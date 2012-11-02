@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://revlis7.gicp.net/';
+$config['base_url']	= 'http://pp.localhost/';
 
 /*
 |--------------------------------------------------------------------------

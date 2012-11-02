@@ -2,10 +2,11 @@
 
 class User extends Auth_Controller {
 	function __construct() {
-		parent::__construct();
+		parent::__construct(false);
 	}
 	
 	function index() {
+		/*
 		//只允许管理员访问
 		if(element('group', $this->session->userdata('user')) !== 'administrator') {
 			redirect('/', 'refresh');
@@ -14,6 +15,8 @@ class User extends Auth_Controller {
 		//var_dump($users);exit;
 		$data = array('users' => $users);
 		$this->template->load('default', 'user/main', $data);
+		*/
+		$this->template->load('default', 'user/main');
 	}
 	
 	function delete() {

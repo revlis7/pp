@@ -92,7 +92,7 @@ Ext.onReady(function() {
       xtype: 'toolbar',
       bodyPadding: 5,
       items: [{
-      	icon:'resources/icons/accept.gif',
+      	icon:'/misc/resources/icons/accept.gif',
         text: '确认',
         formBind: true, //only enabled once the form is valid
         disabled: true,
@@ -110,7 +110,7 @@ Ext.onReady(function() {
           }
         }
       },{
-      	icon:'resources/icons/cross.gif',
+      	icon:'/misc/resources/icons/cross.gif',
         text: '取消',
         handler: function(){
         	this.up('form').getForm().reset();
@@ -407,7 +407,7 @@ Ext.onReady(function() {
     	xtype:'toolbar',
     	dock: 'top',
     	items:[{
-    		icon: 'resources/icons/add.gif',
+    		icon: '/misc/resources/icons/add.gif',
     		text:'新增额度信息' ,
     		handler:function(){
     			//todo
@@ -422,7 +422,7 @@ Ext.onReady(function() {
         width:30,
         sortable: false,
         items: [{
-          icon: 'resources/icons/cross.gif',
+          icon: '/misc/resources/icons/cross.gif',
           tooltip: '删除此条记录',
           handler: function(grid, rowIndex, colIndex) {
             sampleStore.removeAt(rowIndex); 
@@ -434,7 +434,7 @@ Ext.onReady(function() {
         width:30,
         sortable: false,
         items: [{
-          icon: 'resources/icons/cog_edit.png',
+          icon: '/misc/resources/icons/cog_edit.png',
           tooltip: '编辑此条记录',
           handler: function(grid, rowIndex, colIndex) {
             //sampleStore.removeAt(rowIndex);      

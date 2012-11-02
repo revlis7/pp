@@ -1,5 +1,5 @@
 Ext.Loader.setConfig({enabled: true});
-Ext.Loader.setPath('Ext.ux', 'ux');
+Ext.Loader.setPath('Ext.ux', '/misc/ux');
 
 Ext.require([
     'Ext.grid.*',
@@ -24,7 +24,7 @@ Ext.onReady(function() {
         width:30,
         sortable: false,
         items: [{
-          icon: 'resources/icons/cog_edit.png',
+          icon: '/misc/resources/icons/cog_edit.png',
           tooltip: '编辑此条记录',
           handler: function(grid, rowIndex, colIndex) {
             //sampleStore.removeAt(rowIndex);      
@@ -106,7 +106,7 @@ Ext.onReady(function() {
             xtype: 'toolbar',
             bodyPadding: 5,
             items: [{
-            	  icon:'resources/icons/grid.png',
+            	  icon:'/misc/resources/icons/grid.png',
                 text: '进入详细配置',
                 formBind: true, //only enabled once the form is valid
                 disabled: true,
@@ -126,7 +126,7 @@ Ext.onReady(function() {
                     }
                 }
             },{
-            	  icon:'resources/icons/cross.gif',
+            	  icon:'/misc/resources/icons/cross.gif',
                 text: '取消',
                 handler: function(){
                     this.up('window').close();
@@ -293,13 +293,13 @@ Ext.onReady(function() {
     fullGrid.child('pagingtoolbar').add([
         '->',
         {
-            icon: 'resources/icons/delete.gif',
+            icon: '/misc/resources/icons/delete.gif',
             text: '清除过滤条件',
             handler: function () {
                 fullGrid.filters.clearFilters();
             } 
         }, {
-            icon: 'resources/icons/add.gif',
+            icon: '/misc/resources/icons/add.gif',
             text: '新增项目',
             handler: function () {
                 ProjWin.show();
@@ -332,11 +332,11 @@ Ext.onReady(function() {
         	flex:1,
         },{
         	text:'用户管理',
-        	icon:'resources/icons/user_edit.png',
+        	icon:'/misc/resources/icons/user_edit.png',
         	handler:function(){window.location.href='ts_usermanage.html';}
         },{
         	text:'离开管理员模式',
-        	icon:'resources/icons/cross.gif',
+        	icon:'/misc/resources/icons/cross.gif',
         	handler:function(){window.location.href='ts_viewonly.html';}
         }]
       },{

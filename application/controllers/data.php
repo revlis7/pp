@@ -2,10 +2,14 @@
 
 class Data extends Auth_Controller {
 	function __construct() {
-		parent::__construct();
+		parent::__construct(false);
 	}
 	
 	function index() {
-		$this->template->load('default', 'data/main');
+		$this->template->load('default', 'data/view');
+	}
+	
+	function manage() {
+		$this->template->load('default', 'data/manage');
 	}
 }

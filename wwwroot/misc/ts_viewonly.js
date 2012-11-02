@@ -1,5 +1,5 @@
 Ext.Loader.setConfig({enabled: true});
-Ext.Loader.setPath('Ext.ux', 'ux');
+Ext.Loader.setPath('Ext.ux', '/misc/ux');
 
 Ext.require([
     'Ext.grid.*',
@@ -40,7 +40,7 @@ Ext.onReady(function() {
         width:30,
         sortable: false,
         items: [{
-          icon: 'resources/icons/cog_edit.png',
+          icon: '/misc/resources/icons/cog_edit.png',
           tooltip: '编辑此条记录',
           handler: function(grid, rowIndex, colIndex) {
             //sampleStore.removeAt(rowIndex);      
@@ -100,7 +100,7 @@ Ext.onReady(function() {
     fullGrid.child('pagingtoolbar').add([
         '->',
         {
-            icon: 'resources/icons/delete.gif',
+            icon: '/misc/resources/icons/delete.gif',
             text: '清除过滤条件',
             handler: function () {
                 fullGrid.filters.clearFilters();
@@ -130,15 +130,15 @@ Ext.onReady(function() {
         	flex:1,
         },{
         	text:'进入管理模式',
-        	icon:'resources/icons/plugin.gif',
+        	icon:'/misc/resources/icons/plugin.gif',
         	handler:function(){window.location.href='ts_usermanage.html';}
         },{
         	text:'个人信息',
-        	icon:'resources/icons/user.png',
+        	icon:'/misc/resources/icons/user.png',
         	handler:function(){}
         },{
         	text:'退出',
-        	icon:'resources/icons/cross.gif',
+        	icon:'/misc/resources/icons/cross.gif',
         	handler:function(){window.location.href='ts_login.html';}
         }]
       },{

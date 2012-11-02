@@ -11,7 +11,7 @@ Ext.onReady(function() {
       width:30,
       sortable: false,
       items: [{
-        icon: 'resources/icons/connect.gif',
+        icon: '/misc/resources/icons/connect.gif',
         tooltip: '重置密码',
         handler: function(grid, rowIndex, colIndex) {
         }
@@ -21,7 +21,7 @@ Ext.onReady(function() {
       width:30,
       sortable: false,
       items: [{
-        icon: 'resources/icons/cog_edit.png',
+        icon: '/misc/resources/icons/cog_edit.png',
         tooltip: '编辑用户信息',
         handler: function(grid, rowIndex, colIndex) {
         }
@@ -31,7 +31,7 @@ Ext.onReady(function() {
       width:30,
       sortable: false,
       items: [{
-        icon: 'resources/icons/delete.gif',
+        icon: '/misc/resources/icons/delete.gif',
         tooltip: '禁用用户',
         handler: function(grid, rowIndex, colIndex) {
         }
@@ -41,7 +41,7 @@ Ext.onReady(function() {
       width:30,
       sortable: false,
       items: [{
-        icon: 'resources/icons/cross.gif',
+        icon: '/misc/resources/icons/cross.gif',
         tooltip: '删除用户',
         handler: function(grid, rowIndex, colIndex) {
         }
@@ -89,7 +89,7 @@ Ext.onReady(function() {
           xtype: 'toolbar',
           bodyPadding: 5,
           items: [{
-          	  icon:'resources/icons/accept.png',
+          	  icon:'/misc/resources/icons/accept.png',
               text: '确定',
               formBind: true, //only enabled once the form is valid
               disabled: true,
@@ -110,7 +110,7 @@ Ext.onReady(function() {
                   }
               }
           },{
-          	  icon:'resources/icons/cross.gif',
+          	  icon:'/misc/resources/icons/cross.gif',
               text: '取消',
               handler: function(){
                   this.up('window').close();
@@ -202,15 +202,15 @@ Ext.onReady(function() {
         flex:1,
       },{
       	text:'新增用户',
-      	icon:'resources/icons/user_add.gif',
+      	icon:'/misc/resources/icons/user_add.gif',
       	handler:function(){UserEditWin.show();}
       },{
       	text:'项目管理',
-      	icon:'resources/icons/user_add.gif',
+      	icon:'/misc/resources/icons/user_add.gif',
       	handler:function(){window.location.href='ts_projmanage.html';}
       },{
       	text:'离开管理员模式',
-      	icon:'resources/icons/cross.gif',
+      	icon:'/misc/resources/icons/cross.gif',
       	handler:function(){window.location.href='ts_viewonly.html';}
       }]
     },{

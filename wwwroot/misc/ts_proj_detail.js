@@ -120,12 +120,12 @@ Ext.onReady(function() {
       items:[{
         xtype:'numberfield',
         fieldLabel: '认购金额(万)',
-        name:'iAmount',
+        name:'amount',
         allowBlank: false
       },{
         xtype:'numberfield',
         fieldLabel: '项目收益(%)',
-        name:'fProfit',
+        name:'profit',
         allowBlank: false
       }]
     }, {
@@ -143,7 +143,7 @@ Ext.onReady(function() {
       items:[{
          xtype:'combo',
          fieldLabel: '份额',
-         name:'chTotalShare',
+         name:'total_share',
          queryMode : 'local',
          store : chTotalShareList,
          valueField: 'id',
@@ -153,7 +153,7 @@ Ext.onReady(function() {
        }, {
          xtype:'combo',
          fieldLabel: '销售状态',
-         name:'chStatus',
+         name:'status',
          queryMode : 'local',
          store : chStatusList,
          valueField: 'id',
@@ -176,12 +176,12 @@ Ext.onReady(function() {
       items:[{
         xtype:'numberfield',
         fieldLabel: '税前佣金(%)',
-        name:'fCommissionBTax',
+        name:'commission_b_tax',
         allowBlank: false
       },{
         xtype:'numberfield',
         fieldLabel: '税后佣金(%)',
-        name:'fCommissionATax',
+        name:'commission_a_tax',
         allowBlank: false
       }]
     }, {
@@ -200,11 +200,11 @@ Ext.onReady(function() {
        xtype:'datefield',
        fieldLabel: '打款日期',
        forceSelection:true,
-       name:'dPay'
+       name:'pay'
       },{
        xtype:'numberfield',
        fieldLabel: '已打款金额',
-       name:'iPaid'
+       name:'paid'
       }]
     }, {
       xtype:'fieldset',
@@ -221,15 +221,15 @@ Ext.onReady(function() {
       items:[{
        xtype:'numberfield',
        fieldLabel: '包销/分销额度',
-       name:'iQuota'
+       name:'quota'
       },{
        xtype:'numberfield',
        fieldLabel: '已打款额度',
-       name:'iQuotaPaid'
+       name:'quota_paid'
       },{
        xtype:'numberfield',
        fieldLabel: '剩余额度',
-       name:'iQuotaRemain'
+       name:'quota_remain'
       }]
     },{
       xtype:'fieldset',
@@ -246,19 +246,19 @@ Ext.onReady(function() {
       items:[{
        xtype:'textfield',
        fieldLabel: '主销渠道',
-       name:'strMainChannel'
+       name:'main_channel'
       },{
        xtype:'textfield',
        fieldLabel: '渠道公司',
-       name:'strChannelCompany'
+       name:'channel_company'
       },{
        xtype:'textfield',
        fieldLabel: '渠道联系人',
-       name:'strChannelContact'
+       name:'channel_contact'
       },{
        xtype:'textfield',
        fieldLabel: '走帐公司',
-       name:'strBillingCompany'
+       name:'billing_company'
       }]
     }]
   });
@@ -297,66 +297,66 @@ Ext.onReady(function() {
           //emptyText:"主类别...",  
     	    disabled:true,
           width:160,   
-          name:'chCategory'
+          name:'category'
         }, 
         {//子类别
           xtype:'textfield',
           //emptyText:"子类别...",
     	    disabled:true,
           width:160,   
-          name:'chSubCategory'
+          name:'sub_category'
         }]
       },{
         xtype:'textfield',
         fieldLabel: '发行方',
-        name:'strIssue',
+        name:'issue',
     	  disabled:true,
         allowBlank: false
       },{
         xtype:'textfield',
         fieldLabel: '项目名称',
         width:480,
-        name:'strName',
+        name:'name',
     	  disabled:true,
         allowBlank: false
       },{
         xtype:'numberfield',
         fieldLabel: '项目期限',
-        name:'iMonth',
+        name:'month',
     	  disabled:true,
         allowBlank: false
       },{
         xtype:'numberfield',
         fieldLabel: '融资规模(万)',
-        name:'iScale',
+        name:'scale',
     	  disabled:true,
         allowBlank: false
       },{
         xtype:'textfield',
         fieldLabel: '分配',
     	  disabled:true,
-        name:'chCycle'
+        name:'cycle'
       },{
         xtype:'textfield',
         fieldLabel: '项目收益属性',
     	  disabled:true,
-        name:'chProfitProperty'
+        name:'profit_property'
       },{
         xtype:'textfield',
         fieldLabel: '产品经理',
     	  disabled:true,
-        name:'chManager',
+        name:'manager',
       },{
         xtype:'datefield',
         fieldLabel: '成立日期',
     	  disabled:true,
-        name:'dFound'
+        name:'found'
       },{
         xtype:'textfield',
         fieldLabel: '资金投向',
         width:480,
     	  disabled:true,
-        name:'strFlowOfFund',
+        name:'flow_of_fund',
         allowBlank: false
       },{
         xtype:'textfield',
@@ -371,14 +371,14 @@ Ext.onReady(function() {
         width:480,
         height:100,
     	  disabled:true,
-        name:'strHighlights',
+        name:'highlights',
         allowBlank: false
       },{
         xtype:'textareafield',
         fieldLabel: '备注',
         width:480,
     	  disabled:true,
-        name:'strRemark',
+        name:'remark',
         allowBlank: true
       }]
     }]
@@ -430,24 +430,24 @@ Ext.onReady(function() {
           }
         }]
       },
-      {text:'份额',         dataIndex:'chTotalShare',     filtable:true, width:100},
-      {text:'销售状态',     dataIndex:'chStatus',         filtable:true, width:100},
-      {text:'认购金额',     dataIndex:'iAmount',          filtable:true, width:100},
-      {text:'项目收益',     dataIndex:'fProfit',          filtable:true, width:100},
-      {text:'产品经理',     dataIndex:'chManager',        filtable:true, width:100},
-      {text:'税前佣金',     dataIndex:'fCommissionBTax',  filtable:true, width:100},
-      {text:'税后佣金',     dataIndex:'fCommissionATax',  filtable:true, width:100},
-      {text:'佣金',         dataIndex:'fInnerCommission', filtable:true, width:100},
-      {text:'佣金（税后）', dataIndex:'fOuterCommission', filtable:true, width:100},
-      {text:'打款日期',     dataIndex:'dPay',             filtable:true, width:100},
-      {text:'已打款金额',   dataIndex:'iPaid',            filtable:true, width:100},
-      {text:'包销/分销额度',dataIndex:'iQuota',           filtable:true, width:100},
-      {text:'已打款额度',   dataIndex:'iQuotaPaid',       filtable:true, width:100},
-      {text:'剩余额度',     dataIndex:'iQuotaRemain',     filtable:true, width:100},
-      {text:'主销渠道',     dataIndex:'strMainChannel',   filtable:true, width:100},
-      {text:'渠道公司',     dataIndex:'strChannelCompany',filtable:true, width:100},
-      {text:'渠道联系人',   dataIndex:'strChannelContact',filtable:true, width:100},
-      {text:'走帐公司',     dataIndex:'strBillingCompany',filtable:true, width:100}
+      {text:'份额',         dataIndex:'total_share',     filtable:true, width:100},
+      {text:'销售状态',     dataIndex:'status',         filtable:true, width:100},
+      {text:'认购金额',     dataIndex:'amount',          filtable:true, width:100},
+      {text:'项目收益',     dataIndex:'profit',          filtable:true, width:100},
+      {text:'产品经理',     dataIndex:'manager',        filtable:true, width:100},
+      {text:'税前佣金',     dataIndex:'commission_b_tax',  filtable:true, width:100},
+      {text:'税后佣金',     dataIndex:'commission_a_tax',  filtable:true, width:100},
+      {text:'佣金',         dataIndex:'inner_commission', filtable:true, width:100},
+      {text:'佣金（税后）', dataIndex:'outer_commission', filtable:true, width:100},
+      {text:'打款日期',     dataIndex:'pay',             filtable:true, width:100},
+      {text:'已打款金额',   dataIndex:'paid',            filtable:true, width:100},
+      {text:'包销/分销额度',dataIndex:'quota',           filtable:true, width:100},
+      {text:'已打款额度',   dataIndex:'quota_paid',       filtable:true, width:100},
+      {text:'剩余额度',     dataIndex:'quota_remain',     filtable:true, width:100},
+      {text:'主销渠道',     dataIndex:'main_channel',   filtable:true, width:100},
+      {text:'渠道公司',     dataIndex:'channel_company',filtable:true, width:100},
+      {text:'渠道联系人',   dataIndex:'channel_contact',filtable:true, width:100},
+      {text:'走帐公司',     dataIndex:'billing_company',filtable:true, width:100}
     ]
   });
 

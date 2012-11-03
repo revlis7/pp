@@ -33,39 +33,39 @@ Ext.onReady(function() {
           }
         }]
       },
-        {text:'份额',         dataIndex:'chTotalShare',     filtable:true, width:100},
-        {text:'销售状态',     dataIndex:'chStatus',         filtable:true, width:100},
-        {text:'销售类别',     dataIndex:'chExclusive',      filtable:true, width:100},
-        {text:'产品等级',     dataIndex:'chGrade',          filtable:true, width:100},
-        {text:'项目类别',     dataIndex:'chCategory',       filtable:true, width:100},
-        {text:'子类别',       dataIndex:'chSubCategory',    filtable:true, width:100},
-        {text:'发行方',       dataIndex:'strIssue',         filtable:true, width:100},
-        {text:'项目名称',     dataIndex:'strName',          filtable:true, width:100},
-        {text:'资金投向',     dataIndex:'strFlowOfFund',    filtable:true, width:100},
-        {text:'项目亮点',     dataIndex:'strHighlights',    filtable:true, width:100},
-        {text:'项目期限',     dataIndex:'iMonth',           filtable:true, width:100},
-        {text:'融资规模',     dataIndex:'iScale',           filtable:true, width:100},
-        {text:'分配',         dataIndex:'chCycle',          filtable:true, width:100},
-        {text:'认购金额',     dataIndex:'iAmount',          filtable:true, width:100},
-        {text:'项目收益属性', dataIndex:'chProfitProperty', filtable:true, width:100},
-        {text:'项目收益',     dataIndex:'fProfit',          filtable:true, width:100},
-        {text:'产品经理',     dataIndex:'chManager',        filtable:true, width:100},
-        {text:'备注',         dataIndex:'strRemark',        filtable:true, width:100},
-        {text:'税前佣金',     dataIndex:'fCommissionBTax',  filtable:true, width:100},
-        {text:'税后佣金',     dataIndex:'fCommissionATax',  filtable:true, width:100},
-        {text:'佣金',         dataIndex:'fInnerCommission', filtable:true, width:100},
-        {text:'佣金（税后）', dataIndex:'fOuterCommission', filtable:true, width:100},
-        {text:'打款日期',     dataIndex:'dPay',             filtable:true, width:100},
-        {text:'已打款金额',   dataIndex:'iPaid',            filtable:true, width:100},
-        {text:'成立日期',     dataIndex:'dFound',           filtable:true, width:100},
-        {text:'包销/分销额度',dataIndex:'iQuota',           filtable:true, width:100},
-        {text:'已打款额度',   dataIndex:'iQuotaPaid',       filtable:true, width:100},
-        {text:'剩余额度',     dataIndex:'iQuotaRemain',     filtable:true, width:100},
-        {text:'主销渠道',     dataIndex:'strMainChannel',   filtable:true, width:100},
-        {text:'渠道公司',     dataIndex:'strChannelCompany',filtable:true, width:100},
-        {text:'渠道联系人',   dataIndex:'strChannelContact',filtable:true, width:100},
-        {text:'走帐公司',     dataIndex:'strBillingCompany',filtable:true, width:100},
-        {text:'产品经理备注', dataIndex:'strManegerRemark', filtable:true, width:100}
+        {text:'份额',         dataIndex:'total_share',     filtable:true, width:100},
+        {text:'销售状态',     dataIndex:'status',         filtable:true, width:100},
+        {text:'销售类别',     dataIndex:'exclusive',      filtable:true, width:100},
+        {text:'产品等级',     dataIndex:'grade',          filtable:true, width:100},
+        {text:'项目类别',     dataIndex:'category',       filtable:true, width:100},
+        {text:'子类别',       dataIndex:'sub_category',    filtable:true, width:100},
+        {text:'发行方',       dataIndex:'issue',         filtable:true, width:100},
+        {text:'项目名称',     dataIndex:'name',          filtable:true, width:100},
+        {text:'资金投向',     dataIndex:'flow_of_fund',    filtable:true, width:100},
+        {text:'项目亮点',     dataIndex:'highlights',    filtable:true, width:100},
+        {text:'项目期限',     dataIndex:'month',           filtable:true, width:100},
+        {text:'融资规模',     dataIndex:'scale',           filtable:true, width:100},
+        {text:'分配',         dataIndex:'cycle',          filtable:true, width:100},
+        {text:'认购金额',     dataIndex:'amount',          filtable:true, width:100},
+        {text:'项目收益属性', dataIndex:'profit_property', filtable:true, width:100},
+        {text:'项目收益',     dataIndex:'profit',          filtable:true, width:100},
+        {text:'产品经理',     dataIndex:'manager',        filtable:true, width:100},
+        {text:'备注',         dataIndex:'remark',        filtable:true, width:100},
+        {text:'税前佣金',     dataIndex:'commission_b_tax',  filtable:true, width:100},
+        {text:'税后佣金',     dataIndex:'commission_a_tax',  filtable:true, width:100},
+        {text:'佣金',         dataIndex:'inner_commission', filtable:true, width:100},
+        {text:'佣金（税后）', dataIndex:'outer_commission', filtable:true, width:100},
+        {text:'打款日期',     dataIndex:'pay',             filtable:true, width:100},
+        {text:'已打款金额',   dataIndex:'paid',            filtable:true, width:100},
+        {text:'成立日期',     dataIndex:'found',           filtable:true, width:100},
+        {text:'包销/分销额度',dataIndex:'quota',           filtable:true, width:100},
+        {text:'已打款额度',   dataIndex:'quota_paid',       filtable:true, width:100},
+        {text:'剩余额度',     dataIndex:'quota_remain',     filtable:true, width:100},
+        {text:'主销渠道',     dataIndex:'main_channel',   filtable:true, width:100},
+        {text:'渠道公司',     dataIndex:'channel_company',filtable:true, width:100},
+        {text:'渠道联系人',   dataIndex:'channel_contact',filtable:true, width:100},
+        {text:'走帐公司',     dataIndex:'billing_company',filtable:true, width:100},
+        {text:'产品经理备注', dataIndex:'manager_remark', filtable:true, width:100}
       ],
       title: '项目列表',
       viewConfig: {
@@ -206,41 +206,41 @@ Ext.onReady(function() {
             },{
               xtype:'textfield',
               fieldLabel: '发行方',
-              name:'strIssue',
+              name:'issue',
               allowBlank: false
             },{
               xtype:'textfield',
               fieldLabel: '项目名称',
               width:480,
-              name:'strName',
+              name:'name',
               allowBlank: false
             },{
               xtype:'textfield',
               fieldLabel: '资金投向',
               width:480,
-              name:'strFlowOfFund',
+              name:'flow_of_fund',
               allowBlank: false
             },{
               xtype:'textareafield',
               fieldLabel: '项目亮点',
               width:480,
               height:100,
-              name:'strHighlights',
+              name:'highlights',
               allowBlank: false
             },{
               xtype:'numberfield',
               fieldLabel: '项目期限',
-              name:'iMonth',
+              name:'month',
               allowBlank: false
             },{
               xtype:'numberfield',
               fieldLabel: '融资规模(万)',
-              name:'iScale',
+              name:'scale',
               allowBlank: false
             },{
               xtype:'combo',
               fieldLabel: '分配',
-              name:'chCycle',
+              name:'cycle',
               queryMode : 'local',
               store : chCycleList,
               valueField: 'id',
@@ -250,7 +250,7 @@ Ext.onReady(function() {
             },{
               xtype:'combo',
               fieldLabel: '项目收益属性',
-              name:'chProfitProperty',
+              name:'profit_property',
               queryMode : 'local',
               store : chProfitPropertyList,
               valueField: 'id',
@@ -266,7 +266,7 @@ Ext.onReady(function() {
             },{
               xtype:'combo',
               fieldLabel: '产品经理',
-              name:'chManager',
+              name:'manager',
               queryMode : 'local',
               store : chManagerList,
               valueField: 'id',
@@ -277,12 +277,12 @@ Ext.onReady(function() {
               xtype:'datefield',
               fieldLabel: '成立日期',
               forceSelection:true,
-              name:'dFound'
+              name:'found'
             },{
               xtype:'textareafield',
               fieldLabel: '备注',
               width:480,
-              name:'strRemark',
+              name:'remark',
               allowBlank: true
             }]
           }]

@@ -6,7 +6,7 @@ class User extends Auth_Controller {
 	}
 	
 	function index() {
-		/*
+		/* TODO
 		//只允许管理员访问
 		if(element('group', $this->session->userdata('user')) !== 'administrator') {
 			redirect('/', 'refresh');

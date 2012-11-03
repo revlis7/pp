@@ -1,16 +1,3 @@
-Ext.Loader.setConfig({enabled: true});
-Ext.Loader.setPath('Ext.ux', '/misc/ux');
-
-Ext.require([
-    'Ext.grid.*',
-    'Ext.data.*',
-    'Ext.util.*',
-    'Ext.state.*',
-    'Ext.ux.grid.FiltersFeature',
-    'Ext.ux.ajax.JsonSimlet',
-    'Ext.ux.ajax.SimManager'
-]);
-
 Ext.onReady(function() {
   Ext.QuickTips.init();
 
@@ -156,6 +143,9 @@ Ext.onReady(function() {
       fullGrid]
     }]
   });
+  
+  sampleStore.load();
+  sampleChanges.load();
 
 });
 

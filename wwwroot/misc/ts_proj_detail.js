@@ -1,16 +1,3 @@
-Ext.Loader.setConfig({enabled: true});
-Ext.Loader.setPath('Ext.ux', 'ux');
-
-Ext.require([
-    'Ext.grid.*',
-    'Ext.data.*',
-    'Ext.util.*',
-    'Ext.state.*',
-    'Ext.ux.grid.FiltersFeature',
-    'Ext.ux.ajax.JsonSimlet',
-    'Ext.ux.ajax.SimManager'
-]);
-
 Ext.onReady(function() {
   Ext.QuickTips.init();
 /*    
@@ -114,7 +101,7 @@ Ext.onReady(function() {
         text: '取消',
         handler: function(){
         	this.up('form').getForm().reset();
-          //this.up('panel').hide(); 
+          this.up('panel').hide(); 
         }
       }]
     }],
@@ -507,5 +494,8 @@ Ext.onReady(function() {
     }]
   });
   
-  ProjInfoForm.getForm().loadRecord(sampleStore.first())
+  sampleStore.load();
+  sampleChanges.load();
+
+  ProjInfoForm.getForm().loadRecord(sampleStore.first());
 });

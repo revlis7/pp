@@ -127,11 +127,13 @@ Ext.onReady(function() {
         xtype:'textfield',
         fieldLabel: '密码',
         name:'strPassword',
+        inputType: 'password',
         allowBlank: false
       },{
         xtype:'textfield',
         fieldLabel: '请重复密码',
         name:'strPassword2',
+        inputType: 'password',
         allowBlank: false
       },{
         xtype:'textfield',

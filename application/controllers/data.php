@@ -9,6 +9,11 @@ class Data extends Auth_Controller {
 		$this->template->load('default', 'data/view');
 	}
 	
+	function view() {
+		$data = $this->Data_model->get_list();
+		echo $this->json->output(array('success' => true, 'data' => $data));
+	}
+	
 	function manage() {
 		$this->template->load('default', 'data/manage');
 	}

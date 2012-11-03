@@ -1,3 +1,16 @@
+Ext.Loader.setConfig({enabled: true});
+Ext.Loader.setPath('Ext.ux', '/misc/ux');
+
+Ext.require([
+    'Ext.grid.*',
+    'Ext.data.*',
+    'Ext.util.*',
+    'Ext.state.*',
+    'Ext.ux.grid.FiltersFeature',
+    'Ext.ux.ajax.JsonSimlet',
+    'Ext.ux.ajax.SimManager'
+]);
+
   var sampleData=[
 ['OPEN','在售','销售类别','产品等级','项目类别','子类别','发行方','项目名称','资金投向','项目亮点','24','40000','分配','100','项目收益属性','9.5','产品经理','备注','8','7','3.2','3.5',new Date(2012,05,12),'1000',new Date(2012,05,12),'500','1000','3000','主销渠道','渠道公司','渠道联系人','走帐公司','产品经理备注']
 
@@ -168,7 +181,7 @@
       ['其他不便归类基金','其他不便归类基金']
     ]
 
-  var sampleStore=Ext.create('Ext.data.ArrayStore', {
+  var sampleStore=Ext.create('Ext.data.JsonStore', {
       fields: [
         {name:'chTotalShare'     ,type:'string' },
         {name:'chStatus'         ,type:'string' },
@@ -184,9 +197,10 @@
         {name:'iScale'           ,type:'integer'},
         {name:'chCycle'          ,type:'string' },
         {name:'iAmount'          ,type:'integer'},
-        {name:'chProfitProperty',type:'string' },
+        {name:'chProfitProperty' ,type:'string' },
         {name:'fProfit'          ,type:'float'  },
         {name:'chManager'        ,type:'string' },
+        {name:'strContract'      ,type:'string' },
         {name:'strRemark'        ,type:'string' },
         {name:'fCommissionBTax'  ,type:'float'  },
         {name:'fCommissionATax'  ,type:'float'  },
@@ -204,7 +218,15 @@
         {name:'strBillingCompany',type:'string' },
         {name:'strManegerRemark' ,type:'string' }
       ],
-      data: sampleData
+      proxy: {
+        type: 'ajax',
+        //url: '/etc/proj_sample_data.json',
+        url: '/data/view',
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+      }
     });
   
   var sampleChanges=Ext.create('Ext.data.ArrayStore', {
@@ -213,7 +235,14 @@
   	  {name:'changePerson',type:'string'},
   	  {name:'changes',type:'string'}
   	],
-  	data:sampleChangeData
+      proxy: {
+        type: 'ajax',
+        url: '/etc/recent_change_data.json',
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+      }
   });
   
   var filtersCfg = {

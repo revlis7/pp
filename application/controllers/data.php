@@ -10,7 +10,7 @@ class Data extends Auth_Controller {
 	}
 	
 	function view() {
-		$data = $this->Data_model->get_list();
+		$data = $this->Data_model->get_all();
 		echo $this->json->output(array('success' => true, 'data' => $data));
 	}
 	

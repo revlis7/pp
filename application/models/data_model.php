@@ -4,7 +4,7 @@ class Data_model extends CI_Model {
 		parent::__construct();
 	}
 	
-	function get_list() {
+	function get_all() {
 		$this->db->from('data');
 		$this->db->order_by('id', 'asc');
 		$query = $this->db->get();

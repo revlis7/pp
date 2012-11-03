@@ -25,7 +25,7 @@ class User_model extends CI_Model {
 		return false;
 	}
 	
-	function get_list() {
+	function get_all() {
 		$this->db->from('user');
 		$this->db->order_by('id', 'asc');
 		$query = $this->db->get();
@@ -37,5 +37,29 @@ class User_model extends CI_Model {
 		$this->db->where('loginname', $loginname);
 		$this->db->update('user');
 		return $this->db->affected_rows();
+	}
+	
+	function create($loginname, $password, $group, $realname) {
+		$data = array(
+			'loginname' => $loginname,
+			'password'  => $this->encrypt->sha1($password),
+			'group'     => $group,
+			'realname'  => $realname,
+		);
+		$query = $this->db->insert('user', $data);
+		if($this->db->affected_rows() === 1) {
+			return true;
+		}
+		return false;
+	}
+	
+	function delete($loginname) {
+		$this->db->from('user')->where('loginname', $loginname);
+		$this->db->delete();
+		
+		if($this->db->affected_rows() === 1) {
+			return true;
+		}
+		return false;
 	}
 }

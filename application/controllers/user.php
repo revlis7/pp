@@ -11,7 +11,8 @@ class User extends Auth_Controller {
 		if(element('group', $this->session->userdata('user')) !== 'administrator') {
 			redirect('/', 'refresh');
 		}
-		$users = $this->User_model->get_list();
+		
+		$users = $this->User_model->get_all();
 		//var_dump($users);exit;
 		$data = array('users' => $users);
 		$this->template->load('default', 'user/main', $data);
@@ -35,28 +36,28 @@ class User extends Auth_Controller {
 			$this->json->output(array('r' => 'error', 'm' => '不能删除自己的账号'));
 		}
 		
-		$this->db->from('user')->where('loginname', $loginname);
-		$this->db->delete();
-		
-		if($this->db->affected_rows() === 0) {
+		if(!$this->User_model->delete($loginname)) {
 			$this->json->output(array('r' => 'error', 'm' => '未找到符合的账号信息'));
 		}
+		
 		$this->json->output(array('r' => 'success'));
 	}
 	
 	function create() {
+		/* TODO
 		if(element('group', $this->session->userdata('user')) !== 'administrator') {
 			redirect('/', 'refresh');
 		}
+		*/
 		$this->template->load('default', 'user/create');
 	}
 	
 	function create_submit() {
 		$loginname = $this->input->post('loginname', true);
 		$password  = $this->input->post('password', true);
-		$realname  = $this->input->post('realname', true);
 		$group     = $this->input->post('group', true);
-		
+		$realname  = $this->input->post('realname', true);
+				
 		if(element('group', $this->session->userdata('user')) !== 'administrator') {
 			$this->json->output(array('r' => 'error', 'm' => '您没有使用该功能的权限'));
 		}
@@ -69,32 +70,22 @@ class User extends Auth_Controller {
 			$this->json->output(array('r' => 'error', 'm' => '登录密码不符合规范（密码长6～24字符，由大小写字母、数字和下划线组成）'));
 		}
 		
-		if(!$this->utility->chk_realname($realname)) {
-			$this->json->output(array('r' => 'error', 'm' => '用户姓名不符合规范（姓名长2～64字符，由汉字、大小写字母、数字和下划线组成）'));
-		}
-		
 		if(!$this->utility->chk_group($group)) {
 			$this->json->output(array('r' => 'error', 'm' => '用户分组信息错误，请重新选择'));
+		}
+		
+		if(!$this->utility->chk_realname($realname)) {
+			$this->json->output(array('r' => 'error', 'm' => '用户姓名不符合规范（姓名长2～64字符，由汉字、大小写字母、数字和下划线组成）'));
 		}
 		
 		if($this->User_model->exists($loginname)) {
 			$this->json->output(array('r' => 'error', 'm' => '用户名已存在'));
 		}
 		
-		/*
-		$this->db->from('user')->where('loginname', $loginname);
-		if($this->db->count_all_results() !== 0)  {
-			$this->json->output(array('r' => 'error', 'm' => '用户名已存在'));
+		if(!$this->User_model->create($loginname, $password, $group, $realname)) {
+			$this->json->output(array('r' => 'error', 'm' => '创建用户失败'));
 		}
-		*/
 		
-		$data = array(
-			'loginname' => $loginname,
-			'password'  => $this->encrypt->sha1($password),
-			'realname'  => $realname,
-			'group'     => $group,
-		);
-		$query = $this->db->insert('user', $data);
 		$this->json->output(array('r' => 'success'));
 	}
 	

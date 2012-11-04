@@ -126,7 +126,7 @@ Ext.onReady(function() {
         },{
         	text:'退出',
         	icon:'/misc/resources/icons/cross.gif',
-        	handler:function(){window.location.href='ts_login.html';}
+        	handler:function(){window.location.href='/logout';}
         }]
       },{
     	xtype:'panel', 

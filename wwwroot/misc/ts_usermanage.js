@@ -1,6 +1,18 @@
 Ext.onReady(function() {
   Ext.QuickTips.init();
+  Ext.tip.QuickTipManager.init();
   
+  Ext.apply(Ext.form.field.VTypes, {
+    password: function(val, field) {
+      if (field.initialPassField) {
+         var pwd = field.up('form').down('#' + field.initialPassField);
+         return (val == pwd.getValue());
+      }
+      return true;
+    },
+    passwordText: '两次输入的密码不一致！'
+  });
+
   var userGrid = Ext.create('Ext.grid.Panel', {
     store: strUserList,
     region:'center',
@@ -14,6 +26,7 @@ Ext.onReady(function() {
         icon: '/misc/resources/icons/connect.gif',
         tooltip: '重置密码',
         handler: function(grid, rowIndex, colIndex) {
+        	UserPassWin.show();
         }
       }]
     },{
@@ -34,6 +47,19 @@ Ext.onReady(function() {
         icon: '/misc/resources/icons/delete.gif',
         tooltip: '禁用用户',
         handler: function(grid, rowIndex, colIndex) {
+              this.up('form').getForm().submit({
+                  url: 'xml-form-errors-ed-json.json',
+                  submitEmptyText: false,
+                  waitMsg: 'Saving Data...',
+                  success: function(form, action) {
+                     this.up('window').close();
+                     strUserList.load();
+                  }
+                  //,
+                  //failure: function(form, action) {
+                      //...
+                  //}
+              });
         }
       }]
     },{
@@ -44,6 +70,18 @@ Ext.onReady(function() {
         icon: '/misc/resources/icons/cross.gif',
         tooltip: '删除用户',
         handler: function(grid, rowIndex, colIndex) {
+               this.up('form').getForm().submit({
+                  url: 'xml-form-errors-ed-json.json',
+                  submitEmptyText: false,
+                  waitMsg: 'Deleting...',
+                  success: function(form, action) {
+                     this.up('window').close();
+                     sampleStore.removeAt(rowIndex);
+                  },
+                  failure: function(form, action) {
+                    Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+                  }
+              });
         }
       }]
     },{
@@ -68,7 +106,7 @@ Ext.onReady(function() {
     closeAction:"hide",
     closable:false,
     title:'新增用户',
-    width:360,
+    width:380,
     items:[
     {
       xtype:"form",
@@ -89,26 +127,24 @@ Ext.onReady(function() {
           xtype: 'toolbar',
           bodyPadding: 5,
           items: [{
-          	  icon:'/misc/resources/icons/accept.png',
-              text: '确定',
-              formBind: true, //only enabled once the form is valid
-              disabled: true,
-              handler: function() {
-                  var win = this.up('window');
-                  var form = this.up('form').getForm();
-                  if (form.isValid()) {
-                      form.submit({
-                          success: function(form, action) {
-                          	//todo!!
-                             win.close();
-                             document.location.href="ts2.html";
-                          },
-                          failure: function(form, action) {
-                             win.close();
-                          }
-                      });
+          	icon:'/misc/resources/icons/accept.png',
+            text: '确定',
+            formBind: true, //only enabled once the form is valid
+            disabled: true,
+            handler: function() {
+              this.up('form').getForm().submit({
+                  url: 'xml-form-errors-ed-json.json',
+                  submitEmptyText: false,
+                  waitMsg: 'Saving Data...',
+                  success: function(form, action) {
+                    this.up('window').close();
+                    strUserList.load();
+                  } ,
+                  failure: function(form, action) {
+                    Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
                   }
-              }
+              });
+            }
           },{
           	  icon:'/misc/resources/icons/cross.gif',
               text: '取消',
@@ -127,13 +163,16 @@ Ext.onReady(function() {
         xtype:'textfield',
         fieldLabel: '密码',
         name:'strPassword',
+        itemId: 'pass',
         inputType: 'password',
         allowBlank: false
       },{
         xtype:'textfield',
         fieldLabel: '请重复密码',
-        name:'strPassword2',
+        name:'strPassword_comfirm',
         inputType: 'password',
+        vtype: 'password',
+        initialPassField: 'pass',
         allowBlank: false
       },{
         xtype:'textfield',
@@ -179,6 +218,77 @@ Ext.onReady(function() {
     }]
   });
   
+  var UserPassWin=Ext.create("Ext.window.Window",{
+    resizeable:false,
+    closeAction:"hide",
+    closable:false,
+    title:'新增用户',
+    width:380,
+    items:[
+    {
+      xtype:"form",
+      bodyPadding:5,
+      trackResetOnLoad:true,
+      border:0,
+      waitTitle:"Pleas wait...",
+      layout:{
+        type:'vbox',
+        defaultMargins: {top: 0, right: 5, bottom: 0, left: 5}
+      },
+      fieldDefaults:{
+        lableWidth:90,
+        width:320
+      },
+      dockedItems: [{
+          dock: 'bottom',
+          xtype: 'toolbar',
+          bodyPadding: 5,
+          items: [{
+          	icon:'/misc/resources/icons/accept.png',
+            text: '确定',
+            formBind: true, //only enabled once the form is valid
+            disabled: true,
+            handler: function() {
+              this.up('form').getForm().submit({
+                  url: 'xml-form-errors-ed-json.json',
+                  submitEmptyText: false,
+                  waitMsg: 'Saving Data...',
+                  success: function(form, action) {
+                    this.up('window').close();
+                    strUserList.load();
+                  } ,
+                  failure: function(form, action) {
+                    Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+                  }
+              });
+            }
+          },{
+          	  icon:'/misc/resources/icons/cross.gif',
+              text: '取消',
+              handler: function(){
+                  this.up('window').close();
+              }
+          }]
+      }],
+      items:[
+      {
+        xtype:'textfield',
+        fieldLabel: '密码',
+        name:'strPassword',
+        itemId: 'pass',
+        inputType: 'password',
+        allowBlank: false
+      },{
+        xtype:'textfield',
+        fieldLabel: '请重复密码',
+        name:'strPassword_comfirm',
+        inputType: 'password',
+        vtype: 'password',
+        initialPassField: 'pass',
+        allowBlank: false
+      }]
+    }]
+  });
   var viewport = Ext.create('Ext.Viewport', {
     layout: {
         type: 'border',

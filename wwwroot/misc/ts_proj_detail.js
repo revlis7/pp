@@ -412,7 +412,17 @@ Ext.onReady(function() {
           icon: '/misc/resources/icons/cross.gif',
           tooltip: '删除此条记录',
           handler: function(grid, rowIndex, colIndex) {
-            sampleStore.removeAt(rowIndex); 
+            this.up('form').getForm().submit({
+                url: 'xml-form-errors-ed-json.json',
+                submitEmptyText: false,
+                waitMsg: 'Saving Data...',
+                success: function(form, action) {
+                  sampleStore.removeAt(rowIndex);
+                } ,
+                failure: function(form, action) {
+                  Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+                }
+            });
           }
         }]
       },{

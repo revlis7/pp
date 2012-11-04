@@ -143,7 +143,7 @@ Ext.onReady(function() {
                   submitEmptyText: false,
                   waitMsg: 'Saving Data...',
                   success: function(form, action) {
-                    this.up('window').close();
+                    UserNewWin.close();
                     strUserList.load();
                   } 
                   //,
@@ -332,7 +332,7 @@ Ext.onReady(function() {
     resizeable:false,
     closeAction:"hide",
     closable:false,
-    title:'新增用户',
+    title:'修改密码',
     width:380,
     items:[
     {

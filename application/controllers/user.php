@@ -125,8 +125,8 @@ class User extends Auth_Controller {
 		}
 		
 		if($this->User_model->update_pwd($loginname, $password) === 1) {
-			$this->json->output(array('succes' => true));
+			$this->json->output(array('success' => true));
 		}
-		$this->json->output(array('success' => false, 'errors' => array('password' => '修改密码失败')));
+		$this->json->output(array('success' => false, 'errors' => array('password' => '您输入的新密码与旧密码相同')));
 	}
 }

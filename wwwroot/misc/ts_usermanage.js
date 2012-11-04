@@ -144,10 +144,11 @@ Ext.onReady(function() {
                   success: function(form, action) {
                     this.up('window').close();
                     strUserList.load();
-                  } ,
-                  failure: function(form, action) {
-                    Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
-                  }
+                  } 
+                  //,
+                  //failure: function(form, action) {
+                  //  Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+                  //}
               });
             }
           },{
@@ -258,12 +259,14 @@ Ext.onReady(function() {
                   submitEmptyText: false,
                   waitMsg: 'Saving Data...',
                   success: function(form, action) {
-                    this.up('window').close();
+                    UserEditWin.close();
+                    Ext.Msg.alert('消息', '修改成功！');
                     strUserList.load();
-                  } ,
-                  failure: function(form, action) {
-                    Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
                   }
+                  // ,
+                  //failure: function(form, action) {
+                  //  Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+                  //}
               });
             }
           },{
@@ -360,12 +363,14 @@ Ext.onReady(function() {
                   submitEmptyText: false,
                   waitMsg: 'Saving Data...',
                   success: function(form, action) {
-                    this.up('window').close();
+                    UserPassWin.close();
+                    Ext.Msg.alert('消息', '密码修改成功！');
                     strUserList.load();
-                  } ,
-                  failure: function(form, action) {
-                    Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
                   }
+                  // ,
+                  //failure: function(form, action) {
+                  //  Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+                  //}
               });
             }
           },{

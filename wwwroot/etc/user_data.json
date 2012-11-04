@@ -1,0 +1,12 @@
+{
+  "success":"true",
+  "data":[{
+      "loginname":"loginname1",
+      "realname":"张三",
+      "chTitle":"产品经理",
+      "chBranch":"上海第一财富中心",
+      "strTel":"13911111111",
+      "strQQ":"12345678",
+      "strEmail":"abc@def.com"
+  }]
+}

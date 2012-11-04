@@ -27,6 +27,7 @@ Ext.onReady(function() {
         tooltip: '重置密码',
         handler: function(grid, rowIndex, colIndex) {
         	UserPassWin.show();
+        	UserPassWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
         }
       }]
     },{
@@ -37,6 +38,8 @@ Ext.onReady(function() {
         icon: '/misc/resources/icons/cog_edit.png',
         tooltip: '编辑用户信息',
         handler: function(grid, rowIndex, colIndex) {
+        	UserEditWin.show();
+        	UserEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
         }
       }]
     },{
@@ -47,19 +50,19 @@ Ext.onReady(function() {
         icon: '/misc/resources/icons/delete.gif',
         tooltip: '禁用用户',
         handler: function(grid, rowIndex, colIndex) {
-              this.up('form').getForm().submit({
-                  url: 'xml-form-errors-ed-json.json',
-                  submitEmptyText: false,
-                  waitMsg: 'Saving Data...',
-                  success: function(form, action) {
-                     this.up('window').close();
-                     strUserList.load();
-                  }
-                  //,
-                  //failure: function(form, action) {
-                      //...
-                  //}
-              });
+        	UserEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
+          UserEditWin.down('form').getForm().submit({
+            url: 'xml-form-errors-ed-json.json',
+            submitEmptyText: false,
+            waitMsg: 'Saving Data...',
+            success: function(form, action) {
+               this.up('window').close();
+               strUserList.load();
+            },
+            failure: function(form, action) {
+              Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+            }
+          });
         }
       }]
     },{
@@ -70,37 +73,155 @@ Ext.onReady(function() {
         icon: '/misc/resources/icons/cross.gif',
         tooltip: '删除用户',
         handler: function(grid, rowIndex, colIndex) {
-               this.up('form').getForm().submit({
-                  url: 'xml-form-errors-ed-json.json',
+        	UserEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
+          UserEditWin.down('form').getForm().submit({
+            url: 'xml-form-errors-ed-json.json',
+            submitEmptyText: false,
+            waitMsg: 'Deleting...',
+            success: function(form, action) {
+               this.up('window').close();
+               strUserList.removeAt(rowIndex);
+            },
+            failure: function(form, action) {
+              Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+            }
+          });
+        }
+      }]
+    },{
+    	text:'登录名',dataIndex:'loginname', width:100
+    },{
+    	text:'真实姓名',dataIndex:'realname', width:100
+    },{
+    	text:'职位',dataIndex:'title', width:100
+    },{
+    	text:'分支机构',dataIndex:'branch', width:150
+    },{
+    	text:'联系电话',dataIndex:'tel', width:150
+    },{
+    	text:'QQ',dataIndex:'qq', width:150
+    },{
+    	text:'邮箱',dataIndex:'email', width:150
+    }]
+  })
+
+  var UserNewWin=Ext.create("Ext.window.Window",{
+    resizeable:false,
+    closeAction:"hide",
+    closable:false,
+    title:'新增用户',
+    width:380,
+    items:[
+    {
+      xtype:"form",
+      bodyPadding:5,
+      trackResetOnLoad:true,
+      border:0,
+      waitTitle:"Pleas wait...",
+      layout:{
+        type:'vbox',
+        defaultMargins: {top: 0, right: 5, bottom: 0, left: 5}
+      },
+      fieldDefaults:{
+        lableWidth:90,
+        width:320
+      },
+      dockedItems: [{
+          dock: 'bottom',
+          xtype: 'toolbar',
+          bodyPadding: 5,
+          items: [{
+          	icon:'/misc/resources/icons/accept.png',
+            text: '确定',
+            formBind: true, //only enabled once the form is valid
+            disabled: true,
+            handler: function() {
+              this.up('form').getForm().submit({
+                  //url: 'xml-form-errors-ed-json.json',
+                  url: '/user/create_submit',
                   submitEmptyText: false,
-                  waitMsg: 'Deleting...',
+                  waitMsg: 'Saving Data...',
                   success: function(form, action) {
-                     this.up('window').close();
-                     sampleStore.removeAt(rowIndex);
-                  },
+                    this.up('window').close();
+                    strUserList.load();
+                  } ,
                   failure: function(form, action) {
                     Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
                   }
               });
-        }
+            }
+          },{
+          	  icon:'/misc/resources/icons/cross.gif',
+              text: '取消',
+              handler: function(){
+                  this.up('window').close();
+              }
+          }]
+      }],
+      items:[
+      {
+        xtype:'textfield',
+        fieldLabel: '用户名',
+        name:'loginname',
+        allowBlank: false
+      },{
+        xtype:'textfield',
+        fieldLabel: '密码',
+        name:'password',
+        itemId: 'pass',
+        inputType: 'password',
+        allowBlank: false
+      },{
+        xtype:'textfield',
+        fieldLabel: '请重复密码',
+        name:'password_confirm',
+        inputType: 'password',
+        vtype: 'password',
+        initialPassField: 'pass',
+        allowBlank: false
+      },{
+        xtype:'textfield',
+        fieldLabel: '真实姓名',
+        name:'realname',
+        allowBlank: false
+      },{
+        xtype:'combo',
+        fieldLabel: '职位',
+        name:'title',
+        queryMode : 'local',
+        store : chTitleList,
+        valueField: 'id',
+        displayField: 'text',
+        forceSelection:true,
+        allowBlank: false
+      },{
+        xtype:'combo',
+        fieldLabel: '分支机构',
+        name:'branch',
+        queryMode : 'local',
+        store : chBranchList,
+        valueField: 'id',
+        displayField: 'text',
+        forceSelection:true,
+        allowBlank: false
+      },{
+        xtype:'textfield',
+        fieldLabel: '联系电话',
+        name:'tel',
+        allowBlank: false
+      },{
+        xtype:'textfield',
+        fieldLabel: 'QQ',
+        name:'qq',
+        allowBlank: false
+      },{
+        xtype:'textfield',
+        fieldLabel: 'Email',
+        name:'email',
+        allowBlank: false
       }]
-    },{
-    	text:'登录名',dataIndex:'strLoginname', width:100
-    },{
-    	text:'真实姓名',dataIndex:'strRealname', width:100
-    },{
-    	text:'职位',dataIndex:'chTitle', width:100
-    },{
-    	text:'分支机构',dataIndex:'chBranch', width:150
-    },{
-    	text:'联系电话',dataIndex:'strTel', width:150
-    },{
-    	text:'QQ',dataIndex:'strQQ', width:150
-    },{
-    	text:'邮箱',dataIndex:'strEmail', width:150
     }]
-  })
-
+  });
   var UserEditWin=Ext.create("Ext.window.Window",{
     resizeable:false,
     closeAction:"hide",
@@ -157,32 +278,17 @@ Ext.onReady(function() {
       {
         xtype:'textfield',
         fieldLabel: '用户名',
-        name:'strLoginname',
-        allowBlank: false
-      },{
-        xtype:'textfield',
-        fieldLabel: '密码',
-        name:'strPassword',
-        itemId: 'pass',
-        inputType: 'password',
-        allowBlank: false
-      },{
-        xtype:'textfield',
-        fieldLabel: '请重复密码',
-        name:'strPassword_comfirm',
-        inputType: 'password',
-        vtype: 'password',
-        initialPassField: 'pass',
+        name:'loginname',
         allowBlank: false
       },{
         xtype:'textfield',
         fieldLabel: '真实姓名',
-        name:'strRealname',
+        name:'realname',
         allowBlank: false
       },{
         xtype:'combo',
         fieldLabel: '职位',
-        name:'chTitle',
+        name:'title',
         queryMode : 'local',
         store : chTitleList,
         valueField: 'id',
@@ -192,7 +298,7 @@ Ext.onReady(function() {
       },{
         xtype:'combo',
         fieldLabel: '分支机构',
-        name:'chBranch',
+        name:'branch',
         queryMode : 'local',
         store : chBranchList,
         valueField: 'id',
@@ -202,17 +308,17 @@ Ext.onReady(function() {
       },{
         xtype:'textfield',
         fieldLabel: '联系电话',
-        name:'strTel',
+        name:'tel',
         allowBlank: false
       },{
         xtype:'textfield',
         fieldLabel: 'QQ',
-        name:'strQQ',
+        name:'qq',
         allowBlank: false
       },{
         xtype:'textfield',
         fieldLabel: 'Email',
-        name:'strEmail',
+        name:'email',
         allowBlank: false
       }]
     }]
@@ -273,18 +379,23 @@ Ext.onReady(function() {
       items:[
       {
         xtype:'textfield',
+        fieldLabel: '用户名',
+        name:'loginname',
+        allowBlank: false
+      },{
+        xtype:'textfield',
         fieldLabel: '密码',
-        name:'strPassword',
-        itemId: 'pass',
+        name:'password',
+        itemId: 'passE',
         inputType: 'password',
         allowBlank: false
       },{
         xtype:'textfield',
         fieldLabel: '请重复密码',
-        name:'strPassword_comfirm',
+        name:'password_confirm',
         inputType: 'password',
         vtype: 'password',
-        initialPassField: 'pass',
+        initialPassField: 'passE',
         allowBlank: false
       }]
     }]
@@ -315,7 +426,7 @@ Ext.onReady(function() {
       },{
       	text:'新增用户',
       	icon:'/misc/resources/icons/user_add.gif',
-      	handler:function(){UserEditWin.show();}
+      	handler:function(){UserNewWin.show();}
       },{
       	text:'项目管理',
       	icon:'/misc/resources/icons/user_add.gif',
@@ -335,4 +446,6 @@ Ext.onReady(function() {
       items: [userGrid]
     }]
   });
+  
+  strUserList.load();
 });

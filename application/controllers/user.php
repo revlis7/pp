@@ -62,17 +62,21 @@ class User extends Auth_Controller {
 		$password  = $this->input->post('password', true);
 		$title     = $this->input->post('title', true);
 		$realname  = $this->input->post('realname', true);
-				
+		$branch    = $this->input->post('branch', true);
+		$tel       = $this->input->post('tel', true);
+		$qq        = $this->input->post('qq', true);
+		$email     = $this->input->post('email', true);
+		
 		//if(element('group', $this->session->userdata('user')) !== 'administrator') {
 		//	$this->json->output(array('r' => 'error', 'm' => '您没有使用该功能的权限'));
 		//}
 		
 		if(!$this->utility->chk_loginname($loginname)) {
-			$this->json->output(array('r' => 'error', 'm' => '用户名不符合规范（用户名长3～24字符，由大小写字母、数字和下划线组成）'));
+			$this->json->output(array('success' => false, 'm' => '用户名不符合规范（用户名长3～24字符，由大小写字母、数字和下划线组成）'));
 		}
 		
 		if(!$this->utility->chk_password($password)) {
-			$this->json->output(array('r' => 'error', 'm' => '登录密码不符合规范（密码长6～24字符，由大小写字母、数字和下划线组成）'));
+			$this->json->output(array('success' => false, 'm' => '登录密码不符合规范（密码长6～24字符，由大小写字母、数字和下划线组成）'));
 		}
 		
 		/*
@@ -86,14 +90,14 @@ class User extends Auth_Controller {
 		*/
 		
 		if($this->User_model->exists($loginname)) {
-			$this->json->output(array('r' => 'error', 'm' => '用户名已存在'));
+			$this->json->output(array('success' => false, 'm' => '用户名已存在'));
 		}
 		
-		if(!$this->User_model->create($loginname, $password, $title, $realname)) {
-			$this->json->output(array('r' => 'error', 'm' => '添加用户失败'));
+		if(!$this->User_model->create($loginname, $password, $title, $realname, $branch, $tel, $qq, $email)) {
+			$this->json->output(array('success' => false, 'm' => '添加用户失败'));
 		}
 		
-		$this->json->output(array('r' => 'success'));
+		$this->json->output(array('success' => true));
 	}
 	
 	function pwd_change() {

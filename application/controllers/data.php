@@ -2,7 +2,7 @@
 
 class Data extends Auth_Controller {
 	function __construct() {
-		parent::__construct(false);
+		parent::__construct();
 	}
 	
 	function index() {

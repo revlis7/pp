@@ -21,21 +21,7 @@ Ext.onReady(function() {
       store: sampleStore,
       region:'center',
       columnLines: true,
-      columns: [{
-        xtype: 'actioncolumn',
-        //text:'编辑',
-        width:30,
-        sortable: false,
-        items: [{
-          icon: '/misc/resources/icons/cog_edit.png',
-          tooltip: '编辑此条记录',
-          handler: function(grid, rowIndex, colIndex) {
-            //sampleStore.removeAt(rowIndex);      
-            AmountEditForm.getForm().loadRecord(grid.getStore().getAt(rowIndex));
-            AmountEditForm.show();
-          }
-        }]
-      },
+      columns: [
         {text:'份额',         dataIndex:'total_share',     filtable:true, width:100},
         {text:'销售状态',     dataIndex:'status',         filtable:true, width:100},
         {text:'销售类别',     dataIndex:'exclusive',      filtable:true, width:100},
@@ -118,7 +104,7 @@ Ext.onReady(function() {
         },{
         	text:'进入管理模式',
         	icon:'/misc/resources/icons/plugin.gif',
-        	handler:function(){window.location.href='ts_usermanage.html';}
+        	handler:function(){window.location.href='ts_projmanage.html';}
         },{
         	text:'个人信息',
         	icon:'/misc/resources/icons/user.png',

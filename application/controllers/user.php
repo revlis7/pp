@@ -83,7 +83,7 @@ class User extends Auth_Controller {
 		}
 		
 		if(!$this->User_model->create($loginname, $password, $group, $realname)) {
-			$this->json->output(array('r' => 'error', 'm' => '创建用户失败'));
+			$this->json->output(array('r' => 'error', 'm' => '添加用户失败'));
 		}
 		
 		$this->json->output(array('r' => 'success'));

@@ -26,6 +26,7 @@ class User_model extends CI_Model {
 	}
 	
 	function get_all() {
+		$this->db->select('loginname, title, realname, branch, tel, qq, email');
 		$this->db->from('user');
 		$this->db->order_by('id', 'asc');
 		$query = $this->db->get();
@@ -39,12 +40,16 @@ class User_model extends CI_Model {
 		return $this->db->affected_rows();
 	}
 	
-	function create($loginname, $password, $group, $realname) {
+	function create($loginname, $password, $title, $realname = '', $branch = '', $tel = '', $qq = '', $email = '') {
 		$data = array(
 			'loginname' => $loginname,
 			'password'  => $this->encrypt->sha1($password),
-			'group'     => $group,
+			'title'     => $title,
 			'realname'  => $realname,
+			'branch'    => $branch,
+			'tel'       => $tel,
+			'qq'        => $qq,
+			'email'     => $email,
 		);
 		$query = $this->db->insert('user', $data);
 		if($this->db->affected_rows() === 1) {

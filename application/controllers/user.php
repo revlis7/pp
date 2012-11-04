@@ -20,6 +20,11 @@ class User extends Auth_Controller {
 		$this->template->load('default', 'user/main');
 	}
 	
+	function view() {
+		$data = $this->User_model->get_all();
+		echo $this->json->output(array('success' => true, 'data' => $data));
+	}
+	
 	function delete_submit() {
 		$loginname = $this->input->post('loginname', true);
 		
@@ -43,24 +48,24 @@ class User extends Auth_Controller {
 		$this->json->output(array('r' => 'success'));
 	}
 	
-	function create() {
+	function test() {
 		/* TODO
 		if(element('group', $this->session->userdata('user')) !== 'administrator') {
 			redirect('/', 'refresh');
 		}
 		*/
-		$this->template->load('default', 'user/create');
+		$this->template->load('default', 'user/test');
 	}
 	
 	function create_submit() {
 		$loginname = $this->input->post('loginname', true);
 		$password  = $this->input->post('password', true);
-		$group     = $this->input->post('group', true);
+		$title     = $this->input->post('title', true);
 		$realname  = $this->input->post('realname', true);
 				
-		if(element('group', $this->session->userdata('user')) !== 'administrator') {
-			$this->json->output(array('r' => 'error', 'm' => '您没有使用该功能的权限'));
-		}
+		//if(element('group', $this->session->userdata('user')) !== 'administrator') {
+		//	$this->json->output(array('r' => 'error', 'm' => '您没有使用该功能的权限'));
+		//}
 		
 		if(!$this->utility->chk_loginname($loginname)) {
 			$this->json->output(array('r' => 'error', 'm' => '用户名不符合规范（用户名长3～24字符，由大小写字母、数字和下划线组成）'));
@@ -70,6 +75,7 @@ class User extends Auth_Controller {
 			$this->json->output(array('r' => 'error', 'm' => '登录密码不符合规范（密码长6～24字符，由大小写字母、数字和下划线组成）'));
 		}
 		
+		/*
 		if(!$this->utility->chk_group($group)) {
 			$this->json->output(array('r' => 'error', 'm' => '用户分组信息错误，请重新选择'));
 		}
@@ -77,12 +83,13 @@ class User extends Auth_Controller {
 		if(!$this->utility->chk_realname($realname)) {
 			$this->json->output(array('r' => 'error', 'm' => '用户姓名不符合规范（姓名长2～64字符，由汉字、大小写字母、数字和下划线组成）'));
 		}
+		*/
 		
 		if($this->User_model->exists($loginname)) {
 			$this->json->output(array('r' => 'error', 'm' => '用户名已存在'));
 		}
 		
-		if(!$this->User_model->create($loginname, $password, $group, $realname)) {
+		if(!$this->User_model->create($loginname, $password, $title, $realname)) {
 			$this->json->output(array('r' => 'error', 'm' => '添加用户失败'));
 		}
 		

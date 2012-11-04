@@ -56,7 +56,7 @@ Ext.onReady(function() {
             submitEmptyText: false,
             waitMsg: 'Saving Data...',
             success: function(form, action) {
-               this.up('window').close();
+               UserEditWin.close();
                strUserList.load();
             },
             failure: function(form, action) {
@@ -80,7 +80,7 @@ Ext.onReady(function() {
             submitEmptyText: false,
             waitMsg: 'Deleting...',
             success: function(form, action) {
-               this.up('window').close();
+               UserEditWin.close();
                strUserList.removeAt(rowIndex);
             },
             failure: function(form, action) {
@@ -360,7 +360,8 @@ Ext.onReady(function() {
             disabled: true,
             handler: function() {
               this.up('form').getForm().submit({
-                  url: 'xml-form-errors-ed-json.json',
+                  //url: 'xml-form-errors-ed-json.json',
+                  url: '/user/pwd_change_submit',
                   submitEmptyText: false,
                   waitMsg: 'Saving Data...',
                   success: function(form, action) {

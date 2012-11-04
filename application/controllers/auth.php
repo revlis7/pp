@@ -32,31 +32,17 @@ class Auth extends Auth_Controller {
 		*/
 		
 		if(!$this->User_model->exists($loginname)) {
-			$this->json->output(array('r' => 'error', 'm' => '用户不存在'));
+			$this->json->output(array('success' => false, 'errors' => array('loginname' => '用户不存在')));
 		}
-		
-		/*
-		$this->db->from('user')->where('loginname', $loginname);
-		if($this->db->count_all_results() === 0)  {
-			$this->json->output(array('r' => 'error', 'm' => '用户不存在'));
-		}
-		*/
 		
 		if(!$this->User_model->validate($loginname, $password)) {
-			$this->json->output(array('r' => 'error', 'm' => '登录密码错误'));
+			$this->json->output(array('success' => false, 'errors' => array('password' => '登录密码错误')));
 		}
-		
-		/*
-		$this->db->from('user')->where(array('loginname' => $loginname, 'password' => $this->encrypt->sha1($password)));
-		if($this->db->count_all_results() === 0)  {
-			$this->json->output(array('r' => 'error', 'm' => '登录密码错误'));
-		}
-		*/
 		
 		if(!$this->login->set_login($loginname)) {
-			$this->json->output(array('r' => 'error', 'm' => '登录失败'));
+			$this->json->output(array('success' => false, 'errors' => array('loginname' => '登录失败')));
 		}
 		
-		$this->json->output(array('r' => 'success'));
+		$this->json->output(array('success' => true));
 	}
 }

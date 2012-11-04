@@ -53,7 +53,18 @@ Ext.onReady(function() {
           	icon:'/misc/resources/icons/grid.png',
             text: '登录',
             handler: function() {
-         window.location.href='ts_viewonly.html';
+              this.up('form').getForm().submit({
+                  //url: 'xml-form-errors-ed-json.json',
+                  url: '/auth/auth_submit',
+                  submitEmptyText: false,
+                  waitMsg: 'Saving Data...',
+                  success: function(form, action) {
+                    window.location.href='/data';
+                  },
+                  failure: function(form, action) {
+                    Ext.Msg.alert('alert', '用户名或密码错误，请检查您的输入！');
+                  }
+              });
             }
           },{
           	xtype:'box',

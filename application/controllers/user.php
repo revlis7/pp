@@ -29,23 +29,23 @@ class User extends Auth_Controller {
 		$loginname = $this->input->post('loginname', true);
 		
 		//只允许管理员访问
-		if(element('group', $this->session->userdata('user')) !== 'administrator') {
-			$this->json->output(array('r' => 'error', 'm' => '您没有使用该功能的权限'));
-		}
+		//if(element('group', $this->session->userdata('user')) !== 'administrator') {
+		//	$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		//}
 		
 		if(!$this->utility->chk_loginname($loginname)) {
-			$this->json->output(array('r' => 'error', 'm' => '请正确输入用户账号'));
+			$this->json->output(array('success' => false, 'm' => '请正确输入用户账号'));
 		}
 		
 		if($loginname === element('loginname', $this->session->userdata('user'))) {
-			$this->json->output(array('r' => 'error', 'm' => '不能删除自己的账号'));
+			$this->json->output(array('success' => false, 'm' => '不能删除自己的账号'));
 		}
 		
 		if(!$this->User_model->delete($loginname)) {
-			$this->json->output(array('r' => 'error', 'm' => '未找到符合的账号信息'));
+			$this->json->output(array('success' => false, 'm' => '未找到符合的账号信息'));
 		}
 		
-		$this->json->output(array('r' => 'success'));
+		$this->json->output(array('success' => true));
 	}
 	
 	function test() {
@@ -72,11 +72,11 @@ class User extends Auth_Controller {
 		//}
 		
 		if(!$this->utility->chk_loginname($loginname)) {
-			$this->json->output(array('success' => false, 'm' => '用户名不符合规范（用户名长3～24字符，由大小写字母、数字和下划线组成）'));
+			$this->json->output(array('success' => false, 'errors' => array('loginname' => '用户名不符合规范（用户名长3～24字符，由大小写字母、数字和下划线组成）')));
 		}
 		
 		if(!$this->utility->chk_password($password)) {
-			$this->json->output(array('success' => false, 'm' => '登录密码不符合规范（密码长6～24字符，由大小写字母、数字和下划线组成）'));
+			$this->json->output(array('success' => false, 'errors' => array('password' => '登录密码不符合规范（密码长6～24字符，由大小写字母、数字和下划线组成）')));
 		}
 		
 		/*

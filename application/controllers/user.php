@@ -20,7 +20,7 @@ class User extends Auth_Controller {
 		$this->template->load('default', 'user/main');
 	}
 	
-	function delete() {
+	function delete_submit() {
 		$loginname = $this->input->post('loginname', true);
 		
 		//只允许管理员访问

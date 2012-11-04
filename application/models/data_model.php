@@ -47,6 +47,16 @@ class Data_model extends CI_Model {
 		return false;
 	}
 	
+	function delete($id) {
+		$this->db->from('data')->where('id', $id);
+		$this->db->delete();
+		
+		if($this->db->affected_rows() === 1) {
+			return true;
+		}
+		return false;
+	}
+	
 	function get_all() {
 		$this->db->from('data');
 		$this->db->order_by('id', 'asc');

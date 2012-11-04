@@ -25,7 +25,7 @@ function del(loginname) {
 		loginname : loginname
 	};
 	$.ajax({
-		url : '/user/delete',
+		url : '/user/delete_submit',
 		type : 'POST',
 		data : S.data,
 		cache : false,

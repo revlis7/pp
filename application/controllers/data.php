@@ -59,6 +59,16 @@ class Data extends Auth_Controller {
 		$this->json->output(array('r' => 'success'));
 	}
 	
+	function delete_submit() {
+		$id = $this->input->post('id', true);
+	
+		if(!$this->Data_model->delete($id)) {
+			$this->json->output(array('r' => 'error', 'm' => '未找到符合的数据记录'));
+		}
+		
+		$this->json->output(array('r' => 'success'));
+	}
+	
 	function manage() {
 		$this->template->load('default', 'data/manage');
 	}

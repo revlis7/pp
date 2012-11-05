@@ -200,7 +200,7 @@ Ext.require([
         {name:'profit_property'  ,type:'string' },
         {name:'profit'           ,type:'float'  },
         {name:'manager'          ,type:'string' },
-        {name:'strContract'      ,type:'string' },
+        {name:'contract'      ,type:'string' },
         {name:'remark'           ,type:'string' },
         {name:'commission_b_tax' ,type:'float'  },
         {name:'commission_a_tax' ,type:'float'  },
@@ -221,7 +221,7 @@ Ext.require([
       proxy: {
         type: 'ajax',
         //url: '/etc/proj_sample_data.json',
-        url: '/data/view',
+        url: '/proj/view',
         reader: {
             type: 'json',
             root: 'data'

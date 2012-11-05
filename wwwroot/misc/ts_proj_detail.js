@@ -363,7 +363,7 @@ Ext.onReady(function() {
         fieldLabel: '合同情况',
         width:480,
     	  disabled:true,
-        name:'strContract',
+        name:'contract',
         allowBlank: true
       },{
         xtype:'textareafield',

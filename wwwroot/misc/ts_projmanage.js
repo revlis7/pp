@@ -261,7 +261,7 @@ Ext.onReady(function() {
               xtype:'textfield',
               fieldLabel: '合同情况',
               width:480,
-              name:'strContract',
+              name:'contract',
               allowBlank: true
             },{
               xtype:'combo',

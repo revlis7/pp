@@ -59,7 +59,7 @@ Ext.onReady(function() {
                   submitEmptyText: false,
                   waitMsg: 'Saving Data...',
                   success: function(form, action) {
-                    window.location.href='/data';
+                    window.location.href='/proj';
                   },
                   failure: function(form, action) {
                     Ext.Msg.alert('alert', '用户名或密码错误，请检查您的输入！');

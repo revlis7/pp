@@ -16,7 +16,7 @@ $(document).ready(function() {
 				if(json.r == 'error') {
 					alert(json.m);
 				} else if(json.r == 'success') {
-					window.location.href = '/data';
+					window.location.href = '/proj';
 				}
 			},
 			error : function() {

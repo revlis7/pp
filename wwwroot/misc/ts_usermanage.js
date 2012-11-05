@@ -441,7 +441,7 @@ Ext.onReady(function() {
       },{
       	text:'离开管理员模式',
       	icon:'/misc/resources/icons/cross.gif',
-      	handler:function(){window.location.href='/data';}
+      	handler:function(){window.location.href='/proj';}
       }]
     },{
       xtype:'panel', 

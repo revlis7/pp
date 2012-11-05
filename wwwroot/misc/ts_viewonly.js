@@ -21,7 +21,7 @@ Ext.onReady(function() {
   	  
   var listControl=Ext.create('Ext.data.JsonStore', {
       fields: [
-        {name:'proj_id'          ,type:'boolean' },
+        {name:'proj_id'   ,type:'boolean' },
         {name:'proj_detail_id'   ,type:'boolean' },
         {name:'total_share'      ,type:'boolean' },
         {name:'status'           ,type:'boolean' },

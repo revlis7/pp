@@ -1,7 +1,8 @@
 {
   "success":true,
   "data":{
-    "id":false,
+    "proj_id":false,
+    "proj_detail_id":false,
     "total_share":false,
     "status":false,
     "exclusive":false,

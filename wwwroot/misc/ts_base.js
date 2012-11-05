@@ -183,6 +183,8 @@ Ext.require([
 
   var sampleStore=Ext.create('Ext.data.JsonStore', {
       fields: [
+        {name:'proj_id'      ,type:'integer' },
+        {name:'proj_detail_id'      ,type:'integer' },
         {name:'total_share'      ,type:'string' },
         {name:'status'           ,type:'string' },
         {name:'exclusive'        ,type:'string' },

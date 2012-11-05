@@ -21,6 +21,7 @@ Ext.onReady(function() {
   	  
   var listControl=Ext.create('Ext.data.JsonStore', {
       fields: [
+        {name:'proj_id'          ,type:'boolean' },
         {name:'proj_detail_id'   ,type:'boolean' },
         {name:'total_share'      ,type:'boolean' },
         {name:'status'           ,type:'boolean' },
@@ -78,6 +79,7 @@ Ext.onReady(function() {
         region:'center',
         columnLines: true,
         columns: [
+          {text:'proj_id',     dataIndex:'proj_id',       filtable:true, width:100,hidden:records[0].get("proj_id")},
           {text:'proj_detail_id',     dataIndex:'proj_detail_id',       filtable:true, width:100,hidden:records[0].get("proj_detail_id")},
           {text:'份额',         dataIndex:'total_share',     filtable:true, width:100, hidden:records[0].get("total_share")},
           {text:'销售状态',     dataIndex:'status',         filtable:true, width:100, hidden:records[0].get("status")},

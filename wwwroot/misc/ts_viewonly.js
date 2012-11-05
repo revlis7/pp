@@ -1,3 +1,5 @@
+Ext.require(['Ext.ux.RowExpander']);
+
 Ext.onReady(function() {
   Ext.QuickTips.init();
 
@@ -19,7 +21,7 @@ Ext.onReady(function() {
   	  
   var listControl=Ext.create('Ext.data.JsonStore', {
       fields: [
-        {name:'id'         ,type:'boolean' },
+        {name:'proj_detail_id'   ,type:'boolean' },
         {name:'total_share'      ,type:'boolean' },
         {name:'status'           ,type:'boolean' },
         {name:'exclusive'        ,type:'boolean' },
@@ -37,7 +39,7 @@ Ext.onReady(function() {
         {name:'profit_property'  ,type:'boolean' },
         {name:'profit'           ,type:'boolean' },
         {name:'manager'          ,type:'boolean' },
-        {name:'contract'      ,type:'boolean' },
+        {name:'contract'         ,type:'boolean' },
         {name:'remark'           ,type:'boolean' },
         {name:'commission_b_tax' ,type:'boolean' },
         {name:'commission_a_tax' ,type:'boolean' },
@@ -57,6 +59,7 @@ Ext.onReady(function() {
       ],
       proxy: {
         type: 'ajax',
+        //url: 'listControl.json',
         url: '/etc/listControl.json',
         reader: {
             type: 'json',
@@ -75,7 +78,7 @@ Ext.onReady(function() {
         region:'center',
         columnLines: true,
         columns: [
-          {text:'id',          dataIndex:'id',       filtable:true, width:100,hidden:records[0].get("detailId")},
+          {text:'proj_detail_id',     dataIndex:'proj_detail_id',       filtable:true, width:100,hidden:records[0].get("proj_detail_id")},
           {text:'份额',         dataIndex:'total_share',     filtable:true, width:100, hidden:records[0].get("total_share")},
           {text:'销售状态',     dataIndex:'status',         filtable:true, width:100, hidden:records[0].get("status")},
           {text:'销售类别',     dataIndex:'exclusive',      filtable:true, width:100, hidden:records[0].get("exclusive")},
@@ -85,7 +88,7 @@ Ext.onReady(function() {
           {text:'发行方',       dataIndex:'issue',         filtable:true, width:100, hidden:records[0].get("issue")},
           {text:'项目名称',     dataIndex:'name',          filtable:true, width:100, hidden:records[0].get("name")},
           {text:'资金投向',     dataIndex:'flow_of_fund',    filtable:true, width:100, hidden:records[0].get("flow_of_fund")},
-          {text:'项目亮点',     dataIndex:'highlights',    filtable:true, width:100, hidden:records[0].get("highlights")},
+          //{text:'项目亮点',     dataIndex:'highlights',    filtable:true, width:100, hidden:records[0].get("highlights")},
           {text:'项目期限',     dataIndex:'month',           filtable:true, width:100, hidden:records[0].get("month")},
           {text:'融资规模',     dataIndex:'scale',           filtable:true, width:100, hidden:records[0].get("scale")},
           {text:'分配',         dataIndex:'cycle',          filtable:true, width:100, hidden:records[0].get("cycle")},
@@ -94,7 +97,7 @@ Ext.onReady(function() {
           {text:'项目收益',     dataIndex:'profit',          filtable:true, width:100, hidden:records[0].get("profit")},
           {text:'产品经理',     dataIndex:'manager',        filtable:true, width:100, hidden:records[0].get("manager")},
           {text:'合同信息',     dataIndex:'contract',        filtable:true, width:100, hidden:records[0].get("contract")},
-          {text:'备注',         dataIndex:'remark',        filtable:true, width:100, hidden:records[0].get("remark")},
+          //{text:'备注',         dataIndex:'remark',        filtable:true, width:100, hidden:records[0].get("remark")},
           {text:'税前佣金',     dataIndex:'commission_b_tax',  filtable:true, width:100, hidden:records[0].get("commission_b_tax")},
           {text:'税后佣金',     dataIndex:'commission_a_tax',  filtable:true, width:100, hidden:records[0].get("commission_a_tax")},
           {text:'佣金',         dataIndex:'inner_commission', filtable:true, width:100, hidden:records[0].get("inner_commission")},
@@ -121,6 +124,13 @@ Ext.onReady(function() {
             dock: 'bottom',
             store: sampleStore
         })],
+        plugins: [{
+            ptype: 'rowexpander',
+            rowBodyTpl : [
+                '<p><b>项目亮点:</b> {highlights}</p>',
+                '<p><b>备注:</b> {remark}</p>'
+            ]
+        }],
         emptyText: 'No Matching Records'
       });
 
@@ -158,7 +168,7 @@ Ext.onReady(function() {
             },{
             	text:'进入管理模式',
             	icon:'/misc/resources/icons/plugin.gif',
-            	handler:function(){window.location.href='/data/manage';}
+            	handler:function(){window.location.href='ts_projmanage.html';}
             },{
             	text:'个人信息',
             	icon:'/misc/resources/icons/user.png',
@@ -166,7 +176,7 @@ Ext.onReady(function() {
             },{
             	text:'退出',
             	icon:'/misc/resources/icons/cross.gif',
-            	handler:function(){window.location.href='/logout';}
+            	handler:function(){window.location.href='ts_login.html';}
             }]
           },{
         	xtype:'panel', 

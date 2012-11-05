@@ -52,215 +52,215 @@ Ext.onReady(function() {
      }, ]
    });
 */  
-   var ProjWin=Ext.create("Ext.window.Window",{
-      resizeable:false,
-      closeAction:"hide",
-      closable:false,
-      title:'新增项目',
-      width:540,
+  var ProjWin=Ext.create("Ext.window.Window",{
+    resizeable:false,
+    closeAction:"hide",
+    closable:false,
+    title:'新增项目',
+    width:540,
+    items:[
+    {
+      xtype:"form",
+      bodyPadding:5,
+      trackResetOnLoad:true,
+      border:0,
+      waitTitle:"Pleas wait...",
+      layout:{
+        type:'hbox',
+        defaultMargins: {top: 0, right: 5, bottom: 0, left: 5}
+      },
+      fieldDefaults:{
+        lableWidth:90,
+        width:320
+      },
+      dockedItems: [{
+        dock: 'bottom',
+        xtype: 'toolbar',
+        bodyPadding: 5,
+        items: [{
+         icon:'/misc/resources/icons/grid.png',
+          text: '进入详细配置',
+          formBind: true, //only enabled once the form is valid
+          disabled: true,
+          handler: function() {
+            var win = this.up('window');
+            var form = this.up('form').getForm();
+            if (form.isValid()) {
+                form.submit({
+                    success: function(form, action) {
+                       ProjWin.close();
+                       window.location.href="ts_proj_detail.html";
+                    },
+                    failure: function(form, action) {
+                       ProjWin.close();
+                    }
+                });
+            }
+          }
+        },{
+         icon:'/misc/resources/icons/cross.gif',
+          text: '取消',
+          handler: function(){
+            this.up('window').close();
+          }
+        }]
+      }],
       items:[
       {
-        xtype:"form",
-        bodyPadding:5,
-        trackResetOnLoad:true,
+        xtype:'panel',
+        region:'east',
         border:0,
-        waitTitle:"Pleas wait...",
-        layout:{
-          type:'hbox',
-          defaultMargins: {top: 0, right: 5, bottom: 0, left: 5}
-        },
-        fieldDefaults:{
-          lableWidth:90,
-          width:320
-        },
-        dockedItems: [{
-            dock: 'bottom',
-            xtype: 'toolbar',
-            bodyPadding: 5,
-            items: [{
-            	  icon:'/misc/resources/icons/grid.png',
-                text: '进入详细配置',
-                formBind: true, //only enabled once the form is valid
-                disabled: true,
-                handler: function() {
-                    var win = this.up('window');
-                    var form = this.up('form').getForm();
-                    if (form.isValid()) {
-                        form.submit({
-                            success: function(form, action) {
-                               ProjWin.close();
-                               window.location.href="ts_proj_detail.html";
-                            },
-                            failure: function(form, action) {
-                               ProjWin.close();
-                            }
-                        });
-                    }
-                }
-            },{
-            	  icon:'/misc/resources/icons/cross.gif',
-                text: '取消',
-                handler: function(){
-                    this.up('window').close();
-                }
-            }]
-        }],
         items:[
         {
-          xtype:'panel',
-          region:'east',
-          border:0,
+          xtype:'fieldset',
+          title: '项目信息',
+          //collapsible: true,
+          defaults: {
+            labelWidth: 89,
+            anchor: '100%',
+            layout: {
+              type: 'hbox',
+              defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
+            }
+          },
           items:[
           {
-            xtype:'fieldset',
-            title: '项目信息',
-            //collapsible: true,
-            defaults: {
-              labelWidth: 89,
-              anchor: '100%',
-              layout: {
-                type: 'hbox',
-                defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
-              }
-            },
+            xtype:'fieldcontainer',
+            layout:'hbox',
+            flex:1,
+            width:480,
+            region:'north',
+            fieldLabel: '项目类别',
             items:[
-            {
-              xtype:'fieldcontainer',
-              layout:'hbox',
-              flex:1,
-              width:480,
-              region:'north',
-              fieldLabel: '项目类别',
-              items:[
-              {//主类别
-                 xtype:'combo',
-                 emptyText:"主类别...",  
-                 width:160,   
-                 store : chCategoryList,
-                 queryMode : 'local',
-                 forceSelection:true,
-                 triggerAction: 'all',
-                 valueField: 'id',   //value值字段
-                 displayField: 'text',  //显示文本字段
-                 listeners: { // 监听选择事件
-                     select: function() {
-                        chSubCategoryList.removeAll();
-                        if (this.getValue() == '信托类') {
-                           chSubCategoryList.loadData(subTrustList,true);
-                        } else if (this.getValue() == '债券类') {
-                           chSubCategoryList.loadData(subBondList,true);
-                        } else if (this.getValue() == '私募证券类') {
-                           chSubCategoryList.loadData(subPrivateSecuritiesList,true);
-                        } else if (this.getValue() == '私募股权类') {
-                           chSubCategoryList.loadData(subPrivateEquityList,true);
-                        } else if (this.getValue() == '其他类') {
-                           chSubCategoryList.loadData(subOtherList,true);
-                        }
-                     }
-                 }
-              }, 
-              {//子类别
-                 xtype:'combo',
-                 emptyText:"子类别...",
-                 width:160,   
-                 store : chSubCategoryList,
-                 queryMode: 'local',
-                 triggerAction: 'all',
-                 valueField: 'value',
-                 displayField: 'text',
-                 forceSelection:true,
-                 listeners: { 
-                     select: function() {
-//                         alert(comboBuild.getValue() + '-' + comboRoom.getValue());                          
-                        }
-                 }
-              }]
-            },{
-              xtype:'textfield',
-              fieldLabel: '发行方',
-              name:'issue',
-              allowBlank: false
-            },{
-              xtype:'textfield',
-              fieldLabel: '项目名称',
-              width:480,
-              name:'name',
-              allowBlank: false
-            },{
-              xtype:'textfield',
-              fieldLabel: '资金投向',
-              width:480,
-              name:'flow_of_fund',
-              allowBlank: false
-            },{
-              xtype:'textareafield',
-              fieldLabel: '项目亮点',
-              width:480,
-              height:100,
-              name:'highlights',
-              allowBlank: false
-            },{
-              xtype:'numberfield',
-              fieldLabel: '项目期限',
-              name:'month',
-              allowBlank: false
-            },{
-              xtype:'numberfield',
-              fieldLabel: '融资规模(万)',
-              name:'scale',
-              allowBlank: false
-            },{
-              xtype:'combo',
-              fieldLabel: '分配',
-              name:'cycle',
-              queryMode : 'local',
-              store : chCycleList,
-              valueField: 'id',
-              displayField: 'text',
-              forceSelection:true,
-              allowBlank: false
-            },{
-              xtype:'combo',
-              fieldLabel: '项目收益属性',
-              name:'profit_property',
-              queryMode : 'local',
-              store : chProfitPropertyList,
-              valueField: 'id',
-              displayField: 'text',
-              forceSelection:true,
-              allowBlank: false
-            },{
-              xtype:'textfield',
-              fieldLabel: '合同情况',
-              width:480,
-              name:'contract',
-              allowBlank: true
-            },{
-              xtype:'combo',
-              fieldLabel: '产品经理',
-              name:'manager',
-              queryMode : 'local',
-              store : chManagerList,
-              valueField: 'id',
-              displayField: 'text',
-              forceSelection:true,
-              allowBlank: false
-            },{
-              xtype:'datefield',
-              fieldLabel: '成立日期',
-              forceSelection:true,
-              name:'found'
-            },{
-              xtype:'textareafield',
-              fieldLabel: '备注',
-              width:480,
-              name:'remark',
-              allowBlank: true
+            {//主类别
+               xtype:'combo',
+               emptyText:"主类别...",  
+               width:160,   
+               store : chCategoryList,
+               queryMode : 'local',
+               forceSelection:true,
+               triggerAction: 'all',
+               valueField: 'id',   //value值字段
+               displayField: 'text',  //显示文本字段
+               listeners: { // 监听选择事件
+                   select: function() {
+                      chSubCategoryList.removeAll();
+                      if (this.getValue() == '信托类') {
+                         chSubCategoryList.loadData(subTrustList,true);
+                      } else if (this.getValue() == '债券类') {
+                         chSubCategoryList.loadData(subBondList,true);
+                      } else if (this.getValue() == '私募证券类') {
+                         chSubCategoryList.loadData(subPrivateSecuritiesList,true);
+                      } else if (this.getValue() == '私募股权类') {
+                         chSubCategoryList.loadData(subPrivateEquityList,true);
+                      } else if (this.getValue() == '其他类') {
+                         chSubCategoryList.loadData(subOtherList,true);
+                      }
+                   }
+               }
+            }, 
+            {//子类别
+               xtype:'combo',
+               emptyText:"子类别...",
+               width:160,   
+               store : chSubCategoryList,
+               queryMode: 'local',
+               triggerAction: 'all',
+               valueField: 'value',
+               displayField: 'text',
+               forceSelection:true,
+               listeners: { 
+                   select: function() {
+//                       alert(comboBuild.getValue() + '-' + comboRoom.getValue());                          
+                      }
+               }
             }]
+          },{
+            xtype:'textfield',
+            fieldLabel: '发行方',
+            name:'issue',
+            allowBlank: false
+          },{
+            xtype:'textfield',
+            fieldLabel: '项目名称',
+            width:480,
+            name:'name',
+            allowBlank: false
+          },{
+            xtype:'textfield',
+            fieldLabel: '资金投向',
+            width:480,
+            name:'flow_of_fund',
+            allowBlank: false
+          },{
+            xtype:'textareafield',
+            fieldLabel: '项目亮点',
+            width:480,
+            height:100,
+            name:'highlights',
+            allowBlank: false
+          },{
+            xtype:'numberfield',
+            fieldLabel: '项目期限',
+            name:'month',
+            allowBlank: false
+          },{
+            xtype:'numberfield',
+            fieldLabel: '融资规模(万)',
+            name:'scale',
+            allowBlank: false
+          },{
+            xtype:'combo',
+            fieldLabel: '分配',
+            name:'cycle',
+            queryMode : 'local',
+            store : chCycleList,
+            valueField: 'id',
+            displayField: 'text',
+            forceSelection:true,
+            allowBlank: false
+          },{
+            xtype:'combo',
+            fieldLabel: '项目收益属性',
+            name:'profit_property',
+            queryMode : 'local',
+            store : chProfitPropertyList,
+            valueField: 'id',
+            displayField: 'text',
+            forceSelection:true,
+            allowBlank: false
+          },{
+            xtype:'textfield',
+            fieldLabel: '合同情况',
+            width:480,
+            name:'contract',
+            allowBlank: true
+          },{
+            xtype:'combo',
+            fieldLabel: '产品经理',
+            name:'manager',
+            queryMode : 'local',
+            store : chManagerList,
+            valueField: 'id',
+            displayField: 'text',
+            forceSelection:true,
+            allowBlank: false
+          },{
+            xtype:'datefield',
+            fieldLabel: '成立日期',
+            forceSelection:true,
+            name:'found'
+          },{
+            xtype:'textareafield',
+            fieldLabel: '备注',
+            width:480,
+            name:'remark',
+            allowBlank: true
           }]
         }]
       }]
-    });
+    }]
+  });
   var AmountEditForm=Ext.create('Ext.form.Panel',{
     region:'east',
     width:320,
@@ -713,8 +713,10 @@ Ext.onReady(function() {
     }]
   });
   
-  sampleStore.load();
-  sampleChanges.load();
+  //sampleStore.load();
+  //sampleChanges.load();
 
-  ProjInfoForm.getForm().loadRecord(sampleStore.first());
+  //ProjInfoForm.getForm().loadRecord(sampleStore.first());
+  
+  ProjWin.show();
 });

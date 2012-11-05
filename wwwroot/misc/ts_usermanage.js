@@ -228,7 +228,7 @@ Ext.onReady(function() {
     resizeable:false,
     closeAction:"hide",
     closable:false,
-    title:'新增用户',
+    title:'编辑用户信息',
     width:380,
     items:[
     {
@@ -437,11 +437,11 @@ Ext.onReady(function() {
       },{
       	text:'项目管理',
       	icon:'/misc/resources/icons/user_add.gif',
-      	handler:function(){window.location.href='ts_projmanage.html';}
+      	handler:function(){window.location.href='/data/manage';}
       },{
       	text:'离开管理员模式',
       	icon:'/misc/resources/icons/cross.gif',
-      	handler:function(){window.location.href='ts_viewonly.html';}
+      	handler:function(){window.location.href='/data';}
       }]
     },{
       xtype:'panel', 

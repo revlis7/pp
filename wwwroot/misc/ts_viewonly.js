@@ -104,7 +104,7 @@ Ext.onReady(function() {
         },{
         	text:'进入管理模式',
         	icon:'/misc/resources/icons/plugin.gif',
-        	handler:function(){window.location.href='ts_projmanage.html';}
+        	handler:function(){window.location.href='/data/manage';}
         },{
         	text:'个人信息',
         	icon:'/misc/resources/icons/user.png',

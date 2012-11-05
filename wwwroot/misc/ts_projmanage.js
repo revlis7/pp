@@ -333,11 +333,11 @@ Ext.onReady(function() {
         },{
         	text:'用户管理',
         	icon:'/misc/resources/icons/user_edit.png',
-        	handler:function(){window.location.href='ts_usermanage.html';}
+        	handler:function(){window.location.href='/user';}
         },{
         	text:'离开管理员模式',
         	icon:'/misc/resources/icons/cross.gif',
-        	handler:function(){window.location.href='ts_viewonly.html';}
+        	handler:function(){window.location.href='/data';}
         }]
       },{
     	xtype:'panel', 

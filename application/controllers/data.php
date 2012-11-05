@@ -14,6 +14,10 @@ class Data extends Auth_Controller {
 		echo $this->json->output(array('success' => true, 'data' => $data));
 	}
 	
+	function manage() {
+		$this->template->load('default', 'data/manage');
+	}
+	
 	function test() {
 		$this->template->load('default', 'data/test');
 	}
@@ -67,9 +71,5 @@ class Data extends Auth_Controller {
 		}
 		
 		$this->json->output(array('r' => 'success'));
-	}
-	
-	function manage() {
-		$this->template->load('default', 'data/manage');
 	}
 }

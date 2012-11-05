@@ -40,7 +40,7 @@ class User_model extends CI_Model {
 		return $this->db->affected_rows();
 	}
 	
-	function create($loginname, $password, $title, $realname = '', $branch = '', $tel = '', $qq = '', $email = '') {
+	function create($loginname, $password, $title, $realname = '', $branch = '', $tel = '', $qq = '', $email = '', $status = 'normal') {
 		$data = array(
 			'loginname' => $loginname,
 			'password'  => $this->encrypt->sha1($password),
@@ -50,12 +50,17 @@ class User_model extends CI_Model {
 			'tel'       => $tel,
 			'qq'        => $qq,
 			'email'     => $email,
+			'status'    => $status,
 		);
 		$query = $this->db->insert('user', $data);
 		if($this->db->affected_rows() === 1) {
 			return true;
 		}
 		return false;
+	}
+	
+	function ban($loginname) {
+		return 0;
 	}
 	
 	function delete($loginname) {

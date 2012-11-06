@@ -58,8 +58,19 @@ class Proj_model extends CI_Model {
 		return false;
 	}
 	
-	function delete($proj_id) {
+	// TODO join delete
+	function delete_proj($proj_id) {
 		$this->db->from('proj')->where('id', $proj_id);
+		$this->db->delete();
+		
+		if($this->db->affected_rows() === 1) {
+			return true;
+		}
+		return false;
+	}
+	
+	function delete_detail($proj_detail_id) {
+		$this->db->from('proj_detail')->where('id', $proj_detail_id);
 		$this->db->delete();
 		
 		if($this->db->affected_rows() === 1) {
@@ -74,6 +85,7 @@ class Proj_model extends CI_Model {
 		return $query->result();
 	}
 	
+	// TODO
 	function get_detail() {
 		return null;
 	}

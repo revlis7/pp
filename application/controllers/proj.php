@@ -58,7 +58,7 @@ class Proj extends Auth_Controller {
 		return null;
 	}
 	
-	function create_submit() {
+	function proj_create_submit() {
 		//$total_share = $this->input->post('total_share', true);
 		//$status = $this->input->post('status', true);
 		//$exclusive = $this->input->post('exclusive', true);
@@ -130,13 +130,21 @@ class Proj extends Auth_Controller {
 		$this->json->output(array('success' => true));
 	}
 	
-	function delete_submit() {
-		$id = $this->input->post('id', true);
+	function proj_delete_submit() {
+		$proj_id = $this->input->post('proj_id', true);
 	
-		if(!$this->Data_model->delete($id)) {
+		if(!$this->Data_model->delete_proj($proj_id)) {
 			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
 		}
+		$this->json->output(array('success' => true));
+	}
+	
+	function detail_delete_submit() {
+		$proj_detail_id = $this->input->post('proj_detail_id', true);
 		
+		if(!$this->Data_model->delete_detail($proj_detail_id)) {
+			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+		}
 		$this->json->output(array('success' => true));
 	}
 }

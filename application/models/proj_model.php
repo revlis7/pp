@@ -4,7 +4,7 @@ class Proj_model extends CI_Model {
 		parent::__construct();
 	}
 	
-	function create($category = '', $sub_category = '', $issue = '', $name = '', $flow_of_fund = '', $highlights = '', $month = '', $scale = '', $cycle = '', $profit_property = '', $manager = '', $contract = '', $remark = '', $found = '') {
+	function create_proj($category = '', $sub_category = '', $issue = '', $name = '', $flow_of_fund = '', $highlights = '', $month = '', $scale = '', $cycle = '', $profit_property = '', $manager = '', $contract = '', $remark = '', $found = '') {
 		$proj = array(
 			'category' => $category,
 			'sub_category' => $sub_category,
@@ -21,6 +21,37 @@ class Proj_model extends CI_Model {
 			'found' => $found,
 		);
 		$query = $this->db->insert('proj', $proj);
+		if($this->db->affected_rows() === 1) {
+			return true;
+		}
+		return false;
+	}
+	
+	function create_detail($proj_id, $total_share = '', $status = '', $exclusive = '', $grade = '', $amount = '', $profit = '', $remark = '', $commission_b_tax = '', $commission_a_tax = '', $inner_commission = '', $outer_commission = '', $pay = '', $paid = '', $quota = '', $quota_paid = '', $quota_remain = '', $main_channel = '', $channel_company = '', $channel_contact = '', $billing_company = '', $manager_remark = '') {
+		$proj_detail = array(
+			'total_share' => $total_share,
+			'status' => $status,
+			'exclusive' => $exclusive,
+			'grade' => $grade,
+			'amount' => $amount,
+			'profit' => $profit,
+			'remark' => $remark,
+			'commission_b_tax' => $commission_b_tax,
+			'commission_a_tax' => $commission_a_tax,
+			'inner_commission' => $inner_commission,
+			'outer_commission' => $outer_commission,
+			'pay' => $pay,
+			'paid' => $paid,
+			'quota' => $quota,
+			'quota_paid' => $quota_paid,
+			'quota_remain' => $quota_remain,
+			'main_channel' => $main_channel,
+			'channel_company' => $channel_company,
+			'channel_contact' => $channel_contact,
+			'billing_company' => $billing_company,
+			'manager_remark' => $manager_remark,
+		);
+		$query = $this->db->insert('proj_detail', $proj_detail);
 		if($this->db->affected_rows() === 1) {
 			return true;
 		}

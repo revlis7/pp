@@ -120,7 +120,7 @@ Ext.onReady(function() {
         },{
           icon: '/misc/resources/icons/add.gif',
           text: '新增项目',
-          handler: function () {window.location.href='ts_proj_detail_new.html';} 
+          handler: function () {window.location.href='/proj/create';} 
         },{
         	text:'用户管理',
         	icon:'/misc/resources/icons/user_edit.png',

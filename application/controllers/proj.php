@@ -9,17 +9,53 @@ class Proj extends Auth_Controller {
 		$this->template->load('default', 'proj/view');
 	}
 	
-	function view() {
-		$data = $this->Proj_model->get_all_detail();
-		echo $this->json->output(array('success' => true, 'data' => $data));
-	}
-	
 	function manage() {
 		$this->template->load('default', 'proj/manage');
 	}
 	
-	function test() {
-		$this->template->load('default', 'proj/test');
+	function create() {
+		$this->template->load('default', 'proj/create');
+	}
+	
+	function update() {
+		$this->template->load('default', 'proj/update');
+	}
+	
+	//返回所有proj＋proj_detail的json数据
+	function view() {
+		$data = $this->Proj_model->get_all_proj_detail();
+		echo $this->json->output(array('success' => true, 'data' => $data));
+	}
+	
+	//返回所有proj的json数据
+	function proj_view() {
+		return null;
+	}
+	
+	//返回proj下所有proj_detail的json数据
+	function detail_view() {
+		$proj_id = $this->input->get('proj_id', true);
+		
+		$data = $this->Proj_model->get_all_detail($proj_id);
+		echo $this->json->output(array('success' => true, 'data' => $data));
+	}
+	
+	//返回单条proj＋proj_detail的json数据
+	function get() {
+		return null;
+	}
+	
+	//返回单条proj的json数据
+	function proj_get() {
+		$proj_id = $this->input->get('proj_id', true);
+		
+		$data = $this->Proj_model->get_proj($proj_id);
+		echo $this->json->output(array('success' => true, 'data' => $data));
+	}
+	
+	//返回单条proj_detail的json数据
+	function detail_get() {
+		return null;
 	}
 	
 	function create_submit() {

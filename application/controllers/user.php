@@ -48,15 +48,6 @@ class User extends Auth_Controller {
 		$this->json->output(array('success' => true));
 	}
 	
-	function test() {
-		/* TODO
-		if(element('group', $this->session->userdata('user')) !== 'administrator') {
-			redirect('/', 'refresh');
-		}
-		*/
-		$this->template->load('default', 'user/test');
-	}
-	
 	function create_submit() {
 		$loginname = $this->input->post('loginname', true);
 		$password  = $this->input->post('password', true);

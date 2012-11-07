@@ -228,7 +228,7 @@ Ext.onReady(function() {
           },{
             icon:'/misc/resources/icons/grid.png',
             text: '确定',
-            id:'ok_edit'
+            id:'ok_edit',
             hidden:true,
             formBind: true, //only enabled once the form is valid
             disabled: true,
@@ -880,10 +880,26 @@ Ext.onReady(function() {
         split: true                //可改变窗体大小
     },
     items: [{
-      xtype:'box',
+      xtype:'toolbar',
       region:'north',
       height: 30,
-      html:'<span class="app-header1">some system</span><span class="app-header2">some step</span>'
+      border:0,
+      items:[
+      {
+      	xtype:'box',
+      	html:'<span class="app-header1">some system</span>'
+      },{
+      	xtype:'box',
+      	flex:1,
+      },{
+      	text:'返回',
+      	icon:'/misc/resources/icons/plugin.gif',
+      	handler:function(){Ext.util.History.back();}
+      },{
+      	text:'退出',
+      	icon:'/misc/resources/icons/cross.gif',
+      	handler:function(){window.location.href='/logout';}
+      }]
     },{
       xtype:'panel', 
       margin:'0 20 20 20',

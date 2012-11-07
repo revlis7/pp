@@ -44,7 +44,6 @@ Ext.onReady(function() {
       ],
       proxy: {
         type: 'ajax',
-        //url: 'proj_sample_data.json?para='+params.proj_id,
         url: '/proj/proj_get?proj_id='+params.proj_id,
         reader: {
             type: 'json',
@@ -55,8 +54,8 @@ Ext.onReady(function() {
 
   var projdetailStore=Ext.create('Ext.data.JsonStore', {
       fields: [
-        {name:'proj_id'      ,type:'integer' },
-        {name:'proj_detail_id'      ,type:'integer' },
+        {name:'proj_id'          ,type:'integer' },
+        {name:'proj_detail_id'   ,type:'integer' },
         {name:'total_share'      ,type:'string' },
         {name:'status'           ,type:'string' },
         {name:'exclusive'        ,type:'string' },
@@ -74,7 +73,7 @@ Ext.onReady(function() {
         {name:'profit_property'  ,type:'string' },
         {name:'profit'           ,type:'float'  },
         {name:'manager'          ,type:'string' },
-        {name:'contract'      ,type:'string' },
+        {name:'contract'         ,type:'string' },
         {name:'remark'           ,type:'string' },
         {name:'commission_b_tax' ,type:'float'  },
         {name:'commission_a_tax' ,type:'float'  },
@@ -94,7 +93,6 @@ Ext.onReady(function() {
       ],
       proxy: {
         type: 'ajax',
-        //url: 'proj_sample_data.json?para='+params.proj_id,
         url: '/proj/detail_view?proj_id='+params.proj_id,
         reader: {
             type: 'json',
@@ -176,36 +174,38 @@ Ext.onReady(function() {
           width:320
         },
         dockedItems: [{
-            dock: 'bottom',
-            xtype: 'toolbar',
-            bodyPadding: 5,
-            items: [{
-                icon:'/misc/resources/icons/grid.png',
-                text: '确定',
-                formBind: true, //only enabled once the form is valid
-                disabled: true,
-                handler: function() {
-                  this.up('form').getForm().submit({
-                      url: 'xml-form-errors-ed-json.json?para='+params.proj_id,
-                      submitEmptyText: false,
-                      waitMsg: 'Saving Data...',
-                      success: function(form, action) {
-                        ProjWin.close();
-                        projStore.load();
-                      } 
-                      //,
-                      //failure: function(form, action) {
-                      //  Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
-                      //}
+          dock: 'bottom',
+          xtype: 'toolbar',
+          bodyPadding: 5,
+          items: [{
+            icon:'/misc/resources/icons/grid.png',
+            text: '确定',
+            formBind: true, //only enabled once the form is valid
+            disabled: true,
+            handler: function() {
+              this.up('form').getForm().submit({
+                url: '/proj/proj_update_submit',
+                submitEmptyText: false,
+                waitMsg: 'Saving Data...',
+                success: function(form, action) {
+                  ProjWin.close();
+                  projStore.load(function(records, operation, success) {
+                    ProjInfoForm.getForm().loadRecord(records[0]);
                   });
-                }
-            },{
-                icon:'/misc/resources/icons/cross.gif',
-                text: '取消',
-                handler: function(){
-                    this.up('window').close();
-                }
-            }]
+                } 
+                //,
+                //failure: function(form, action) {
+                //  Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+                //}
+              });
+            }
+          },{
+            icon:'/misc/resources/icons/cross.gif',
+            text: '取消',
+            handler: function(){
+              this.up('window').close();
+            }
+          }]
         }],
         items:[
         {
@@ -227,6 +227,12 @@ Ext.onReady(function() {
             },
             items:[
             {
+              xtype:'hiddenfield',
+              fieldLabel: 'proj_id',
+              name:'proj_id',
+              allowBlank: false
+            },
+            {
               xtype:'fieldcontainer',
               layout:'hbox',
               flex:1,
@@ -238,6 +244,7 @@ Ext.onReady(function() {
                  xtype:'combo',
                  emptyText:"主类别...",  
                  width:160,
+                 name:'category',
                  store : chCategoryList,
                  queryMode : 'local',
                  forceSelection:true,
@@ -265,6 +272,7 @@ Ext.onReady(function() {
                  xtype:'combo',
                  emptyText:"子类别...",
                  width:160,
+                 name:'sub_category',
                  store : chSubCategoryList,
                  queryMode: 'local',
                  triggerAction: 'all',
@@ -396,7 +404,7 @@ Ext.onReady(function() {
         disabled: true,
         handler: function() {
           this.up('form').getForm().submit({
-            url: 'xml-form-errors-ed-json.json',
+            url: '/proj/detail_create_submit',
             submitEmptyText: false,
             waitMsg: 'Saving Data...',
             success: function(form, action) {
@@ -430,7 +438,14 @@ Ext.onReady(function() {
           defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
         }
       },
-      items:[{
+      items:[
+      {
+        xtype:'hiddenfield',
+        fieldLabel: 'proj_id',
+        name:'proj_id',
+        allowBlank: false
+      },
+      {
         xtype:'hiddenfield',
         fieldLabel: 'proj_detail_id',
         name:'proj_detail_id',
@@ -730,7 +745,8 @@ Ext.onReady(function() {
         handler:function(){
           //todo
           AmountEditForm.getForm().reset();
-          AmountEditForm.down('hiddenfield').setValue(-1);
+          AmountEditForm.down('hiddenfield[name="proj_id"]').setValue(params.proj_id);
+          AmountEditForm.down('hiddenfield[name="proj_detail_id"]').setValue(-1);
           AmountEditForm.down('numberfield[name="amount"]').setValue(null);
           AmountEditForm.show();
         }
@@ -747,7 +763,7 @@ Ext.onReady(function() {
           handler: function(grid, rowIndex, colIndex) {
             AmountEditForm.getForm().loadRecord(grid.getStore().getAt(rowIndex));
             AmountEditForm.getForm().submit({
-                url: 'xml-form-errors-ed-json.json',
+                url: '/proj/detail_delete_submit',
                 submitEmptyText: false,
                 waitMsg: 'Saving Data...',
                 success: function(form, action) {
@@ -804,10 +820,26 @@ Ext.onReady(function() {
         split: true                //可改变窗体大小
     },
     items: [{
-      xtype:'box',
+      xtype:'toolbar',
       region:'north',
       height: 30,
-      html:'<span class="app-header1">some system</span><span class="app-header2">some step</span>'
+      border:0,
+      items:[
+      {
+      	xtype:'box',
+      	html:'<span class="app-header1">some system</span>'
+      },{
+      	xtype:'box',
+      	flex:1,
+      },{
+      	text:'返回',
+      	icon:'/misc/resources/icons/plugin.gif',
+      	handler:function(){Ext.util.History.back();}
+      },{
+      	text:'退出',
+      	icon:'/misc/resources/icons/cross.gif',
+      	handler:function(){window.location.href='/logout';}
+      }]
     },{
       xtype:'panel', 
       margin:'0 20 20 20',
@@ -842,6 +874,5 @@ Ext.onReady(function() {
     ProjInfoForm.getForm().loadRecord(records[0]);
   });
   projdetailStore.load();
-  
   
 });

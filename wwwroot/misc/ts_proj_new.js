@@ -484,7 +484,14 @@ Ext.onReady(function() {
           defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
         }
       },
-      items:[{
+      items:[
+      {
+        xtype:'hiddenfield',
+        fieldLabel: 'proj_id',
+        name:'proj_id',
+        allowBlank: false
+      },
+      {
         xtype:'hiddenfield',
         fieldLabel: 'proj_detail_id',
         name:'proj_detail_id',
@@ -784,7 +791,8 @@ Ext.onReady(function() {
         handler:function(){
           //todo
           AmountEditForm.getForm().reset();
-          AmountEditForm.down('hiddenfield').setValue(-1);
+          AmountEditForm.down('numberfield[name="proj_id"]').setValue(proj_id);
+          AmountEditForm.down('numberfield[name="proj_detail_id"]').setValue(-1);
           AmountEditForm.down('numberfield[name="amount"]').setValue(null);
           AmountEditForm.show();
         }

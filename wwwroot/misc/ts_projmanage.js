@@ -29,12 +29,13 @@ Ext.onReady(function() {
           tooltip: '编辑此条记录',
           handler: function(grid, rowIndex, colIndex) {
             //sampleStore.removeAt(rowIndex);      
-            AmountEditForm.getForm().loadRecord(grid.getStore().getAt(rowIndex));
-            AmountEditForm.show();
+            var proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
+            window.location.href='/proj/update?proj_id='+proj_id;
           }
         }]
       },
-      {text:'id',     dataIndex:'id',       filtable:true, hidden:true},
+      {text:'proj_id',     dataIndex:'proj_id',       filtable:true, hidden:true},
+      {text:'proj_detail_id',     dataIndex:'proj_detail_id',       filtable:true, hidden:true},
       {text:'份额',         dataIndex:'total_share',     filtable:true, width:100},
       {text:'销售状态',     dataIndex:'status',         filtable:true, width:100},
       {text:'销售类别',     dataIndex:'exclusive',      filtable:true, width:100},
@@ -139,5 +140,5 @@ Ext.onReady(function() {
       items:[fullGrid]
     }]
   });
-
+  sampleStore.load();
 });

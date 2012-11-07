@@ -193,8 +193,8 @@ Ext.onReady(function() {
                 success: function(form, action) {
                   proj_id=action.result.proj_id;
                   ProjWin.close();
-                  projWin.down('button[hidden=true]').hidden=false;
-                  projWin.down('button[hidden=false]').hidden=true;
+                  ProjWin.down('button[hidden=true]').hidden=false;
+                  ProjWin.down('button[hidden=false]').hidden=true;
                   projStore.setProxy({
                     type: 'ajax',
                     url: '/proj/proj_get?proj_id='+proj_id,

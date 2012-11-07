@@ -271,6 +271,12 @@ Ext.onReady(function() {
             },
             items:[
             {
+              xtype:'hiddenfield',
+              fieldLabel: 'proj_id',
+              name:'proj_id',
+              allowBlank: false
+            },
+            {
               xtype:'fieldcontainer',
               layout:'hbox',
               flex:1,

@@ -48,8 +48,9 @@ class Proj extends Auth_Controller {
 	//返回单条proj的json数据
 	function proj_get() {
 		$proj_id = $this->input->get('proj_id', true);
-		
 		$data = $this->Proj_model->get_proj($proj_id);
+		$data[0]->proj_id = $data[0]->id;
+		unset($data[0]->id);
 		echo $this->json->output(array('success' => true, 'data' => $data));
 	}
 	

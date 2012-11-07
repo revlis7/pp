@@ -84,6 +84,37 @@ class Proj_model extends CI_Model {
 		return false;
 	}
 	
+	function update_detail($proj_detail_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark) {
+		$proj_detail = array(
+			'total_share' => $total_share,
+			'status' => $status,
+			'exclusive' => $exclusive,
+			'grade' => $grade,
+			'amount' => $amount,
+			'profit' => $profit,
+			'commission_b_tax' => $commission_b_tax,
+			'commission_a_tax' => $commission_a_tax,
+			'inner_commission' => $inner_commission,
+			'outer_commission' => $outer_commission,
+			'pay' => $pay,
+			'paid' => $paid,
+			'quota' => $quota,
+			'quota_paid' => $quota_paid,
+			'quota_remain' => $quota_remain,
+			'main_channel' => $main_channel,
+			'channel_company' => $channel_company,
+			'channel_contact' => $channel_contact,
+			'billing_company' => $billing_company,
+			'manager_remark' => $manager_remark
+		);
+		$this->db->where('id', $proj_detail_id);
+		$this->db->update('proj_detail', $proj_detail);
+		if($this->db->affected_rows() === 1) {
+			return $proj_detail_id;
+		}
+		return false;
+	}
+	
 	// TODO join delete
 	function delete_proj($proj_id) {
 		$this->db->from('proj')->where('id', $proj_id);

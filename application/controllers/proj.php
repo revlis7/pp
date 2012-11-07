@@ -128,6 +128,7 @@ class Proj extends Auth_Controller {
 	
 	function detail_create_submit() {
 		$proj_id = $this->input->post('proj_id', true);
+		$proj_detail_id = $this->input->post('proj_detail_id', true);
 		$total_share = $this->input->post('total_share', true);
 		$status = $this->input->post('status', true);
 		$exclusive = $this->input->post('exclusive', true);
@@ -149,7 +150,12 @@ class Proj extends Auth_Controller {
 		$billing_company = $this->input->post('billing_company', true);
 		$manager_remark = $this->input->post('manager_remark', true);
 		
-		$proj_detail_id = $this->Proj_model->create_detail($proj_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark);
+		if($proj_detail_id != '-1') {
+			$proj_detail_id = $this->Proj_model->update_detail($proj_detail_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark);
+		} else {
+			$proj_detail_id = $this->Proj_model->create_detail($proj_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark);
+		}
+		
 		if($proj_detail_id === false) {
 			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 		}

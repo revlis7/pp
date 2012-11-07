@@ -809,7 +809,7 @@ Ext.onReady(function() {
           handler: function(grid, rowIndex, colIndex) {
             AmountEditForm.getForm().loadRecord(grid.getStore().getAt(rowIndex));
             AmountEditForm.getForm().submit({
-                url: 'xml-form-errors-ed-json.json',
+                url: '/proj/detail_delete_submit',
                 submitEmptyText: false,
                 waitMsg: 'Saving Data...',
                 success: function(form, action) {

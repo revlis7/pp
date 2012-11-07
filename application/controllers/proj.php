@@ -168,7 +168,7 @@ class Proj extends Auth_Controller {
 	function detail_delete_submit() {
 		$proj_detail_id = $this->input->post('proj_detail_id', true);
 		
-		if(!$this->Data_model->delete_detail($proj_detail_id)) {
+		if(!$this->Proj_model->delete_detail($proj_detail_id)) {
 			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
 		}
 		$this->json->output(array('success' => true));

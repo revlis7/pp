@@ -235,7 +235,9 @@ Ext.onReady(function() {
                 waitMsg: 'Saving Data...',
                 success: function(form, action) {
                   ProjWin.close();
-                  projStore.load();
+                  projStore.load(function(records, operation, success) {
+                    ProjInfoForm.getForm().loadRecord(records[0]);
+                  });
                 } 
                 //,
                 //failure: function(form, action) {
@@ -448,7 +450,7 @@ Ext.onReady(function() {
         disabled: true,
         handler: function() {
           this.up('form').getForm().submit({
-            url: 'xml-form-errors-ed-json.json',
+            url: '/proj/detail_create_submit',
             submitEmptyText: false,
             waitMsg: 'Saving Data...',
             success: function(form, action) {

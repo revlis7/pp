@@ -791,8 +791,8 @@ Ext.onReady(function() {
         handler:function(){
           //todo
           AmountEditForm.getForm().reset();
-          AmountEditForm.down('numberfield[name="proj_id"]').setValue(proj_id);
-          AmountEditForm.down('numberfield[name="proj_detail_id"]').setValue(-1);
+          AmountEditForm.down('hiddenfield[name="proj_id"]').setValue(proj_id);
+          AmountEditForm.down('hiddenfield[name="proj_detail_id"]').setValue(-1);
           AmountEditForm.down('numberfield[name="amount"]').setValue(null);
           AmountEditForm.show();
         }

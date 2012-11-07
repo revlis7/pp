@@ -55,6 +55,7 @@ class Proj_model extends CI_Model {
 	
 	function create_detail($proj_id, $total_share = '', $status = '', $exclusive = '', $grade = '', $amount = '', $profit = '', $commission_b_tax = '', $commission_a_tax = '', $inner_commission = '', $outer_commission = '', $pay = '', $paid = '', $quota = '', $quota_paid = '', $quota_remain = '', $main_channel = '', $channel_company = '', $channel_contact = '', $billing_company = '', $manager_remark = '') {
 		$proj_detail = array(
+			'proj_id' => $proj_id,
 			'total_share' => $total_share,
 			'status' => $status,
 			'exclusive' => $exclusive,

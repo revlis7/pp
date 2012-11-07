@@ -149,7 +149,7 @@ class Proj extends Auth_Controller {
 		$billing_company = $this->input->post('billing_company', true);
 		$manager_remark = $this->input->post('manager_remark', true);
 		
-		$proj_id = $this->Data_model->create_detail($proj_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark);
+		$proj_detail_id = $this->Proj_model->create_detail($proj_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark);
 		if($proj_detail_id === false) {
 			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 		}

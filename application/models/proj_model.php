@@ -28,6 +28,31 @@ class Proj_model extends CI_Model {
 		return false;
 	}
 	
+	function update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $remark, $found) {
+		$proj = array(
+			'category' => $category,
+			'sub_category' => $sub_category,
+			'issue' => $issue,
+			'name' => $name,
+			'flow_of_fund' => $flow_of_fund,
+			'highlights' => $highlights,
+			'month' => $month,
+			'scale' => $scale,
+			'cycle' => $cycle,
+			'profit_property' => $profit_property,
+			'manager' => $manager,
+			'contract' => $contract,
+			'remark' => $remark,
+			'found' => $found,
+		);
+		$this->db->where('id', $proj_id);
+		$this->db->update('proj', $proj);
+		if($this->db->affected_rows() === 1) {
+			return $proj_id;
+		}
+		return false;
+	}
+	
 	function create_detail($proj_id, $total_share = '', $status = '', $exclusive = '', $grade = '', $amount = '', $profit = '', $commission_b_tax = '', $commission_a_tax = '', $inner_commission = '', $outer_commission = '', $pay = '', $paid = '', $quota = '', $quota_paid = '', $quota_remain = '', $main_channel = '', $channel_company = '', $channel_contact = '', $billing_company = '', $manager_remark = '') {
 		$proj_detail = array(
 			'total_share' => $total_share,

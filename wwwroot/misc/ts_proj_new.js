@@ -3,6 +3,10 @@ Ext.onReady(function() {
 
   //var params=Ext.Object.fromQueryString(location.search.substring(1));
   var proj_id;
+  var params={
+  	newProj:false,
+  	editProj:true
+  }
 
   var projStore=Ext.create('Ext.data.JsonStore', {
       fields: [
@@ -45,8 +49,7 @@ Ext.onReady(function() {
       ],
       proxy: {
         type: 'ajax',
-        url: 'proj_sample_data.json?para='+proj_id,
-        //url: '/proj/view',
+        url: '/proj/detail_view?proj_id='+proj_id,
         reader: {
             type: 'json',
             root: 'data'
@@ -56,8 +59,8 @@ Ext.onReady(function() {
 
   var projdetailStore=Ext.create('Ext.data.JsonStore', {
       fields: [
-        {name:'proj_id'      ,type:'integer' },
-        {name:'proj_detail_id'      ,type:'integer' },
+        {name:'proj_id'          ,type:'integer' },
+        {name:'proj_detail_id'   ,type:'integer' },
         {name:'total_share'      ,type:'string' },
         {name:'status'           ,type:'string' },
         {name:'exclusive'        ,type:'string' },
@@ -75,7 +78,7 @@ Ext.onReady(function() {
         {name:'profit_property'  ,type:'string' },
         {name:'profit'           ,type:'float'  },
         {name:'manager'          ,type:'string' },
-        {name:'contract'      ,type:'string' },
+        {name:'contract'         ,type:'string' },
         {name:'remark'           ,type:'string' },
         {name:'commission_b_tax' ,type:'float'  },
         {name:'commission_a_tax' ,type:'float'  },
@@ -183,20 +186,23 @@ Ext.onReady(function() {
           items: [{
             icon:'/misc/resources/icons/grid.png',
             text: '确定',
+            hidden:params.newProj,
             formBind: true, //only enabled once the form is valid
             disabled: true,
             handler: function() {
               this.up('form').getForm().submit({
-                //url: 'xml-form-errors-ed-json.json?para='+proj_id,
                 url: '/proj/proj_create_submit',
                 submitEmptyText: false,
                 waitMsg: 'Saving Data...',
                 success: function(form, action) {
                   proj_id=action.result.proj_id;
                   ProjWin.close();
+                  params={
+                  	newProj:true,
+                  	editProj:false
+                  }
                   projStore.setProxy({
                     type: 'ajax',
-                    //url: 'proj_sample_data.json?para='+proj_id,
                     url: '/proj/proj_get?proj_id='+proj_id,
                     reader: {
                         type: 'json',
@@ -208,7 +214,6 @@ Ext.onReady(function() {
                   });
                   projdetailStore.setProxy({
                     type: 'ajax',
-                    //url: 'proj_sample_data.json?para='+proj_id,
                     url: '/proj/detail_view?proj_id='+proj_id,
                     reader: {
                         type: 'json',
@@ -216,6 +221,27 @@ Ext.onReady(function() {
                     }
                   });
                   projdetailStore.load();
+                } 
+                //,
+                //failure: function(form, action) {
+                //  Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+                //}
+              });
+            }
+          },{
+            icon:'/misc/resources/icons/grid.png',
+            text: '确定',
+            hidden:params.editProj,
+            formBind: true, //only enabled once the form is valid
+            disabled: true,
+            handler: function() {
+              this.up('form').getForm().submit({
+                url: '/proj/proj_update_submit',
+                submitEmptyText: false,
+                waitMsg: 'Saving Data...',
+                success: function(form, action) {
+                  ProjWin.close();
+                  projStore.load();
                 } 
                 //,
                 //failure: function(form, action) {

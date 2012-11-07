@@ -101,6 +101,30 @@ class Proj extends Auth_Controller {
 		$this->json->output(array('success' => true, 'proj_id' => $proj_id));
 	}
 	
+	function proj_update_submit() {
+		$proj_id = $this->input->post('proj_id', true);
+		$category = $this->input->post('category', true);
+		$sub_category = $this->input->post('sub_category', true);
+		$issue = $this->input->post('issue', true);
+		$name = $this->input->post('name', true);
+		$flow_of_fund = $this->input->post('flow_of_fund', true);
+		$highlights = $this->input->post('highlights', true);
+		$month = $this->input->post('month', true);
+		$scale = $this->input->post('scale', true);
+		$cycle = $this->input->post('cycle', true);
+		$profit_property = $this->input->post('profit_property', true);
+		$manager = $this->input->post('manager', true);
+		$contract = $this->input->post('contract', true);
+		$remark = $this->input->post('remark', true);
+		$found = $this->input->post('found', true);
+		
+		$proj_id = $this->Proj_model->update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $remark, $found);
+		if($proj_id === false) {
+			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
+		}
+		$this->json->output(array('success' => true, 'proj_id' => $proj_id));
+	}
+	
 	function detail_create_submit() {
 		$proj_id = $this->input->post('proj_id', true);
 		$total_share = $this->input->post('total_share', true);

@@ -3,10 +3,6 @@ Ext.onReady(function() {
 
   //var params=Ext.Object.fromQueryString(location.search.substring(1));
   var proj_id;
-  var params={
-  	newProj:false,
-  	editProj:true
-  }
 
   var projStore=Ext.create('Ext.data.JsonStore', {
       fields: [
@@ -186,7 +182,7 @@ Ext.onReady(function() {
           items: [{
             icon:'/misc/resources/icons/grid.png',
             text: '确定',
-            hidden:params.newProj,
+            hidden:false,
             formBind: true, //only enabled once the form is valid
             disabled: true,
             handler: function() {
@@ -197,10 +193,8 @@ Ext.onReady(function() {
                 success: function(form, action) {
                   proj_id=action.result.proj_id;
                   ProjWin.close();
-                  params={
-                  	newProj:true,
-                  	editProj:false
-                  }
+                  projWin.down('button[hidden=true]').hidden=false;
+                  projWin.down('button[hidden=false]').hidden=true;
                   projStore.setProxy({
                     type: 'ajax',
                     url: '/proj/proj_get?proj_id='+proj_id,
@@ -231,7 +225,7 @@ Ext.onReady(function() {
           },{
             icon:'/misc/resources/icons/grid.png',
             text: '确定',
-            hidden:params.editProj,
+            hidden:true,
             formBind: true, //only enabled once the form is valid
             disabled: true,
             handler: function() {

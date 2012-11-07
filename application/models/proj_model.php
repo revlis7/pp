@@ -18,6 +18,7 @@ class Proj_model extends CI_Model {
 			'profit_property' => $profit_property,
 			'manager' => $manager,
 			'contract' => $contract,
+			'remark' => $remark,
 			'found' => $found,
 		);
 		$query = $this->db->insert('proj', $proj);
@@ -27,7 +28,7 @@ class Proj_model extends CI_Model {
 		return false;
 	}
 	
-	function create_detail($proj_id, $total_share = '', $status = '', $exclusive = '', $grade = '', $amount = '', $profit = '', $remark = '', $commission_b_tax = '', $commission_a_tax = '', $inner_commission = '', $outer_commission = '', $pay = '', $paid = '', $quota = '', $quota_paid = '', $quota_remain = '', $main_channel = '', $channel_company = '', $channel_contact = '', $billing_company = '', $manager_remark = '') {
+	function create_detail($proj_id, $total_share = '', $status = '', $exclusive = '', $grade = '', $amount = '', $profit = '', $commission_b_tax = '', $commission_a_tax = '', $inner_commission = '', $outer_commission = '', $pay = '', $paid = '', $quota = '', $quota_paid = '', $quota_remain = '', $main_channel = '', $channel_company = '', $channel_contact = '', $billing_company = '', $manager_remark = '') {
 		$proj_detail = array(
 			'total_share' => $total_share,
 			'status' => $status,
@@ -35,7 +36,6 @@ class Proj_model extends CI_Model {
 			'grade' => $grade,
 			'amount' => $amount,
 			'profit' => $profit,
-			'remark' => $remark,
 			'commission_b_tax' => $commission_b_tax,
 			'commission_a_tax' => $commission_a_tax,
 			'inner_commission' => $inner_commission,

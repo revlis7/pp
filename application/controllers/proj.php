@@ -77,7 +77,7 @@ class Proj extends Auth_Controller {
 		//$profit = $this->input->post('profit', true);
 		$manager = $this->input->post('manager', true);
 		$contract = $this->input->post('contract', true);
-		//$remark = $this->input->post('remark', true);
+		$remark = $this->input->post('remark', true);
 		//$commission_b_tax = $this->input->post('commission_b_tax', true);
 		//$commission_a_tax = $this->input->post('commission_a_tax', true);
 		//$inner_commission = $this->input->post('inner_commission', true);
@@ -94,7 +94,7 @@ class Proj extends Auth_Controller {
 		//$billing_company = $this->input->post('billing_company', true);
 		//$manager_remark = $this->input->post('manager_remark', true);
 		
-		$proj_id = $this->Proj_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $found);
+		$proj_id = $this->Proj_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $remark, $found);
 		if($proj_id === false) {
 			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 		}
@@ -109,7 +109,6 @@ class Proj extends Auth_Controller {
 		$grade = $this->input->post('grade', true);
 		$amount = $this->input->post('amount', true);
 		$profit = $this->input->post('profit', true);
-		$remark = $this->input->post('remark', true);
 		$commission_b_tax = $this->input->post('commission_b_tax', true);
 		$commission_a_tax = $this->input->post('commission_a_tax', true);
 		$inner_commission = $this->input->post('inner_commission', true);
@@ -125,7 +124,7 @@ class Proj extends Auth_Controller {
 		$billing_company = $this->input->post('billing_company', true);
 		$manager_remark = $this->input->post('manager_remark', true);
 		
-		$proj_id = $this->Data_model->create_detail($proj_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $remark, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark);
+		$proj_id = $this->Data_model->create_detail($proj_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark);
 		if($proj_detail_id === false) {
 			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 		}

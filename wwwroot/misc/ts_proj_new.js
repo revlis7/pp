@@ -192,7 +192,7 @@ Ext.onReady(function() {
                 submitEmptyText: false,
                 waitMsg: 'Saving Data...',
                 success: function(form, action) {
-                	var proj_id=action.result.proj_id;
+                  proj_id=action.result.proj_id;
                   ProjWin.close();
                   projStore.setProxy({
                     type: 'ajax',

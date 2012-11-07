@@ -182,6 +182,7 @@ Ext.onReady(function() {
           items: [{
             icon:'/misc/resources/icons/grid.png',
             text: '确定',
+            id:'ok_create',
             hidden:false,
             formBind: true, //only enabled once the form is valid
             disabled: true,
@@ -193,8 +194,10 @@ Ext.onReady(function() {
                 success: function(form, action) {
                   proj_id=action.result.proj_id;
                   ProjWin.close();
-                  ProjWin.down('button[hidden=true]').setVisible(true);
-                  ProjWin.down('button[hidden=false]').setVisible(false);
+                  ProjWin.down('button[id=ok_edit]').setVisible(true);
+                  ProjWin.down('button[id=ok_create]').setVisible(false);
+                  ProjWin.down('button[id=cancel_edit]').setVisible(true);
+                  ProjWin.down('button[id=cancel_create]').setVisible(false);
                   projStore.setProxy({
                     type: 'ajax',
                     url: '/proj/proj_get?proj_id='+proj_id,
@@ -225,6 +228,7 @@ Ext.onReady(function() {
           },{
             icon:'/misc/resources/icons/grid.png',
             text: '确定',
+            id:'ok_edit'
             hidden:true,
             formBind: true, //only enabled once the form is valid
             disabled: true,
@@ -248,8 +252,18 @@ Ext.onReady(function() {
           },{
             icon:'/misc/resources/icons/cross.gif',
             text: '取消',
+            id:'cancel_create',
+            hidden:false,
             handler: function(){
               Ext.util.History.back();
+            }
+          },{
+            icon:'/misc/resources/icons/cross.gif',
+            text: '取消',
+            id:'cancel_edit',
+            hidden:true,
+            handler: function(){
+              this.up('window').close();
             }
           }]
         }],

@@ -94,10 +94,11 @@ class Proj extends Auth_Controller {
 		//$billing_company = $this->input->post('billing_company', true);
 		//$manager_remark = $this->input->post('manager_remark', true);
 		
-		if(!$this->Data_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $found)) {
+		$proj_id = $this->Proj_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $found);
+		if($proj_id === false) {
 			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 		}
-		$this->json->output(array('success' => true));
+		$this->json->output(array('success' => true, 'proj_id' => $proj_id));
 	}
 	
 	function detail_create_submit() {
@@ -124,10 +125,11 @@ class Proj extends Auth_Controller {
 		$billing_company = $this->input->post('billing_company', true);
 		$manager_remark = $this->input->post('manager_remark', true);
 		
-		if(!$this->Data_model->create_detail($proj_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $remark, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark)) {
+		$proj_id = $this->Data_model->create_detail($proj_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $remark, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark);
+		if($proj_detail_id === false) {
 			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 		}
-		$this->json->output(array('success' => true));
+		$this->json->output(array('success' => true, 'proj_detail_id' => $proj_detail_id));
 	}
 	
 	function proj_delete_submit() {

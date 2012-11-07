@@ -5,8 +5,8 @@ Ext.onReady(function() {
 
   var projStore=Ext.create('Ext.data.JsonStore', {
       fields: [
-        {name:'proj_id'      ,type:'integer' },
-        {name:'proj_detail_id'      ,type:'integer' },
+        {name:'proj_id'          ,type:'integer' },
+        {name:'proj_detail_id'   ,type:'integer' },
         {name:'total_share'      ,type:'string' },
         {name:'status'           ,type:'string' },
         {name:'exclusive'        ,type:'string' },
@@ -44,7 +44,7 @@ Ext.onReady(function() {
       ],
       proxy: {
         type: 'ajax',
-        //url: '/etc/proj_sample_data.json?para='+params.proj_id,
+        //url: 'proj_sample_data.json?para='+params.proj_id,
         url: '/proj/proj_get?proj_id='+params.proj_id,
         reader: {
             type: 'json',
@@ -94,7 +94,7 @@ Ext.onReady(function() {
       ],
       proxy: {
         type: 'ajax',
-        //url: '/etc/proj_sample_data.json?para='+params.proj_id,
+        //url: 'proj_sample_data.json?para='+params.proj_id,
         url: '/proj/detail_view?proj_id='+params.proj_id,
         reader: {
             type: 'json',
@@ -154,7 +154,7 @@ Ext.onReady(function() {
      }, ]
    });
 */  
-   var ProjWin=Ext.create("Ext.window.Window",{
+  var ProjWin=Ext.create("Ext.window.Window",{
       resizeable:false,
       closeAction:"hide",
       closable:false,
@@ -180,27 +180,27 @@ Ext.onReady(function() {
             xtype: 'toolbar',
             bodyPadding: 5,
             items: [{
-            	  icon:'/misc/resources/icons/grid.png',
+                icon:'/misc/resources/icons/grid.png',
                 text: '确定',
                 formBind: true, //only enabled once the form is valid
                 disabled: true,
                 handler: function() {
-                    var win = this.up('window');
-                    var form = this.up('form').getForm();
-                    if (form.isValid()) {
-                        form.submit({
-                            success: function(form, action) {
-                               ProjWin.close();
-                               window.location.href="ts_proj_detail.html";
-                            },
-                            failure: function(form, action) {
-                               ProjWin.close();
-                            }
-                        });
-                    }
+                  this.up('form').getForm().submit({
+                      url: 'xml-form-errors-ed-json.json?para='+params.proj_id,
+                      submitEmptyText: false,
+                      waitMsg: 'Saving Data...',
+                      success: function(form, action) {
+                        ProjWin.close();
+                        projStore.load();
+                      } 
+                      //,
+                      //failure: function(form, action) {
+                      //  Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+                      //}
+                  });
                 }
             },{
-            	  icon:'/misc/resources/icons/cross.gif',
+                icon:'/misc/resources/icons/cross.gif',
                 text: '取消',
                 handler: function(){
                     this.up('window').close();
@@ -264,7 +264,7 @@ Ext.onReady(function() {
               {//子类别
                  xtype:'combo',
                  emptyText:"子类别...",
-                 width:160,   
+                 width:160,
                  store : chSubCategoryList,
                  queryMode: 'local',
                  triggerAction: 'all',
@@ -390,28 +390,30 @@ Ext.onReady(function() {
       xtype: 'toolbar',
       bodyPadding: 5,
       items: [{
-      	icon:'/misc/resources/icons/accept.gif',
+        icon:'/misc/resources/icons/accept.gif',
         text: '确认',
         formBind: true, //only enabled once the form is valid
         disabled: true,
         handler: function() {
-          var form = this.up('form').getForm();
-          if (form.isValid()) {
-            form.submit({
-              success: function(form, action) {
-                Ext.Msg.alert('Success', action.result.msg);
-              },
-              failure: function(form, action) {
-                Ext.Msg.alert('Failed', action.result.msg);
-              }
-            });
-          }
+          this.up('form').getForm().submit({
+            url: 'xml-form-errors-ed-json.json',
+            submitEmptyText: false,
+            waitMsg: 'Saving Data...',
+            success: function(form, action) {
+              AmountEditForm.hide();
+              projdetailStore.load();
+            } 
+            //,
+            //failure: function(form, action) {
+            //  Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+            //}
+          });
         }
       },{
-      	icon:'/misc/resources/icons/cross.gif',
+        icon:'/misc/resources/icons/cross.gif',
         text: '取消',
         handler: function(){
-        	this.up('form').getForm().reset();
+          this.up('form').getForm().reset();
           this.up('panel').hide(); 
         }
       }]
@@ -429,6 +431,11 @@ Ext.onReady(function() {
         }
       },
       items:[{
+        xtype:'hiddenfield',
+        fieldLabel: 'proj_detail_id',
+        name:'proj_detail_id',
+        allowBlank: false
+      },{
         xtype:'numberfield',
         fieldLabel: '认购金额(万)',
         name:'amount',
@@ -583,8 +590,8 @@ Ext.onReady(function() {
     flex:2,
     autoScroll :true,
     fieldDefault:{
-    	maskOnDisable:false,
-    	disabledCls:"x-item"
+      maskOnDisable:false,
+      disabledCls:"x-item"
     },
 /*    listeners:{
       show: function(){
@@ -592,11 +599,24 @@ Ext.onReady(function() {
       }
     },
 */
+    dockedItems: [{
+      dock: 'top',
+      xtype: 'toolbar',
+      bodyPadding: 5,
+      items: [{
+      	text:'编辑项目信息',
+      	icon: '/misc/resources/icons/cog_edit.png',
+      	handler:function(){
+      		ProjWin.down('form').getForm().loadRecord(projStore.first());
+      		ProjWin.show();
+      	}
+      }]
+    }],
     items:[{
-    	xtype:'fieldset',
-    	title:'项目信息',
-    	collapsible:false,
-    	items:[{
+      xtype:'fieldset',
+      title:'项目信息',
+      collapsible:false,
+      items:[{
         xtype:'fieldcontainer',
         layout:'hbox',
         flex:1,
@@ -606,14 +626,14 @@ Ext.onReady(function() {
         {//主类别
           xtype:'textfield',
           //emptyText:"主类别...",  
-    	    disabled:true,
+          disabled:true,
           width:160,   
           name:'category'
         }, 
         {//子类别
           xtype:'textfield',
           //emptyText:"子类别...",
-    	    disabled:true,
+          disabled:true,
           width:160,   
           name:'sub_category'
         }]
@@ -621,59 +641,59 @@ Ext.onReady(function() {
         xtype:'textfield',
         fieldLabel: '发行方',
         name:'issue',
-    	  disabled:true,
+        disabled:true,
         allowBlank: false
       },{
         xtype:'textfield',
         fieldLabel: '项目名称',
         width:480,
         name:'name',
-    	  disabled:true,
+        disabled:true,
         allowBlank: false
       },{
         xtype:'numberfield',
         fieldLabel: '项目期限',
         name:'month',
-    	  disabled:true,
+        disabled:true,
         allowBlank: false
       },{
         xtype:'numberfield',
         fieldLabel: '融资规模(万)',
         name:'scale',
-    	  disabled:true,
+        disabled:true,
         allowBlank: false
       },{
         xtype:'textfield',
         fieldLabel: '分配',
-    	  disabled:true,
+        disabled:true,
         name:'cycle'
       },{
         xtype:'textfield',
         fieldLabel: '项目收益属性',
-    	  disabled:true,
+        disabled:true,
         name:'profit_property'
       },{
         xtype:'textfield',
         fieldLabel: '产品经理',
-    	  disabled:true,
+        disabled:true,
         name:'manager',
       },{
         xtype:'datefield',
         fieldLabel: '成立日期',
-    	  disabled:true,
+        disabled:true,
         name:'found'
       },{
         xtype:'textfield',
         fieldLabel: '资金投向',
         width:480,
-    	  disabled:true,
+        disabled:true,
         name:'flow_of_fund',
         allowBlank: false
       },{
         xtype:'textfield',
         fieldLabel: '合同情况',
         width:480,
-    	  disabled:true,
+        disabled:true,
         name:'contract',
         allowBlank: true
       },{
@@ -681,14 +701,14 @@ Ext.onReady(function() {
         fieldLabel: '项目亮点',
         width:480,
         height:100,
-    	  disabled:true,
+        disabled:true,
         name:'highlights',
         allowBlank: false
       },{
         xtype:'textareafield',
         fieldLabel: '备注',
         width:480,
-    	  disabled:true,
+        disabled:true,
         name:'remark',
         allowBlank: true
       }]
@@ -702,17 +722,19 @@ Ext.onReady(function() {
     region:'center',
     flex:2,
     dockedItems:[{
-    	xtype:'toolbar',
-    	dock: 'top',
-    	items:[{
-    		icon: '/misc/resources/icons/add.gif',
-    		text:'新增额度信息' ,
-    		handler:function(){
-    			//todo
-    			AmountEditForm.getForm().reset();
-    			AmountEditForm.show();
-    		}         		
-    	}]
+      xtype:'toolbar',
+      dock: 'top',
+      items:[{
+        icon: '/misc/resources/icons/add.gif',
+        text:'新增额度信息' ,
+        handler:function(){
+          //todo
+          AmountEditForm.getForm().reset();
+          AmountEditForm.down('hiddenfield').setValue(-1);
+          AmountEditForm.down('numberfield[name="amount"]').setValue(null);
+          AmountEditForm.show();
+        }
+      }]
     }],
     columns:[{
         xtype: 'actioncolumn',
@@ -723,15 +745,16 @@ Ext.onReady(function() {
           icon: '/misc/resources/icons/cross.gif',
           tooltip: '删除此条记录',
           handler: function(grid, rowIndex, colIndex) {
-            this.up('form').getForm().submit({
+            AmountEditForm.getForm().loadRecord(grid.getStore().getAt(rowIndex));
+            AmountEditForm.getForm().submit({
                 url: 'xml-form-errors-ed-json.json',
                 submitEmptyText: false,
                 waitMsg: 'Saving Data...',
                 success: function(form, action) {
-                  sampleStore.removeAt(rowIndex);
+                  projdetailStore.removeAt(rowIndex);
                 } ,
                 failure: function(form, action) {
-                  Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+                  Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
                 }
             });
           }
@@ -781,31 +804,31 @@ Ext.onReady(function() {
         split: true                //可改变窗体大小
     },
     items: [{
-    	xtype:'box',
-    	region:'north',
-    	height: 30,
-    	html:'<span class="app-header1">some system</span><span class="app-header2">some step</span>'
+      xtype:'box',
+      region:'north',
+      height: 30,
+      html:'<span class="app-header1">some system</span><span class="app-header2">some step</span>'
     },{
-    	xtype:'panel', 
-    	margin:'0 20 20 20',
-    	border:0,
-    	region:'center',
-    	layout:'border',
+      xtype:'panel', 
+      margin:'0 20 20 20',
+      border:0,
+      region:'center',
+      layout:'border',
       items:[{
-      	xtype:'panel',
-      	//autoScroll :true,
-      	border:0,
-      	//minWidth:500,
-      	//minHeight:200,
-      	layout:'border',
-      	region:'center',
-      	items:[
+        xtype:'panel',
+        //autoScroll :true,
+        border:0,
+        //minWidth:500,
+        //minHeight:200,
+        layout:'border',
+        region:'center',
+        items:[
           ProjInfoForm,
           {
-        	  xtype:'box',
-          	region:'north',
-           	weight:-200,
-          	height:15
+            xtype:'box',
+            region:'north',
+            weight:-200,
+            height:15
           },        
           AmountDetailsGrid
         ]

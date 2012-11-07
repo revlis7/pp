@@ -22,7 +22,7 @@ class Proj_model extends CI_Model {
 		);
 		$query = $this->db->insert('proj', $proj);
 		if($this->db->affected_rows() === 1) {
-			return true;
+			return $this->db->insert_id();
 		}
 		return false;
 	}
@@ -53,7 +53,7 @@ class Proj_model extends CI_Model {
 		);
 		$query = $this->db->insert('proj_detail', $proj_detail);
 		if($this->db->affected_rows() === 1) {
-			return true;
+			return $this->db->insert_id();
 		}
 		return false;
 	}

@@ -192,7 +192,7 @@ Ext.onReady(function() {
                 submitEmptyText: false,
                 waitMsg: 'Saving Data...',
                 success: function(form, action) {
-                	var params=action.result.proj_id;
+                	var proj_id=action.result.proj_id;
                   ProjWin.close();
                   projStore.setProxy({
                     type: 'ajax',
@@ -262,6 +262,7 @@ Ext.onReady(function() {
                  xtype:'combo',
                  emptyText:"主类别...",  
                  width:160,
+                 name:'category',
                  store : chCategoryList,
                  queryMode : 'local',
                  forceSelection:true,
@@ -288,7 +289,8 @@ Ext.onReady(function() {
               {//子类别
                  xtype:'combo',
                  emptyText:"子类别...",
-                 width:160,   
+                 width:160,
+                 name:'sub_category',
                  store : chSubCategoryList,
                  queryMode: 'local',
                  triggerAction: 'all',

@@ -10,14 +10,29 @@ class Proj extends Auth_Controller {
 	}
 	
 	function manage() {
+		if(!$this->_has_privilege()) {
+			redirect('/', 'refresh');
+		}
 		$this->template->load('default', 'proj/manage');
 	}
 	
 	function create() {
+		if(!$this->_has_privilege()) {
+			redirect('/', 'refresh');
+		}
 		$this->template->load('default', 'proj/create');
 	}
 	
 	function update() {
+		if(!$this->_has_privilege()) {
+			redirect('/', 'refresh');
+		}
+		
+		$proj_id = $this->input->get('proj_id', true);
+		
+		if($this->utility->is_pm() && $this->Proj_model->get_proj_creator($proj_id) !== element('loginname', $this->session->userdata('user'))) {
+			redirect('/proj/manage', 'refresh');
+		}
 		$this->template->load('default', 'proj/update');
 	}
 	
@@ -28,9 +43,9 @@ class Proj extends Auth_Controller {
 	}
 	
 	//返回所有proj的json数据
-	function proj_view() {
-		return null;
-	}
+	//function proj_view() {
+	//	return null;
+	//}
 	
 	//返回proj下所有proj_detail的json数据
 	function detail_view() {
@@ -41,9 +56,9 @@ class Proj extends Auth_Controller {
 	}
 	
 	//返回单条proj＋proj_detail的json数据
-	function get() {
-		return null;
-	}
+	//function get() {
+	//	return null;
+	//}
 	
 	//返回单条proj的json数据
 	function proj_get() {
@@ -55,11 +70,14 @@ class Proj extends Auth_Controller {
 	}
 	
 	//返回单条proj_detail的json数据
-	function detail_get() {
-		return null;
-	}
+	//function detail_get() {
+	//	return null;
+	//}
 	
 	function proj_create_submit() {
+		if(!$this->_has_privilege()) {
+			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
 		//$total_share = $this->input->post('total_share', true);
 		//$status = $this->input->post('status', true);
 		//$exclusive = $this->input->post('exclusive', true);
@@ -103,6 +121,10 @@ class Proj extends Auth_Controller {
 	}
 	
 	function proj_update_submit() {
+		if(!$this->_has_privilege()) {
+			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
+		
 		$proj_id = $this->input->post('proj_id', true);
 		$category = $this->input->post('category', true);
 		$sub_category = $this->input->post('sub_category', true);
@@ -119,6 +141,10 @@ class Proj extends Auth_Controller {
 		$remark = $this->input->post('remark', true);
 		$found = $this->input->post('found', true);
 		
+		if($this->utility->is_pm() && $this->Proj_model->get_proj_creator($proj_id) !== element('loginname', $this->session->userdata('user'))) {
+			$this->json->output(array('success' => false, 'm' => '您不能对他人的记录进行操作'));
+		}
+		
 		$proj_id = $this->Proj_model->update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $remark, $found, element('loginname', $this->session->userdata('user')));
 		if($proj_id === false) {
 			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
@@ -127,6 +153,9 @@ class Proj extends Auth_Controller {
 	}
 	
 	function detail_create_submit() {
+		if(!$this->_has_privilege()) {
+			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
 		$proj_id = $this->input->post('proj_id', true);
 		$proj_detail_id = $this->input->post('proj_detail_id', true);
 		$total_share = $this->input->post('total_share', true);
@@ -150,6 +179,10 @@ class Proj extends Auth_Controller {
 		$billing_company = $this->input->post('billing_company', true);
 		$manager_remark = $this->input->post('manager_remark', true);
 		
+		if($this->utility->is_pm() && $this->Proj_model->get_proj_creator($proj_id) !== element('loginname', $this->session->userdata('user'))) {
+			$this->json->output(array('success' => false, 'm' => '您不能对他人的记录进行操作'));
+		}
+		
 		if($proj_detail_id != '-1') {
 			$proj_detail_id = $this->Proj_model->update_detail($proj_detail_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, element('loginname', $this->session->userdata('user')));
 		} else {
@@ -163,8 +196,16 @@ class Proj extends Auth_Controller {
 	}
 	
 	function proj_delete_submit() {
+		if(!$this->_has_privilege()) {
+			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
+		
 		$proj_id = $this->input->post('proj_id', true);
-	
+		
+		if($this->utility->is_pm() && $this->Proj_model->get_proj_creator($proj_id) !== element('loginname', $this->session->userdata('user'))) {
+			$this->json->output(array('success' => false, 'm' => '您不能对他人的记录进行操作'));
+		}
+		
 		if(!$this->Data_model->delete_proj($proj_id)) {
 			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
 		}
@@ -172,11 +213,27 @@ class Proj extends Auth_Controller {
 	}
 	
 	function detail_delete_submit() {
+		if(!$this->_has_privilege()) {
+			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
+		
 		$proj_detail_id = $this->input->post('proj_detail_id', true);
+		
+		$proj_detail = $this->Proj_model->get_detail($proj_detail_id);
+		if($this->utility->is_pm() && $this->Proj_model->get_proj_creator($proj_detail->proj_id) !== element('loginname', $this->session->userdata('user'))) {
+			$this->json->output(array('success' => false, 'm' => '您不能对他人的记录进行操作'));
+		}
 		
 		if(!$this->Proj_model->delete_detail($proj_detail_id)) {
 			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
 		}
 		$this->json->output(array('success' => true));
+	}
+	
+	private function _has_privilege() {
+		if(!$this->utility->is_admin() && !$this->utility->is_pm()) {
+			return false;
+		}
+		return true;
 	}
 }

@@ -6,21 +6,20 @@ class User extends Auth_Controller {
 	}
 	
 	function index() {
-		/* TODO
 		//只允许管理员访问
-		if(element('group', $this->session->userdata('user')) !== 'administrator') {
+		if(!$this->utility->is_admin()) {
 			redirect('/', 'refresh');
 		}
 		
-		$users = $this->User_model->get_all();
-		//var_dump($users);exit;
-		$data = array('users' => $users);
-		$this->template->load('default', 'user/main', $data);
-		*/
 		$this->template->load('default', 'user/main');
 	}
 	
 	function view() {
+		//只允许管理员访问
+		if(!$this->utility->is_admin()) {
+			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
+		
 		$data = $this->User_model->get_all();
 		echo $this->json->output(array('success' => true, 'data' => $data));
 	}
@@ -29,9 +28,9 @@ class User extends Auth_Controller {
 		$loginname = $this->input->post('loginname', true);
 		
 		//只允许管理员访问
-		//if(element('group', $this->session->userdata('user')) !== 'administrator') {
-		//	$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
-		//}
+		if(!$this->utility->is_admin()) {
+			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
 		
 		if(!$this->utility->chk_loginname($loginname)) {
 			$this->json->output(array('success' => false, 'm' => '请正确输入用户账号'));
@@ -58,9 +57,9 @@ class User extends Auth_Controller {
 		$qq        = $this->input->post('qq', true);
 		$email     = $this->input->post('email', true);
 		
-		//if(element('group', $this->session->userdata('user')) !== 'administrator') {
-		//	$this->json->output(array('r' => 'error', 'm' => '您没有使用该功能的权限'));
-		//}
+		if(!$this->utility->is_admin()) {
+			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
 		
 		if(!$this->utility->chk_loginname($loginname)) {
 			$this->json->output(array('success' => false, 'errors' => array('loginname' => '用户名不符合规范（用户名长3～24字符，由大小写字母、数字和下划线组成）')));
@@ -91,15 +90,20 @@ class User extends Auth_Controller {
 		$this->json->output(array('success' => true));
 	}
 	
+	/*
 	function pwd_change() {
 		$this->template->load('default', 'user/pwd_change');
 	}
+	*/
 	
 	function pwd_change_submit() {
-		$loginname = element('loginname', $this->session->userdata('user'));
-		// TODO
-		$loginname = $this->input->post('loginname');
-		$password = $this->input->post('password');
+		//$loginname = element('loginname', $this->session->userdata('user'));
+		$loginname = $this->input->post('loginname', true);
+		$password = $this->input->post('password', true);
+		
+		if(!$this->utility->is_admin()) {
+			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
 		
 		/*
 		if($password === $password_new) {
@@ -115,9 +119,26 @@ class User extends Auth_Controller {
 			$this->json->output(array('success' => false, 'errors' => array('password' => '您输入的新密码不符合规范（密码长6～24字符，由大小写字母、数字和下划线组成）')));
 		}
 		
-		if($this->User_model->update_pwd($loginname, $password) === 1) {
-			$this->json->output(array('success' => true));
+		if($this->User_model->update_pwd($loginname, $password) !== true) {
+			$this->json->output(array('success' => false, 'errors' => array('password' => '您输入的新密码与旧密码相同')));
 		}
-		$this->json->output(array('success' => false, 'errors' => array('password' => '您输入的新密码与旧密码相同')));
+		$this->json->output(array('success' => true));
+	}
+	
+	function ban_submit() {
+		$loginname = $this->input->post('loginname', true);
+		
+		if(!$this->utility->is_admin()) {
+			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
+		
+		if($loginname === 'admin') {
+			$this->json->output(array('success' => false, 'errors' => array('loginname' => '不能禁用admin账号')));
+		}
+		
+		if($this->User_model->ban($loginname) !== true) {
+			$this->json->output(array('success' => false, 'errors' => array('password' => '用户更新操作失败')));
+		}
+		$this->json->output(array('success' => true));
 	}
 }

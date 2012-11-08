@@ -52,7 +52,7 @@ Ext.onReady(function() {
         handler: function(grid, rowIndex, colIndex) {
         	UserEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
           UserEditWin.down('form').getForm().submit({
-            url: 'xml-form-errors-ed-json.json',
+            url: '/user/ban_submit',
             submitEmptyText: false,
             waitMsg: 'Saving Data...',
             success: function(form, action) {

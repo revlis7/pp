@@ -11,18 +11,18 @@ class User_model extends CI_Model {
 	
 	function exists($loginname) {
 		$this->db->from('user')->where('loginname', $loginname);
-		if($this->db->count_all_results() === 1)  {
-			return true;
+		if($this->db->count_all_results() !== 1)  {
+			return false;
 		}
-		return false;
+		return true;
 	}
 	
 	function validate($loginname, $password) {
 		$this->db->from('user')->where(array('loginname' => $loginname, 'password' => $this->encrypt->sha1($password)));
-		if($this->db->count_all_results() === 1)  {
-			return true;
+		if($this->db->count_all_results() !== 1)  {
+			return false;
 		}
-		return false;
+		return true;
 	}
 	
 	function get_all() {
@@ -37,7 +37,10 @@ class User_model extends CI_Model {
 		$this->db->set('password', $this->encrypt->sha1($password));
 		$this->db->where('loginname', $loginname);
 		$this->db->update('user');
-		return $this->db->affected_rows();
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return true;
 	}
 	
 	function create($loginname, $password, $title, $realname = '', $branch = '', $tel = '', $qq = '', $email = '', $status = 'normal') {
@@ -53,23 +56,29 @@ class User_model extends CI_Model {
 			'status'    => $status,
 		);
 		$query = $this->db->insert('user', $data);
-		if($this->db->affected_rows() === 1) {
-			return true;
+		if($this->db->affected_rows() !== 1) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 	
 	function ban($loginname) {
-		return 0;
+		$this->db->set('status', 'banned');
+		$this->db->where('loginname', $loginname);
+		$this->db->update('user');
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return true;
 	}
 	
 	function delete($loginname) {
 		$this->db->from('user')->where('loginname', $loginname);
 		$this->db->delete();
 		
-		if($this->db->affected_rows() === 1) {
-			return true;
+		if($this->db->affected_rows() !== 1) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 }

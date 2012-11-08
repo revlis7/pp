@@ -4,6 +4,16 @@ class Proj_model extends CI_Model {
 		parent::__construct();
 	}
 	
+	function get_proj_creator($proj_id) {
+		$proj = $this->get_proj($proj_id);
+		if(!$proj) {
+			return false;
+		}
+		return $proj->creator;
+	}
+	
+	
+	
 	function create_proj($category = '', $sub_category = '', $issue = '', $name = '', $flow_of_fund = '', $highlights = '', $month = '', $scale = '', $cycle = '', $profit_property = '', $manager = '', $contract = '', $remark = '', $found = '', $creator = '') {
 		$proj = array(
 			'category' => $category,
@@ -24,10 +34,10 @@ class Proj_model extends CI_Model {
 			'create_ts' => date('Y-m-d H:i:s'),
 		);
 		$query = $this->db->insert('proj', $proj);
-		if($this->db->affected_rows() === 1) {
-			return $this->db->insert_id();
+		if($this->db->affected_rows() !== 1) {
+			return false;
 		}
-		return false;
+		return $this->db->insert_id();
 	}
 	
 	function update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $remark, $found, $editor) {
@@ -78,10 +88,10 @@ class Proj_model extends CI_Model {
 		);
 		$this->db->where('id', $proj_id);
 		$this->db->update('proj', $proj);
-		if($this->db->affected_rows() === 1) {
-			return $proj_id;
+		if($this->db->affected_rows() !== 1) {
+			return false;
 		}
-		return false;
+		return $proj_id;
 	}
 	
 	function create_detail($proj_id, $total_share = '', $status = '', $exclusive = '', $grade = '', $amount = '', $profit = '', $commission_b_tax = '', $commission_a_tax = '', $inner_commission = '', $outer_commission = '', $pay = '', $paid = '', $quota = '', $quota_paid = '', $quota_remain = '', $main_channel = '', $channel_company = '', $channel_contact = '', $billing_company = '', $manager_remark = '', $creator = '') {
@@ -111,10 +121,10 @@ class Proj_model extends CI_Model {
 			'create_ts' => date('Y-m-d H:i:s'),
 		);
 		$query = $this->db->insert('proj_detail', $proj_detail);
-		if($this->db->affected_rows() === 1) {
-			return $this->db->insert_id();
+		if($this->db->affected_rows() !== 1) {
+			return false;
 		}
-		return false;
+		return $this->db->insert_id();
 	}
 	
 	function update_detail($proj_detail_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, $editor) {
@@ -178,10 +188,10 @@ class Proj_model extends CI_Model {
 		);
 		$this->db->where('id', $proj_detail_id);
 		$this->db->update('proj_detail', $proj_detail);
-		if($this->db->affected_rows() === 1) {
-			return $proj_detail_id;
+		if($this->db->affected_rows() !== 1) {
+			return false;
 		}
-		return false;
+		return $proj_detail_id;
 	}
 	
 	// TODO join delete
@@ -189,20 +199,20 @@ class Proj_model extends CI_Model {
 		$this->db->from('proj')->where('id', $proj_id);
 		$this->db->delete();
 		
-		if($this->db->affected_rows() === 1) {
-			return true;
+		if($this->db->affected_rows() !== 1) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 	
 	function delete_detail($proj_detail_id) {
 		$this->db->from('proj_detail')->where('id', $proj_detail_id);
 		$this->db->delete();
 		
-		if($this->db->affected_rows() === 1) {
-			return true;
+		if($this->db->affected_rows() !== 1) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 	
 	function get_proj($proj_id) {

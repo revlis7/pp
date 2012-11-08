@@ -37,6 +37,30 @@ class Utility {
 		return true;
 	}
 	
+	function title2group($title) {
+		$_cfg = $this->get_group_cfg();
+		foreach($_cfg as $group => $title_array) {
+			if(in_array($title, $title_array)) {
+				return $group;
+			}
+		}
+		return null;
+	}
+	
+	function is_admin() {
+		if($this->title2group(element('title', $this->CI->session->userdata('user'))) !== 'administrator') {
+			return false;
+		}
+		return true;
+	}
+	
+	function is_pm() {
+		if($this->title2group(element('title', $this->CI->session->userdata('user'))) !== 'product_manager') {
+			return false;
+		}
+		return true;
+	}
+	
 	function is_ajax_request() {
 		if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
 			return true;

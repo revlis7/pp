@@ -39,6 +39,10 @@ class Auth extends Auth_Controller {
 			$this->json->output(array('success' => false, 'errors' => array('password' => '登录密码错误')));
 		}
 		
+		if($this->User_model->is_banned($loginname)) {
+			$this->json->output(array('success' => false, 'errors' => array('loginname' => '该账号已被禁止登录')));
+		}
+		
 		if(!$this->login->set_login($loginname)) {
 			$this->json->output(array('success' => false, 'errors' => array('loginname' => '登录失败')));
 		}

@@ -72,6 +72,17 @@ class User_model extends CI_Model {
 		return true;
 	}
 	
+	function is_banned($loginname) {
+		$this->db->select('status');
+		$this->db->from('user')->where('loginname', $loginname);
+		$query = $this->db->get();
+		$ret = $query->row();
+		if($ret->status === 'banned') {
+			return true;
+		}
+		return false;
+	}
+	
 	function delete($loginname) {
 		$this->db->from('user')->where('loginname', $loginname);
 		$this->db->delete();

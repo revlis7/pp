@@ -60,8 +60,8 @@ Ext.onReady(function() {
       ],
       proxy: {
         type: 'ajax',
-        //url: 'listControl.json',
-        url: '/etc/listControl.json',
+        //url: '/etc/listControl.json',
+        url: '/api/access_fields',
         reader: {
             type: 'json',
             root: 'data'

@@ -37,6 +37,10 @@ class Utility {
 		return true;
 	}
 	
+	function get_user_group() {
+		return $this->title2group(element('title', $this->CI->session->userdata('user')));
+	}
+	
 	function title2group($title) {
 		$_cfg = $this->get_group_cfg();
 		foreach($_cfg as $group => $title_array) {
@@ -59,6 +63,63 @@ class Utility {
 			return false;
 		}
 		return true;
+	}
+	
+	function access_fields_filter($group, $data) {
+		$_data = $data;
+		$_cfg = $this->get_access_fields($group);
+		foreach($_cfg as $field => $hidden) {
+			if(isset($_data->$field) && $hidden) {
+				unset($_data->$field);
+			}
+		}
+		return $_data;
+	}
+	
+	function get_access_fields($group) {
+		$_cfg = $this->get('access_fields_cfg');
+		
+		if(!isset($_cfg[$group])) {
+			return array(
+				'proj_id' => true,
+				'proj_detail_id' => true,
+				'total_share' => false,
+				'status' => false,
+				'exclusive' => false,
+				'grade' => false,
+				'category' => false,
+				'sub_category' => false,
+				'issue' => false,
+				'name' => false,
+				'flow_of_fund' => false,
+				'highlights' => false,
+				'month' => false,
+				'scale' => false,
+				'cycle' => false,
+				'amount' => false,
+				'profit_property' => false,
+				'profit' => false,
+				'manager' => false,
+				'contract' => false,
+				'remark' => false,
+				'commission_b_tax' => false,
+				'commission_a_tax' => false,
+				'inner_commission' => false,
+				'outer_commission' => false,
+				'pay' => false,
+				'paid' => false,
+				'found' => false,
+				'quota' => false,
+				'quota_paid' => false,
+				'quota_remain' => false,
+				'main_channel' => false,
+				'channel_company' => false,
+				'channel_contact' => false,
+				'billing_company' => false,
+				'manager_remark' => false,
+			);
+		}
+		return $_cfg[$group];
 	}
 	
 	function is_ajax_request() {

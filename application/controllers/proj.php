@@ -39,7 +39,12 @@ class Proj extends Auth_Controller {
 	//返回所有proj＋proj_detail的json数据
 	function view() {
 		$data = $this->Proj_model->get_all_proj_detail();
-		echo $this->json->output(array('success' => true, 'data' => $data));
+		$temp = array();
+		$group = $this->utility->get_user_group();
+		foreach($data as $_t) {
+			$temp[] = $this->utility->access_fields_filter($group, $_t);
+		}
+		echo $this->json->output(array('success' => true, 'data' => $temp));
 	}
 	
 	//返回所有proj的json数据

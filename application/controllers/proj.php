@@ -49,8 +49,8 @@ class Proj extends Auth_Controller {
 	function proj_get() {
 		$proj_id = $this->input->get('proj_id', true);
 		$data = $this->Proj_model->get_proj($proj_id);
-		$data[0]->proj_id = $data[0]->id;
-		unset($data[0]->id);
+		$data->proj_id = $data->id;
+		unset($data->id);
 		echo $this->json->output(array('success' => true, 'data' => $data));
 	}
 	
@@ -95,7 +95,7 @@ class Proj extends Auth_Controller {
 		//$billing_company = $this->input->post('billing_company', true);
 		//$manager_remark = $this->input->post('manager_remark', true);
 		
-		$proj_id = $this->Proj_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $remark, $found);
+		$proj_id = $this->Proj_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $remark, $found, element('loginname', $this->session->userdata('user')));
 		if($proj_id === false) {
 			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 		}
@@ -119,7 +119,7 @@ class Proj extends Auth_Controller {
 		$remark = $this->input->post('remark', true);
 		$found = $this->input->post('found', true);
 		
-		$proj_id = $this->Proj_model->update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $remark, $found);
+		$proj_id = $this->Proj_model->update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $remark, $found, element('loginname', $this->session->userdata('user')));
 		if($proj_id === false) {
 			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
 		}
@@ -151,9 +151,9 @@ class Proj extends Auth_Controller {
 		$manager_remark = $this->input->post('manager_remark', true);
 		
 		if($proj_detail_id != '-1') {
-			$proj_detail_id = $this->Proj_model->update_detail($proj_detail_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark);
+			$proj_detail_id = $this->Proj_model->update_detail($proj_detail_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, element('loginname', $this->session->userdata('user')));
 		} else {
-			$proj_detail_id = $this->Proj_model->create_detail($proj_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark);
+			$proj_detail_id = $this->Proj_model->create_detail($proj_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, element('loginname', $this->session->userdata('user')));
 		}
 		
 		if($proj_detail_id === false) {

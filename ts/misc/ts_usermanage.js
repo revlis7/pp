@@ -437,11 +437,11 @@ Ext.onReady(function() {
       },{
       	text:'项目管理',
       	icon:'/ts/misc/resources/icons/user_add.gif',
-      	handler:function(){window.location.href='/data/manage';}
+      	handler:function(){window.location.href='/ts/proj/manage';}
       },{
       	text:'离开管理员模式',
       	icon:'/ts/misc/resources/icons/cross.gif',
-      	handler:function(){window.location.href='/proj';}
+      	handler:function(){window.location.href='/ts/proj';}
       }]
     },{
       xtype:'panel', 

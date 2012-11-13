@@ -8,7 +8,7 @@ class User extends Auth_Controller {
 	function index() {
 		//只允许管理员访问
 		if(!$this->utility->is_admin()) {
-			redirect('/', 'refresh');
+			redirect(base_url(), 'refresh');
 		}
 		
 		$this->template->load('default', 'user/main');

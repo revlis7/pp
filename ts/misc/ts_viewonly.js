@@ -170,7 +170,7 @@ Ext.onReady(function() {
             },{
             	text:'进入管理模式',
             	icon:'/ts/misc/resources/icons/plugin.gif',
-            	handler:function(){window.location.href='/proj/manage';}
+            	handler:function(){window.location.href='/ts/proj/manage';}
             },{
             	text:'个人信息',
             	icon:'/ts/misc/resources/icons/user.png',
@@ -178,7 +178,7 @@ Ext.onReady(function() {
             },{
             	text:'退出',
             	icon:'/ts/misc/resources/icons/cross.gif',
-            	handler:function(){window.location.href='/logout';}
+            	handler:function(){window.location.href='/ts/logout';}
             }]
           },{
         	xtype:'panel', 

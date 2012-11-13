@@ -898,7 +898,7 @@ Ext.onReady(function() {
       },{
       	text:'退出',
       	icon:'/ts/misc/resources/icons/cross.gif',
-      	handler:function(){window.location.href='/logout';}
+      	handler:function(){window.location.href='/ts/logout';}
       }]
     },{
       xtype:'panel', 

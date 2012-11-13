@@ -21,9 +21,9 @@ class Auth_Controller extends CI_Controller {
 				$this->json->output(array('r' => 'error', 'm' => '您已经自动登出，请重新登录', 'd' => array('redurl' => '/')));
 			}
 			if(current_url() != base_url()) {
-				redirect('/auth?redurl='.urlencode(current_url().$this->build_request(true)), 'refresh');
+				redirect(base_url('auth?redurl='.urlencode(current_url().$this->build_request(true))), 'refresh');
 			}
-			redirect('/auth', 'refresh');
+			redirect(base_url('auth'), 'refresh');
 		}
 		$this->login_init();
 	}

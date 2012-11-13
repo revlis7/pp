@@ -11,27 +11,27 @@ class Proj extends Auth_Controller {
 	
 	function manage() {
 		if(!$this->_has_privilege()) {
-			redirect('/', 'refresh');
+			redirect(base_url(), 'refresh');
 		}
 		$this->template->load('default', 'proj/manage');
 	}
 	
 	function create() {
 		if(!$this->_has_privilege()) {
-			redirect('/', 'refresh');
+			redirect(base_url(), 'refresh');
 		}
 		$this->template->load('default', 'proj/create');
 	}
 	
 	function update() {
 		if(!$this->_has_privilege()) {
-			redirect('/', 'refresh');
+			redirect(base_url(), 'refresh');
 		}
 		
 		$proj_id = $this->input->get('proj_id', true);
 		
 		if($this->utility->is_pm() && $this->Proj_model->get_proj_creator($proj_id) !== element('loginname', $this->session->userdata('user'))) {
-			redirect('/proj/manage', 'refresh');
+			redirect(base_url('proj/manage'), 'refresh');
 		}
 		$this->template->load('default', 'proj/update');
 	}

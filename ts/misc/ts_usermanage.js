@@ -23,7 +23,7 @@ Ext.onReady(function() {
       width:30,
       sortable: false,
       items: [{
-        icon: '/misc/resources/icons/connect.gif',
+        icon: '/ts/misc/resources/icons/connect.gif',
         tooltip: '重置密码',
         handler: function(grid, rowIndex, colIndex) {
         	UserPassWin.show();
@@ -35,7 +35,7 @@ Ext.onReady(function() {
       width:30,
       sortable: false,
       items: [{
-        icon: '/misc/resources/icons/cog_edit.png',
+        icon: '/ts/misc/resources/icons/cog_edit.png',
         tooltip: '编辑用户信息',
         handler: function(grid, rowIndex, colIndex) {
         	UserEditWin.show();
@@ -47,12 +47,12 @@ Ext.onReady(function() {
       width:30,
       sortable: false,
       items: [{
-        icon: '/misc/resources/icons/delete.gif',
+        icon: '/ts/misc/resources/icons/delete.gif',
         tooltip: '禁用用户',
         handler: function(grid, rowIndex, colIndex) {
         	UserEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
           UserEditWin.down('form').getForm().submit({
-            url: '/user/ban_submit',
+            url: '/ts/user/ban_submit',
             submitEmptyText: false,
             waitMsg: 'Saving Data...',
             success: function(form, action) {
@@ -70,13 +70,13 @@ Ext.onReady(function() {
       width:30,
       sortable: false,
       items: [{
-        icon: '/misc/resources/icons/cross.gif',
+        icon: '/ts/misc/resources/icons/cross.gif',
         tooltip: '删除用户',
         handler: function(grid, rowIndex, colIndex) {
         	UserEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
           UserEditWin.down('form').getForm().submit({
             //url: 'xml-form-errors-ed-json.json',
-            url: '/user/delete_submit',
+            url: '/ts/user/delete_submit',
             submitEmptyText: false,
             waitMsg: 'Deleting...',
             success: function(form, action) {
@@ -132,14 +132,14 @@ Ext.onReady(function() {
           xtype: 'toolbar',
           bodyPadding: 5,
           items: [{
-          	icon:'/misc/resources/icons/accept.png',
+          	icon:'/ts/misc/resources/icons/accept.png',
             text: '确定',
             formBind: true, //only enabled once the form is valid
             disabled: true,
             handler: function() {
               this.up('form').getForm().submit({
                   //url: 'xml-form-errors-ed-json.json',
-                  url: '/user/create_submit',
+                  url: '/ts/user/create_submit',
                   submitEmptyText: false,
                   waitMsg: 'Saving Data...',
                   success: function(form, action) {
@@ -153,7 +153,7 @@ Ext.onReady(function() {
               });
             }
           },{
-          	  icon:'/misc/resources/icons/cross.gif',
+          	  icon:'/ts/misc/resources/icons/cross.gif',
               text: '取消',
               handler: function(){
                   this.up('window').close();
@@ -250,7 +250,7 @@ Ext.onReady(function() {
           xtype: 'toolbar',
           bodyPadding: 5,
           items: [{
-          	icon:'/misc/resources/icons/accept.png',
+          	icon:'/ts/misc/resources/icons/accept.png',
             text: '确定',
             formBind: true, //only enabled once the form is valid
             disabled: true,
@@ -271,7 +271,7 @@ Ext.onReady(function() {
               });
             }
           },{
-          	  icon:'/misc/resources/icons/cross.gif',
+          	  icon:'/ts/misc/resources/icons/cross.gif',
               text: '取消',
               handler: function(){
                   this.up('window').close();
@@ -354,14 +354,14 @@ Ext.onReady(function() {
           xtype: 'toolbar',
           bodyPadding: 5,
           items: [{
-          	icon:'/misc/resources/icons/accept.png',
+          	icon:'/ts/misc/resources/icons/accept.png',
             text: '确定',
             formBind: true, //only enabled once the form is valid
             disabled: true,
             handler: function() {
               this.up('form').getForm().submit({
                   //url: 'xml-form-errors-ed-json.json',
-                  url: '/user/pwd_change_submit',
+                  url: '/ts/user/pwd_change_submit',
                   submitEmptyText: false,
                   waitMsg: 'Saving Data...',
                   success: function(form, action) {
@@ -376,7 +376,7 @@ Ext.onReady(function() {
               });
             }
           },{
-          	  icon:'/misc/resources/icons/cross.gif',
+          	  icon:'/ts/misc/resources/icons/cross.gif',
               text: '取消',
               handler: function(){
                   this.up('window').close();
@@ -432,15 +432,15 @@ Ext.onReady(function() {
         flex:1,
       },{
       	text:'新增用户',
-      	icon:'/misc/resources/icons/user_add.gif',
+      	icon:'/ts/misc/resources/icons/user_add.gif',
       	handler:function(){UserNewWin.show();}
       },{
       	text:'项目管理',
-      	icon:'/misc/resources/icons/user_add.gif',
+      	icon:'/ts/misc/resources/icons/user_add.gif',
       	handler:function(){window.location.href='/data/manage';}
       },{
       	text:'离开管理员模式',
-      	icon:'/misc/resources/icons/cross.gif',
+      	icon:'/ts/misc/resources/icons/cross.gif',
       	handler:function(){window.location.href='/proj';}
       }]
     },{

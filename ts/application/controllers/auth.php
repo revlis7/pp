@@ -9,7 +9,7 @@ class Auth extends Auth_Controller {
 			if($redurl != '') {
 				redirect($redurl, 'refresh');
 			}
-			redirect('/proj', 'refresh');
+			redirect(base_url('proj'), 'refresh');
 		}
 	}
 

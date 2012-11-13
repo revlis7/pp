@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://pp.localhost/';
+$config['base_url']	= 'http://pp.localhost/ts/';
 
 /*
 |--------------------------------------------------------------------------

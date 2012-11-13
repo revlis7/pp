@@ -1,5 +1,5 @@
 Ext.Loader.setConfig({enabled: true});
-Ext.Loader.setPath('Ext.ux', '/misc/ux');
+Ext.Loader.setPath('Ext.ux', '/ts/misc/ux');
 
 Ext.require([
     'Ext.grid.*',
@@ -25,7 +25,7 @@ Ext.onReady(function() {
         width:30,
         sortable: false,
         items: [{
-          icon: '/misc/resources/icons/cog_edit.png',
+          icon: '/ts/misc/resources/icons/cog_edit.png',
           tooltip: '编辑此条记录',
           handler: function(grid, rowIndex, colIndex) {
             //sampleStore.removeAt(rowIndex);      
@@ -87,7 +87,7 @@ Ext.onReady(function() {
     fullGrid.child('pagingtoolbar').add([
         '->',
         {
-            icon: '/misc/resources/icons/delete.gif',
+            icon: '/ts/misc/resources/icons/delete.gif',
             text: '清除过滤条件',
             handler: function () {
                 fullGrid.filters.clearFilters();
@@ -119,16 +119,16 @@ Ext.onReady(function() {
         	xtype:'box',
         	flex:1,
         },{
-          icon: '/misc/resources/icons/add.gif',
+          icon: '/ts/misc/resources/icons/add.gif',
           text: '新增项目',
           handler: function () {window.location.href='/proj/create';} 
         },{
         	text:'用户管理',
-        	icon:'/misc/resources/icons/user_edit.png',
+        	icon:'/ts/misc/resources/icons/user_edit.png',
         	handler:function(){window.location.href='/user';}
         },{
         	text:'离开管理员模式',
-        	icon:'/misc/resources/icons/cross.gif',
+        	icon:'/ts/misc/resources/icons/cross.gif',
         	handler:function(){window.location.href='/proj';}
         }]
       },{

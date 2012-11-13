@@ -45,7 +45,7 @@ Ext.onReady(function() {
       ],
       proxy: {
         type: 'ajax',
-        url: '/proj/detail_view?proj_id='+proj_id,
+        url: '/ts/proj/detail_view?proj_id='+proj_id,
         reader: {
             type: 'json',
             root: 'data'
@@ -95,7 +95,7 @@ Ext.onReady(function() {
       proxy: {
         type: 'ajax',
         url: 'proj_sample_data.json?para='+proj_id,
-        //url: '/proj/view',
+        //url: '/ts/proj/view',
         reader: {
             type: 'json',
             root: 'data'
@@ -180,7 +180,7 @@ Ext.onReady(function() {
           xtype: 'toolbar',
           bodyPadding: 5,
           items: [{
-            icon:'/misc/resources/icons/grid.png',
+            icon:'/ts/misc/resources/icons/grid.png',
             text: '确定',
             id:'ok_create',
             hidden:false,
@@ -188,7 +188,7 @@ Ext.onReady(function() {
             disabled: true,
             handler: function() {
               this.up('form').getForm().submit({
-                url: '/proj/proj_create_submit',
+                url: '/ts/proj/proj_create_submit',
                 submitEmptyText: false,
                 waitMsg: 'Saving Data...',
                 success: function(form, action) {
@@ -200,7 +200,7 @@ Ext.onReady(function() {
                   ProjWin.down('button[id=cancel_create]').setVisible(false);
                   projStore.setProxy({
                     type: 'ajax',
-                    url: '/proj/proj_get?proj_id='+proj_id,
+                    url: '/ts/proj/proj_get?proj_id='+proj_id,
                     reader: {
                         type: 'json',
                         root: 'data'
@@ -211,7 +211,7 @@ Ext.onReady(function() {
                   });
                   projdetailStore.setProxy({
                     type: 'ajax',
-                    url: '/proj/detail_view?proj_id='+proj_id,
+                    url: '/ts/proj/detail_view?proj_id='+proj_id,
                     reader: {
                         type: 'json',
                         root: 'data'
@@ -226,7 +226,7 @@ Ext.onReady(function() {
               });
             }
           },{
-            icon:'/misc/resources/icons/grid.png',
+            icon:'/ts/misc/resources/icons/grid.png',
             text: '确定',
             id:'ok_edit',
             hidden:true,
@@ -234,7 +234,7 @@ Ext.onReady(function() {
             disabled: true,
             handler: function() {
               this.up('form').getForm().submit({
-                url: '/proj/proj_update_submit',
+                url: '/ts/proj/proj_update_submit',
                 submitEmptyText: false,
                 waitMsg: 'Saving Data...',
                 success: function(form, action) {
@@ -250,7 +250,7 @@ Ext.onReady(function() {
               });
             }
           },{
-            icon:'/misc/resources/icons/cross.gif',
+            icon:'/ts/misc/resources/icons/cross.gif',
             text: '取消',
             id:'cancel_create',
             hidden:false,
@@ -258,7 +258,7 @@ Ext.onReady(function() {
               Ext.util.History.back();
             }
           },{
-            icon:'/misc/resources/icons/cross.gif',
+            icon:'/ts/misc/resources/icons/cross.gif',
             text: '取消',
             id:'cancel_edit',
             hidden:true,
@@ -458,13 +458,13 @@ Ext.onReady(function() {
       xtype: 'toolbar',
       bodyPadding: 5,
       items: [{
-        icon:'/misc/resources/icons/accept.gif',
+        icon:'/ts/misc/resources/icons/accept.gif',
         text: '确认',
         formBind: true, //only enabled once the form is valid
         disabled: true,
         handler: function() {
           this.up('form').getForm().submit({
-            url: '/proj/detail_create_submit',
+            url: '/ts/proj/detail_create_submit',
             submitEmptyText: false,
             waitMsg: 'Saving Data...',
             success: function(form, action) {
@@ -478,7 +478,7 @@ Ext.onReady(function() {
           });
         }
       },{
-        icon:'/misc/resources/icons/cross.gif',
+        icon:'/ts/misc/resources/icons/cross.gif',
         text: '取消',
         handler: function(){
           this.up('form').getForm().reset();
@@ -680,7 +680,7 @@ Ext.onReady(function() {
       bodyPadding: 5,
       items: [{
       	text:'编辑项目信息',
-      	icon: '/misc/resources/icons/cog_edit.png',
+      	icon: '/ts/misc/resources/icons/cog_edit.png',
       	handler:function(){
       		ProjWin.down('form').getForm().loadRecord(projStore.first());
       		ProjWin.show();
@@ -800,7 +800,7 @@ Ext.onReady(function() {
       xtype:'toolbar',
       dock: 'top',
       items:[{
-        icon: '/misc/resources/icons/add.gif',
+        icon: '/ts/misc/resources/icons/add.gif',
         text:'新增额度信息' ,
         handler:function(){
           //todo
@@ -818,12 +818,12 @@ Ext.onReady(function() {
         width:30,
         sortable: false,
         items: [{
-          icon: '/misc/resources/icons/cross.gif',
+          icon: '/ts/misc/resources/icons/cross.gif',
           tooltip: '删除此条记录',
           handler: function(grid, rowIndex, colIndex) {
             AmountEditForm.getForm().loadRecord(grid.getStore().getAt(rowIndex));
             AmountEditForm.getForm().submit({
-                url: '/proj/detail_delete_submit',
+                url: '/ts/proj/detail_delete_submit',
                 submitEmptyText: false,
                 waitMsg: 'Saving Data...',
                 success: function(form, action) {
@@ -841,7 +841,7 @@ Ext.onReady(function() {
         width:30,
         sortable: false,
         items: [{
-          icon: '/misc/resources/icons/cog_edit.png',
+          icon: '/ts/misc/resources/icons/cog_edit.png',
           tooltip: '编辑此条记录',
           handler: function(grid, rowIndex, colIndex) {
             //sampleStore.removeAt(rowIndex);      
@@ -893,11 +893,11 @@ Ext.onReady(function() {
       	flex:1,
       },{
       	text:'返回',
-      	icon:'/misc/resources/icons/plugin.gif',
+      	icon:'/ts/misc/resources/icons/plugin.gif',
       	handler:function(){Ext.util.History.back();}
       },{
       	text:'退出',
-      	icon:'/misc/resources/icons/cross.gif',
+      	icon:'/ts/misc/resources/icons/cross.gif',
       	handler:function(){window.location.href='/logout';}
       }]
     },{

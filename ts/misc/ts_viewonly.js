@@ -61,7 +61,7 @@ Ext.onReady(function() {
       proxy: {
         type: 'ajax',
         //url: '/etc/listControl.json',
-        url: '/api/access_fields',
+        url: '/ts/api/access_fields',
         reader: {
             type: 'json',
             root: 'data'
@@ -139,7 +139,7 @@ Ext.onReady(function() {
       fullGrid.child('pagingtoolbar').add([
           '->',
           {
-              icon: '/misc/resources/icons/delete.gif',
+              icon: '/ts/misc/resources/icons/delete.gif',
               text: '清除过滤条件',
               handler: function () {
                   fullGrid.filters.clearFilters();
@@ -169,15 +169,15 @@ Ext.onReady(function() {
             	flex:1,
             },{
             	text:'进入管理模式',
-            	icon:'/misc/resources/icons/plugin.gif',
+            	icon:'/ts/misc/resources/icons/plugin.gif',
             	handler:function(){window.location.href='/proj/manage';}
             },{
             	text:'个人信息',
-            	icon:'/misc/resources/icons/user.png',
+            	icon:'/ts/misc/resources/icons/user.png',
             	handler:function(){}
             },{
             	text:'退出',
-            	icon:'/misc/resources/icons/cross.gif',
+            	icon:'/ts/misc/resources/icons/cross.gif',
             	handler:function(){window.location.href='/logout';}
             }]
           },{

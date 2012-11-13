@@ -15,5 +15,5 @@
     text-shadow: 0 1px 0 #fff;
 }
 </style>
-<script type="text/javascript" src="/misc/ts_base.js"></script>
-<script type="text/javascript" src="/misc/ts_projmanage.js"></script>
+<script type="text/javascript" src="<?php echo base_url('misc/ts_base.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('misc/ts_proj_new.js'); ?>"></script>

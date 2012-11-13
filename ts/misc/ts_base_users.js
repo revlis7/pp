@@ -1,5 +1,5 @@
 Ext.Loader.setConfig({enabled: true});
-Ext.Loader.setPath('Ext.ux', '/misc/ux');
+Ext.Loader.setPath('Ext.ux', '/ts/misc/ux');
 
 Ext.require([
     'Ext.grid.*',
@@ -16,7 +16,7 @@ Ext.require([
     proxy: {
       type: 'ajax',
       //url: '/etc/proj_sample_data.json',
-      url: '/user/view',
+      url: '/ts/user/view',
       reader: {
           type: 'json',
           root: 'data'

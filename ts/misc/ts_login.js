@@ -50,12 +50,12 @@ Ext.onReady(function() {
           	flex:1
           },
           {
-          	icon:'/misc/resources/icons/grid.png',
+          	icon:'/ts/misc/resources/icons/grid.png',
             text: '登录',
             handler: function() {
               this.up('form').getForm().submit({
                   //url: 'xml-form-errors-ed-json.json',
-                  url: '/auth/auth_submit',
+                  url: '/ts/auth/auth_submit',
                   submitEmptyText: false,
                   waitMsg: 'Saving Data...',
                   success: function(form, action) {

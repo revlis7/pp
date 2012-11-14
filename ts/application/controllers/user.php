@@ -141,4 +141,23 @@ class User extends Auth_Controller {
 		}
 		$this->json->output(array('success' => true));
 	}
+	
+	function update_submit() {
+		$loginname = $this->input->post('loginname', true);
+		$realname = $this->input->post('realname', true);
+		$title = $this->input->post('title', true);
+		$branch = $this->input->post('branch', true);
+		$tel = $this->input->post('tel', true);
+		$qq = $this->input->post('qq', true);
+		$email = $this->input->post('email', true);
+		
+		if(!$this->utility->is_admin()) {
+			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
+		
+		if($this->User_model->update($loginname, $title, $realname, $branch, $tel, $qq, $email) !== true) {
+			$this->json->output(array('success' => false, 'errors' => array('password' => '用户更新操作失败')));
+		}
+		$this->json->output(array('success' => true));
+	}
 }

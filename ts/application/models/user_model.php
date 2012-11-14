@@ -43,6 +43,23 @@ class User_model extends CI_Model {
 		return true;
 	}
 	
+	function update($loginname, $title, $realname, $branch, $tel, $qq, $email) {
+		$user = array(
+			'title' => $title,
+			'realname' => $realname,
+			'branch' => $branch,
+			'tel' => $tel,
+			'qq' => $qq,
+			'email' => $email,
+		);
+		$this->db->where('loginname', $loginname);
+		$this->db->update('user', $user);
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return true;
+	}
+	
 	function create($loginname, $password, $title, $realname = '', $branch = '', $tel = '', $qq = '', $email = '', $status = 'normal') {
 		$data = array(
 			'loginname' => $loginname,

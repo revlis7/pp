@@ -256,7 +256,7 @@ Ext.onReady(function() {
             disabled: true,
             handler: function() {
               this.up('form').getForm().submit({
-                  url: 'xml-form-errors-ed-json.json',
+                  url: '/ts/index.php/user/update_submit',
                   submitEmptyText: false,
                   waitMsg: 'Saving Data...',
                   success: function(form, action) {

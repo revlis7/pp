@@ -63,7 +63,7 @@ Ext.onReady(function() {
           	flex:1
           },
           {
-          	id:'enter_button'
+          	id:'enter_button',
           	icon:'/ts/misc/resources/icons/grid.png',
             text: '登录',
             handler: function() {

@@ -26,7 +26,7 @@ $config['base_url']	= 'http://pp.localhost/ts/';
 | variable so that it is blank.
 |
 */
-$config['index_page'] = '';
+$config['index_page'] = 'index.php';
 
 /*
 |--------------------------------------------------------------------------

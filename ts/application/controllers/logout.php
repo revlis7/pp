@@ -13,6 +13,6 @@ class Logout extends Auth_Controller {
 		if($redurl != '') {
 			redirect($redurl, 'refresh');
 		}
-		redirect(base_url(), 'refresh');
+		redirect(site_url(), 'refresh');
 	}
 }

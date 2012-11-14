@@ -12,8 +12,6 @@ class Proj_model extends CI_Model {
 		return $proj->creator;
 	}
 	
-	
-	
 	function create_proj($category = '', $sub_category = '', $issue = '', $name = '', $flow_of_fund = '', $highlights = '', $month = '', $scale = '', $cycle = '', $profit_property = '', $manager = '', $contract = '', $remark = '', $found = '', $creator = '') {
 		$proj = array(
 			'category' => $category,
@@ -94,7 +92,7 @@ class Proj_model extends CI_Model {
 		return $proj_id;
 	}
 	
-	function create_detail($proj_id, $total_share = '', $status = '', $exclusive = '', $grade = '', $amount = '', $profit = '', $commission_b_tax = '', $commission_a_tax = '', $inner_commission = '', $outer_commission = '', $pay = '', $paid = '', $quota = '', $quota_paid = '', $quota_remain = '', $main_channel = '', $channel_company = '', $channel_contact = '', $billing_company = '', $manager_remark = '', $creator = '') {
+	function create_detail($proj_id, $total_share = '', $status = '', $exclusive = '', $grade = '', $amount = '', $profit = '', $commission_b_tax = '', $commission_a_tax = '', $pay = '', $paid = '', $quota = '', $quota_paid = '', $quota_remain = '', $main_channel = '', $channel_company = '', $channel_contact = '', $billing_company = '', $manager_remark = '', $creator = '') {
 		$proj_detail = array(
 			'proj_id' => $proj_id,
 			'total_share' => $total_share,
@@ -105,8 +103,8 @@ class Proj_model extends CI_Model {
 			'profit' => $profit,
 			'commission_b_tax' => $commission_b_tax,
 			'commission_a_tax' => $commission_a_tax,
-			'inner_commission' => $inner_commission,
-			'outer_commission' => $outer_commission,
+			//'inner_commission' => $commission_a_tax * (1 - 0.09 * 2),
+			//'outer_commission' => $commission_a_tax * (1 - 0.1 * 2),
 			'pay' => $pay,
 			'paid' => $paid,
 			'quota' => $quota,
@@ -127,7 +125,7 @@ class Proj_model extends CI_Model {
 		return $this->db->insert_id();
 	}
 	
-	function update_detail($proj_detail_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, $editor) {
+	function update_detail($proj_detail_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, $editor) {
 		//查询旧记录，插入历史表
 		$old_proj_detail = $this->get_detail($proj_detail_id);
 		if(!$old_proj_detail) {
@@ -144,8 +142,8 @@ class Proj_model extends CI_Model {
 			'profit' => $old_proj_detail->profit,
 			'commission_b_tax' => $old_proj_detail->commission_b_tax,
 			'commission_a_tax' => $old_proj_detail->commission_a_tax,
-			'inner_commission' => $old_proj_detail->inner_commission,
-			'outer_commission' => $old_proj_detail->outer_commission,
+			//'inner_commission' => $old_proj_detail->inner_commission,
+			//'outer_commission' => $old_proj_detail->outer_commission,
 			'pay' => $old_proj_detail->pay,
 			'paid' => $old_proj_detail->paid,
 			'quota' => $old_proj_detail->quota,
@@ -173,8 +171,8 @@ class Proj_model extends CI_Model {
 			'profit' => $profit,
 			'commission_b_tax' => $commission_b_tax,
 			'commission_a_tax' => $commission_a_tax,
-			'inner_commission' => $inner_commission,
-			'outer_commission' => $outer_commission,
+			//'inner_commission' => round($commission_a_tax * (1 - 0.09 * 2), 3),
+			//'outer_commission' => round($commission_a_tax * (1 - 0.1 * 2), 3),
 			'pay' => $pay,
 			'paid' => $paid,
 			'quota' => $quota,

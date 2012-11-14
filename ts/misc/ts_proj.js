@@ -493,6 +493,26 @@ Ext.onReady(function() {
          displayField: 'text',
          forceSelection:true,
          allowBlank: false
+       }, {
+         xtype:'combo',
+         fieldLabel: '销售类别',
+         name:'exclusive',
+         queryMode : 'local',
+         store : chExclusiveList,
+         valueField: 'id',
+         displayField: 'text',
+         forceSelection:true,
+         allowBlank: false
+       }, {
+         xtype:'combo',
+         fieldLabel: '产品等级',
+         name:'grade',
+         queryMode : 'local',
+         store : chGradeList,
+         valueField: 'id',
+         displayField: 'text',
+         forceSelection:true,
+         allowBlank: false
        }]
     }, {
       xtype:'fieldset',

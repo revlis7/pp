@@ -30,7 +30,7 @@ Ext.onReady(function() {
           handler: function(grid, rowIndex, colIndex) {
             //sampleStore.removeAt(rowIndex);      
             var proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
-            window.location.href='/ts/proj/update?proj_id='+proj_id;
+            window.location.href='/ts/index.php/proj/update?proj_id='+proj_id;
           }
         }]
       },
@@ -121,15 +121,15 @@ Ext.onReady(function() {
         },{
           icon: '/ts/misc/resources/icons/add.gif',
           text: '新增项目',
-          handler: function () {window.location.href='/ts/proj/create';} 
+          handler: function () {window.location.href='/ts/index.php/proj/create';} 
         },{
         	text:'用户管理',
         	icon:'/ts/misc/resources/icons/user_edit.png',
-        	handler:function(){window.location.href='/ts/user';}
+        	handler:function(){window.location.href='/ts/index.php/user';}
         },{
         	text:'离开管理员模式',
         	icon:'/ts/misc/resources/icons/cross.gif',
-        	handler:function(){window.location.href='/ts/proj';}
+        	handler:function(){window.location.href='/ts/index.php/proj';}
         }]
       },{
     	xtype:'panel', 

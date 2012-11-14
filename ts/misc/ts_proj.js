@@ -44,7 +44,7 @@ Ext.onReady(function() {
       ],
       proxy: {
         type: 'ajax',
-        url: '/ts/proj/proj_get?proj_id='+params.proj_id,
+        url: '/ts/index.php/proj/proj_get?proj_id='+params.proj_id,
         reader: {
             type: 'json',
             root: 'data'
@@ -93,7 +93,7 @@ Ext.onReady(function() {
       ],
       proxy: {
         type: 'ajax',
-        url: '/ts/proj/detail_view?proj_id='+params.proj_id,
+        url: '/ts/index.php/proj/detail_view?proj_id='+params.proj_id,
         reader: {
             type: 'json',
             root: 'data'
@@ -184,7 +184,7 @@ Ext.onReady(function() {
             disabled: true,
             handler: function() {
               this.up('form').getForm().submit({
-                url: '/ts/proj/proj_update_submit',
+                url: '/ts/index.php/proj/proj_update_submit',
                 submitEmptyText: false,
                 waitMsg: 'Saving Data...',
                 success: function(form, action) {
@@ -404,7 +404,7 @@ Ext.onReady(function() {
         disabled: true,
         handler: function() {
           this.up('form').getForm().submit({
-            url: '/ts/proj/detail_create_submit',
+            url: '/ts/index.php/proj/detail_create_submit',
             submitEmptyText: false,
             waitMsg: 'Saving Data...',
             success: function(form, action) {
@@ -763,7 +763,7 @@ Ext.onReady(function() {
           handler: function(grid, rowIndex, colIndex) {
             AmountEditForm.getForm().loadRecord(grid.getStore().getAt(rowIndex));
             AmountEditForm.getForm().submit({
-                url: '/ts/proj/detail_delete_submit',
+                url: '/ts/index.php/proj/detail_delete_submit',
                 submitEmptyText: false,
                 waitMsg: 'Saving Data...',
                 success: function(form, action) {
@@ -838,7 +838,7 @@ Ext.onReady(function() {
       },{
       	text:'退出',
       	icon:'/ts/misc/resources/icons/cross.gif',
-      	handler:function(){window.location.href='/ts/logout';}
+      	handler:function(){window.location.href='/ts/index.php/logout';}
       }]
     },{
       xtype:'panel', 

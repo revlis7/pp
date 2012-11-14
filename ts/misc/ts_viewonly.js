@@ -61,7 +61,7 @@ Ext.onReady(function() {
       proxy: {
         type: 'ajax',
         //url: '/etc/listControl.json',
-        url: '/ts/api/access_fields',
+        url: '/ts/index.php/api/access_fields',
         reader: {
             type: 'json',
             root: 'data'
@@ -79,8 +79,8 @@ Ext.onReady(function() {
         region:'center',
         columnLines: true,
         columns: [
-          {text:'proj_id',     dataIndex:'proj_id',       filtable:true, width:100,hidden:records[0].get("proj_id")},
-          {text:'proj_detail_id',     dataIndex:'proj_detail_id',       filtable:true, width:100,hidden:records[0].get("proj_detail_id")},
+          {text:'proj_id',     dataIndex:'proj_id',       filtable:true, width:100,hidden:true},
+          {text:'proj_detail_id',     dataIndex:'proj_detail_id',       filtable:true, width:100,hidden:true},
           {text:'份额',         dataIndex:'total_share',     filtable:true, width:100, hidden:records[0].get("total_share")},
           {text:'销售状态',     dataIndex:'status',         filtable:true, width:100, hidden:records[0].get("status")},
           {text:'销售类别',     dataIndex:'exclusive',      filtable:true, width:100, hidden:records[0].get("exclusive")},
@@ -170,7 +170,7 @@ Ext.onReady(function() {
             },{
             	text:'进入管理模式',
             	icon:'/ts/misc/resources/icons/plugin.gif',
-            	handler:function(){window.location.href='/ts/proj/manage';}
+            	handler:function(){window.location.href='/ts/index.php/proj/manage';}
             },{
             	text:'个人信息',
             	icon:'/ts/misc/resources/icons/user.png',
@@ -178,7 +178,7 @@ Ext.onReady(function() {
             },{
             	text:'退出',
             	icon:'/ts/misc/resources/icons/cross.gif',
-            	handler:function(){window.location.href='/ts/logout';}
+            	handler:function(){window.location.href='/ts/index.php/logout';}
             }]
           },{
         	xtype:'panel', 

@@ -52,7 +52,7 @@ Ext.onReady(function() {
         handler: function(grid, rowIndex, colIndex) {
         	UserEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
           UserEditWin.down('form').getForm().submit({
-            url: '/ts/user/ban_submit',
+            url: '/ts/index.php/user/ban_submit',
             submitEmptyText: false,
             waitMsg: 'Saving Data...',
             success: function(form, action) {
@@ -76,7 +76,7 @@ Ext.onReady(function() {
         	UserEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
           UserEditWin.down('form').getForm().submit({
             //url: 'xml-form-errors-ed-json.json',
-            url: '/ts/user/delete_submit',
+            url: '/ts/index.php/user/delete_submit',
             submitEmptyText: false,
             waitMsg: 'Deleting...',
             success: function(form, action) {
@@ -139,7 +139,7 @@ Ext.onReady(function() {
             handler: function() {
               this.up('form').getForm().submit({
                   //url: 'xml-form-errors-ed-json.json',
-                  url: '/ts/user/create_submit',
+                  url: '/ts/index.php/user/create_submit',
                   submitEmptyText: false,
                   waitMsg: 'Saving Data...',
                   success: function(form, action) {
@@ -361,7 +361,7 @@ Ext.onReady(function() {
             handler: function() {
               this.up('form').getForm().submit({
                   //url: 'xml-form-errors-ed-json.json',
-                  url: '/ts/user/pwd_change_submit',
+                  url: '/ts/index.php/user/pwd_change_submit',
                   submitEmptyText: false,
                   waitMsg: 'Saving Data...',
                   success: function(form, action) {
@@ -437,11 +437,11 @@ Ext.onReady(function() {
       },{
       	text:'项目管理',
       	icon:'/ts/misc/resources/icons/user_add.gif',
-      	handler:function(){window.location.href='/ts/proj/manage';}
+      	handler:function(){window.location.href='/ts/index.php/proj/manage';}
       },{
       	text:'离开管理员模式',
       	icon:'/ts/misc/resources/icons/cross.gif',
-      	handler:function(){window.location.href='/ts/proj';}
+      	handler:function(){window.location.href='/ts/index.php/proj';}
       }]
     },{
       xtype:'panel', 

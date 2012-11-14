@@ -223,7 +223,7 @@ Ext.require([
       proxy: {
         type: 'ajax',
         //url: '/etc/proj_sample_data.json',
-        url: '/ts/proj/view',
+        url: '/ts/index.php/proj/view',
         reader: {
             type: 'json',
             root: 'data'
@@ -239,7 +239,7 @@ Ext.require([
   	],
       proxy: {
         type: 'ajax',
-        url: '/ts/etc/recent_change_data.json',
+        url: '/ts/index.php/etc/recent_change_data.json',
         reader: {
             type: 'json',
             root: 'data'

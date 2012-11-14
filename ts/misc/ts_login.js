@@ -55,11 +55,11 @@ Ext.onReady(function() {
             handler: function() {
               this.up('form').getForm().submit({
                   //url: 'xml-form-errors-ed-json.json',
-                  url: '/ts/auth/auth_submit',
+                  url: '/ts/index.php/auth/auth_submit',
                   submitEmptyText: false,
                   waitMsg: 'Saving Data...',
                   success: function(form, action) {
-                    window.location.href='/ts/proj';
+                    window.location.href='/ts/index.php/proj';
                   },
                   failure: function(form, action) {
                     Ext.Msg.alert('alert', '用户名或密码错误，请检查您的输入！');

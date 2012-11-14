@@ -16,7 +16,7 @@ Ext.require([
     proxy: {
       type: 'ajax',
       //url: '/etc/proj_sample_data.json',
-      url: '/ts/user/view',
+      url: '/ts/index.php/user/view',
       reader: {
           type: 'json',
           root: 'data'

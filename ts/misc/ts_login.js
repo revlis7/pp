@@ -41,19 +41,6 @@ Ext.onReady(function() {
         	type: 'vbox',
         	align: 'center'
         },
-        listeners: {  
-          afterRender: function(thisForm, options){  
-            this.keyNav = Ext.create('Ext.util.KeyNav', this.el, {  
-              enter: function(){  
-                // 筛选表格  
-                var btn = Ext.getCmp('enter_button');  
-                btn.handler() ;  
-                console.log( this );  
-              },  
-              scope: this  
-            });  
-          }  
-        },
         dockedItems: [{
           dock: 'bottom',
           xtype: 'toolbar',
@@ -63,7 +50,6 @@ Ext.onReady(function() {
           	flex:1
           },
           {
-          	id:'enter_button'
           	icon:'/ts/misc/resources/icons/grid.png',
             text: '登录',
             handler: function() {

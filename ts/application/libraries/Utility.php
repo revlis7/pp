@@ -128,4 +128,18 @@ class Utility {
 		}
 		return false;
 	}
+	
+	function get_inner_commission($commission_a_tax, $month) {
+		if($month <= 0 || $commission_a_tax <= 0) {
+			return 0;
+		}
+		return round($commission_a_tax - (0.09 * ($month / 12)), 3);
+	}
+	
+	function get_outer_commission($commission_a_tax, $month) {
+		if($month <= 0 || $commission_a_tax <= 0) {
+			return 0;
+		}
+		return round($commission_a_tax - (0.1 * ($month / 12)), 3);
+	}
 }

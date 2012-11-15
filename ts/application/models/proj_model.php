@@ -1,7 +1,11 @@
 <?php
 class Proj_model extends CI_Model {
+	private $CI;
+
 	function __construct() {
 		parent::__construct();
+		
+		$this->CI =& get_instance();
 	}
 	
 	function get_proj_creator($proj_id) {
@@ -222,7 +226,18 @@ class Proj_model extends CI_Model {
 	function get_detail($proj_detail_id) {
 		$this->db->from('proj_detail')->where('id', $proj_detail_id);
 		$query = $this->db->get();
-		return $query->row();
+		$result = $query->row();
+		if(!$result) {
+			return false;
+		}
+		$proj = $this->get_proj($result->proj_id);
+		if(!$proj) {
+			return false;
+		}
+		$month = $proj->month;
+		$result->inner_commission = $this->CI->utility->get_inner_commission($result->commission_a_tax, $month);
+		$result->outer_commission = $this->CI->utility->get_outer_commission($result->commission_a_tax, $month);
+		return $result;
 	}
 	
 	function get_all_proj() {
@@ -233,23 +248,36 @@ class Proj_model extends CI_Model {
 	}
 	
 	function get_all_detail($proj_id) {
+		$proj = $this->get_proj($proj_id);
+		if(!$proj) {
+			return false;
+		}
+		$month = $proj->month;
 		$this->db->select('proj_detail.proj_id as proj_id, proj_detail.id as proj_detail_id, proj_detail.total_share, proj_detail.status, proj_detail.exclusive, proj_detail.grade, proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, proj_detail.commission_a_tax, proj_detail.inner_commission, proj_detail.outer_commission, proj_detail.pay, proj_detail.paid, proj_detail.quota, proj_detail.quota_paid, proj_detail.quota_remain, proj_detail.main_channel, proj_detail.channel_company, proj_detail.channel_contact, proj_detail.billing_company, proj_detail.manager_remark');
-		//$this->db->select('proj.category, proj.sub_category, proj.issue, proj.name, proj.flow_of_fund, proj.highlights, proj.month, proj.scale, proj.cycle, proj.profit_property, proj.manager, proj.contract, proj.remark, proj.found, proj_detail.*');
 		$this->db->from('proj_detail')->where('proj_id', $proj_id);
-		//$this->db->join('proj_detail', 'proj_detail.proj_id = proj.id', 'left');
 		$this->db->order_by('proj_detail_id', 'asc');
 		$query = $this->db->get();
-		return $query->result();
+		$result = $query->result();
+		for($i = 0; $i < count($result); $i++) {
+			$result[$i]->inner_commission = $this->CI->utility->get_inner_commission($result[$i]->commission_a_tax, $month);
+			$result[$i]->outer_commission = $this->CI->utility->get_outer_commission($result[$i]->commission_a_tax, $month);
+		}
+		return $result;
 	}
 	
 	function get_all_proj_detail() {
-		//$this->db->select('proj.*, proj_detail.total_share, proj_detail.status, proj_detail.exclusive, proj_detail.grade, proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, proj_detail.commission_a_tax, proj_detail.inner_commission, proj_detail.outer_commission, proj_detail.pay, proj_detail.paid, proj_detail.quota, proj_detail.quota_paid, proj_detail.quota_remain, proj_detail.main_channel, proj_detail.channel_company, proj_detail.channel_contact, proj_detail.billing_company, proj_detail.manager_remark');
 		$this->db->select('proj.id as proj_id, proj.category, proj.sub_category, proj.issue, proj.name, proj.flow_of_fund, proj.highlights, proj.month, proj.scale, proj.cycle, proj.profit_property, proj.manager, proj.contract, proj.remark, proj.found, proj_detail.id as proj_detail_id, proj_detail.total_share, proj_detail.status, proj_detail.exclusive, proj_detail.grade, proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, proj_detail.commission_a_tax, proj_detail.inner_commission, proj_detail.outer_commission, proj_detail.pay, proj_detail.paid, proj_detail.quota, proj_detail.quota_paid, proj_detail.quota_remain, proj_detail.main_channel, proj_detail.channel_company, proj_detail.channel_contact, proj_detail.billing_company, proj_detail.manager_remark');
-		//$this->db->select('proj.category, proj.sub_category, proj.issue, proj.name, proj.flow_of_fund, proj.highlights, proj.month, proj.scale, proj.cycle, proj.profit_property, proj.manager, proj.contract, proj.remark, proj.found, proj_detail.*');
 		$this->db->from('proj');
 		$this->db->join('proj_detail', 'proj_detail.proj_id = proj.id', 'left');
 		$this->db->order_by('proj.id', 'asc');
 		$query = $this->db->get();
-		return $query->result();
+		$result = $query->result();
+		for($i = 0; $i < count($result); $i++) {
+			//$result[$i]->inner_commission = round($result[$i]->commission_a_tax - (0.09 * ($result[$i]->month / 12)), 3);
+			//$result[$i]->outer_commission = round($result[$i]->commission_a_tax - (0.1 * ($result[$i]->month / 12)), 3);
+			$result[$i]->inner_commission = $this->CI->utility->get_inner_commission($result[$i]->commission_a_tax, $result[$i]->month);
+			$result[$i]->outer_commission = $this->CI->utility->get_outer_commission($result[$i]->commission_a_tax, $result[$i]->month);
+		}
+		return $result;
 	}
 }

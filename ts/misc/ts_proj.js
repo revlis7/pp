@@ -613,6 +613,23 @@ Ext.onReady(function() {
        fieldLabel: '走帐公司',
        name:'billing_company'
       }]
+    },{
+      xtype:'fieldset',
+      title: '其他',
+      collapsible: true,
+      defaults: {
+        labelWidth: 89,
+        anchor: '100%',
+        layout: {
+          type: 'hbox',
+          defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
+        }
+      },
+      items:[{
+       xtype:'textfield',
+       fieldLabel: '产品经理备注',
+       name:'manager_remark'
+      }]
     }]
   });
 
@@ -814,7 +831,6 @@ Ext.onReady(function() {
       {text:'销售状态',     dataIndex:'status',         filtable:true, width:100},
       {text:'认购金额',     dataIndex:'amount',          filtable:true, width:100},
       {text:'项目收益',     dataIndex:'profit',          filtable:true, width:100},
-      {text:'产品经理',     dataIndex:'manager',        filtable:true, width:100},
       {text:'税前佣金',     dataIndex:'commission_b_tax',  filtable:true, width:100},
       {text:'税后佣金',     dataIndex:'commission_a_tax',  filtable:true, width:100},
       {text:'佣金',         dataIndex:'inner_commission', filtable:true, width:100},
@@ -827,7 +843,8 @@ Ext.onReady(function() {
       {text:'主销渠道',     dataIndex:'main_channel',   filtable:true, width:100},
       {text:'渠道公司',     dataIndex:'channel_company',filtable:true, width:100},
       {text:'渠道联系人',   dataIndex:'channel_contact',filtable:true, width:100},
-      {text:'走帐公司',     dataIndex:'billing_company',filtable:true, width:100}
+      {text:'走帐公司',     dataIndex:'billing_company',filtable:true, width:100},
+      {text:'产品经理备注',     dataIndex:'manager_remark',filtable:true, width:100}
     ]
   });
 

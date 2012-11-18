@@ -36,7 +36,6 @@ Ext.onReady(function() {
           //disabled: true,
           handler: function() {
           	UserPassWin.show();
-          	UserPassWin.down('form').getForm().loadRecord(strUserList.first());
           }
         }]
     }],
@@ -176,7 +175,6 @@ Ext.onReady(function() {
       }]
     }]
   });
-  
   var viewport = Ext.create('Ext.Viewport', {
     layout: {
         type: 'border',

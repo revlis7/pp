@@ -22,12 +22,8 @@ Ext.require([
           root: 'data'
       }
     }
-//    data: [
-//      ['loginname1','张三','产品经理','上海第一财富中心','13911111111','12345678','abc@def.com'],
-//      ['loginname2','李四','业务人员','上海第一财富中心','18622222222','87654321','ghi@jkl.com']
-//    ]
   });
-  
+
   var chTitleList=Ext.create('Ext.data.ArrayStore', {
     fields: ['id', 'text'],
     data: [

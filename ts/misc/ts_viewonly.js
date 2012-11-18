@@ -79,42 +79,54 @@ Ext.onReady(function() {
         region:'center',
         columnLines: true,
         columns: [
+        {text:'项目状态',columns:[
           {text:'proj_id',     dataIndex:'proj_id',       filtable:true, width:100,hidden:true},
           {text:'proj_detail_id',     dataIndex:'proj_detail_id',       filtable:true, width:100,hidden:true},
-          {text:'份额',         dataIndex:'total_share',     filtable:true, width:100, hidden:records[0].get("total_share")},
-          {text:'销售状态',     dataIndex:'status',         filtable:true, width:100, hidden:records[0].get("status")},
-          {text:'销售类别',     dataIndex:'exclusive',      filtable:true, width:100, hidden:records[0].get("exclusive")},
-          {text:'产品等级',     dataIndex:'grade',          filtable:true, width:100, hidden:records[0].get("grade")},
-          {text:'项目类别',     dataIndex:'category',       filtable:true, width:100, hidden:records[0].get("category")},
-          {text:'子类别',       dataIndex:'sub_category',    filtable:true, width:100, hidden:records[0].get("sub_category")},
-          {text:'发行方',       dataIndex:'issue',         filtable:true, width:100, hidden:records[0].get("issue")},
-          {text:'项目名称',     dataIndex:'name',          filtable:true, width:100, hidden:records[0].get("name")},
-          {text:'资金投向',     dataIndex:'flow_of_fund',    filtable:true, width:100, hidden:records[0].get("flow_of_fund")},
+          {text:'份额',         dataIndex:'total_share',     filtable:true,sortable : true, width:50, hidden:records[0].get("total_share")},
+          {text:'销售状态',     dataIndex:'status',         filtable:true,sortable : true, width:50, hidden:records[0].get("status")}
+        ]},
+        {text:'产品信息',columns:[
+          {text:'销售类别',     dataIndex:'exclusive',      filtable:true,sortable : true, width:50, hidden:records[0].get("exclusive")},
+          {text:'产品等级',     dataIndex:'grade',          filtable:true,sortable : true, width:50, hidden:records[0].get("grade")},
+          {text:'项目类别',     dataIndex:'category',       filtable:true,sortable : true, width:80, hidden:records[0].get("category")},
+          {text:'子类别',       dataIndex:'sub_category',    filtable:true,sortable : true, width:120, hidden:records[0].get("sub_category")},
+          {text:'发行方',       dataIndex:'issue',         filtable:true,sortable : true, width:100, hidden:records[0].get("issue")},
+          {text:'项目名称',     dataIndex:'name',          filtable:true,sortable : true, width:180, hidden:records[0].get("name")},
+          //{text:'资金投向',     dataIndex:'flow_of_fund',    filtable:true, width:100, hidden:records[0].get("flow_of_fund")},
           //{text:'项目亮点',     dataIndex:'highlights',    filtable:true, width:100, hidden:records[0].get("highlights")},
-          {text:'项目期限',     dataIndex:'month',           filtable:true, width:100, hidden:records[0].get("month")},
-          {text:'融资规模',     dataIndex:'scale',           filtable:true, width:100, hidden:records[0].get("scale")},
-          {text:'分配',         dataIndex:'cycle',          filtable:true, width:100, hidden:records[0].get("cycle")},
-          {text:'认购金额',     dataIndex:'amount',          filtable:true, width:100, hidden:records[0].get("amount")},
-          {text:'项目收益属性', dataIndex:'profit_property', filtable:true, width:100, hidden:records[0].get("profit_property")},
-          {text:'项目收益',     dataIndex:'profit',          filtable:true, width:100, hidden:records[0].get("profit")},
-          {text:'产品经理',     dataIndex:'manager',        filtable:true, width:100, hidden:records[0].get("manager")},
-          {text:'合同信息',     dataIndex:'contract',        filtable:true, width:100, hidden:records[0].get("contract")},
-          //{text:'备注',         dataIndex:'remark',        filtable:true, width:100, hidden:records[0].get("remark")},
-          {text:'税前佣金',     dataIndex:'commission_b_tax',  filtable:true, width:100, hidden:records[0].get("commission_b_tax")},
-          {text:'税后佣金',     dataIndex:'commission_a_tax',  filtable:true, width:100, hidden:records[0].get("commission_a_tax")},
-          {text:'佣金',         dataIndex:'inner_commission', filtable:true, width:100, hidden:records[0].get("inner_commission")},
-          {text:'佣金（税后）', dataIndex:'outer_commission', filtable:true, width:100, hidden:records[0].get("outer_commission")},
-          {text:'打款日期',     dataIndex:'pay',             filtable:true, width:100, hidden:records[0].get("pay")},
-          {text:'已打款金额',   dataIndex:'paid',            filtable:true, width:100, hidden:records[0].get("paid")},
-          {text:'成立日期',     dataIndex:'found',           filtable:true, width:100, hidden:records[0].get("found")},
-          {text:'包销/分销额度',dataIndex:'quota',           filtable:true, width:100, hidden:records[0].get("quota")},
-          {text:'已打款额度',   dataIndex:'quota_paid',       filtable:true, width:100, hidden:records[0].get("quota_paid")},
-          {text:'剩余额度',     dataIndex:'quota_remain',     filtable:true, width:100, hidden:records[0].get("quota_remain")},
-          {text:'主销渠道',     dataIndex:'main_channel',   filtable:true, width:100, hidden:records[0].get("main_channel")},
-          {text:'渠道公司',     dataIndex:'channel_company',filtable:true, width:100, hidden:records[0].get("channel_company")},
-          {text:'渠道联系人',   dataIndex:'channel_contact',filtable:true, width:100, hidden:records[0].get("channel_contact")},
-          {text:'走帐公司',     dataIndex:'billing_company',filtable:true, width:100, hidden:records[0].get("billing_company")},
-          {text:'产品经理备注', dataIndex:'manager_remark', filtable:true, width:100, hidden:records[0].get("manager_remark")}
+          {text:'期限',     dataIndex:'month',           filtable:true,sortable : true, width:40, hidden:records[0].get("month")},
+          {text:'融资规模',     dataIndex:'scale',           filtable:true,sortable : true, width:60, hidden:records[0].get("scale")},
+          {text:'分配',         dataIndex:'cycle',          filtable:true,sortable : true, width:50, hidden:records[0].get("cycle")},
+          {text:'认购金额',     dataIndex:'amount',          filtable:true,sortable : true, width:40, hidden:records[0].get("amount")},
+          {text:'项目收益属性', dataIndex:'profit_property', filtable:true,sortable : true, width:90, hidden:records[0].get("profit_property")},
+          {text:'收益',     dataIndex:'profit',          filtable:true,sortable : true, width:50, hidden:records[0].get("profit")},
+          {text:'产品经理',     dataIndex:'manager',        filtable:true,sortable : true, width:60, hidden:records[0].get("manager")},
+          {text:'合同信息',     dataIndex:'contract',        filtable:true,sortable : true, width:100, hidden:records[0].get("contract")}
+        ]},
+         //{text:'备注',         dataIndex:'remark',        filtable:true, width:100, hidden:records[0].get("remark")},
+        {text:'佣金信息',columns:[
+          {text:'税前佣金',     dataIndex:'commission_b_tax',  filtable:true,sortable : true, width:50, hidden:records[0].get("commission_b_tax")},
+          {text:'税后佣金',     dataIndex:'commission_a_tax',  filtable:true,sortable : true, width:50, hidden:records[0].get("commission_a_tax")},
+          {text:'佣金',         dataIndex:'inner_commission', filtable:true,sortable : true, width:50, hidden:records[0].get("inner_commission")},
+          {text:'佣金（税后）', dataIndex:'outer_commission', filtable:true,sortable : true, width:50, hidden:records[0].get("outer_commission")}
+        ]},
+        {text:'打款信息',columns:[
+          {text:'打款日期',     dataIndex:'pay',             filtable:true,sortable : true, width:90, renderer:new Ext.util.Format.dateRenderer("Y-m-d"), hidden:records[0].get("pay")},
+          {text:'已打款金额',   dataIndex:'paid',            filtable:true,sortable : true, width:50, hidden:records[0].get("paid")},
+          {text:'成立日期',     dataIndex:'found',           filtable:true,sortable : true, width:90, renderer:new Ext.util.Format.dateRenderer("Y-m-d"), hidden:records[0].get("found")}
+        ]},
+        {text:'包销进度信息',columns:[
+          {text:'包销/分销额度',dataIndex:'quota',           filtable:true,sortable : true, width:50, hidden:records[0].get("quota")},
+          {text:'已打款额度',   dataIndex:'quota_paid',       filtable:true,sortable : true, width:50, hidden:records[0].get("quota_paid")},
+          {text:'剩余额度',     dataIndex:'quota_remain',     filtable:true,sortable : true, width:50, hidden:records[0].get("quota_remain")}
+        ]},
+        {text:'渠道信息',columns:[
+          {text:'主销渠道',     dataIndex:'main_channel',   filtable:true,sortable : true, width:80, hidden:records[0].get("main_channel")},
+          {text:'渠道公司',     dataIndex:'channel_company',filtable:true,sortable : true, width:80, hidden:records[0].get("channel_company")},
+          {text:'渠道联系人',   dataIndex:'channel_contact',filtable:true,sortable : true, width:60, hidden:records[0].get("channel_contact")},
+          {text:'走帐公司',     dataIndex:'billing_company',filtable:true,sortable : true, width:100, hidden:records[0].get("billing_company")}
+        ]},
+          {text:'产品经理备注', dataIndex:'manager_remark', filtable:true,sortable : true, width:150, hidden:records[0].get("manager_remark")}
         ],
         title: '项目列表',
         viewConfig: {
@@ -129,8 +141,9 @@ Ext.onReady(function() {
         plugins: [{
             ptype: 'rowexpander',
             rowBodyTpl : [
-                '<p><b>项目亮点:</b> {highlights}</p>',
-                '<p><b>备注:</b> {remark}</p>'
+                '<table><tr><td valign=top style="padding:5px"><b>资金投向:</b></td><td style="padding:5px"><pre>{flow_of_fund}</pre></td></tr>',
+                '<tr><td valign=top style="padding:5px"><b>项目亮点:</b></td><td style="padding:5px"><pre>{highlights}</pre></td></tr>',
+                '<tr><td valign=top style="padding:5px"><b>备注:</b></td><td style="padding:5px"><pre> {remark}</pre></td></tr></table>'
             ]
         }],
         emptyText: 'No Matching Records'

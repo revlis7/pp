@@ -16,6 +16,7 @@ Ext.onReady(function() {
   var UserEditPanel=Ext.create("Ext.form.Panel",{
   	trackResetOnLoad:true,
     border:0,
+    bodyPadding: 5,
     waitTitle:"Pleas wait...",
     layout:{
       type:'vbox',
@@ -53,25 +54,15 @@ Ext.onReady(function() {
       disabled:true,
       allowBlank: false
     },{
-      xtype:'combo',
+      xtype:'textfield',
       fieldLabel: '职位',
       name:'title',
-      queryMode : 'local',
-      store : chTitleList,
-      valueField: 'id',
-      displayField: 'text',
-      forceSelection:true,
       disabled:true,
       allowBlank: false
     },{
-      xtype:'combo',
+      xtype:'textfield',
       fieldLabel: '分支机构',
       name:'branch',
-      queryMode : 'local',
-      store : chBranchList,
-      valueField: 'id',
-      displayField: 'text',
-      forceSelection:true,
       disabled:true,
       allowBlank: false
     },{

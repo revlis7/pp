@@ -17,7 +17,7 @@ Ext.onReady(function() {
       items:[
       {
         xtype:'box',
-        html:'<span class="app-header1">some system</span>'
+        html:'<span class="app-header1">彩虹桥</span>'
       },{
         xtype:'box',
         html:'<span class="app-header2">请登录</span>'

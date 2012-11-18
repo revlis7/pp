@@ -111,10 +111,10 @@ Ext.onReady(function() {
         items:[
         {
         	xtype:'box',
-        	html:'<span class="app-header1">some system</span>'
+        	html:'<span class="app-header1">彩虹桥</span>'
         },{
         	xtype:'box',
-        	html:'<span class="app-header2">管理员模式</span>'
+        	html:'<span class="app-header2">管理模式</span>'
         },{
         	xtype:'box',
         	flex:1,

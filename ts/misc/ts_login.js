@@ -23,7 +23,7 @@ Ext.onReady(function() {
         html:'<span class="app-header2">请登录</span>'
       },{
         xtype:'box',
-        flex:1,
+        flex:1
       }]
     },{
       xtype:'panel', 

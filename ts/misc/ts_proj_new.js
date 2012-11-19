@@ -102,58 +102,7 @@ Ext.onReady(function() {
         }
       }
     });
-/*
-  var ItemPanel=Ext.create("Ext.panel.Panel",{
-     resizeable:false,
-     closeAction:"hide",
-     closable:false,
-     title:'项目信息编辑',
-     width:900,
-     layout:{
-       type:'hbox'
-     },
-     dockedItems: [{
-       dock: 'bottom',
-       xtype: 'toolbar',
-       border:0,
-       bodyPadding: 5,
-       items: ['->',{
-         text: '关闭配置窗口',
-         formBind: true, //only enabled once the form is valid
-         disabled: true,
-         handler: function() {
-           var win = this.up('window');
-           var form = this.up('form').getForm();
-           if (form.isValid()) {
-             form.submit({
-               success: function(form, action) {
-                  //Ext.Msg.alert('Success', action.result.msg);
-                  win.close();
-                  //todo
-                  //thisform.data.load();
-                  ItemWin.show();
-               },
-               failure: function(form, action) {
-                  //Ext.Msg.alert('Success', action.result.msg);
-                  win .close();
-                  //todo
-                  //thisform.data.load();
-                  ItemWin.show();
-               }
-             });
-           }
-         }
-       }]
-     }],
-     items:[ {
-       xtype:'panel',
-       region:'center',
-       border:0,
-       width: 550,
-       items:[]
-     }, ]
-   });
-*/  
+
   var ProjWin=Ext.create("Ext.window.Window",{
       resizeable:false,
       closeAction:"hide",
@@ -788,7 +737,7 @@ Ext.onReady(function() {
         xtype:'textfield',
         fieldLabel: '产品经理',
         disabled:true,
-        name:'manager',
+        name:'manager'
       },{
         xtype:'datefield',
         fieldLabel: '成立日期',
@@ -927,7 +876,7 @@ Ext.onReady(function() {
       	html:'<span class="app-header1">彩虹桥</span>'
       },{
       	xtype:'box',
-      	flex:1,
+      	flex:1
       },{
       	text:'返回',
       	icon:'/ts/misc/resources/icons/plugin.gif',

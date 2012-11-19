@@ -431,7 +431,7 @@ Ext.onReady(function() {
         html:'<span class="app-header2">用户管理</span>'
       },{
         xtype:'box',
-        flex:1,
+        flex:1
       },{
       	text:'新增用户',
       	icon:'/ts/misc/resources/icons/user_add.gif',

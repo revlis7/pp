@@ -188,7 +188,7 @@ Ext.onReady(function() {
         html:'<span class="app-header2">个人信息</span>'
       },{
         xtype:'box',
-        flex:1,
+        flex:1
       },{
       	text:'返回',
       	icon:'/ts/misc/resources/icons/plugin.gif',

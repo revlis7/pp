@@ -15,7 +15,7 @@ Ext.onReady(function() {
       columns:[
       {text:'时间',             dataIndex:'changeDate',     filtable:true, width:100},
       {text:'修改人',           dataIndex:'changePerson',     filtable:true, width:100},
-      {text:'修改内容',         dataIndex:'changes',     filtable:true, width:500},
+      {text:'修改内容',         dataIndex:'changes',     filtable:true, width:500}
   	  ]
   	});
   	  
@@ -179,7 +179,7 @@ Ext.onReady(function() {
             	html:'<span class="app-header1">彩虹桥</span>'
             },{
             	xtype:'box',
-            	flex:1,
+            	flex:1
             },{
             	text:'进入管理模式',
             	icon:'/ts/misc/resources/icons/plugin.gif',

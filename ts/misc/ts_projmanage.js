@@ -117,7 +117,7 @@ Ext.onReady(function() {
         	html:'<span class="app-header2">管理模式</span>'
         },{
         	xtype:'box',
-        	flex:1,
+        	flex:1
         },{
           icon: '/ts/misc/resources/icons/add.gif',
           text: '新增项目',

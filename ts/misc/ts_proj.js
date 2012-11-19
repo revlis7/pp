@@ -676,7 +676,7 @@ Ext.onReady(function() {
         xtype:'textfield',
         fieldLabel: '产品经理',
         disabled:true,
-        name:'manager',
+        name:'manager'
       },{
         xtype:'datefield',
         fieldLabel: '成立日期',
@@ -815,7 +815,7 @@ Ext.onReady(function() {
       	html:'<span class="app-header1">彩虹桥</span>'
       },{
       	xtype:'box',
-      	flex:1,
+      	flex:1
       },{
       	text:'返回',
       	icon:'/ts/misc/resources/icons/plugin.gif',

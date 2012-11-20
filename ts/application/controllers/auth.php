@@ -47,6 +47,9 @@ class Auth extends Auth_Controller {
 			$this->json->output(array('success' => false, 'errors' => array('loginname' => '登录失败')));
 		}
 		
+		//记录用户登录历史
+		$this->User_model->login_history($loginname);
+		
 		$this->json->output(array('success' => true));
 	}
 }

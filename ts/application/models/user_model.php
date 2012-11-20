@@ -1,5 +1,7 @@
 <?php
 class User_model extends CI_Model {
+	private $CI;
+
 	var $loginname = '';
 	var $password  = '';
 	var $group     = '';
@@ -7,6 +9,8 @@ class User_model extends CI_Model {
 	
 	function __construct() {
 		parent::__construct();
+		
+		$this->CI =& get_instance();
 	}
 	
 	function exists($loginname) {
@@ -104,6 +108,19 @@ class User_model extends CI_Model {
 		$this->db->from('user')->where('loginname', $loginname);
 		$this->db->delete();
 		
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return true;
+	}
+	
+	function login_history($loginname) {
+		$data = array(
+			'loginname' => $loginname,
+			'ip'        => $this->CI->input->ip_address(),
+			'login_ts'  => date('Y-m-d H:i:s'),
+		);
+		$query = $this->db->insert('user_login_history', $data);
 		if($this->db->affected_rows() !== 1) {
 			return false;
 		}

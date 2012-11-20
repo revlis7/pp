@@ -12,6 +12,10 @@ class Utility {
 		return $this->CI->config->item($item_name, 'application');
 	}
 	
+	function chk_id($val) {
+		return preg_match('/^[1-9][0-9]{0,9}$/', $val);
+	}
+	
 	function chk_loginname($val) {
 		return preg_match('/^[A-Za-z0-9_]{3,24}$/', $val);
 	}

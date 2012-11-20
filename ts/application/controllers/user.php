@@ -25,7 +25,7 @@ class User extends Auth_Controller {
 	}
 	
 	function delete_submit() {
-		$loginname = $this->input->post('loginname', true);
+		$loginname = $this->input->post('loginname', true) === false ? '' : $this->input->post('loginname', true);
 		
 		//只允许管理员访问
 		if(!$this->utility->is_admin()) {
@@ -98,11 +98,15 @@ class User extends Auth_Controller {
 	
 	function pwd_change_submit() {
 		//$loginname = element('loginname', $this->session->userdata('user'));
-		$loginname = $this->input->post('loginname', true);
+		$loginname = $this->input->post('loginname', true) === false ? '' : $this->input->post('loginname', true);
 		$password = $this->input->post('password', true);
 		
 		if(!$this->utility->is_admin()) {
 			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
+		
+		if(!$this->utility->chk_loginname($loginname)) {
+			$this->json->output(array('success' => false, 'm' => '请正确输入用户账号'));
 		}
 		
 		/*
@@ -126,10 +130,14 @@ class User extends Auth_Controller {
 	}
 	
 	function ban_submit() {
-		$loginname = $this->input->post('loginname', true);
+		$loginname = $this->input->post('loginname', true) === false ? '' : $this->input->post('loginname', true);
 		
 		if(!$this->utility->is_admin()) {
 			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
+		
+		if(!$this->utility->chk_loginname($loginname)) {
+			$this->json->output(array('success' => false, 'm' => '请正确输入用户账号'));
 		}
 		
 		if($loginname === 'admin') {
@@ -143,7 +151,7 @@ class User extends Auth_Controller {
 	}
 	
 	function update_submit() {
-		$loginname = $this->input->post('loginname', true);
+		$loginname = $this->input->post('loginname', true) === false ? '' : $this->input->post('loginname', true);
 		$realname = $this->input->post('realname', true);
 		$title = $this->input->post('title', true);
 		$branch = $this->input->post('branch', true);
@@ -153,6 +161,10 @@ class User extends Auth_Controller {
 		
 		if(!$this->utility->is_admin()) {
 			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
+		
+		if(!$this->utility->chk_loginname($loginname)) {
+			$this->json->output(array('success' => false, 'm' => '请正确输入用户账号'));
 		}
 		
 		if($this->User_model->update($loginname, $title, $realname, $branch, $tel, $qq, $email) !== true) {

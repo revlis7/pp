@@ -29,6 +29,12 @@ class User_model extends CI_Model {
 		return true;
 	}
 	
+	function get($loginname) {
+		$this->db->from('user')->where('loginname', $loginname);
+		$query = $this->db->get();
+		return $query->row();
+	}
+	
 	function get_all() {
 		$this->db->select('loginname, title, realname, branch, tel, qq, email');
 		$this->db->from('user');

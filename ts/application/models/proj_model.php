@@ -8,12 +8,12 @@ class Proj_model extends CI_Model {
 		$this->CI =& get_instance();
 	}
 	
-	function get_proj_creator($proj_id) {
+	function get_proj_manager($proj_id) {
 		$proj = $this->get_proj($proj_id);
 		if(!$proj) {
 			return false;
 		}
-		return $proj->creator;
+		return $proj->manager;
 	}
 	
 	function create_proj($category = '', $sub_category = '', $issue = '', $name = '', $flow_of_fund = '', $highlights = '', $month = '', $scale = '', $cycle = '', $profit_property = '', $manager = '', $contract = '', $remark = '', $found = '', $creator = '') {

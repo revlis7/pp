@@ -83,8 +83,32 @@ Ext.onReady(function() {
       {text:'项目状态',columns:[
         {text:'proj_id',     dataIndex:'proj_id',       filtable:true, width:100,hidden:true},
         {text:'proj_detail_id',     dataIndex:'proj_detail_id',       filtable:true, width:100,hidden:true},
-        {text:'份额',         dataIndex:'total_share',     filtable:true,sortable : true, width:50, hidden:records[0].get("total_share")},
-        {text:'销售状态',     dataIndex:'status',         filtable:true,sortable : true, width:50, hidden:records[0].get("status")}
+        {text:'份额',         dataIndex:'total_share',     filtable:true,sortable : true, width:50,hidden:records[0].get("total_share"), 
+          renderer:function(value,metaData){
+            if(value=="OPEN"){
+              metaData.style='background:#CCFFCC;color:#000000'
+            }
+            if(value=="大带小"){
+              metaData.style='background:#FFFF99;color:#000000'
+            }
+            if(value=="无"){
+              metaData.style='background:#DFDFDF;color:#606060;'
+            }
+            return value;
+          }},
+        {text:'销售状态',     dataIndex:'status',         filtable:true,sortable : true, width:50, hidden:records[0].get("status"), 
+          renderer:function(value,metaData){
+            if(value=="在售"){
+              metaData.style='background:#CCFFCC;color:#000000'
+            }
+            if(value=="预约"){
+              metaData.style='background:#FFFF99;color:#000000'
+            }
+            if(value=="结束"){
+              metaData.style='background:#DFDFDF;color:#606060;'
+            }
+            return value;
+          }}
       ]},
       {text:'产品信息',columns:[
         {text:'销售类别',     dataIndex:'exclusive',      filtable:true,sortable : true, width:50, hidden:records[0].get("exclusive")},
@@ -135,16 +159,14 @@ Ext.onReady(function() {
         forceFit:true,
         sortAscText:'正序',
         sortDescText:'降序',
-        getRowClass : function(record,rowIndex,rowParams,store){    
-          if(record.data.status=="在售"){   
-              return 'style_row_onSale';   
+        getRowClass: function(record,rowIndex,rowParams,store){    
+          var sumVal=0;
+          for (var i=0;i<rowIndex;i++) {
+            if(store.getAt(i+1).data.proj_id!=store.getAt(i).data.proj_id){
+              sumVal++;
+            }
           }
-          if(record.data.status=="结束"){   
-              return 'style_row_Over';   
-          }
-          if(record.data.status=="预约"){   
-              return 'style_row_Pre';   
-          }
+          return (sumVal%2==0) ? 'style_row_proj0':'style_row_proj1';
         }
       },
       loadMask: true,

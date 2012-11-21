@@ -137,8 +137,15 @@ Ext.onReady(function() {
         sortDescText:'降序',
         getRowClass : function(record,rowIndex,rowParams,store){    
           if(record.data.status=="在售"){   
-              return 'my_row_Red';   
+              return 'style_row_onSale';   
           }
+          if(record.data.status=="结束"){   
+              return 'style_row_Over';   
+          }
+          if(record.data.status=="预约"){   
+              return 'style_row_Pre';   
+          }
+        }
       },
       loadMask: true,
       features: [filtersCfg],

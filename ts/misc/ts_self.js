@@ -1,3 +1,29 @@
+Ext.Loader.setConfig({enabled: true});
+Ext.Loader.setPath('Ext.ux', '/ts/misc/ux');
+
+Ext.require([
+    'Ext.grid.*',
+    'Ext.data.*',
+    'Ext.util.*',
+    'Ext.state.*',
+    'Ext.ux.grid.FiltersFeature',
+    'Ext.ux.ajax.JsonSimlet',
+    'Ext.ux.ajax.SimManager'
+]);
+
+  var strUserList=Ext.create('Ext.data.ArrayStore', {
+    fields: ['loginname', 'realname','title','branch','tel','qq','email'],
+    proxy: {
+      type: 'ajax',
+      //url: '/etc/proj_sample_data.json',
+      url: '/ts/index.php/user/view',
+      reader: {
+          type: 'json',
+          root: 'data'
+      }
+    }
+  });
+
 Ext.onReady(function() {
   Ext.QuickTips.init();
   Ext.tip.QuickTipManager.init();

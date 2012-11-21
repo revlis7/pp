@@ -16,7 +16,7 @@ Ext.require([
     proxy: {
       type: 'ajax',
       //url: '/etc/proj_sample_data.json',
-      url: '/ts/index.php/user/view',
+      url: '/ts/index.php/user/get_info',
       reader: {
           type: 'json',
           root: 'data'
@@ -145,7 +145,7 @@ Ext.onReady(function() {
             handler: function() {
               this.up('form').getForm().submit({
                   //url: 'xml-form-errors-ed-json.json',
-                  url: '/ts/index.php/user/pwd_change_submit',
+                  url: '/ts/index.php/user/user_pwd_change_submit',
                   submitEmptyText: false,
                   waitMsg: 'Saving Data...',
                   success: function(form, action) {

@@ -7,6 +7,6 @@ class Api extends Auth_Controller {
 	
 	function access_fields() {
 		$group = $this->utility->title2group(element('title', $this->session->userdata('user')));
-		echo $this->json->output(array('success' => true, 'data' => $this->utility->get_access_fields($group)));
+		$this->json->output(array('success' => true, 'data' => $this->utility->get_access_fields($group)));
 	}
 }

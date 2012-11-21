@@ -226,7 +226,7 @@ Ext.onReady(function() {
         },{
         	text:'个人信息',
         	icon:'/ts/misc/resources/icons/user.png',
-        	handler:function(){}
+        	handler:function(){window.location.href='/ts/index.php/user/info';}
         },{
         	text:'退出',
         	icon:'/ts/misc/resources/icons/cross.gif',

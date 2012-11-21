@@ -44,7 +44,7 @@ class Proj extends Auth_Controller {
 		foreach($data as $_t) {
 			$temp[] = $this->utility->access_fields_filter($group, $_t);
 		}
-		echo $this->json->output(array('success' => true, 'data' => $temp));
+		$this->json->output(array('success' => true, 'data' => $temp));
 	}
 	
 	//返回所有proj的json数据
@@ -57,7 +57,7 @@ class Proj extends Auth_Controller {
 		$proj_id = $this->input->get('proj_id', true);
 		
 		$data = $this->Proj_model->get_all_detail($proj_id);
-		echo $this->json->output(array('success' => true, 'data' => $data));
+		$this->json->output(array('success' => true, 'data' => $data));
 	}
 	
 	//返回单条proj＋proj_detail的json数据
@@ -71,7 +71,7 @@ class Proj extends Auth_Controller {
 		$data = $this->Proj_model->get_proj($proj_id);
 		$data->proj_id = $data->id;
 		unset($data->id);
-		echo $this->json->output(array('success' => true, 'data' => $data));
+		$this->json->output(array('success' => true, 'data' => $data));
 	}
 	
 	//返回单条proj_detail的json数据

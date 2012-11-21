@@ -21,11 +21,18 @@ class User extends Auth_Controller {
 		}
 		
 		$data = $this->User_model->get_all();
-		echo $this->json->output(array('success' => true, 'data' => $data));
+		$this->json->output(array('success' => true, 'data' => $data));
 	}
 	
 	function info() {
 		$this->template->load('default', 'user/info');
+	}
+	
+	function get_info() {
+		$loginname = element('loginname', $this->session->userdata('user'));
+		
+		$data = $this->User_model->get($loginname);
+		$this->json->output(array('success' => true, 'data' => $data));
 	}
 	
 	function delete_submit() {
@@ -122,6 +129,24 @@ class User extends Auth_Controller {
 			$this->json->output(array('r' => 'error', 'm' => '您输入的旧密码错误'));
 		}
 		*/
+		
+		if(!$this->utility->chk_password($password)) {
+			$this->json->output(array('success' => false, 'errors' => array('password' => '您输入的新密码不符合规范（密码长6～24字符，由大小写字母、数字和下划线组成）')));
+		}
+		
+		if($this->User_model->update_pwd($loginname, $password) !== true) {
+			$this->json->output(array('success' => false, 'errors' => array('password' => '您输入的新密码与旧密码相同')));
+		}
+		$this->json->output(array('success' => true));
+	}
+	
+	function user_pwd_change_submit() {
+		$loginname = element('loginname', $this->session->userdata('user'));
+		$password = $this->input->post('password', true);
+		
+		if(!$this->utility->chk_loginname($loginname)) {
+			$this->json->output(array('success' => false, 'm' => '请正确输入用户账号'));
+		}
 		
 		if(!$this->utility->chk_password($password)) {
 			$this->json->output(array('success' => false, 'errors' => array('password' => '您输入的新密码不符合规范（密码长6～24字符，由大小写字母、数字和下划线组成）')));

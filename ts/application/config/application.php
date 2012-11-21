@@ -3,9 +3,9 @@
 $config['login_expire'] = 1800;
 
 $config['group_cfg'] = array(
-	'administrator'   => array('administrator', 'CEO', '产品与研究部总监', '产品与研究部副总监', 'CTO'),
+	'administrator'   => array('administrator', 'CEO', '产品总监', '综合部', 'CTO'),
 	'product_manager' => array('产品经理'),
-	'staff'           => array('各地财富中心合伙人', '独立理财顾问'),
+	'staff'           => array('财富中心合伙人', '独立理财顾问','业务人员'),
 	'part_time_job'   => array('外部兼职人员'),
 );
 
@@ -108,7 +108,7 @@ $config['access_fields_cfg'] = array(
 		'manager' => false,
 		'contract' => false,
 		'remark' => false,
-		'commission_b_tax' => false,
+		'commission_b_tax' => true,
 		'commission_a_tax' => true,
 		'inner_commission' => false,
 		'outer_commission' => true,
@@ -147,7 +147,7 @@ $config['access_fields_cfg'] = array(
 		'contract' => false,
 		'remark' => false,
 		'commission_b_tax' => true,
-		'commission_a_tax' => false,
+		'commission_a_tax' => true,
 		'inner_commission' => true,
 		'outer_commission' => false,
 		'pay' => false,

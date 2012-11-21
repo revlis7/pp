@@ -24,6 +24,10 @@ class User extends Auth_Controller {
 		echo $this->json->output(array('success' => true, 'data' => $data));
 	}
 	
+	function info() {
+		$this->template->load('default', 'user/info');
+	}
+	
 	function delete_submit() {
 		$loginname = $this->input->post('loginname', true) === false ? '' : $this->input->post('loginname', true);
 		

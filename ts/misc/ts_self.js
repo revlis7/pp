@@ -143,10 +143,9 @@ Ext.onReady(function() {
       }],
       items:[
       {
-        xtype:'textfield',
+        xtype:'hiddenfield',
         fieldLabel: '用户名',
         name:'loginname',
-        disabled:true,
         allowBlank: false
       },{
         xtype:'textfield',

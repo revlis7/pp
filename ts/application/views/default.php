@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>²ÊºçÇÅ - Óñ¶û²Æ¸»</title>
+<title>å½©è™¹æ¡¥ - çŽ‰å°”è´¢å¯Œ</title>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('misc/resources/css/ext-all.css'); ?>" />
 <script type="text/javascript" src="<?php echo base_url('misc/ext-all.js'); ?>"></script>
 </head>

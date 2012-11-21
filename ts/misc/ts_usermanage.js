@@ -26,8 +26,9 @@ Ext.onReady(function() {
         icon: '/ts/misc/resources/icons/connect.gif',
         tooltip: '重置密码',
         handler: function(grid, rowIndex, colIndex) {
-        	UserPassWin.show();
-        	UserPassWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
+          UserPassWin.setTitle("重置密码："+grid.getStore().getAt(rowIndex).get("loginname"));
+          UserPassWin.show();
+          UserPassWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
         }
       }]
     },{
@@ -38,8 +39,9 @@ Ext.onReady(function() {
         icon: '/ts/misc/resources/icons/cog_edit.png',
         tooltip: '编辑用户信息',
         handler: function(grid, rowIndex, colIndex) {
-        	UserEditWin.show();
-        	UserEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
+          UserEditWin.setTitle("编辑用户信息："+grid.getStore().getAt(rowIndex).get("loginname"));
+          UserEditWin.show();
+          UserEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
         }
       }]
     },{
@@ -50,7 +52,7 @@ Ext.onReady(function() {
         icon: '/ts/misc/resources/icons/delete.gif',
         tooltip: '禁用用户',
         handler: function(grid, rowIndex, colIndex) {
-        	UserEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
+          UserEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
           UserEditWin.down('form').getForm().submit({
             url: '/ts/index.php/user/ban_submit',
             submitEmptyText: false,
@@ -280,11 +282,6 @@ Ext.onReady(function() {
       }],
       items:[
       {
-        xtype:'textfield',
-        fieldLabel: '用户名',
-        disabled:true,
-        allowBlank: false
-      },{
         xtype:'hiddenfield',
         fieldLabel: '用户名',
         name:'loginname',
@@ -390,11 +387,6 @@ Ext.onReady(function() {
       }],
       items:[
       {
-        xtype:'textfield',
-        fieldLabel: '用户名',
-        disabled:true,
-        allowBlank: false
-      },{
         xtype:'hiddenfield',
         fieldLabel: '用户名',
         name:'loginname',

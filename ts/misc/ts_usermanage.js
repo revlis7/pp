@@ -282,8 +282,12 @@ Ext.onReady(function() {
       {
         xtype:'textfield',
         fieldLabel: '用户名',
-        name:'loginname',
         disabled:true,
+        allowBlank: false
+      },{
+        xtype:'hiddenfield',
+        fieldLabel: '用户名',
+        name:'loginname',
         allowBlank: false
       },{
         xtype:'textfield',
@@ -388,8 +392,12 @@ Ext.onReady(function() {
       {
         xtype:'textfield',
         fieldLabel: '用户名',
-        name:'loginname',
         disabled:true,
+        allowBlank: false
+      },{
+        xtype:'hiddenfield',
+        fieldLabel: '用户名',
+        name:'loginname',
         allowBlank: false
       },{
         xtype:'textfield',

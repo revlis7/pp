@@ -162,7 +162,7 @@ Ext.onReady(function() {
         getRowClass: function(record,rowIndex,rowParams,store){    
           var sumVal=0;
           for (var i=0;i<rowIndex;i++) {
-            if(store.getAt(i+1).data.proj_id!=store.getAt(i).data.proj_id){
+            if(store.getAt(i+1).data.name!=store.getAt(i).data.name){
               sumVal++;
             }
           }

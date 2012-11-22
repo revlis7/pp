@@ -74,7 +74,7 @@ class Utility {
 		$_cfg = $this->get_access_fields($group);
 		foreach($_cfg as $field => $hidden) {
 			if(isset($_data->$field) && $hidden) {
-				unset($_data->$field);
+				$_data->$field = '';
 			}
 		}
 		return $_data;
@@ -138,8 +138,8 @@ class Utility {
 			'manager_remark',
 		);
 		foreach($fields as $field) {
-			if(isset($proj_detail[$field])) {
-				$proj_detail[$field] = '';
+			if(isset($proj_detail->$field)) {
+				$proj_detail->$field = '';
 			}
 		}
 		return true;

@@ -39,11 +39,24 @@ class Proj extends Auth_Controller {
 	//返回所有proj＋proj_detail的json数据
 	function view() {
 		$data = $this->Proj_model->get_all_proj_detail();
+		
+		//根据用户组过滤可见信息
 		$temp = array();
 		$group = $this->utility->get_user_group();
 		foreach($data as $_t) {
 			$temp[] = $this->utility->access_fields_filter($group, $_t);
 		}
+		
+		//对于项目经理组，不属于登录用户自己创建的记录需要过滤部分字段
+		if($this->utility->is_pm()) {
+			$n = count($temp);
+			for($i = 0; $i < $n; $i++) {
+				if($temp[$i]->manager != $this->get_user_info('realname')) {
+					$this->utility->manager_view_filter($temp[$i]);
+				}
+			}
+		}
+		
 		$this->json->output(array('success' => true, 'data' => $temp));
 	}
 	

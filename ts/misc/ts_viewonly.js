@@ -116,24 +116,63 @@ Ext.onReady(function() {
         {text:'项目类别',     dataIndex:'category',       filtable:true,sortable : true, width:80, hidden:records[0].get("category")},
         {text:'子类别',       dataIndex:'sub_category',    filtable:true,sortable : true, width:120, hidden:records[0].get("sub_category")},
         {text:'发行方',       dataIndex:'issue',         filtable:true,sortable : true, width:100, hidden:records[0].get("issue")},
-        {text:'项目名称',     dataIndex:'name',          filtable:true,sortable : true, width:180, hidden:records[0].get("name")},
+        {text:'项目名称',     dataIndex:'name',          filtable:true,sortable : true, width:180, hidden:records[0].get("name"),
+        renderer: function(value,metaData,record,colIndex,store,view) {  
+          var ttip_flow_of_fund=record.data.flow_of_fund;
+          var ttip_highlights=record.data.highlights;
+          var ttip_remark=record.data.remark;
+          
+          var ttip='<table><tr><td valign=top style="padding:5px"><b>资金投向:</b></td><td style="padding:5px"><pre>'+ttip_flow_of_fund+'</pre></td></tr>'+
+              '<tr><td valign=top style="padding:5px"><b>项目亮点:</b></td><td style="padding:5px"><pre>'+ttip_highlights+'</pre></td></tr>'+
+              '<tr><td valign=top style="padding:5px"><b>备注:</b></td><td style="padding:5px"><pre>'+ttip_remark+'</pre></td></tr></table>';
+          metaData.tdAttr = 'data-qtip="'+value+'"';  
+        //console.log(record);//在console中打印出record的值  
+          return value; 
+        }
+       },
         //{text:'资金投向',     dataIndex:'flow_of_fund',    filtable:true, width:100, hidden:records[0].get("flow_of_fund")},
         //{text:'项目亮点',     dataIndex:'highlights',    filtable:true, width:100, hidden:records[0].get("highlights")},
-        {text:'期限',     dataIndex:'month',           filtable:true,sortable : true, width:40, hidden:records[0].get("month")},
-        {text:'融资规模',     dataIndex:'scale',           filtable:true,sortable : true, width:60, hidden:records[0].get("scale")},
+        {text:'期限',     dataIndex:'month',           filtable:true,sortable : true, width:50, hidden:records[0].get("month"),
+        renderer: function(value,metaData,record,colIndex,store,view) {  
+          return value+'月';
+        }},
+        {text:'融资规模',     dataIndex:'scale',           filtable:true,sortable : true, width:60, hidden:records[0].get("scale"),
+        renderer: function(value,metaData,record,colIndex,store,view) {  
+          if(value>=10000){ return value/10000+'亿'; } 
+          if(value<10000){ return value+'万'; } 
+        }},
         {text:'分配',         dataIndex:'cycle',          filtable:true,sortable : true, width:50, hidden:records[0].get("cycle")},
-        {text:'认购金额',     dataIndex:'amount',          filtable:true,sortable : true, width:40, hidden:records[0].get("amount")},
+        {text:'认购金额',     dataIndex:'amount',          filtable:true,sortable : true, width:60, hidden:records[0].get("amount"),
+        renderer: function(value,metaData,record,colIndex,store,view) {  
+          if(value>=10000){ return value/10000+'亿'; } 
+          if(value<10000){ return value+'万'; } 
+        }},
         {text:'项目收益属性', dataIndex:'profit_property', filtable:true,sortable : true, width:90, hidden:records[0].get("profit_property")},
-        {text:'收益',     dataIndex:'profit',          filtable:true,sortable : true, width:50, hidden:records[0].get("profit")},
+        {text:'收益',     dataIndex:'profit',          filtable:true,sortable : true, width:50, hidden:records[0].get("profit"),
+        renderer: function(value,metaData,record,colIndex,store,view) {  
+          return value+'%'; 
+        }},
         {text:'产品经理',     dataIndex:'manager',        filtable:true,sortable : true, width:60, hidden:records[0].get("manager")},
         {text:'合同信息',     dataIndex:'contract',        filtable:true,sortable : true, width:100, hidden:records[0].get("contract")}
       ]},
        //{text:'备注',         dataIndex:'remark',        filtable:true, width:100, hidden:records[0].get("remark")},
       {text:'佣金信息',columns:[
-        {text:'税前佣金',     dataIndex:'commission_b_tax',  filtable:true,sortable : true, width:50, hidden:records[0].get("commission_b_tax")},
-        {text:'税后佣金',     dataIndex:'commission_a_tax',  filtable:true,sortable : true, width:50, hidden:records[0].get("commission_a_tax")},
-        {text:'佣金',         dataIndex:'inner_commission', filtable:true,sortable : true, width:50, hidden:records[0].get("inner_commission")},
-        {text:'佣金（税后）', dataIndex:'outer_commission', filtable:true,sortable : true, width:50, hidden:records[0].get("outer_commission")}
+        {text:'税前佣金',     dataIndex:'commission_b_tax',  filtable:true,sortable : true, width:50, hidden:records[0].get("commission_b_tax"),
+        renderer: function(value,metaData,record,colIndex,store,view) {  
+          return value+'%'; 
+        }},
+        {text:'税后佣金',     dataIndex:'commission_a_tax',  filtable:true,sortable : true, width:50, hidden:records[0].get("commission_a_tax"),
+        renderer: function(value,metaData,record,colIndex,store,view) {  
+          return value+'%'; 
+        }},
+        {text:'佣金',         dataIndex:'inner_commission', filtable:true,sortable : true, width:50, hidden:records[0].get("inner_commission"),
+        renderer: function(value,metaData,record,colIndex,store,view) {  
+          return value+'%'; 
+        }},
+        {text:'佣金（税后）', dataIndex:'outer_commission', filtable:true,sortable : true, width:50, hidden:records[0].get("outer_commission"),
+        renderer: function(value,metaData,record,colIndex,store,view) {  
+          return value+'%'; 
+        }}
       ]},
       {text:'打款信息',columns:[
         {text:'打款日期',     dataIndex:'pay',             filtable:true,sortable : true, width:90, renderer:new Ext.util.Format.dateRenderer("Y-m-d"), hidden:records[0].get("pay")},
@@ -151,7 +190,12 @@ Ext.onReady(function() {
         {text:'渠道联系人',   dataIndex:'channel_contact',filtable:true,sortable : true, width:60, hidden:records[0].get("channel_contact")},
         {text:'走帐公司',     dataIndex:'billing_company',filtable:true,sortable : true, width:100, hidden:records[0].get("billing_company")}
       ]},
-        {text:'产品经理备注', dataIndex:'manager_remark', filtable:true,sortable : true, width:150, hidden:records[0].get("manager_remark")}
+        {text:'产品经理备注', dataIndex:'manager_remark', filtable:true,sortable : true, width:150, hidden:records[0].get("manager_remark"),
+        renderer: function(value,metaData,record,colIndex,store,view) {  
+          metaData.tdAttr = 'data-qtip="'+value+'"';  
+        //console.log(record);//在console中打印出record的值  
+          return value; 
+        }}
       ],
       title: '项目列表',
       viewConfig: {

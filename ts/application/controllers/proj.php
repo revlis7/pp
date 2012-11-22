@@ -57,6 +57,15 @@ class Proj extends Auth_Controller {
 		$proj_id = $this->input->get('proj_id', true);
 		
 		$data = $this->Proj_model->get_all_detail($proj_id);
+		
+		//对于项目经理组，不属于登录用户自己创建的记录需要过滤部分字段
+		if($this->utility->is_pm() && $this->Proj_model->get_proj_manager($proj_id) !== $this->get_user_info('realname')) {
+			$n = count($data);
+			for($i = 0; $i < $n; $i++) {
+				$this->utility->manager_view_filter($data[$i]);
+			}
+		}
+		
 		$this->json->output(array('success' => true, 'data' => $data));
 	}
 	

@@ -126,6 +126,25 @@ class Utility {
 		return $_cfg[$group];
 	}
 	
+	function manager_view_filter($proj_detail) {
+		$fields = array(
+			'commission_b_tax',
+			'commission_a_tax',
+			'outer_commission',
+			'main_channel',
+			'channel_company',
+			'channel_contact',
+			'billing_company',
+			'manager_remark',
+		);
+		foreach($fields as $field) {
+			if(isset($proj_detail[$field])) {
+				$proj_detail[$field] = '';
+			}
+		}
+		return true;
+	}
+	
 	function is_ajax_request() {
 		if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
 			return true;

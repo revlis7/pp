@@ -132,4 +132,18 @@ class User_model extends CI_Model {
 		}
 		return true;
 	}
+
+	function operation_history($loginname, $operation) {
+		$data = array(
+			'loginname'  => $loginname,
+			'ip'         => $this->CI->input->ip_address(),
+			'operation'  => $operation,
+			'operate_ts' => date('Y-m-d H:i:s'),
+		);
+		$query = $this->db->insert('user_operation_history', $data);
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return true;
+	}
 }

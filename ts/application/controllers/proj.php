@@ -144,6 +144,10 @@ class Proj extends Auth_Controller {
 		if($proj_id === false) {
 			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 		}
+
+		//记录用户操作历史
+		$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'新增['.$issue.']的项目：['.$name.']，['.$scale.']万额度');
+
 		$this->json->output(array('success' => true, 'proj_id' => $proj_id));
 	}
 	
@@ -179,7 +183,7 @@ class Proj extends Auth_Controller {
 		//获取需要记录历史操作的旧值
 		$proj = $this->Proj_model->get_proj($proj_id);
 		if($remark != $proj->remark) {
-			$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'将备注［'.$proj->remark.'］修改为［'.$remark.'］');
+			$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'将['.$proj->issue.']的项目：['.$proj->name.']的备注修改为［'.$remark.'］');
 		}
 		
 		$proj_id = $this->Proj_model->update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $remark, $found, element('loginname', $this->session->userdata('user')));
@@ -225,21 +229,21 @@ class Proj extends Auth_Controller {
 				$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
 			}
 			//获取需要记录历史操作的旧值
+			$proj = $this->Proj_model->get_proj($proj_id);
 			$proj_detail = $this->Proj_model->get_detail($proj_detail_id);
-			if($status != $proj_detail->status) {
-				$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'将［'.$proj_detail->status.'］状态修改为［'.$status.'］');
-			}
 
 			$proj_detail_id = $this->Proj_model->update_detail($proj_detail_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, element('loginname', $this->session->userdata('user')));
+
+			//比较新旧值，记录操作历史
+			if($status != $proj_detail->status) {
+				$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'将['.$proj->issue.']的项目：['.$proj->name.']，额度为['.$proj_detail->amount.']万，由［'.$proj_detail->status.'］状态修改为［'.$status.'］');
+			}
+
 		} else {
 			$proj_detail_id = $this->Proj_model->create_detail($proj_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, element('loginname', $this->session->userdata('user')));
 			if($proj_detail_id === false) {
 				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 			}
-
-			//记录用户操作历史
-			$proj = $this->Proj_model->get_proj($proj_id);
-			$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'新增'.$proj->issue.'的项目：'.$proj->name.'，'.$quota.'万额度');
 		}
 
 		$this->json->output(array('success' => true, 'proj_detail_id' => $proj_detail_id));

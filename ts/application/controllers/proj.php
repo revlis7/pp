@@ -291,6 +291,11 @@ class Proj extends Auth_Controller {
 		}
 		$this->json->output(array('success' => true));
 	}
+
+	function operation_history() {
+		$data = $this->User_model->get_operation_history();
+		$this->json->output(array('success' => true, 'data' => $data));
+	}
 	
 	private function get_user_info($field) {
 		$info = element($field, $this->session->userdata('user'));

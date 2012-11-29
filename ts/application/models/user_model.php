@@ -146,4 +146,13 @@ class User_model extends CI_Model {
 		}
 		return true;
 	}
+
+	function get_operation_history() {
+		$this->db->select('user.realname, user_operation_history.operation, user_operation_history.operate_ts');
+		$this->db->from('user_operation_history');
+		$this->db->join('user', 'user.loginname = user_operation_history.loginname', 'left');
+		$this->db->order_by('user_operation_history.id', 'desc');
+		$query = $this->db->get();
+		return $query->result();
+	}
 }

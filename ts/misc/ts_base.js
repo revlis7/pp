@@ -53,11 +53,8 @@ Ext.require([
   var chCategoryList=Ext.create('Ext.data.ArrayStore', {
     fields: ['id', 'text'],
     data: [
-      ['信托类','信托类'],
-      ['债券类','债券类'],
-      ['私募证券类','私募证券类'],
-      ['私募股权类','私募股权类'],
-      ['其他类','其他类']
+      ['固定收益类','固定收益类'],
+      ['浮动收益类','浮动收益类']
     ]
   });
 
@@ -99,6 +96,23 @@ Ext.require([
        data:[],
        autoLoad : true
   });
+  
+  var chFixedList=[
+      ['集合信托：上市公司股票质押类','集合信托：上市公司股票质押类'],
+      ['集合信托：政府基建类','集合信托：政府基建类'],
+      ['集合信托：房地产类','集合信托：房地产类'],
+      ['集合信托：其他类','集合信托：其他类'],
+      ['私募基金','私募基金'],
+      ['P2P理财','P2P理财'],
+      ['其他','其他']
+  ]
+  
+  var chFloatingList=[
+      ['债券基金','债券基金'],
+      ['证券基金','证券基金'],
+      ['股权基金','股权基金'],
+      ['其他','其他']
+  ]
 
   var subTrustList=[
       ['非商业地产房地产类','非商业地产房地产类'],
@@ -148,8 +162,7 @@ Ext.require([
       ['其他不便归类基金','其他不便归类基金']
     ]
 
-  var sampleStore=Ext.create('Ext.data.JsonStore', {
-      fields: [
+  var sampleStoreFields=[
         {name:'proj_id'      ,type:'integer' },
         {name:'proj_detail_id'      ,type:'integer' },
         {name:'total_share'      ,type:'string' },
@@ -186,30 +199,11 @@ Ext.require([
         {name:'channel_contact'  ,type:'string' },
         {name:'billing_company'  ,type:'string' },
         {name:'manager_remark'   ,type:'string' }
-      ],
-      sorters: [{
-        sorterFn: function(o1, o2){
-          var getRank = function(o){
-            var name = o.get('status');
-            if (name === '在售') {
-              return 1;
-            } else if (name === '预约') {
-              return 2;
-            } else {
-              return 3;
-            }
-          },
-          rank1 = getRank(o1),
-          rank2 = getRank(o2);
-          if (rank1 === rank2) {
-            return 0;
-          }
-          return rank1 < rank2 ? -1 : 1;
-        }
-      }],
+      ]
+  var sampleStore=Ext.create('Ext.data.JsonStore', {
+      fields: sampleStoreFields,
       proxy: {
         type: 'ajax',
-        //url: '/etc/proj_sample_data.json',
         url: '/ts/index.php/proj/view',
         reader: {
             type: 'json',
@@ -217,7 +211,29 @@ Ext.require([
         }
       }
     });
-  
+  var sampleStoreC1=Ext.create('Ext.data.JsonStore', {
+      fields: sampleStoreFields,
+      proxy: {
+        type: 'ajax',
+        url: '/ts/index.php/proj/view?c=1',
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+      }
+    });
+
+  var sampleStoreC2=Ext.create('Ext.data.JsonStore', {
+      fields: sampleStoreFields,
+      proxy: {
+        type: 'ajax',
+        url: '/ts/index.php/proj/view?c=2',
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+      }
+    });
   var sampleChanges=Ext.create('Ext.data.ArrayStore', {
   	fields:[
   	  {name:'operate_ts',type:'date',dateFormat:"Y-m-d H:i:s"},

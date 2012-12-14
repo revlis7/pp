@@ -2,23 +2,18 @@ Ext.require(['Ext.ux.RowExpander']);
 
 Ext.onReady(function() {
   Ext.QuickTips.init();
-  var fullGrid;
+  var accPanel;
   
   var recentChangeGrid=Ext.create('Ext.grid.Panel', {
-  	region:'north',
-  	collapsible:true,
-  	collapseDirection:'top',
-  	collapseMode:'header',
-  	animCollapse : true,
-    title:'最近更改',
     maxHeight:150,
-    titleCollapse:true,
+    width:966,
     border:0,
+    hidden:true,
     store:sampleChanges,
+    hideHeaders : true,
     columns:[
     {text:'时间',             dataIndex:'operate_ts',     filtable:true, width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
-    {text:'修改人',           dataIndex:'realname',     filtable:true, width:100},
-    {text:'修改内容',         dataIndex:'operation',     filtable:true, width:800}
+    {text:'修改内容',         dataIndex:'operation',     filtable:true, width:820}
     ]
   });
   	  
@@ -79,71 +74,67 @@ Ext.onReady(function() {
 
 
   listControl.load(function(records, operation, success) {
-var strPay="";
-if(records[0].get("pay")==false || records[0].get("paid")==false || records[0].get("found")==false){
-  strPay += "<tr><td class=\"r_ex_td_pre\"><b>打款信息</b></td><td class=\"r_ex_td_main\"><table><tr>";
-  if(records[0].get("pay")==false){
-    strPay += "<td width=100px style=\"background: #fff;\">打款日期：</td><td width=100px style=\"background: #fff;\">{pay:this.cusDate()}</td>";
-  }
-  if(records[0].get("paid")==false){
-    strPay += "<td width=100px style=\"background: #fff;\">已打款金额：</td><td width=100px style=\"background: #fff;\">{paid:this.cusNum()}</td>";
-  }
-  if(records[0].get("found")==false){
-    strPay += "<td width=100px style=\"background: #fff;\">成立日期：</td><td width=100px style=\"background: #fff;\">{found:this.cusDate()}</td>";
-  }
-  strPay += "</tr></table></td></tr>"
-}
-
-var strQuota="";
-if(records[0].get("quota")==false 
-  || records[0].get("quota_paid")==false 
-  || records[0].get("quota_remain")==false
-){
-  strQuota += "<tr><td class=\"r_ex_td_pre\"><b>包销进度信息</b></td><td class=\"r_ex_td_main\"><table><tr>";
-  if(records[0].get("quota")==false){
-    strQuota += "<td width=100px style=\"background: #fff;\">包销/分销额度：</td><td width=100px style=\"background: #fff;\">{quota:this.cusNum()}</td>";
-  }
-  if(records[0].get("quota_paid")==false){
-    strQuota += "<td width=100px style=\"background: #fff;\">已打款额度：</td><td width=100px style=\"background: #fff;\">{quota_paid:this.cusNum()}</td>";
-  }
-  if(records[0].get("quota_remain")==false){
-    strQuota += "<td width=100px style=\"background: #fff;\">剩余额度：</td><td width=100px style=\"background: #fff;\">{quota_remain:this.cusNum()}</td>";
-  }
-  strQuota += "</tr></table></td></tr>"
-}
-
-var strChannel="";
-if(records[0].get("main_channel")==false 
-  || records[0].get("channel_company")==false 
-  || records[0].get("channel_contact")==false 
-  || records[0].get("billing_company")==false 
-){
-  strChannel += "<tr><td class=\"r_ex_td_pre\"><b>渠道信息</b></td><td class=\"r_ex_td_main\"><table><tr>";
-  if(records[0].get("main_channel")==false){
-    strChannel += "<td width=100px style=\"background: #fff;\">主销渠道：</td><td width=100px style=\"background: #fff;\">{main_channel}&nbsp;</td>";
-  }
-  if(records[0].get("channel_company")==false){
-    strChannel += "<td width=100px style=\"background: #fff;\">渠道公司：</td><td width=100px style=\"background: #fff;\">{channel_company}</td>";
-  }
-  if(records[0].get("channel_contact")==false){
-    strChannel += "<td width=100px style=\"background: #fff;\">渠道联系人：</td><td width=100px style=\"background: #fff;\">{channel_contact}</td>";
-  }
-  if(records[0].get("billing_company")==false){
-    strChannel += "<td width=100px style=\"background: #fff;\">走帐公司：</td><td width=150px style=\"background: #fff;\">{billing_company}</td>";
-  }
-  strChannel += "</tr></table></td></tr>"
-}
-
-var strManagerRemark="";
-if(records[0].get("manager_remark")==false){
-  strManagerRemark += "<tr><td class=\"r_ex_td_pre\"><b>产品经理备注</b></td><td class=\"r_ex_td_main\">{manager_remark}</td></tr>";
-}
-    fullGrid=Ext.create('Ext.grid.Panel', {
-      store: sampleStore,
-      region:'center',
-      border:0,
-      columnLines: true,
-      columns: [
+    var strPay="";
+    if(records[0].get("pay")==false || records[0].get("paid")==false || records[0].get("found")==false){
+      strPay += "<tr><td class=\"r_ex_td_pre\"><b>打款信息</b></td><td class=\"r_ex_td_main\"><table><tr>";
+      if(records[0].get("pay")==false){
+        strPay += "<td width=100px style=\"background: #fff;\">打款日期：</td><td width=100px style=\"background: #fff;\">{pay:this.cusDate()}</td>";
+      }
+      if(records[0].get("paid")==false){
+        strPay += "<td width=100px style=\"background: #fff;\">已打款金额：</td><td width=100px style=\"background: #fff;\">{paid:this.cusNum()}</td>";
+      }
+      if(records[0].get("found")==false){
+        strPay += "<td width=100px style=\"background: #fff;\">成立日期：</td><td width=100px style=\"background: #fff;\">{found:this.cusDate()}</td>";
+      }
+      strPay += "</tr></table></td></tr>"
+    }
+    
+    var strQuota="";
+    if(records[0].get("quota")==false 
+      || records[0].get("quota_paid")==false 
+      || records[0].get("quota_remain")==false
+    ){
+      strQuota += "<tr><td class=\"r_ex_td_pre\"><b>包销进度信息</b></td><td class=\"r_ex_td_main\"><table><tr>";
+      if(records[0].get("quota")==false){
+        strQuota += "<td width=100px style=\"background: #fff;\">包销/分销额度：</td><td width=100px style=\"background: #fff;\">{quota:this.cusNum()}</td>";
+      }
+      if(records[0].get("quota_paid")==false){
+        strQuota += "<td width=100px style=\"background: #fff;\">已打款额度：</td><td width=100px style=\"background: #fff;\">{quota_paid:this.cusNum()}</td>";
+      }
+      if(records[0].get("quota_remain")==false){
+        strQuota += "<td width=100px style=\"background: #fff;\">剩余额度：</td><td width=100px style=\"background: #fff;\">{quota_remain:this.cusNum()}</td>";
+      }
+      strQuota += "</tr></table></td></tr>"
+    }
+    
+    var strChannel="";
+    if(records[0].get("main_channel")==false 
+      || records[0].get("channel_company")==false 
+      || records[0].get("channel_contact")==false 
+      || records[0].get("billing_company")==false 
+    ){
+      strChannel += "<tr><td class=\"r_ex_td_pre\"><b>渠道信息</b></td><td class=\"r_ex_td_main\"><table><tr>";
+      if(records[0].get("main_channel")==false){
+        strChannel += "<td width=100px style=\"background: #fff;\">主销渠道：</td><td width=100px style=\"background: #fff;\">{main_channel}&nbsp;</td>";
+      }
+      if(records[0].get("channel_company")==false){
+        strChannel += "<td width=100px style=\"background: #fff;\">渠道公司：</td><td width=100px style=\"background: #fff;\">{channel_company}</td>";
+      }
+      if(records[0].get("channel_contact")==false){
+        strChannel += "<td width=100px style=\"background: #fff;\">渠道联系人：</td><td width=100px style=\"background: #fff;\">{channel_contact}</td>";
+      }
+      if(records[0].get("billing_company")==false){
+        strChannel += "<td width=100px style=\"background: #fff;\">走帐公司：</td><td width=150px style=\"background: #fff;\">{billing_company}</td>";
+      }
+      strChannel += "</tr></table></td></tr>"
+    }
+    
+    var strManagerRemark="";
+    if(records[0].get("manager_remark")==false){
+      strManagerRemark += "<tr><td class=\"r_ex_td_pre\"><b>产品经理备注</b></td><td class=\"r_ex_td_main\">{manager_remark}</td></tr>";
+    }
+    
+    var fullGridColumns=[
       {text:'项目状态',columns:[
         {text:'proj_id',     dataIndex:'proj_id',       filtable:true, width:100,hidden:true},
         {text:'proj_detail_id',     dataIndex:'proj_detail_id',       filtable:true, width:100,hidden:true},
@@ -175,48 +166,24 @@ if(records[0].get("manager_remark")==false){
           }}
       ]},
       {text:'产品信息',columns:[
-        //{text:'销售类别',     dataIndex:'exclusive',      filtable:true,sortable : true, width:50, hidden:records[0].get("exclusive")},
         {text:'产品等级',     dataIndex:'grade',          filtable:true,sortable : true, width:50, hidden:records[0].get("grade")},
-        //{text:'项目类别',     dataIndex:'category',       filtable:true,sortable : true, width:80, hidden:records[0].get("category")},
-        {text:'类别',       dataIndex:'sub_category',    filtable:true,sortable : true, width:150,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_category"),
-          renderer: function(value,metaData,record,colIndex,store,view) {  
-          var main_subject=record.data.category;
-          metaData.tdAttr = 'data-qtip="'+main_subject+'：'+value+'"';
-          return main_subject+'：'+value;
-        }},
+        {text:'类别',       dataIndex:'sub_category',    filtable:true,sortable : true, width:150,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_category")},
         {text:'发行方',       dataIndex:'issue',         filtable:true,sortable : true, width:100,style: "text-align:center;",align: 'center', hidden:records[0].get("issue")},
         {text:'项目名称',     dataIndex:'name',          filtable:true,sortable : true, width:180,style: "text-align:center;",align: 'left', hidden:records[0].get("name"),
         renderer: function(value,metaData,record,colIndex,store,view) {  
-          //var ttip_flow_of_fund=record.data.flow_of_fund;
-          //var ttip_highlights=record.data.highlights;
-          //var ttip_remark=record.data.remark;
-          
-          //var ttip='<table><tr><td valign=top style="padding:5px"><b>资金投向:</b></td><td style="padding:5px"><pre>'+ttip_flow_of_fund+'</pre></td></tr>'+
-          //    '<tr><td valign=top style="padding:5px"><b>项目亮点:</b></td><td style="padding:5px"><pre>'+ttip_highlights+'</pre></td></tr>'+
-          //    '<tr><td valign=top style="padding:5px"><b>备注:</b></td><td style="padding:5px"><pre>'+ttip_remark+'</pre></td></tr></table>';
           metaData.tdAttr = 'data-qtip="'+value+'"';  
-        //console.log(record);//在console中打印出record的值  
           return value; 
         }
        },
-        //{text:'资金投向',     dataIndex:'flow_of_fund',    filtable:true, width:100, hidden:records[0].get("flow_of_fund")},
-        //{text:'项目亮点',     dataIndex:'highlights',    filtable:true, width:100, hidden:records[0].get("highlights")},
         {text:'期限',     dataIndex:'month',           filtable:true,sortable : true, width:50,style: "text-align:center;",align: 'center', hidden:records[0].get("month"),
           renderer: function(value,metaData,record,colIndex,store,view) {  
           return value+'月';
         }},
-        //{text:'融资规模',     dataIndex:'scale',           filtable:true,sortable : true, width:60, hidden:records[0].get("scale"),
-        //renderer: function(value,metaData,record,colIndex,store,view) {  
-        //  if(value>=10000){ return value/10000+'亿'; } 
-        //  if(value<10000){ return value+'万'; } 
-        //}},
-        //{text:'分配',         dataIndex:'cycle',          filtable:true,sortable : true, width:50, hidden:records[0].get("cycle")},
         {text:'认购金额',     dataIndex:'amount',          filtable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("amount"),
         renderer: function(value,metaData,record,colIndex,store,view) {  
           if(value>=10000){ return value/10000+'亿'; } 
           if(value<10000){ return value+'万'; } 
         }},
-        //{text:'项目收益属性', dataIndex:'profit_property', filtable:true,sortable : true, width:90, hidden:records[0].get("profit_property")},
         {text:'收益',     dataIndex:'profit',          filtable:true,sortable : true, width:50, style: "text-align:center;",align: 'center',hidden:records[0].get("profit"),
         renderer: function(value,metaData,record,colIndex,store,view) {  
           return value+'%'; 
@@ -228,12 +195,7 @@ if(records[0].get("manager_remark")==false){
             return value; 
           }}
       ]},
-       //{text:'备注',         dataIndex:'remark',        filtable:true, width:100, hidden:records[0].get("remark")},
       {text:'佣金信息',columns:[
-        //{text:'税前佣金',     dataIndex:'commission_b_tax',  filtable:true,sortable : true, width:50, hidden:records[0].get("commission_b_tax"),
-        //renderer: function(value,metaData,record,colIndex,store,view) {  
-        //  return value+'%'; 
-        //}},
         {text:'税后佣金',     dataIndex:'commission_a_tax',  filtable:true,sortable : true, width:50, style: "text-align:center;",align: 'center',hidden:records[0].get("commission_a_tax"),
         renderer: function(value,metaData,record,colIndex,store,view) {  
           return value+'%'; 
@@ -247,36 +209,42 @@ if(records[0].get("manager_remark")==false){
           return value+'%'; 
         }}
       ]},
-      //{text:'打款信息',columns:[
-      //  {text:'打款日期',     dataIndex:'pay',             filtable:true,sortable : true, width:90, renderer:new Ext.util.Format.dateRenderer("Y-m-d"), hidden:records[0].get("pay")},
-      //  {text:'已打款金额',   dataIndex:'paid',            filtable:true,sortable : true, width:50, hidden:records[0].get("paid")},
-      //  {text:'成立日期',     dataIndex:'found',           filtable:true,sortable : true, width:90, renderer:new Ext.util.Format.dateRenderer("Y-m-d"), hidden:records[0].get("found")}
-      //]},
-      //{text:'包销进度信息',columns:[
-      //  {text:'包销/分销额度',dataIndex:'quota',           filtable:true,sortable : true, width:50, hidden:records[0].get("quota")},
-      //  {text:'已打款额度',   dataIndex:'quota_paid',       filtable:true,sortable : true, width:50, hidden:records[0].get("quota_paid")},
-      //  {text:'剩余额度',     dataIndex:'quota_remain',     filtable:true,sortable : true, width:50, hidden:records[0].get("quota_remain")}
-      //]},
-      //{text:'渠道信息',columns:[
-      //  {text:'主销渠道',     dataIndex:'main_channel',   filtable:true,sortable : true, width:80, hidden:records[0].get("main_channel")},
-      //  {text:'渠道公司',     dataIndex:'channel_company',filtable:true,sortable : true, width:80, hidden:records[0].get("channel_company")},
-      //  {text:'渠道联系人',   dataIndex:'channel_contact',filtable:true,sortable : true, width:60, hidden:records[0].get("channel_contact")},
-      //  {text:'走帐公司',     dataIndex:'billing_company',filtable:true,sortable : true, width:100, hidden:records[0].get("billing_company")}
-      //]},
-      //  {text:'产品经理备注', dataIndex:'manager_remark', filtable:true,sortable : true, width:150, hidden:records[0].get("manager_remark"),
-      //  renderer: function(value,metaData,record,colIndex,store,view) {  
-      //    metaData.tdAttr = 'data-qtip="'+value+'"';  
-      //  //console.log(record);//在console中打印出record的值  
-      //    return value; 
-      //  }},
-        {text:'备注', dataIndex:'remark', filtable:true,sortable : true, width:220, hidden:records[0].get("remark"),
+      {text:'备注', dataIndex:'remark', filtable:true,sortable : true, minWidth:200,hidden:records[0].get("remark"),
           renderer: function(value,metaData,record,colIndex,store,view) {  
             metaData.tdAttr = 'data-qtip="<pre>'+value+'</pre>"';  
             return value; 
           }
         }
-      ],
-      title: '项目列表',
+      ];
+    
+    var fullGridExpander=[{
+          ptype: 'rowexpander',
+          selectRowOnExpand : true,
+          rowBodyTpl : [
+            '<table><tr><td style="padding:10px;border:1px;"><table>',
+            '<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
+            '<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，期限<b>{month}</b>个月，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
+            //'{[(records[0].get("profit_property")==true)?"aaa":"bbb"]}',
+            '<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}->{sub_category}, {exclusive}</pre></td></tr>',
+            '<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
+            '<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{highlights}</pre></td></tr>',
+            '<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre> {remark}</pre></td></tr>',
+            strPay+strQuota+strChannel+strManagerRemark,
+            '</table></td></tr></table>',{
+              cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
+            },{
+              cusNum:function(n){return (n<10000)?(n+"万"):(n/10000+"亿")}
+            }
+        ]
+      }];
+    var fullGridC1=Ext.create('searchPanel', {
+      store: sampleStoreC1,
+      border:0,
+      columnLines: true,
+      forceFit: true,
+      width:1320,
+      columns: fullGridColumns,
+      title: '&nbsp;&nbsp;<b>&gt;&gt;&nbsp;固定收益产品&nbsp;&lt;&lt;</b> -- 点击折叠',
       viewConfig: {
         stripeRows: true,
         forceFit:true,
@@ -294,67 +262,219 @@ if(records[0].get("manager_remark")==false){
       },
       loadMask: true,
       features: [filtersCfg],
-      dockedItems: [Ext.create('Ext.toolbar.Paging', {
-          dock: 'bottom',
-          store: sampleStore
-      })],
-      plugins: [{
-          ptype: 'rowexpander',
-          selectRowOnExpand : true,
-          rowBodyTpl : [
-            '<table><tr><td style="padding:10px;border:1px;"><table>',
-            '<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
-            '<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，期限<b>{month}</b>个月，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
-            //'{[(records[0].get("profit_property")==true)?"aaa":"bbb"]}',
-            '<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
-            '<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{highlights}</pre></td></tr>',
-            '<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre> {remark}</pre></td></tr>',
-            strPay+strQuota+strChannel+strManagerRemark,
-            '</table></td></tr></table>',{
-              cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
-            },{
-              cusNum:function(n){return (n<10000)?(n+"万"):(n/10000+"亿")}
-            }
-        ]
-      }],
+      plugins: fullGridExpander,
       emptyText: '没有匹配的记录'
     });
-    
-    fullGrid.setLoading(true);
 
-    fullGrid.child('pagingtoolbar').add([
-        '->',
-        {
-            icon: '/ts/misc/resources/icons/delete.gif',
-            text: '清除过滤条件',
-            handler: function () {
-                fullGrid.filters.clearFilters();
-                sampleStore.load();
-            } 
+    var fullGridC2=Ext.create('searchPanel', {
+      store: sampleStoreC2,
+      border:0,
+      width:1320,
+      title: '&nbsp;&nbsp;<b>&gt;&gt;&nbsp;浮动收益产品&nbsp;&lt;&lt;</b> -- 点击展开',
+      columnLines: true,
+      forceFit: true,
+      columns: fullGridColumns,
+      viewConfig: {
+        stripeRows: true,
+        forceFit:true,
+        sortAscText:'正序',
+        sortDescText:'降序',
+        getRowClass: function(record,rowIndex,rowParams,store){    
+          var sumVal=0;
+          for (var i=0;i<rowIndex;i++) {
+            if(store.getAt(i+1).data.name!=store.getAt(i).data.name){
+              sumVal++;
+            }
+          }
+          return (sumVal%2==0) ? 'style_row_proj0':'style_row_proj1';
         }
+      },
+      loadMask: true,
+      features: [filtersCfg],
+      plugins: fullGridExpander,
+      emptyText: '没有匹配的记录'
+    });
+
+    fullGridC1.child('toolbar').add([
+            {
+                xtype:'tbtext',
+                text:'快速筛选：'
+            },{
+                xtype:'tbtext',
+              text:'【集合信托产品：'
+            },{
+                text:'上市公司股票质押',
+                handler:function(){
+                  fullGridC1.filters.clearFilters();
+                  sampleStoreC1.filterBy( function(record,id){
+                    return record.get("sub_category")=="集合信托：上市公司股票质押类" ;
+                  });
+                }
+            },{
+                text:'政府基建',
+                handler:function(){
+                  fullGridC1.filters.clearFilters();
+                  sampleStoreC1.filterBy( function(record,id){
+                    return record.get("sub_category")=="集合信托：政府基建类";
+                  });
+                }
+            },{
+                text:'房地产',
+                handler:function(){
+                  fullGridC1.filters.clearFilters();
+                  sampleStoreC1.filterBy( function(record,id){
+                    return record.get("sub_category")=="集合信托：房地产类";
+                  });
+                }
+            },{
+                text:'其他信托',
+                handler:function(){
+                  fullGridC1.filters.clearFilters();
+                  sampleStoreC1.filterBy( function(record,id){
+                    return record.get("sub_category")=="集合信托：其他类";
+                  });
+                }
+            },{
+                text:'所有信托】',
+                handler:function(){
+                  fullGridC1.filters.clearFilters();
+                  sampleStoreC1.filterBy( function(record,id){
+                    return record.get("sub_category")=="集合信托：其他类" ||
+                      record.get("sub_category")=="集合信托：房地产类" ||
+                      record.get("sub_category")=="集合信托：政府基建类" ||
+                      record.get("sub_category")=="集合信托：上市公司股票质押类";
+                  });
+                }
+            },{
+                text:'【私募基金】',
+                handler:function(){
+                  fullGridC1.filters.clearFilters();
+                  sampleStoreC1.filterBy( function(record,id){
+                    return record.get("sub_category")=="私募基金";
+                  });
+                }
+            },{
+                text:'【P2P理财】',
+                handler:function(){
+                  fullGridC1.filters.clearFilters();
+                  sampleStoreC1.filterBy( function(record,id){
+                    return record.get("sub_category")=="P2P理财";
+                  });
+                }
+            },{
+                text:'【其他固定收益产品】',
+                handler:function(){
+                  fullGridC1.filters.clearFilters();
+                  sampleStoreC1.filterBy( function(record,id){
+                    return record.get("sub_category")=="其他" ;
+                  });
+                }
+            },'-',{
+                text:'全部显示',
+                icon:'/ts/misc/resources/icons/grid.png',
+                handler:function(){
+                  fullGridC1.filters.clearFilters();
+                  sampleStoreC1.load();
+                }
+            }     
     ]);
-  
+    fullGridC2.child('toolbar').add([
+            {
+                xtype:'tbtext',
+                text:'快速筛选：'
+            },{
+                text:'【债券基金】',
+                handler:function(){
+                  fullGridC2.filters.clearFilters();
+                  sampleStoreC2.filterBy( function(record,id){
+                    return record.get("sub_category")=="债券基金";
+                  });
+                }
+            },{
+                text:'【证券基金】',
+                handler:function(){
+                  fullGridC2.filters.clearFilters();
+                  sampleStoreC2.filterBy( function(record,id){
+                    return record.get("sub_category")=="证券基金";
+                  });
+                }
+            },{
+                text:'【股权基金】',
+                handler:function(){
+                  fullGridC2.filters.clearFilters();
+                  sampleStoreC2.filterBy( function(record,id){
+                    return record.get("sub_category")=="股权基金";
+                  });
+                }
+            },{
+                text:'【其他浮动收益产品】',
+                handler:function(){
+                  fullGridC2.filters.clearFilters();
+                  sampleStoreC2.filterBy( function(record,id){
+                    return record.get("sub_category")=="其他";
+                  });
+                }
+            },'-',{
+                text:'全部显示',
+                icon:'/ts/misc/resources/icons/grid.png',
+                handler:function(){
+                  fullGridC2.filters.clearFilters();
+                  sampleStoreC2.load();
+                }
+            }     ]);
+    
+
+    fullGridC1.on({
+      beforeExpand:function(p){
+        p.setTitle('&nbsp;&nbsp;<b>&gt;&gt;&nbsp;固定收益产品&nbsp;&lt;&lt;</b> -- 点击折叠');
+      },
+      beforeCollapse:function(p){
+        p.setTitle('&nbsp;&nbsp;<b>&gt;&gt;&nbsp;固定收益产品&nbsp;&lt;&lt;</b> -- 点击展开');
+      }
+    });
+    
+    fullGridC2.on({
+      beforeExpand:function(p){
+        p.setTitle('&nbsp;&nbsp;<b>&gt;&gt;&nbsp;浮动收益产品&nbsp;&lt;&lt;</b> -- 点击折叠');
+      },
+      beforeCollapse:function(p){
+        p.setTitle('&nbsp;&nbsp;<b>&gt;&gt;&nbsp;浮动收益产品&nbsp;&lt;&lt;</b> -- 点击展开');
+      }
+    });
+    
     var viewport = Ext.create('Ext.Viewport', {
       layout: {
           type: 'border',
           padding: 0
-      },
-      defaults: {
-          split: true                //可改变窗体大小
       },
       baseCls:'customT',
       items: [{
         xtype:'toolbar',
         region:'north',
         height: 40,
+        id:'topMenu',
         border:0,
         items:[
         {
-        	xtype:'box',
-        	html:'<span class="app-header1">彩虹桥</span>'
+        	xtype:'image',
+                src:'/ts/misc/resources/firstshin.jpg',
+          	width:240,
+                height:38
         },{
         	xtype:'box',
         	flex:1
+        },{
+        	text:'折叠信息',
+        	icon:'/ts/misc/resources/icons/folder_go.gif',
+        	handler:function(){
+                  if(this.getText()=='折叠信息'){
+                    Ext.getCmp('topInfo').hide();
+                    this.setText('展开信息');
+                  } else {
+                    Ext.getCmp('topInfo').show();
+                    this.setText('折叠信息');
+                  }                  
+                }
         },{
         	text:'进入管理模式',
         	icon:'/ts/misc/resources/icons/plugin.gif',
@@ -368,42 +488,94 @@ if(records[0].get("manager_remark")==false){
         	icon:'/ts/misc/resources/icons/cross.gif',
         	handler:function(){window.location.href='/ts/index.php/logout';}
         }]
-      },{
+      },{xtype:'panel',height:5,border:0,region:'north'},
+      {
         xtype:'panel',
-        height:41,
-        border:0,
+        height:150,
+        id:'topInfo',
         region:'north',
-        layout:'hbox',
-        align:'stretch',
-        resizable:false,
-        padding:0,
-        items:[{xtype:'box',border:0,height:41,baseCls:'customT',flex:1},
-        {
-          xtype:'image',
-          id:'ad1',
-          src:'/ts/misc/resources/ad.jpg',
-          height:41,
-          width:772
-        },{xtype:'box',border:0,height:41,baseCls:'customT',flex:1}]
-      },{
-        xtype:'panel', 
-        margin:'0 20 20 20',
         border:0,
-        region:'center',
-        layout:'border',
+        layout:{
+          type:'hbox',
+          pack:'center',
+          align:'stretch',
+          padding:5
+        },
         resizable:false,
         items:[
-
-        recentChangeGrid,{
-          region:'north',
-          xtype:'box',
-          height:20,
-          baseCls:'customT'
+        {
+          xtype:'panel',
+          border:0,
+          layout:'fit',
+          height:150,
+          width:483,
+          items:[{
+            xtype:'image',
+            id:'ad1',
+            src:'/ts/misc/resources/ad1.jpg'
+          }]
+        },{
+          xtype:'panel',
+          border:0,
+          layout:'fit',
+          height:150,
+          width:483,
+          items:[{
+            xtype:'image',
+            id:'ad2',
+            src:'/ts/misc/resources/ad2.jpg'
+          }]
         },
-        fullGrid]
+        recentChangeGrid,
+        {
+          xtype:'button',
+          text:'显示最近更改',
+          padding:5,
+          border:0,
+          handler:function(){
+            if(this.text=='显示最近更改'){
+              this.setText('隐藏最近更改');
+              Ext.each(this.up('panel').query('panel'),function(item,index){
+                item.hide();
+              });
+              this.up('panel').down('grid').show();
+            } else {
+              this.setText('显示最近更改');
+              Ext.each(this.up('panel').query('panel'),function(item,index){
+                item.show();
+              });
+              this.up('panel').down('grid').hide();
+            }
+          }
+        }]
+      },{xtype:'panel',height:5,border:0,region:'north'},
+      {
+        xtype:'panel',
+        border:0,
+        width:1320,
+        region:'center',
+        layout:{
+          type: 'accordion',
+          animate: true,
+          titleCollapse: true,
+          activeOnTop: true
+        },
+        items:[
+          fullGridC1,
+          fullGridC2
+        ]
+      },{xtype:'panel',height:5,border:0,region:'south'},{
+        xtype:'toolbar',
+        region:'south',
+        border:0,
+        height:20,
+        items:[{xtype:'box',flex:1},{
+          xtype:'box',
+          html:'版权所有。上海玉尔投资发展有限公司 - 2012年'
+        },{xtype:'box',flex:1}]
       }]
     });
-    
+/*    
     Ext.create('Ext.tip.ToolTip', {
       target: 'ad1',
       trackMouse: true,
@@ -412,15 +584,17 @@ if(records[0].get("manager_remark")==false){
     
     Ext.getCmp('ad1').el.on({
       click:function(e,t){
-              sampleStore.filterBy(
+              sampleStoreC1.filterBy(
                 function(record,id){
                   return (record.get("name")=="兆云资产并购循环基金-锦冶")?true:false
                 }
               );
       }
     });
-  });
-  sampleStore.load();
+*/
+});
+  sampleStoreC1.load();
+  sampleStoreC2.load();
   sampleChanges.load();
 });
 

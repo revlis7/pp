@@ -202,16 +202,10 @@ Ext.onReady(function() {
                  listeners: { // 监听选择事件
                      select: function() {
                         chSubCategoryList.removeAll();
-                        if (this.getValue() == '信托类') {
-                           chSubCategoryList.loadData(subTrustList,true);
-                        } else if (this.getValue() == '债券类') {
-                           chSubCategoryList.loadData(subBondList,true);
-                        } else if (this.getValue() == '私募证券类') {
-                           chSubCategoryList.loadData(subPrivateSecuritiesList,true);
-                        } else if (this.getValue() == '私募股权类') {
-                           chSubCategoryList.loadData(subPrivateEquityList,true);
-                        } else if (this.getValue() == '其他类') {
-                           chSubCategoryList.loadData(subOtherList,true);
+                        if (this.getValue() == '固定收益类') {
+                           chSubCategoryList.loadData(chFixedList,true);
+                        } else if (this.getValue() == '浮动收益类') {
+                           chSubCategoryList.loadData(chFloatingList,true);
                         }
                      }
                  }

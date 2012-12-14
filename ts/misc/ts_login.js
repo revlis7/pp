@@ -2,101 +2,138 @@ Ext.onReady(function() {
   Ext.QuickTips.init();
 
   var viewport = Ext.create('Ext.Viewport', {
-    layout: {
-        type: 'border',
-        padding: 5
-    },
-    defaults: {
-        split: true                //可改变窗体大小
-    },
+    layout: 'border',
     items: [{
-      xtype:'toolbar',
-      region:'north',
-      height: 30,
-      border:0,
-      items:[
-      {
-        xtype:'box',
-        html:'<span class="app-header1">彩虹桥</span>'
-      },{
-        xtype:'box',
-        html:'<span class="app-header2">请登录</span>'
-      },{
-        xtype:'box',
-        flex:1
-      }]
+        xtype:'toolbar',
+        region:'south',
+        height:20,
+        items:[{xtype:'box',flex:1},{
+          xtype:'box',
+          html:'上海玉尔投资发展有限公司 - 版权所有 - 2012年'
+        },{xtype:'box',flex:1}]
     },{
       xtype:'panel', 
-      margin:'0 20 20 20',
+      //margin:'0 20 20 20',
       border:0,
       region:'center',
-      align:'center',
-      layout:'border',
+      layout:{
+        type:'hbox',
+        align:'middle'
+      },
       items: [{
-        xtype:'form',
-        border:1,
-        width:400,
-        defaultType: 'textfield',
-        layout:{
-        	type: 'vbox',
-        	align: 'center'
-        },
-        listeners: {  
-          afterRender: function(thisForm, options){  
-            this.keyNav = Ext.create('Ext.util.KeyNav', this.el, {  
-              enter: function(){  
-                // 筛选表格  
-                var btn = Ext.getCmp('enter_button');  
-                btn.handler() ;  
-                console.log( this );  
-              },  
-              scope: this  
-            });  
-          }  
-        },
-        dockedItems: [{
-          dock: 'bottom',
-          xtype: 'toolbar',
-          bodyPadding: 5,
-          items: [{
-          	xtype:'box',
-          	flex:1
+        xtype:'box',flex:1
+      },{
+        xtype:'panel',
+        region:'east',
+        layout:'hbox',
+        border:0,
+        items:[{
+          xtype:'panel',
+          height:600,
+          width:800,
+          html:'<a href="http://www.firstshin.com/?page_id=691"><img src="/ts/misc/resources/fp_20121214.jpg"></img></a>'
+        },{
+          xtype:'form',
+          border:2,
+          margin:'0 0 0 10',
+          region:'east',
+          width:240,
+          height:600,
+          defaultType: 'textfield',
+          layout:{
+            type: 'vbox',
+            align: 'center'
           },
-          {
-          	id:'enter_button',
-          	icon:'/ts/misc/resources/icons/grid.png',
-            text: '登录',
-            handler: function() {
-              this.up('form').getForm().submit({
+          listeners: {  
+            afterRender: function(thisForm, options){  
+              this.keyNav = Ext.create('Ext.util.KeyNav', this.el, {  
+                enter: function(){  
+                  // 筛选表格  
+                  var btn = Ext.getCmp('enter_button');  
+                  btn.handler() ;  
+                  console.log( this );  
+                },  
+                scope: this  
+              });  
+            }  
+          },
+          dockedItems: [{
+            dock: 'bottom',
+            xtype: 'toolbar',
+            //bodyPadding: 5,
+            items: [{
+            	xtype:'box',
+            	flex:1
+            },
+            {
+              id:'enter_button',
+              icon:'/ts/misc/resources/icons/grid.png',
+              text: '登录',
+              scale: 'medium',
+              height:40,
+              handler: function() {
+                this.up('form').getForm().submit({
                   //url: 'xml-form-errors-ed-json.json',
                   url: '/ts/index.php/auth/auth_submit',
                   submitEmptyText: false,
-                  waitMsg: 'Saving Data...',
+                  waitMsg: '正在登录...',
                   success: function(form, action) {
                     window.location.href='/ts/index.php/proj';
                   },
                   failure: function(form, action) {
                     Ext.Msg.alert('alert', '用户名或密码错误，请检查您的输入！');
                   }
-              });
-            }
+                });
+              }
+            },{
+              xtype:'box',
+              flex:1
+            }]
           },{
-          	xtype:'box',
-          	flex:1
+            dock: 'top',
+            xtype:'toolbar',
+            height: 40,
+            border:0,
+            items:[{
+              xtype:'image',
+              src:'/ts/misc/resources/firstshin.jpg',
+              width:240,
+              height:38
+            },{
+              xtype:'box',
+              flex:1
+            }]
+          }],
+          items:[{
+            xtype:'box',
+            margin:'40 0',
+            border:0,
+            html:'<span style="font-size:14px">欢迎访问玉尔财富。请登录:</span>'
+            
+          },{
+            margin: 10,
+            fieldLabel: '用户名',
+            labelAlign: 'top',
+            padding:10,
+            name: 'loginname',
+            width:180,
+            allowBlank: false,
+            labelClsExtra : "font-size:14px!important"
+          },{
+            margin: 10,
+            fieldLabel: '密码',
+            labelAlign: 'top',
+            padding:10,
+            inputType: 'password',
+            name: 'password',
+            width:180,
+            allowBlank: false,
+            labelClsExtra : "font-size:14px!important"
           }]
-        }],
-        items:[{
-          margin: '10 0 5 0',
-          fieldLabel: '用户名',
-          name: 'loginname',
-          allowBlank: false
-        },{
-        	margin: '0 0 10 0',
-          fieldLabel: '密码',
-          inputType: 'password',
-          name: 'password',
-          allowBlank: false
         }]
+      },{
+        xtype:'box',
+        flex:1
       }]
     }]
   });

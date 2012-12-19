@@ -96,7 +96,7 @@ class Proj_model extends CI_Model {
 		return $proj_id;
 	}
 	
-	function create_detail($proj_id, $total_share = '', $status = '', $exclusive = '', $grade = '', $amount = '', $profit = '', $commission_b_tax = '', $commission_a_tax = '', $pay = '', $paid = '', $quota = '', $quota_paid = '', $quota_remain = '', $main_channel = '', $channel_company = '', $channel_contact = '', $billing_company = '', $manager_remark = '', $creator = '') {
+	function create_detail($proj_id, $total_share = '', $status = '', $exclusive = '', $grade = '', $amount = '', $profit = '', $commission_b_tax = '', $commission_a_tax = '', $inner_commission = '', $outer_commission = '', $pay = '', $paid = '', $quota = '', $quota_paid = '', $quota_remain = '', $main_channel = '', $channel_company = '', $channel_contact = '', $billing_company = '', $manager_remark = '', $creator = '') {
 		$proj_detail = array(
 			'proj_id' => $proj_id,
 			'total_share' => $total_share,
@@ -107,8 +107,8 @@ class Proj_model extends CI_Model {
 			'profit' => $profit,
 			'commission_b_tax' => $commission_b_tax,
 			'commission_a_tax' => $commission_a_tax,
-			//'inner_commission' => $commission_a_tax * (1 - 0.09 * 2),
-			//'outer_commission' => $commission_a_tax * (1 - 0.1 * 2),
+			'inner_commission' => $inner_commission,
+			'outer_commission' => $outer_commission,
 			'pay' => $pay,
 			'paid' => $paid,
 			'quota' => $quota,
@@ -129,7 +129,7 @@ class Proj_model extends CI_Model {
 		return $this->db->insert_id();
 	}
 	
-	function update_detail($proj_detail_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, $editor) {
+	function update_detail($proj_detail_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, $editor) {
 		//查询旧记录，插入历史表
 		$old_proj_detail = $this->get_detail($proj_detail_id);
 		if(!$old_proj_detail) {
@@ -146,8 +146,8 @@ class Proj_model extends CI_Model {
 			'profit' => $old_proj_detail->profit,
 			'commission_b_tax' => $old_proj_detail->commission_b_tax,
 			'commission_a_tax' => $old_proj_detail->commission_a_tax,
-			//'inner_commission' => $old_proj_detail->inner_commission,
-			//'outer_commission' => $old_proj_detail->outer_commission,
+			'inner_commission' => $old_proj_detail->inner_commission,
+			'outer_commission' => $old_proj_detail->outer_commission,
 			'pay' => $old_proj_detail->pay,
 			'paid' => $old_proj_detail->paid,
 			'quota' => $old_proj_detail->quota,
@@ -175,8 +175,8 @@ class Proj_model extends CI_Model {
 			'profit' => $profit,
 			'commission_b_tax' => $commission_b_tax,
 			'commission_a_tax' => $commission_a_tax,
-			//'inner_commission' => round($commission_a_tax * (1 - 0.09 * 2), 3),
-			//'outer_commission' => round($commission_a_tax * (1 - 0.1 * 2), 3),
+			'inner_commission' => $inner_commission,
+			'outer_commission' => $outer_commission,
 			'pay' => $pay,
 			'paid' => $paid,
 			'quota' => $quota,
@@ -252,16 +252,16 @@ class Proj_model extends CI_Model {
 		if(!$proj) {
 			return false;
 		}
-		$month = $proj->month;
+		//$month = $proj->month;
 		$this->db->select('proj_detail.proj_id as proj_id, proj_detail.id as proj_detail_id, proj_detail.total_share, proj_detail.status, proj_detail.exclusive, proj_detail.grade, proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, proj_detail.commission_a_tax, proj_detail.inner_commission, proj_detail.outer_commission, proj_detail.pay, proj_detail.paid, proj_detail.quota, proj_detail.quota_paid, proj_detail.quota_remain, proj_detail.main_channel, proj_detail.channel_company, proj_detail.channel_contact, proj_detail.billing_company, proj_detail.manager_remark');
 		$this->db->from('proj_detail')->where('proj_id', $proj_id);
 		$this->db->order_by('proj_detail_id', 'asc');
 		$query = $this->db->get();
 		$result = $query->result();
-		for($i = 0; $i < count($result); $i++) {
-			$result[$i]->inner_commission = $this->CI->utility->get_inner_commission($result[$i]->commission_a_tax, $month);
-			$result[$i]->outer_commission = $this->CI->utility->get_outer_commission($result[$i]->commission_a_tax, $month);
-		}
+		//for($i = 0; $i < count($result); $i++) {
+		//	$result[$i]->inner_commission = $this->CI->utility->get_inner_commission($result[$i]->commission_a_tax, $month);
+		//	$result[$i]->outer_commission = $this->CI->utility->get_outer_commission($result[$i]->commission_a_tax, $month);
+		//}
 		return $result;
 	}
 	
@@ -305,12 +305,12 @@ class Proj_model extends CI_Model {
 		}
 		//$result = $query->result();
 		//for($i = 0; $i < count($result); $i++) {
-		foreach ($query->result() as $row) {
+		//foreach ($query->result() as $row) {
 			//$result[$i]->inner_commission = round($result[$i]->commission_a_tax - (0.09 * ($result[$i]->month / 12)), 3);
 			//$result[$i]->outer_commission = round($result[$i]->commission_a_tax - (0.1 * ($result[$i]->month / 12)), 3);
-			$row->inner_commission = $this->CI->utility->get_inner_commission($row->commission_a_tax, $row->month);
-			$row->outer_commission = $this->CI->utility->get_outer_commission($row->commission_a_tax, $row->month);
-		}
+			//$row->inner_commission = $this->CI->utility->get_inner_commission($row->commission_a_tax, $row->month);
+			//$row->outer_commission = $this->CI->utility->get_outer_commission($row->commission_a_tax, $row->month);
+		//}
 		return $query->result();
 	}
 }

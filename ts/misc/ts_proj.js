@@ -814,10 +814,6 @@ Ext.onReady(function() {
       	text:'返回',
       	icon:'/ts/misc/resources/icons/plugin.gif',
       	handler:function(){Ext.util.History.back();}
-      },{
-      	text:'退出',
-      	icon:'/ts/misc/resources/icons/cross.gif',
-      	handler:function(){window.location.href='/ts/index.php/logout';}
       }]
     },{
       xtype:'panel', 

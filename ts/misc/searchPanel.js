@@ -272,4 +272,4 @@ Ext.define('searchPanel', {
         this.regExpMode = checked;
         this.onTextFieldChange();
     }
-}); 
+});

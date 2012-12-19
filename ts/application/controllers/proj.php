@@ -38,14 +38,12 @@ class Proj extends Auth_Controller {
 	
 	//返回所有proj＋proj_detail的json数据
 	function view() {
-        	$category_id = $this->input->get('c', true);
-        	if($category_id>=1){
+		$category_id = $this->input->get('c', true);
+		if($category_id >= 1) {
 			$data = $this->Proj_model->get_all_proj_detail($category_id);
-			
-                }
-          	else {
+		} else {
 			$data = $this->Proj_model->get_all_proj_detail(-1);
-                }
+		}
 		//根据用户组过滤可见信息
 		$temp = array();
 		$group = $this->utility->get_user_group();
@@ -64,7 +62,7 @@ class Proj extends Auth_Controller {
 		}
 			
 		$this->json->output(array('success' => true, 'data' => $temp));
- 	}
+	}
 	
 	//返回所有proj的json数据
 	//function proj_view() {

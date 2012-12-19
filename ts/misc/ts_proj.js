@@ -478,6 +478,16 @@ Ext.onReady(function() {
         fieldLabel: '税后佣金(%)',
         name:'commission_a_tax',
         allowBlank: false
+      },{
+        xtype:'numberfield',
+        fieldLabel: '佣金',
+        name:'inner_commission',
+        allowBlank: false
+      },{
+        xtype:'numberfield',
+        fieldLabel: '佣金（税后）',
+        name:'outer_commission',
+        allowBlank: false
       }]
     }, {
       xtype:'fieldset',

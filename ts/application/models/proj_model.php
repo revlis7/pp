@@ -234,9 +234,9 @@ class Proj_model extends CI_Model {
 		if(!$proj) {
 			return false;
 		}
-		$month = $proj->month;
-		$result->inner_commission = $this->CI->utility->get_inner_commission($result->commission_a_tax, $month);
-		$result->outer_commission = $this->CI->utility->get_outer_commission($result->commission_a_tax, $month);
+		//$month = $proj->month;
+		//$result->inner_commission = $this->CI->utility->get_inner_commission($result->commission_a_tax, $month);
+		//$result->outer_commission = $this->CI->utility->get_outer_commission($result->commission_a_tax, $month);
 		return $result;
 	}
 	

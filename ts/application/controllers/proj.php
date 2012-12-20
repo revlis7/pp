@@ -4,7 +4,7 @@ class Proj extends Auth_Controller {
 	function __construct() {
 		parent::__construct();
 	}
-	
+
 	function index() {
 		$this->template->load('default', 'proj/view');
 	}
@@ -60,7 +60,15 @@ class Proj extends Auth_Controller {
 				}
 			}
 		}
-			
+		
+		$format = $this->input->get('format', true);
+		if($format == 'csv') {
+			$this->load->helper('csv');
+			$temp = $this->utility->object_to_array($temp);
+			array_to_csv($temp, 'proj-'.date('Y-m-d').'.csv');
+			exit;
+		}
+
 		$this->json->output(array('success' => true, 'data' => $temp));
 	}
 	

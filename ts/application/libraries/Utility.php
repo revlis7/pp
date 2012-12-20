@@ -165,4 +165,24 @@ class Utility {
 		}
 		return round($commission_a_tax - (0.1 * ($month / 12)), 3);
 	}
+
+	function object_to_array($d) {
+		if (is_object($d)) {
+			// Gets the properties of the given object
+			// with get_object_vars function
+			$d = get_object_vars($d); //将第一层对象转换为数组
+		}
+
+		if (is_array($d)) {
+			/*
+			 * Return array converted to object
+			 * Using __FUNCTION__ (Magic constant)
+			 * for recursive call
+			 */
+			return array_map(array($this, 'object_to_array'), $d);//如果是数组使用array_map递归调用自身处理数组元素
+		} else {
+			// Return array
+			return $d;
+		}
+	}
 }

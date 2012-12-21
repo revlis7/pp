@@ -65,6 +65,12 @@ class Proj extends Auth_Controller {
 		if($format == 'csv') {
 			$this->load->helper('csv');
 			$temp = $this->utility->object_to_array($temp);
+			foreach(array_keys($temp) as $n) {
+				foreach(array_keys($temp[$n]) as $m) {
+					$temp[$n][$m] = iconv('UTF-8', 'GB18030', $temp[$n][$m]);
+				}
+			}
+			//var_dump($temp);exit;
 			array_to_csv($temp, 'proj-'.date('Y-m-d').'.csv');
 			exit;
 		}

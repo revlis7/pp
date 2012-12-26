@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Grid Example</title>
+<link rel="stylesheet" type="text/css" href="/ts/misc/resources/css/ext-all.css" />
+<script type="text/javascript" src="/ts/misc/ext-all.js"></script>
+<script type="text/javascript">
+
+Ext.onReady(function() {
+
+Ext.create('Ext.form.Panel', {
+    title: 'Upload a Photo',
+    width: 400,
+    bodyPadding: 10,
+    frame: true,
+    renderTo: Ext.getBody(),
+    items: [{
+        xtype: 'filefield',
+        name: 'photo',
+        fieldLabel: 'Photo',
+        labelWidth: 50,
+        msgTarget: 'side',
+        allowBlank: false,
+        anchor: '100%',
+        buttonText: 'Select Photo...'
+    }],
+
+    buttons: [{
+        text: 'Upload',
+        handler: function() {
+            var form = this.up('form').getForm();
+            if(form.isValid()){
+                form.submit({
+                    url: '/ts/index.php/upload/submit',
+                    waitMsg: 'Uploading your photo...',
+                    success: function(fp, o) {
+                        Ext.Msg.alert('Success', 'Your photo "' + o.result.file + '" has been uploaded.');
+                    }
+                });
+            }
+        }
+    }]
+});
+
+});
+</script>
+</head>
+<body>
+</body>
+</html>  

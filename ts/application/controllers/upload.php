@@ -10,9 +10,9 @@ class Upload extends Auth_Controller {
 			$s = new SaeStorage();
 			$url = $s->upload('upload', $_FILES['photo']['name'], $_FILES['photo']['tmp_name']);
 			if(!$url) {
-				$this->json->output(array('success' => false, 'm' => $s->errmsg()));
+				echo json_encode(array('success' => false, 'm' => $s->errmsg()));exit;
 			}
-			$this->json->output(array('success' => true, 'url' => $url));
+			echo json_encode(array('success' => true, 'url' => $url));exit;
 		}
 	}
 }

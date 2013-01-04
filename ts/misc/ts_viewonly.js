@@ -19,7 +19,8 @@ Ext.onReady(function() {
   	  
   var listControl=Ext.create('Ext.data.JsonStore', {
     fields: [
-      {name:'proj_id'   ,type:'boolean' },
+      {name:'manage_button'    ,type:'boolean' },
+      {name:'proj_id'          ,type:'boolean' },
       {name:'proj_detail_id'   ,type:'boolean' },
       {name:'total_share'      ,type:'boolean' },
       {name:'status'           ,type:'boolean' },
@@ -228,7 +229,8 @@ Ext.onReady(function() {
             '<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}->{sub_category}, {exclusive}</pre></td></tr>',
             '<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
             '<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{highlights}</pre></td></tr>',
-            '<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre> {remark}</pre></td></tr>',
+            '<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
+            '<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
             strPay+strQuota+strChannel+strManagerRemark,
             '</table></td></tr></table>',{
               cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
@@ -464,20 +466,21 @@ Ext.onReady(function() {
         	xtype:'box',
         	flex:1
         },{
-        	text:'折叠信息',
+        	text:'折叠推荐信息',
         	icon:'/ts/misc/resources/icons/folder_go.gif',
         	handler:function(){
-                  if(this.getText()=='折叠信息'){
+                  if(this.getText()=='折叠推荐信息'){
                     Ext.getCmp('topInfo').hide();
-                    this.setText('展开信息');
+                    this.setText('展开推荐信息');
                   } else {
                     Ext.getCmp('topInfo').show();
-                    this.setText('折叠信息');
+                    this.setText('折叠推荐信息');
                   }                  
                 }
         },{
         	text:'进入管理模式',
         	icon:'/ts/misc/resources/icons/plugin.gif',
+                hidden:records[0].get("manage_button"),
         	handler:function(){window.location.href='/ts/index.php/proj/manage';}
         },{
         	text:'个人信息',
@@ -523,7 +526,7 @@ Ext.onReady(function() {
           items:[{
             xtype:'image',
             id:'ad2',
-            src:'/ts/misc/resources/ad2.jpg'
+            src:'/ts/misc/resources/ad2_20121226.jpg'
           }]
         },
         recentChangeGrid,

@@ -12,6 +12,7 @@ $config['group_cfg'] = array(
 
 $config['access_fields_cfg'] = array(
 	'administrator' => array(
+                'manage_button' => false,
 		'proj_id' => false,
 		'proj_detail_id' => false,
 		'total_share' => false,
@@ -50,6 +51,7 @@ $config['access_fields_cfg'] = array(
 		'manager_remark' => false,
 	),
 	'product_manager' => array(
+                'manage_button' => false,
 		'proj_id' => false,
 		'proj_detail_id' => false,
 		'total_share' => false,
@@ -88,6 +90,7 @@ $config['access_fields_cfg'] = array(
 		'manager_remark' => false,
 	),
 	'staff' => array(
+                'manage_button' => true,
 		'proj_id' => false,
 		'proj_detail_id' => false,
 		'total_share' => false,
@@ -126,6 +129,7 @@ $config['access_fields_cfg'] = array(
 		'manager_remark' => true,
 	),
 	'part_time_job' => array(
+                'manage_button' => true,
 		'proj_id' => false,
 		'proj_detail_id' => false,
 		'total_share' => false,
@@ -144,7 +148,7 @@ $config['access_fields_cfg'] = array(
 		'amount' => false,
 		'profit_property' => false,
 		'profit' => false,
-		'manager' => false,
+		'manager' => true,
 		'contract' => false,
 		'remark' => false,
 		'commission_b_tax' => true,
@@ -164,6 +168,7 @@ $config['access_fields_cfg'] = array(
 		'manager_remark' => true,
 	),
 	'other' => array(
+                'manage_button' => true,
 		'proj_id' => false,
 		'proj_detail_id' => false,
 		'total_share' => false,

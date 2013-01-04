@@ -85,6 +85,7 @@ class Utility {
 		
 		if(!isset($_cfg[$group])) {
 			return array(
+				'manage_button' => true,
 				'proj_id' => true,
 				'proj_detail_id' => true,
 				'total_share' => false,

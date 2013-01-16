@@ -313,4 +313,11 @@ class Proj_model extends CI_Model {
 		//}
 		return $query->result();
 	}
+
+	function get_all_company() {
+		$this->db->from('company')->where('operation !=', 'deleted');
+		$this->db->order_by('id', 'asc');
+		$query = $this->db->get();
+		return $query->result();
+	}
 }

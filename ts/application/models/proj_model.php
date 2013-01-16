@@ -320,4 +320,20 @@ class Proj_model extends CI_Model {
 		$query = $this->db->get();
 		return $query->result();
 	}
+
+	function get_all_cproj() {
+		$this->db->from('cproj')->where('operation !=', 'deleted');
+		$this->db->order_by('id', 'asc');
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	function get_cproj_company_relation($proj_id) {
+		$this->db->from('cproj_company_relation');
+		$this->db->where('proj_id', $proj_id);
+		$this->db->where('operation !=', 'deleted');
+		$this->db->order_by('id', 'asc');
+		$query = $this->db->get();
+		return $query->result();
+	}
 }

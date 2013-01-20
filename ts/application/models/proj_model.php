@@ -337,9 +337,9 @@ class Proj_model extends CI_Model {
 		return $query->result();
 	}
 
-	function get_relation_detail($id) {
+	function get_relation_detail($relation_id) {
 		$this->db->from('cproj_company_relation_detail');
-		$this->db->where('id', $id);
+		$this->db->where('relation_id', $relation_id);
 		$this->db->where('operation !=', 'deleted');
 		$this->db->order_by('id', 'asc');
 		$query = $this->db->get();

@@ -2,7 +2,7 @@
 
 class Relation extends Auth_Controller {
 	function __construct() {
-		parent::__construct(false);
+		parent::__construct();
 	}
 
 	function company() {
@@ -17,10 +17,17 @@ class Relation extends Auth_Controller {
 			$rel = $this->Proj_model->get_cproj_company_relation($data[$i]->id);
 			$data[$i]->relation = $rel;
 		}
-		echo '<pre>';
-		print_r($data);
-		echo '</pre>';exit;
+		$this->json->output(array('success' => true, 'data' => $data));
+	}
+
+	function detail() {
+		$id = $this->input->get('id');
+
+		if(!$this->utility->chk_id($id)) {
+			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+		}
+		
+		$data = $this->Proj_model->get_relation_detail($id);
 		$this->json->output(array('success' => true, 'data' => $data));
 	}
 }
-

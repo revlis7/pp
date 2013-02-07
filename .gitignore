@@ -1,2 +1,3 @@
 .DS_Store
 ts/application/config/config.php
+ts/application/config/database.php

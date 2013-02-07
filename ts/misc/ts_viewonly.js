@@ -17,6 +17,24 @@ Ext.onReady(function() {
     ]
   });
   	  
+  var projInfoWin=Ext.create('Ext.window.Window',{
+    resizeable:false,
+    closeAction:"hide",
+    title:'项目信息',
+    width:800,
+    layout:'fit',
+    items:[{
+      id:'projInfoPanel',
+      xtype:'panel',
+      html:'正在加载项目信息...'
+    }]
+  });
+  projInfoWin.on({
+    hide: function(){
+      Ext.getBody().unmask();
+    }
+  });
+  projInfoWin.show();
   var listControl=Ext.create('Ext.data.JsonStore', {
     fields: [
       {name:'manage_button'    ,type:'boolean' },
@@ -135,7 +153,55 @@ Ext.onReady(function() {
       strManagerRemark += "<tr><td class=\"r_ex_td_pre\"><b>产品经理备注</b></td><td class=\"r_ex_td_main\">{manager_remark}</td></tr>";
     }
     
-    var fullGridColumns=[
+
+    var fullGridColumns=[{
+        xtype: 'actioncolumn',
+        text:'查看',
+        width:30,style: "text-align:center;",align: 'center',
+        sortable: false,
+        items: [{
+          icon: '/ts/misc/resources/icons/plugin.gif',
+          tooltip: '点击查看项目信息',
+          renderer: function (val, metadata, record) {  
+            metadata.style = 'background-color: #FFFFCC !important;cursor: pointer;'  
+            return val;  
+          },
+          handler: function(grid, rowIndex, colIndex) {
+            var tStore=grid.getStore();
+            var queryResult=tStore.queryBy(function(record){
+              return record.get("proj_id")==grid.getStore().getAt(rowIndex).get("proj_id")?true:false;
+            });
+            var detailString="";
+            Ext.Array.forEach(queryResult.items,function(record){
+              detailString+=("<pre>"+((record.data.amount<10000)?(record.data.amount+"万"):(record.data.amount/10000+"亿"))+": "+record.data.profit+"%</pre>");
+            });
+            var proj_info_tpl=Ext.create('Ext.XTemplate',[
+              '<table cellpadding=0 cellspacing=0><tr><td style="padding:10px;border:1px;"><table>',
+              '<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}->{sub_category}, {exclusive}</pre></td></tr>',
+              '<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
+              '<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，期限<b>{month}</b>个月，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
+              '<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
+              detailString, '</td></tr>',
+              '<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
+              '<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{highlights}</pre></td></tr>',
+              '<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
+              '<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
+              strPay+strQuota+strChannel+strManagerRemark,
+              '</table></td></tr></table>',
+              {
+                cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
+              },{
+                cusNum:function(n){return (n<10000)?(n+"万"):(n/10000+"亿")}
+              }
+            ]);
+            proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,queryResult.getAt(0).data);
+            Ext.getBody().mask();
+            projInfoWin.show();
+            projInfoWin.setPosition(100,100);
+          }
+        }]
+      },
+
       {text:'项目状态',columns:[
         {text:'proj_id',     dataIndex:'proj_id',       filtable:true, width:100,hidden:true},
         {text:'proj_detail_id',     dataIndex:'proj_detail_id',       filtable:true, width:100,hidden:true},
@@ -167,7 +233,21 @@ Ext.onReady(function() {
           }}
       ]},
       {text:'产品信息',columns:[
-        {text:'产品等级',     dataIndex:'grade',          filtable:true,sortable : true, width:50, hidden:records[0].get("grade")},
+        {text:'产品等级',     dataIndex:'grade',          filtable:true,sortable : true, width:90, hidden:records[0].get("grade"),
+        renderer: function(value,metaData,record,colIndex,store,view) {  
+//          metaData.tdAttr = 'data-qtip="'+value+'"';  
+          if(value=="五星级"){
+            return '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
+          } else if (value=="四星级"){
+            return '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
+          } else if (value=="三星级"){
+            return '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
+          } else if (value=="二星级"){
+            return '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
+          } else if (value=="一星级"){
+            return '<img src="/ts/misc/resources/icons/star.gif" />'
+          }
+        }},
         {text:'类别',       dataIndex:'sub_category',    filtable:true,sortable : true, width:150,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_category")},
         {text:'发行方',       dataIndex:'issue',         filtable:true,sortable : true, width:100,style: "text-align:center;",align: 'center', hidden:records[0].get("issue")},
         {text:'项目名称',     dataIndex:'name',          filtable:true,sortable : true, width:180,style: "text-align:center;",align: 'left', hidden:records[0].get("name"),
@@ -243,7 +323,7 @@ Ext.onReady(function() {
       store: sampleStoreC1,
       border:0,
       columnLines: true,
-      forceFit: true,
+      //forceFit: true,
       width:1320,
       columns: fullGridColumns,
       title: '&nbsp;&nbsp;<b>&gt;&gt;&nbsp;固定收益产品&nbsp;&lt;&lt;</b> -- 点击折叠',
@@ -264,7 +344,7 @@ Ext.onReady(function() {
       },
       loadMask: true,
       features: [filtersCfg],
-      plugins: fullGridExpander,
+//      plugins: fullGridExpander,
       emptyText: '没有匹配的记录'
     });
 
@@ -274,7 +354,7 @@ Ext.onReady(function() {
       width:1320,
       title: '&nbsp;&nbsp;<b>&gt;&gt;&nbsp;浮动收益产品&nbsp;&lt;&lt;</b> -- 点击展开',
       columnLines: true,
-      forceFit: true,
+      //forceFit: true,
       columns: fullGridColumns,
       viewConfig: {
         stripeRows: true,
@@ -293,7 +373,7 @@ Ext.onReady(function() {
       },
       loadMask: true,
       features: [filtersCfg],
-      plugins: fullGridExpander,
+//      plugins: fullGridExpander,
       emptyText: '没有匹配的记录'
     });
 
@@ -303,9 +383,11 @@ Ext.onReady(function() {
                 text:'快速筛选：'
             },{
                 xtype:'tbtext',
+              scale:'medium',
               text:'【集合信托产品：'
             },{
                 text:'上市公司股票质押',
+              scale:'medium',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
                   sampleStoreC1.filterBy( function(record,id){
@@ -314,6 +396,7 @@ Ext.onReady(function() {
                 }
             },{
                 text:'政府基建',
+              scale:'medium',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
                   sampleStoreC1.filterBy( function(record,id){
@@ -322,6 +405,7 @@ Ext.onReady(function() {
                 }
             },{
                 text:'房地产',
+              scale:'medium',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
                   sampleStoreC1.filterBy( function(record,id){
@@ -330,6 +414,7 @@ Ext.onReady(function() {
                 }
             },{
                 text:'其他信托',
+              scale:'medium',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
                   sampleStoreC1.filterBy( function(record,id){
@@ -338,6 +423,7 @@ Ext.onReady(function() {
                 }
             },{
                 text:'所有信托】',
+              scale:'medium',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
                   sampleStoreC1.filterBy( function(record,id){
@@ -349,6 +435,7 @@ Ext.onReady(function() {
                 }
             },{
                 text:'【私募基金】',
+              scale:'medium',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
                   sampleStoreC1.filterBy( function(record,id){
@@ -357,6 +444,7 @@ Ext.onReady(function() {
                 }
             },{
                 text:'【P2P理财】',
+              scale:'medium',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
                   sampleStoreC1.filterBy( function(record,id){
@@ -365,6 +453,7 @@ Ext.onReady(function() {
                 }
             },{
                 text:'【其他固定收益产品】',
+              scale:'medium',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
                   sampleStoreC1.filterBy( function(record,id){
@@ -373,6 +462,7 @@ Ext.onReady(function() {
                 }
             },'-',{
                 text:'全部显示',
+              scale:'medium',
                 icon:'/ts/misc/resources/icons/grid.png',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
@@ -386,6 +476,7 @@ Ext.onReady(function() {
                 text:'快速筛选：'
             },{
                 text:'【债券基金】',
+              scale:'medium',
                 handler:function(){
                   fullGridC2.filters.clearFilters();
                   sampleStoreC2.filterBy( function(record,id){
@@ -394,6 +485,7 @@ Ext.onReady(function() {
                 }
             },{
                 text:'【证券基金】',
+              scale:'medium',
                 handler:function(){
                   fullGridC2.filters.clearFilters();
                   sampleStoreC2.filterBy( function(record,id){
@@ -402,6 +494,7 @@ Ext.onReady(function() {
                 }
             },{
                 text:'【股权基金】',
+              scale:'medium',
                 handler:function(){
                   fullGridC2.filters.clearFilters();
                   sampleStoreC2.filterBy( function(record,id){
@@ -410,6 +503,7 @@ Ext.onReady(function() {
                 }
             },{
                 text:'【其他浮动收益产品】',
+              scale:'medium',
                 handler:function(){
                   fullGridC2.filters.clearFilters();
                   sampleStoreC2.filterBy( function(record,id){
@@ -418,6 +512,7 @@ Ext.onReady(function() {
                 }
             },'-',{
                 text:'全部显示',
+              scale:'medium',
                 icon:'/ts/misc/resources/icons/grid.png',
                 handler:function(){
                   fullGridC2.filters.clearFilters();
@@ -443,7 +538,7 @@ Ext.onReady(function() {
         p.setTitle('&nbsp;&nbsp;<b>&gt;&gt;&nbsp;浮动收益产品&nbsp;&lt;&lt;</b> -- 点击展开');
       }
     });
-    
+    var loginname = Ext.util.Cookies.get("loginname");
     var viewport = Ext.create('Ext.Viewport', {
       layout: {
           type: 'border',
@@ -483,7 +578,7 @@ Ext.onReady(function() {
                 hidden:records[0].get("manage_button"),
         	handler:function(){window.location.href='/ts/index.php/proj/manage';}
         },{
-        	text:'个人信息',
+        	text:'个人信息：'+loginname,
         	icon:'/ts/misc/resources/icons/user.png',
         	handler:function(){window.location.href='/ts/index.php/user/info';}
         },{
@@ -526,7 +621,7 @@ Ext.onReady(function() {
           items:[{
             xtype:'image',
             id:'ad2',
-            src:'/ts/misc/resources/ad2_20121226.jpg'
+            src:'/ts/misc/resources/ad2_20130129.jpg'
           }]
         },
         recentChangeGrid,
@@ -599,6 +694,7 @@ Ext.onReady(function() {
   sampleStoreC1.load();
   sampleStoreC2.load();
   sampleChanges.load();
+  projInfoWin.hide();
 });
 
  

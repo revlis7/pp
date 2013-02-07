@@ -314,9 +314,74 @@ class Proj_model extends CI_Model {
 		return $query->result();
 	}
 
+	function create_company($company_name = '', $type = '', $remark = '', $creator = '') {
+		$company = array(
+			'company_name' => $company_name,
+			'type'         => $type,
+			'remark'       => $remark,
+			'creator'      => $creator,
+			'create_ts'    => date('Y-m-d H:i:s'),
+			'operation'    => 'normal',
+		);
+		$query = $this->db->insert('company', $company);
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return $this->db->insert_id();
+	}
+
+	function get_company($company_id = '') {
+		$this->db->from('company');
+		$this->db->where('operation !=', 'deleted');
+		$this->db->where('id', $company_id);
+		$query = $this->db->get();
+		return $query->result();
+	}
+
 	function get_all_company() {
 		$this->db->from('company')->where('operation !=', 'deleted');
 		$this->db->order_by('id', 'asc');
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	function delete_company($company_id) {
+		$data = array(
+			'operation' => 'deleted',
+		);
+		$this->db->where('id', $company_id);
+		$this->db->update('company', $data);
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return $company_id;
+	}
+
+	function create_cproj($proj_name = '', $amount = '', $month = '', $profit_max = '', $profit_suggest = '', $guarantee_mode = '', $repayment = '', $proj_rel = '', $proj_deadline = '', $remark = '') {
+		$cproj = array(
+			'proj_name'      => $proj_name,
+			'amount'         => $amount,
+			'month'          => $month,
+			'profit_max'     => $profit_max,
+			'profit_suggest' => $profit_suggest,
+			'guarantee_mode' => $guarantee_mode,
+			'repayment'      => $repayment,
+			'proj_rel'       => $proj_rel,
+			'proj_deadline'  => $proj_deadline,
+			'remark'         => $remark,
+			'operation'      => 'normal',
+		);
+		$query = $this->db->insert('cproj', $cproj);
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return $this->db->insert_id();
+	}
+
+	function get_cproj($proj_id) {
+		$this->db->from('cproj');
+		$this->db->where('operation !=', 'deleted');
+		$this->db->where('id', $proj_id);
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -328,6 +393,34 @@ class Proj_model extends CI_Model {
 		return $query->result();
 	}
 
+	function delete_cproj($proj_id) {
+		$data = array(
+			'operation' => 'deleted',
+		);
+		$this->db->where('id', $proj_id);
+		$this->db->update('cproj', $data);
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return $proj_id;
+	}
+
+	function create_relation($proj_id = '', $company_id = '', $status = '', $contact_person = '') {
+		$relation = array(
+			'proj_id'        => $proj_id,
+			'company_id'     => $company_id,
+			'status'         => $status,
+			'contact_person' => $contact_person,
+			'update_ts'      => date('Y-m-d H:i:s'),
+			'operation'      => 'normal',
+		);
+		$query = $this->db->insert('cproj_company_relation', $relation);
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return $this->db->insert_id();
+	}
+
 	function get_cproj_company_relation($proj_id) {
 		$this->db->from('cproj_company_relation');
 		$this->db->where('proj_id', $proj_id);
@@ -337,6 +430,33 @@ class Proj_model extends CI_Model {
 		return $query->result();
 	}
 
+	function delete_relation($relation_id) {
+		$data = array(
+			'operation' => 'deleted',
+		);
+		$this->db->where('id', $relation_id);
+		$this->db->update('cproj_company_relation', $data);
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return $relation_id;
+	}
+
+	function create_relation_detail($relation_id = '', $status = '', $update_remark = '') {
+		$detail = array(
+			'relation_id'    => $relation_id,
+			'update_ts'      => date('Y-m-d H:i:s'),
+			'status'         => $status,
+			'update_remark'  => $update_remark,
+			'operation'      => 'normal',
+		);
+		$query = $this->db->insert('cproj_company_relation_detail', $detail);
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return $this->db->insert_id();
+	}
+
 	function get_relation_detail($relation_id) {
 		$this->db->from('cproj_company_relation_detail');
 		$this->db->where('relation_id', $relation_id);
@@ -344,5 +464,17 @@ class Proj_model extends CI_Model {
 		$this->db->order_by('id', 'asc');
 		$query = $this->db->get();
 		return $query->result();
+	}
+
+	function delete_relation_detail($detail_id) {
+		$data = array(
+			'operation' => 'deleted',
+		);
+		$this->db->where('id', $detail_id);
+		$this->db->update('cproj_company_relation_detail', $data);
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return $detail_id;
 	}
 }

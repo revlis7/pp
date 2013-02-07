@@ -282,7 +282,7 @@ class Proj extends Auth_Controller {
 			$this->json->output(array('success' => false, 'm' => '您不能对他人的记录进行操作'));
 		}
 		
-		if(!$this->Data_model->delete_proj($proj_id)) {
+		if(!$this->Proj_model->delete_proj($proj_id)) {
 			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
 		}
 		$this->json->output(array('success' => true));

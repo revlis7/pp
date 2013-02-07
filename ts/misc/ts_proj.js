@@ -101,25 +101,11 @@ Ext.onReady(function() {
       }
     });
   
-  var proj_info_tpl=Ext.create('Ext.XTemplate',[
-      '<table><tr><td style="padding:10px;border:1px;"><table>',
-      '<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
-      '<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，期限<b>{month}</b>个月，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
-      //'{[(records[0].get("profit_property")==true)?"aaa":"bbb"]}',
-      '<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}->{sub_category}, {exclusive}</pre></td></tr>',
-      '<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
-      '<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{highlights}</pre></td></tr>',
-      '<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
-      '<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
-      '</table></td></tr></table>',
-      {
-        cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
-      },{
-        cusNum:function(n){return (n<10000)?(n+"万"):(n/10000+"亿")}
-      }
-    ]
-  );
-  
+//  var proj_detail_info_tpl=Ext.create('Ext.XTemplate',[
+//    '<tr><td class="r_ex_td_pre"><b></b></td><td>',
+//    '</td></tr>'
+//  ]);
+
   var ProjWin=Ext.create("Ext.window.Window",{
       resizeable:false,
       closeAction:"hide",
@@ -158,7 +144,8 @@ Ext.onReady(function() {
                 success: function(form, action) {
                   ProjWin.close();
                   projStore.load(function(records, operation, success) {
-                    ProjInfoForm.getForm().loadRecord(records[0]);
+                //    ProjInfoForm.getForm().loadRecord(records[0]);
+                    proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
                   });
                 } 
                 //,
@@ -611,22 +598,11 @@ Ext.onReady(function() {
     border:1,
     title:'额度信息',
     region:'center',
-    flex:2,
+    flex:1,
     dockedItems:[{
       xtype:'toolbar',
       dock: 'top',
-      items:[{
-        icon: '/ts/misc/resources/icons/add.gif',
-        text:'新增额度信息' ,
-        handler:function(){
-          //todo
-          AmountEditForm.getForm().reset();
-          AmountEditForm.down('hiddenfield[name="proj_id"]').setValue(params.proj_id);
-          AmountEditForm.down('hiddenfield[name="proj_detail_id"]').setValue(-1);
-          AmountEditForm.down('numberfield[name="amount"]').setValue(null);
-          AmountEditForm.show();
-        }
-      }]
+      items:[]
     }],
     columns:[{
         xtype: 'actioncolumn',
@@ -666,45 +642,55 @@ Ext.onReady(function() {
           }
         }]
       },
-      {text:'份额',         dataIndex:'total_share',      filtable:true, width:100},
-      {text:'销售状态',     dataIndex:'status',           filtable:true, width:100},
-      {text:'认购金额',     dataIndex:'amount',           filtable:true, width:100},
-      {text:'项目收益',     dataIndex:'profit',           filtable:true, width:100},
-      {text:'税前佣金',     dataIndex:'commission_b_tax', filtable:true, width:100},
-      {text:'税后佣金',     dataIndex:'commission_a_tax', filtable:true, width:100},
-      {text:'佣金',         dataIndex:'inner_commission', filtable:true, width:100},
-      {text:'佣金（税后）', dataIndex:'outer_commission', filtable:true, width:100},
-      {text:'打款日期',     dataIndex:'pay',              filtable:true, width:100},
-      {text:'已打款金额',   dataIndex:'paid',             filtable:true, width:100},
-      {text:'包销/分销额度',dataIndex:'quota',            filtable:true, width:100},
-      {text:'已打款额度',   dataIndex:'quota_paid',       filtable:true, width:100},
-      {text:'剩余额度',     dataIndex:'quota_remain',     filtable:true, width:100},
-      {text:'主销渠道',     dataIndex:'main_channel',     filtable:true, width:100},
-      {text:'渠道公司',     dataIndex:'channel_company',  filtable:true, width:100},
-      {text:'渠道联系人',   dataIndex:'channel_contact',  filtable:true, width:100},
-      {text:'走帐公司',     dataIndex:'billing_company',  filtable:true, width:100},
-      {text:'产品经理备注', dataIndex:'manager_remark',   filtable:true, width:100}
+      {text:'份额',         dataIndex:'total_share',      filtable:true, width:50},
+      {text:'销售状态',     dataIndex:'status',           filtable:true, width:70},
+      {text:'认购金额',     dataIndex:'amount',           filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
+      {text:'项目收益',     dataIndex:'profit',           filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+      {text:'税前佣金',     dataIndex:'commission_b_tax', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+      {text:'税后佣金',     dataIndex:'commission_a_tax', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+      {text:'佣金',         dataIndex:'inner_commission', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+      {text:'佣金（税后）', dataIndex:'outer_commission', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+      {text:'打款日期',     dataIndex:'pay',              filtable:true, width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
+      {text:'已打款金额',   dataIndex:'paid',             filtable:true, width:80},
+      {text:'包销/分销额度',dataIndex:'quota',            filtable:true, width:90},
+      {text:'已打款额度',   dataIndex:'quota_paid',       filtable:true, width:80},
+      {text:'剩余额度',     dataIndex:'quota_remain',     filtable:true, width:80},
+      {text:'主销渠道',     dataIndex:'main_channel',     filtable:true, width:80},
+      {text:'渠道公司',     dataIndex:'channel_company',  filtable:true, width:80},
+      {text:'渠道联系人',   dataIndex:'channel_contact',  filtable:true, width:80},
+      {text:'走帐公司',     dataIndex:'billing_company',  filtable:true, width:80},
+      {text:'产品经理备注', dataIndex:'manager_remark',   filtable:true, width:140,
+          renderer: function(value,metaData,record,colIndex,store,view) {  
+            metaData.tdAttr = 'data-qtip="<pre>'+value+'</pre>"';  
+            return value; 
+          }
+      }
     ]
   });
 
   var viewport = Ext.create('Ext.Viewport', {
     layout: {
         type: 'border',
-        padding: 5
+//        padding: 5
     },
     defaults: {
-        split: true                //可改变窗体大小
+//        split: true                //可改变窗体大小
     },
     items: [{
       xtype:'toolbar',
       region:'north',
-      height: 30,
+      height:40,
       border:0,
       items:[
-      {
-      	xtype:'box',
-      	html:'<span class="app-header1">彩虹桥</span>'
-      },{
+        {
+        	xtype:'image',
+                src:'/ts/misc/resources/firstshin.jpg',
+          	width:240,
+                height:38
+        },{
+        	xtype:'box',
+        	html:'<span class="app-header2">项目编辑</span>'
+        },{
       	xtype:'box',
       	flex:1
       },{
@@ -728,33 +714,57 @@ Ext.onReady(function() {
         region:'center',
         items:[
           //ProjInfoForm,
-          {
-            id:'projInfoPanel',
-            region:'north',
-            minHeight:380,
-            minWidth:800,
-            html:'正在加载项目信息...',
-            dockedItems: [{
-      dock: 'top',
-      xtype: 'toolbar',
-      bodyPadding: 5,
-      items: [{
-      	text:'编辑项目信息',
-      	icon: '/ts/misc/resources/icons/cog_edit.png',
-      	handler:function(){
+        {
+          id:'projInfoPanel',
+          region:'north',
+          minHeight:380,
+          minWidth:800,
+          flex:2,
+          html:'正在加载项目信息...',
+          autoScroll :true,
+          dockedItems: [{
+            dock: 'top',
+            xtype: 'toolbar',
+            bodyPadding: 5,
+            items: [{
+              xtype:'tbtext',
+              text:'您可以：'
+            },{
+              text:'编辑项目信息',
+              scale:'medium',
+              icon: '/ts/misc/resources/icons/cog_edit.png',
+              handler:function(){
       		ProjWin.down('form').getForm().loadRecord(projStore.first());
       		ProjWin.show();
-      	}
-      }]
-    }]
-          },
-          {
-            xtype:'box',
-            region:'north',
-            weight:-200,
-            height:15
-          },        
-          AmountDetailsGrid
+              }
+            },{
+              icon: '/ts/misc/resources/icons/add.gif',
+              scale:'medium',
+              text:'新增额度信息' ,
+              handler:function(){
+                //todo
+                AmountEditForm.getForm().reset();
+                AmountEditForm.down('hiddenfield[name="proj_id"]').setValue(params.proj_id);
+                AmountEditForm.down('hiddenfield[name="proj_detail_id"]').setValue(-1);
+                AmountEditForm.down('numberfield[name="amount"]').setValue(null);
+                AmountEditForm.show();
+              }
+            },{
+              text:'上传项目文件',
+              scale:'medium',
+              handler:function(){
+                Ext.MessageBox.alert('提示', '该功能暂未开放');
+              }
+            }]
+          }]
+        },
+        {
+          xtype:'box',
+          region:'north',
+          weight:-200,
+          height:15
+        },        
+        AmountDetailsGrid
         ]
       },
       AmountEditForm
@@ -763,10 +773,35 @@ Ext.onReady(function() {
   });
   
   projStore.load(function(records, operation, success) {
-    //ProjInfoForm.getForm().loadRecord(records[0]);
-    proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
-    //proj_info_window.show();
+    projdetailStore.load(function(records, operation, success) {
+      var detailString="";
+      //ProjInfoForm.getForm().loadRecord(records[0]);
+      Ext.Array.forEach(records,function(record){
+        detailString+='<pre>'+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+record.get("profit")+'%</pre>';
+      });
+      var proj_info_tpl=Ext.create('Ext.XTemplate',[
+        '<table cellpadding=0 cellspacing=0><tr><td style="padding:10px;border:1px;"><table>',
+        '<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}->{sub_category}, {exclusive}</pre></td></tr>',
+        '<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
+        '<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，期限<b>{month}</b>个月，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
+        '<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
+        detailString, '</td></tr>',
+        //'{[(records[0].get("profit_property")==true)?"aaa":"bbb"]}',
+        '<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
+        '<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{highlights}</pre></td></tr>',
+        '<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
+        '<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
+        '</table></td></tr></table>',
+        {
+          cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
+        },{
+          cusNum:function(n){return (n<10000)?(n+"万"):(n/10000+"亿")}
+        }
+      ]);
+      proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
+      //proj_info_window.show();
+    });    
   });
-  projdetailStore.load();
+  //projdetailStore.load();
   
 });

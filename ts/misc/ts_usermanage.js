@@ -223,6 +223,11 @@ Ext.onReady(function() {
         fieldLabel: 'Email',
         name:'email',
         allowBlank: false
+      },{
+        xtype:'textfield',
+        fieldLabel: '玉尔投资职位',
+        name:'FSCtitle',
+        allowBlank: false
       }]
     }]
   });
@@ -325,6 +330,16 @@ Ext.onReady(function() {
         xtype:'textfield',
         fieldLabel: 'Email',
         name:'email',
+        allowBlank: false
+      },{
+        xtype:'combo',
+        fieldLabel: '玉尔投资职位',
+        name:'FSCtitle',
+        queryMode : 'local',
+        store : chFSCTitleList,
+        valueField: 'id',
+        displayField: 'text',
+        forceSelection:true,
         allowBlank: false
       }]
     }]

@@ -14,8 +14,8 @@
     padding: 8px 15px;
     text-shadow: 0 1px 0 #000;
   }
-  .style_row_proj0 tr{background-color:#FFFFFF !important;font-size:12px;cursor: pointer;color: #2f4b52}
-  .style_row_proj1 tr{background-color:#F9EEF2 !important;font-size:12px;cursor: pointer;color: #2f4b52}
+  .style_row_proj0 td{background-color:#FFFFFF !important;font-size:12px;cursor: pointer;color: #2f4b52}
+  .style_row_proj1 td{background-color:#F9EEF2 !important;font-size:12px;cursor: pointer;color: #2f4b52}
   .x-grid-row {height:28px;vertical-align:middle;font-size:12px}
   .x-grid-cell {height:26px;vertical-align:middle}
   .x-grid-cell-inner {height:26px;font-size:12px;padding:6px;line-height:26px}

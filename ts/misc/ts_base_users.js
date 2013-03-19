@@ -12,7 +12,7 @@ Ext.require([
 ]);
 
   var strUserList=Ext.create('Ext.data.ArrayStore', {
-    fields: ['loginname', 'realname','title','branch','tel','qq','email','FSCtitle'],
+    fields: ['loginname', 'realname','title','branch','tel','qq','email'],
     proxy: {
       type: 'ajax',
       //url: '/etc/proj_sample_data.json',
@@ -48,12 +48,5 @@ Ext.require([
       ['温州财富中心','温州财富中心'],
       ['重庆财富中心','重庆财富中心'],
       ['厦门财富中心','厦门财富中心']
-    ]
-  });
-  var chFSCTitleList=Ext.create('Ext.data.ArrayStore', {
-    fields: ['id', 'text'],
-    data: [
-      ['无权','无权'],
-      ['授权','授权']
     ]
   });

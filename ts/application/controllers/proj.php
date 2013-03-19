@@ -38,11 +38,20 @@ class Proj extends Auth_Controller {
 	
 	//返回所有proj＋proj_detail的json数据
 	function view() {
+	  $ending_status =  $this->input->get('e', true);
 		$category_id = $this->input->get('c', true);
 		if($category_id >= 1) {
-			$data = $this->Proj_model->get_all_proj_detail($category_id);
+		  if($ending_status >= 1) {
+		    $data = $this->Proj_model->get_all_proj_detail($category_id,$ending_status);
+		  } else {
+			  $data = $this->Proj_model->get_all_proj_detail($category_id,-1);
+			}
 		} else {
-			$data = $this->Proj_model->get_all_proj_detail(-1);
+		  if($ending_status >= 1) {
+		    $data = $this->Proj_model->get_all_proj_detail(-1,$ending_status);
+		  } else {
+			  $data = $this->Proj_model->get_all_proj_detail(-1,-1);
+			}
 		}
 		//根据用户组过滤可见信息
 		$temp = array();
@@ -142,6 +151,8 @@ class Proj extends Auth_Controller {
 		$manager = $this->input->post('manager', true);
 		$contract = $this->input->post('contract', true);
 		$remark = $this->input->post('remark', true);
+		$pay_account = $this->input->post('pay_account', true);
+		$countdown = $this->input->post('countdown', true);
 		//$commission_b_tax = $this->input->post('commission_b_tax', true);
 		//$commission_a_tax = $this->input->post('commission_a_tax', true);
 		//$inner_commission = $this->input->post('inner_commission', true);
@@ -158,7 +169,7 @@ class Proj extends Auth_Controller {
 		//$billing_company = $this->input->post('billing_company', true);
 		//$manager_remark = $this->input->post('manager_remark', true);
 		
-		$proj_id = $this->Proj_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $remark, $found, element('loginname', $this->session->userdata('user')));
+		$proj_id = $this->Proj_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, element('loginname', $this->session->userdata('user')));
 		if($proj_id === false) {
 			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 		}
@@ -188,6 +199,8 @@ class Proj extends Auth_Controller {
 		$manager = $this->input->post('manager', true);
 		$contract = $this->input->post('contract', true);
 		$remark = $this->input->post('remark', true);
+		$pay_account = $this->input->post('pay_account', true);
+		$countdown = $this->input->post('countdown', true);
 		$found = $this->input->post('found', true);
 		
 		if($this->utility->is_pm() && $this->Proj_model->get_proj_manager($proj_id) !== $this->get_user_info('realname')) {
@@ -204,7 +217,7 @@ class Proj extends Auth_Controller {
 			$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'将['.$proj->issue.']的项目：['.$proj->name.']的备注修改为［'.$remark.'］');
 		}
 		
-		$proj_id = $this->Proj_model->update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $remark, $found, element('loginname', $this->session->userdata('user')));
+		$proj_id = $this->Proj_model->update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $month, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, element('loginname', $this->session->userdata('user')));
 		if($proj_id === false) {
 			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
 		}

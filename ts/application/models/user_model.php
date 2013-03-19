@@ -155,4 +155,12 @@ class User_model extends CI_Model {
 		$query = $this->db->get();
 		return $query->result();
 	}
+
+	function has_relation_access($loginname) {
+		$this->db->from('user_relation_access')->where('loginname', $loginname);
+		if($this->db->count_all_results() !== 1)  {
+			return false;
+		}
+		return true;
+	}
 }

@@ -77,7 +77,7 @@ Ext.define('searchPanel', {
                          buffer: 100
                      }
                  }
-            }, {
+            },{
                 xtype: 'button',
                 text: '&lt;',
                 tooltip: '前一行',
@@ -93,7 +93,7 @@ Ext.define('searchPanel', {
             ]
         }];
 
-        me.bbar = Ext.create('Ext.ux.StatusBar', {
+        me.tbar = Ext.create('Ext.ux.StatusBar', {
             defaultText: me.defaultStatusText,
             name: 'searchStatusBar'
         });

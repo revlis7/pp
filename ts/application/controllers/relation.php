@@ -3,6 +3,14 @@
 class Relation extends Auth_Controller {
 	function __construct() {
 		parent::__construct();
+
+		if(!$this->User_model->has_relation_access(element('loginname', $this->session->userdata('user')))) {
+			redirect(site_url('proj'), 'refresh');
+		}
+	}
+
+	function index() {
+		$this->template->load('default', 'relation/main');
 	}
 
 	function company() {
@@ -83,6 +91,8 @@ class Relation extends Auth_Controller {
 		$company_id = $this->input->post('company_id', true);
 		$status = $this->input->post('status', true);
 		$contact_person = $this->input->post('contact_person', true);
+		$update_ts = date('Y-m-d H:i:s', strtotime($this->input->post('update_ts', true)));
+		$update_remark = $this->input->post('update_remark', true);
 
 		$company = $this->Proj_model->get_company($company_id);
 		if(empty($company)) {
@@ -94,11 +104,44 @@ class Relation extends Auth_Controller {
 			$this->json->output(array('success' => false, 'm' => '未找到符合的项目记录'));
 		}
 
-		$relation_id = $this->Proj_model->create_relation($proj_id, $company_id, $status, $contact_person);
+		$relation_id = $this->Proj_model->create_relation($proj_id, $company_id, $status, $contact_person, $update_ts);
 		if($relation_id === false) {
 			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 		}
+
+		// save relation history
+		$detail_id = $this->Proj_model->create_relation_detail($relation_id, $update_ts, $status, $update_remark);
+		if($detail_id === false) {
+			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
+		}
+
 		$this->json->output(array('success' => true, 'relation_id' => $relation_id));
+	}
+
+	function relation_update() {
+		$proj_id = $this->input->post('proj_id', true);
+		$company_id = $this->input->post('company_id', true);
+
+		$status = $this->input->post('status', true);
+		$update_ts = date('Y-m-d H:i:s', strtotime($this->input->post('update_ts', true)));
+		$update_remark = $this->input->post('update_remark', true);
+
+		$relation_id = $this->Proj_model->get_relation_id($proj_id, $company_id);
+		if($relation_id === false) {
+			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
+		}
+
+		// save relation history
+		$detail_id = $this->Proj_model->create_relation_detail($relation_id, $update_ts, $status, $update_remark);
+		if($detail_id === false) {
+			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
+		}
+
+		$result = $this->Proj_model->update_relation($relation_id, $status, $update_ts);
+		if($result == false) {
+			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
+		}
+		$this->json->output(array('success' => true));
 	}
 
 	function relation_delete() {

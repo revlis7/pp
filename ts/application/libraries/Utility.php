@@ -107,6 +107,8 @@ class Utility {
 				'manager' => false,
 				'contract' => false,
 				'remark' => false,
+				'pay_account' => false,
+				'countdown' => false,
 				'commission_b_tax' => false,
 				'commission_a_tax' => false,
 				'inner_commission' => false,
@@ -122,6 +124,7 @@ class Utility {
 				'channel_contact' => false,
 				'billing_company' => false,
 				'manager_remark' => false,
+				'create_ts' => false
 			);
 		}
 		return $_cfg[$group];
@@ -129,9 +132,6 @@ class Utility {
 	
 	function manager_view_filter($proj_detail) {
 		$fields = array(
-			'commission_b_tax',
-			'commission_a_tax',
-			'outer_commission',
 			'main_channel',
 			'channel_company',
 			'channel_contact',
@@ -184,6 +184,37 @@ class Utility {
 		} else {
 			// Return array
 			return $d;
+		}
+	}
+
+	function page_title() {
+		$module = $this->CI->uri->segment(1);
+		$action = $this->CI->uri->segment(2);
+		switch($module) {
+			case 'user':
+				if($action == 'info') {
+					return '个人信息 - 玉尔通行证';
+				} else {
+					return '用户管理 - 玉尔通行证';
+				}
+				break;
+			case 'proj':
+				if($action == 'manage') {
+					return '项目管理 - 彩虹桥 - 玉尔财富';
+				} else if($action == 'create') {
+					return '新增项目 - 彩虹桥 - 玉尔财富';
+				} else if($action == 'update') {
+					return '项目编辑 - 彩虹桥 - 玉尔财富';
+				} else {
+					return '彩虹桥 - 玉尔财富';
+				}
+				break;
+			case 'relation';
+				return '金水桥 - 玉尔资本';
+				break;
+			default:
+				return '彩虹桥 - 玉尔财富';
+				break;
 		}
 	}
 }

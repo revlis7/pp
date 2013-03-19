@@ -9,7 +9,7 @@ Ext.onReady(function() {
         height:20,
         items:[{xtype:'box',flex:1},{
           xtype:'box',
-          html:'上海玉尔投资发展有限公司 - 版权所有 - 2012年'
+          html:'上海玉尔投资发展有限公司 - 版权所有 - 2012-2013'
         },{xtype:'box',flex:1}]
     },{
       xtype:'panel', 
@@ -31,7 +31,7 @@ Ext.onReady(function() {
           xtype:'panel',
           height:600,
           width:800,
-          html:'<a href="http://www.firstshin.com/?page_id=691"><img src="/ts/misc/resources/fp_20121214.jpg"></img></a>'
+          html:'<a href="http://www.firstshin.com/?page_id=61"><img src="/ts/misc/resources/fp_20130301.jpg"></img></a>'
         },{
           xtype:'form',
           border:2,

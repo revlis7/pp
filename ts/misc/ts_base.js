@@ -33,8 +33,8 @@ Ext.require([
   var chExclusiveList=Ext.create('Ext.data.ArrayStore', {
     fields: ['id', 'text'],
     data: [
+      ['自主开发类','自主开发类'],
       ['包销类','包销类'],
-      ['分销类','分销类'],
       ['通道类','通道类']
     ]
   });
@@ -86,9 +86,8 @@ Ext.require([
     data: [
       ['申玉玺','申玉玺'],
       ['孟祥春','孟祥春'],
-      ['王琪','王琪'],
       ['王璐','王璐'],
-      ['郭晶晶','郭晶晶']
+      ['翟晓凤','翟晓凤']
     ]
   });
   var chSubCategoryList = Ext.create('Ext.data.Store', {
@@ -176,7 +175,7 @@ Ext.require([
         {name:'flow_of_fund'     ,type:'string' },
         {name:'highlights'       ,type:'string' },
         {name:'month'            ,type:'integer'},
-        {name:'scale'            ,type:'integer'},
+        {name:'scale'            ,type:'float'},
         {name:'cycle'            ,type:'string' },
         {name:'amount'           ,type:'integer'},
         {name:'profit_property'  ,type:'string' },
@@ -184,6 +183,8 @@ Ext.require([
         {name:'manager'          ,type:'string' },
         {name:'contract'      ,type:'string' },
         {name:'remark'           ,type:'string' },
+        {name:'pay_account'            ,type:'string' },
+        {name:'countdown'            ,type:'string' },
         {name:'commission_b_tax' ,type:'float'  },
         {name:'commission_a_tax' ,type:'float'  },
         {name:'inner_commission' ,type:'float'  },
@@ -198,7 +199,8 @@ Ext.require([
         {name:'channel_company'  ,type:'string' },
         {name:'channel_contact'  ,type:'string' },
         {name:'billing_company'  ,type:'string' },
-        {name:'manager_remark'   ,type:'string' }
+        {name:'manager_remark'   ,type:'string' },
+        {name:'create_ts'   ,type:'date' }
       ]
   var sampleStore=Ext.create('Ext.data.JsonStore', {
       fields: sampleStoreFields,
@@ -275,6 +277,8 @@ Ext.require([
         {type:'numeric',dataIndex:'profit'           },
         {type:'list'   ,dataIndex:'manager'          ,store: chManagerList},
         {type:'string' ,dataIndex:'remark'           },
+        {type:'string' ,dataIndex:'pay_account'      },
+        {type:'string' ,dataIndex:'countdown'        },
         {type:'numeric',dataIndex:'commission_b_tax' },
         {type:'numeric',dataIndex:'commission_a_tax' },
         {type:'numeric',dataIndex:'inner_commission' },
@@ -289,6 +293,7 @@ Ext.require([
         {type:'string' ,dataIndex:'channel_company'  },
         {type:'string' ,dataIndex:'channel_contact'  },
         {type:'string' ,dataIndex:'billing_company'  },
-        {type:'string' ,dataIndex:'manager_remark'   }
+        {type:'string' ,dataIndex:'manager_remark'   },
+        {type:'date' ,dataIndex:'create_ts'   }
       ]
   };    

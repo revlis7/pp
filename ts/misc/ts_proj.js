@@ -2,7 +2,8 @@ Ext.onReady(function() {
   Ext.QuickTips.init();
 
   var params=Ext.Object.fromQueryString(location.search.substring(1));
-
+  var proj_info_tpl;
+  
   var projStore=Ext.create('Ext.data.JsonStore', {
       fields: [
         {name:'proj_id'          ,type:'integer' },
@@ -18,7 +19,7 @@ Ext.onReady(function() {
         {name:'flow_of_fund'     ,type:'string' },
         {name:'highlights'       ,type:'string' },
         {name:'month'            ,type:'integer'},
-        {name:'scale'            ,type:'integer'},
+        {name:'scale'            ,type:'float'},
         {name:'cycle'            ,type:'string' },
         {name:'amount'           ,type:'integer'},
         {name:'profit_property'  ,type:'string' },
@@ -26,6 +27,8 @@ Ext.onReady(function() {
         {name:'manager'          ,type:'string' },
         {name:'contract'         ,type:'string' },
         {name:'remark'           ,type:'string' },
+        {name:'pay_account'            ,type:'string' },
+        {name:'countdown'            ,type:'string' },
         {name:'commission_b_tax' ,type:'float'  },
         {name:'commission_a_tax' ,type:'float'  },
         {name:'inner_commission' ,type:'float'  },
@@ -67,7 +70,7 @@ Ext.onReady(function() {
         {name:'flow_of_fund'     ,type:'string' },
         {name:'highlights'       ,type:'string' },
         {name:'month'            ,type:'integer'},
-        {name:'scale'            ,type:'integer'},
+        {name:'scale'            ,type:'float'},
         {name:'cycle'            ,type:'string' },
         {name:'amount'           ,type:'integer'},
         {name:'profit_property'  ,type:'string' },
@@ -75,6 +78,8 @@ Ext.onReady(function() {
         {name:'manager'          ,type:'string' },
         {name:'contract'         ,type:'string' },
         {name:'remark'           ,type:'string' },
+        {name:'pay_account'            ,type:'string' },
+        {name:'countdown'            ,type:'string' },
         {name:'commission_b_tax' ,type:'float'  },
         {name:'commission_a_tax' ,type:'float'  },
         {name:'inner_commission' ,type:'float'  },
@@ -101,6 +106,22 @@ Ext.onReady(function() {
       }
     });
   
+  var fileListStore=Ext.create('Ext.data.JsonStore', {
+      fields: [
+        {name:'file_name'     ,type:'string' },
+        {name:'file_size'     ,type:'integer' },
+        {name:'upload_ts'     ,type:'date' },
+      ],
+      proxy: {
+        type: 'ajax',
+        url: '/ts/index.php/proj/file_list?proj_id='+params.proj_id,
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+      }
+    });
+
 //  var proj_detail_info_tpl=Ext.create('Ext.XTemplate',[
 //    '<tr><td class="r_ex_td_pre"><b></b></td><td>',
 //    '</td></tr>'
@@ -206,19 +227,19 @@ Ext.onReady(function() {
                  triggerAction: 'all',
                  valueField: 'id',   //value值字段
                  displayField: 'text',  //显示文本字段
-                 listeners: { // 监听选择事件
-                     select: function() {
-                        chSubCategoryList.removeAll();
-                        if (this.getValue() == '固定收益类') {
-                           chSubCategoryList.loadData(chFixedList,true);
-                        } else if (this.getValue() == '浮动收益类') {
-                           chSubCategoryList.loadData(chFloatingList,true);
-                        }
-                     }
-                 }
+//                 listeners: { // 监听选择事件
+//                     select: function() {
+//                        chSubCategoryList.removeAll();
+//                        if (this.getValue() == '固定收益类') {
+//                           chSubCategoryList.loadData(chFixedList,true);
+//                        } else if (this.getValue() == '浮动收益类') {
+//                           chSubCategoryList.loadData(chFloatingList,true);
+//                        }
+//                     }
+//                 }
               }, 
               {//子类别
-                 xtype:'combo',
+                 xtype:'textfield',
                  emptyText:"子类别...",
                  width:160,
                  name:'sub_category',
@@ -260,12 +281,12 @@ Ext.onReady(function() {
               allowBlank: false
             },{
               xtype:'numberfield',
-              fieldLabel: '项目期限',
+              fieldLabel: '项目期限(月)',
               name:'month',
               allowBlank: false
             },{
               xtype:'numberfield',
-              fieldLabel: '融资规模(万)',
+              fieldLabel: '融资规模(亿)',
               name:'scale',
               allowBlank: false
             },{
@@ -295,6 +316,18 @@ Ext.onReady(function() {
               name:'contract',
               allowBlank: true
             },{
+              xtype:'textareafield',
+              fieldLabel: '打款账户',
+              width:480,
+              name:'pay_account',
+              allowBlank: true
+            },{
+              xtype:'textareafield',
+              fieldLabel: '项目进度',
+              width:480,
+              name:'countdown',
+              allowBlank: true
+            },{
               xtype:'combo',
               fieldLabel: '产品经理',
               name:'manager',
@@ -310,7 +343,7 @@ Ext.onReady(function() {
               forceSelection:true,
               name:'found'
             },{
-              xtype:'textareafield',
+              xtype:'textfield',
               fieldLabel: '备注',
               width:480,
               name:'remark',
@@ -479,21 +512,25 @@ Ext.onReady(function() {
         xtype:'numberfield',
         fieldLabel: '税前佣金(%)',
         name:'commission_b_tax',
+        decimalPrecision:3,
         allowBlank: false
       },{
         xtype:'numberfield',
         fieldLabel: '税后佣金(%)',
         name:'commission_a_tax',
+        decimalPrecision:3,
         allowBlank: false
       },{
         xtype:'numberfield',
-        fieldLabel: '佣金',
+        fieldLabel: '平台费用(%)',
         name:'inner_commission',
+        decimalPrecision:3,
         allowBlank: false
       },{
         xtype:'numberfield',
-        fieldLabel: '佣金（税后）',
+        fieldLabel: '费用(%)',
         name:'outer_commission',
+        decimalPrecision:3,
         allowBlank: false
       }]
     }, {
@@ -592,18 +629,62 @@ Ext.onReady(function() {
     }]
   });
 
+  var uploadWin=Ext.create("Ext.window.Window",{
+    title: '上传项目文件',
+    width: 550,
+    resizeable:false,
+    closeAction:"hide",
+    closable:false,
+    bodyPadding: 10,
+    items:[
+    {
+      xtype:"form",
+      bodyPadding:5,
+      trackResetOnLoad:true,
+      border:0,
+      waitTitle:"Pleas wait...",
+      layout:'fit',
+      items: [{
+          xtype:'hiddenfield',
+          name:'proj_id',
+          allowBlank:false
+      }, {
+          xtype: 'filefield',
+          name: 'file',
+          fieldLabel: '文件',
+          labelWidth: 50,
+          width:500,
+          msgTarget: 'side',
+          allowBlank: false,
+          anchor: '100%',
+          buttonText: '选择文件...'
+      }],
       
-  var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
+      buttons: [{
+          text: '上传',
+          handler: function() {
+              var form = this.up('form').getForm();
+              if(form.isValid()){
+                  form.submit({
+                      url: 'upload.php',
+                      waitMsg: '正在上传文件...',
+                      success: function(fp, o) {
+                          Ext.Msg.alert('上传成功！', '您的文件 "' + o.result.file + '" 已成功上传。');
+                          this.up('window').close();
+                      }
+                  });
+              }
+          }
+      }]
+    }]
+  });
+
+var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
     store: projdetailStore,
     border:1,
     title:'额度信息',
-    region:'center',
+    region:'north',
     flex:1,
-    dockedItems:[{
-      xtype:'toolbar',
-      dock: 'top',
-      items:[]
-    }],
     columns:[{
         xtype: 'actioncolumn',
         text:'删除',
@@ -648,8 +729,8 @@ Ext.onReady(function() {
       {text:'项目收益',     dataIndex:'profit',           filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
       {text:'税前佣金',     dataIndex:'commission_b_tax', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
       {text:'税后佣金',     dataIndex:'commission_a_tax', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-      {text:'佣金',         dataIndex:'inner_commission', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-      {text:'佣金（税后）', dataIndex:'outer_commission', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+      {text:'平台费用',     dataIndex:'inner_commission', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+      {text:'费用',         dataIndex:'outer_commission', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
       {text:'打款日期',     dataIndex:'pay',              filtable:true, width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
       {text:'已打款金额',   dataIndex:'paid',             filtable:true, width:80},
       {text:'包销/分销额度',dataIndex:'quota',            filtable:true, width:90},
@@ -668,6 +749,41 @@ Ext.onReady(function() {
     ]
   });
 
+  var FileListGrid=Ext.create('Ext.grid.Panel',{
+    store: fileListStore,
+    border:1,
+    title:'文件列表',
+    region:'center',
+    flex:1,
+    columns:[{
+        xtype: 'actioncolumn',
+        text:'删除',
+        width:30,
+        sortable: false,
+        items: [{
+          icon: '/ts/misc/resources/icons/cross.gif',
+          tooltip: '删除该文件',
+          handler: function(grid, rowIndex, colIndex) {
+            AmountEditForm.getForm().loadRecord(grid.getStore().getAt(rowIndex));
+            AmountEditForm.getForm().submit({
+                url: '/ts/index.php/proj/file_delete_submit',
+                submitEmptyText: false,
+                waitMsg: 'Saving Data...',
+                success: function(form, action) {
+                  fileListStore.removeAt(rowIndex);
+                } ,
+                failure: function(form, action) {
+                  Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+                }
+            });
+          }
+        }]
+      },
+      {text:'文件名',         dataIndex:'file_name',      filtable:true, width:300},
+      {text:'文件大小',       dataIndex:'file_size',      filtable:true, width:70},
+      {text:'文件上传日期',   dataIndex:'upload_ts',      filtable:true, width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
+    ]
+  });
   var viewport = Ext.create('Ext.Viewport', {
     layout: {
         type: 'border',
@@ -696,6 +812,7 @@ Ext.onReady(function() {
       },{
       	text:'返回',
       	icon:'/ts/misc/resources/icons/plugin.gif',
+        scale:'medium',
       	handler:function(){Ext.util.History.back();}
       }]
     },{
@@ -753,7 +870,8 @@ Ext.onReady(function() {
               text:'上传项目文件',
               scale:'medium',
               handler:function(){
-                Ext.MessageBox.alert('提示', '该功能暂未开放');
+                uploadWin.down('hiddenfield[name="proj_id"]').setValue(params.proj_id);
+                uploadWin.show();
               }
             }]
           }]
@@ -761,10 +879,17 @@ Ext.onReady(function() {
         {
           xtype:'box',
           region:'north',
-          weight:-200,
+          //weight:-200,
           height:15
-        },        
-        AmountDetailsGrid
+        }, 
+        AmountDetailsGrid,
+        {
+          xtype:'box',
+          region:'north',
+          //weight:-100,
+          height:15
+        },
+        FileListGrid
         ]
       },
       AmountEditForm
@@ -779,7 +904,7 @@ Ext.onReady(function() {
       Ext.Array.forEach(records,function(record){
         detailString+='<pre>'+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+record.get("profit")+'%</pre>';
       });
-      var proj_info_tpl=Ext.create('Ext.XTemplate',[
+      proj_info_tpl=Ext.create('Ext.XTemplate',[
         '<table cellpadding=0 cellspacing=0><tr><td style="padding:10px;border:1px;"><table>',
         '<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}->{sub_category}, {exclusive}</pre></td></tr>',
         '<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
@@ -789,13 +914,15 @@ Ext.onReady(function() {
         //'{[(records[0].get("profit_property")==true)?"aaa":"bbb"]}',
         '<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
         '<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{highlights}</pre></td></tr>',
-        '<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
-        '<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
+        '<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{contract}</pre></td></tr>',
+        '<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{countdown}</pre></td></tr>',
+        '<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{pay_account}</pre></td></tr>',
+        '<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{remark}</pre></td></tr>',
         '</table></td></tr></table>',
         {
           cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
         },{
-          cusNum:function(n){return (n<10000)?(n+"万"):(n/10000+"亿")}
+          cusNum:function(n){return (n<1)?(n*10000+"万"):(n+"亿")}
         }
       ]);
       proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);

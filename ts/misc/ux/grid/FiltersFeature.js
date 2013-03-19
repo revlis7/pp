@@ -123,7 +123,7 @@ Ext.define('Ext.ux.grid.FiltersFeature', {
      * @cfg {Array} filters
      * An Array of filters config objects. Refer to each filter type class for
      * configuration details specific to each filter type. Filters for Strings,
-     * Numeric Ranges, Date Ranges, Lists, and Boolean are the standard filters
+     * Numeric Ranges, Date Ranges, List	s, and Boolean are the standard filters
      * available.
      */
     /**
@@ -142,7 +142,7 @@ Ext.define('Ext.ux.grid.FiltersFeature', {
      * @cfg {String} menuFilterText
      * defaults to <tt>'Filters'</tt>.
      */
-    menuFilterText : 'Filters',
+    menuFilterText : '选择过滤条件',
     /**
      * @cfg {String} paramPrefix
      * The url parameter prefix for the filters.

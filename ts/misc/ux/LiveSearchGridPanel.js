@@ -60,7 +60,7 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
     // Component initialization override: adds the top and bottom toolbars and setup headers renderer.
     initComponent: function() {
         var me = this;
-        me.tbar = ['Search',{
+        me.tbar = ['查找',{
                  xtype: 'textfield',
                  name: 'searchField',
                  hideLabel: true,
@@ -75,28 +75,53 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
             }, {
                 xtype: 'button',
                 text: '&lt;',
-                tooltip: 'Find Previous Row',
+                tooltip: '前一行',
                 handler: me.onPreviousClick,
                 scope: me
             },{
                 xtype: 'button',
                 text: '&gt;',
-                tooltip: 'Find Next Row',
+                tooltip: '后一行',
                 handler: me.onNextClick,
                 scope: me
-            }, '-', {
-                xtype: 'checkbox',
-                hideLabel: true,
-                margin: '0 0 0 4px',
-                handler: me.regExpToggle,
-                scope: me                
-            }, 'Regular expression', {
-                xtype: 'checkbox',
-                hideLabel: true,
-                margin: '0 0 0 4px',
-                handler: me.caseSensitiveToggle,
-                scope: me
-            }, 'Case sensitive'];
+            }, '-',{
+                xtype:'tbtext',
+                text:'快速筛选'
+                },{
+                  text:'债券基金',
+                  handler:function(){
+                }
+            },{
+                text:'证券基金',
+                handler:function(){
+                }
+            },{
+                text:'股权基金',
+                handler:function(){
+                }
+            },{
+                text:'其他',
+                handler:function(){
+                }
+            },{
+                text:'全部显示',
+                handler:function(){
+                }
+            } 
+            //{
+            //    xtype: 'checkbox',
+            //    hideLabel: true,
+            //    margin: '0 0 0 4px',
+            //    handler: me.regExpToggle,
+            //    scope: me                
+            //}, 'Regular expression', {
+            //    xtype: 'checkbox',
+            //    hideLabel: true,
+            //    margin: '0 0 0 4px',
+            //    handler: me.caseSensitiveToggle,
+            //    scope: me
+            //}, 'Case sensitive'
+            ];
 
         me.bbar = Ext.create('Ext.ux.StatusBar', {
             defaultText: me.defaultStatusText,

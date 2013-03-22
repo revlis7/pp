@@ -12,7 +12,7 @@ $config['group_cfg'] = array(
 
 $config['access_fields_cfg'] = array(
 	'administrator' => array(
-                'manage_button' => false,
+		'manage_button' => false,
 		'proj_id' => false,
 		'proj_detail_id' => false,
 		'total_share' => false,

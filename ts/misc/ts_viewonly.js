@@ -131,7 +131,7 @@ Ext.onReady(function() {
           
   function on_loadC1(store,records,success){
         if(success==true){
-          var ad_list=[[1,1],[1,3]]
+          var ad_list=[[3,1],[3,3]]
           Ext.Array.forEach(ad_list,function(ad_item){
             var queryResult=store.queryBy(function(record){
               return record.get("proj_id")==ad_item[0]?true:false;
@@ -171,7 +171,7 @@ Ext.onReady(function() {
     
   function on_loadC2(store,records,success){
         if(success==true){
-          var ad_list=[[1,2],[1,4]]
+          var ad_list=[[5,2],[5,4]]
           Ext.Array.forEach(ad_list,function(ad_item){
             var queryResult=store.queryBy(function(record){
               return record.get("proj_id")==ad_item[0]?true:false;
@@ -590,6 +590,9 @@ listControl.load(function(records, operation, success) {
           width:842,
           items:[{
             xtype:'image',
+            border:0,
+            height:120,
+            width:800,
             id:'ad1',
             src:'/ts/misc/resources/ad_temp.jpg'
           },{
@@ -621,6 +624,9 @@ listControl.load(function(records, operation, success) {
           width:842,
           items:[{
             xtype:'image',
+            border:0,
+            height:120,
+            width:800,
             id:'ad2',
             src:'/ts/misc/resources/ad_temp.jpg'
           },{
@@ -652,6 +658,9 @@ listControl.load(function(records, operation, success) {
           margin:10,
           items:[{
             xtype:'image',
+            border:0,
+            height:120,
+            width:800,
             id:'ad3',
             src:'/ts/misc/resources/ad_temp.jpg'
           },{
@@ -683,6 +692,9 @@ listControl.load(function(records, operation, success) {
           margin:10,
           items:[{
             xtype:'image',
+            border:0,
+            height:120,
+            width:800,
             id:'ad4',
             src:'/ts/misc/resources/ad_temp.jpg'
           },{

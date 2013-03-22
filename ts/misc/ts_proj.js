@@ -108,13 +108,16 @@ Ext.onReady(function() {
   
   var fileListStore=Ext.create('Ext.data.JsonStore', {
       fields: [
-        {name:'file_name'     ,type:'string' },
-        {name:'file_size'     ,type:'integer' },
-        {name:'upload_ts'     ,type:'date' },
+        {name:'id'     ,type:'integer' },
+        {name:'proj_id'     ,type:'integer' },
+        {name:'filename'     ,type:'string' },
+        //{name:'file_size'     ,type:'integer' },
+        {name:'editor'     ,type:'string' },
+        {name:'create_ts'     ,type:'date' },
       ],
       proxy: {
         type: 'ajax',
-        url: '/ts/index.php/proj/file_list?proj_id='+params.proj_id,
+        url: '/ts/index.php/upload/get_list?proj_id='+params.proj_id,
         reader: {
             type: 'json',
             root: 'data'
@@ -666,11 +669,12 @@ Ext.onReady(function() {
               var form = this.up('form').getForm();
               if(form.isValid()){
                   form.submit({
-                      url: 'upload.php',
+                      url: '/ts/index.php/upload/submit',
                       waitMsg: '正在上传文件...',
                       success: function(fp, o) {
                           Ext.Msg.alert('上传成功！', '您的文件 "' + o.result.file + '" 已成功上传。');
                           this.up('window').close();
+                          fileListStore.load();
                       }
                   });
               }
@@ -779,9 +783,9 @@ var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
           }
         }]
       },
-      {text:'文件名',         dataIndex:'file_name',      filtable:true, width:300},
-      {text:'文件大小',       dataIndex:'file_size',      filtable:true, width:70},
-      {text:'文件上传日期',   dataIndex:'upload_ts',      filtable:true, width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
+      {text:'文件名',         dataIndex:'filename',      filtable:true, width:300},
+      //{text:'文件大小',       dataIndex:'file_size',      filtable:true, width:70},
+      {text:'文件上传日期',   dataIndex:'create_ts',      filtable:true, width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
     ]
   });
   var viewport = Ext.create('Ext.Viewport', {
@@ -930,5 +934,6 @@ var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
     });    
   });
   //projdetailStore.load();
+  fileListStore.load();
   
 });

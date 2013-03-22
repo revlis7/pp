@@ -533,10 +533,11 @@ class Proj_model extends CI_Model {
 		return $detail_id;
 	}
 
-	function create_upload($proj_id, $filename) {
+	function create_upload($proj_id, $filename, $filesize) {
 		$upload = array(
 			'proj_id'   => $proj_id,
 			'filename'  => $filename,
+			'filesize'  => $filesize,
 			'editor'    => element('loginname', $this->CI->session->userdata('user')),
 			'create_ts' => date('Y-m-d H:i:s'),
 		);
@@ -552,5 +553,14 @@ class Proj_model extends CI_Model {
 		$this->db->order_by('id', 'asc');
 		$query = $this->db->get();
 		return $query->result();
+	}
+
+	function delete_upload($file) {
+		$this->db->from('proj_uploads')->where('filename', $file);
+		$this->db->delete();
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return true;
 	}
 }

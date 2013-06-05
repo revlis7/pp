@@ -12,6 +12,25 @@ Ext.require([
 ]);
 
   
+  var fileListStore=Ext.create('Ext.data.JsonStore', {
+      fields: [
+        {name:'id'          ,type:'integer' },
+        {name:'proj_id'     ,type:'integer' },
+        {name:'filename'    ,type:'string'  },
+        {name:'filesize'    ,type:'integer' },
+        {name:'editor'      ,type:'string'  },
+        {name:'create_ts'   ,type:'date'    }
+      ],
+      proxy: {
+        type: 'ajax',
+        url: '/ts/index.php/upload/get_list',
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+      }
+    });
+
   var chTotalShareList=Ext.create('Ext.data.ArrayStore', {
     fields: ['id', 'text'],
     data: [
@@ -162,8 +181,8 @@ Ext.require([
     ]
 
   var sampleStoreFields=[
-        {name:'proj_id'      ,type:'integer' },
-        {name:'proj_detail_id'      ,type:'integer' },
+        {name:'proj_id'          ,type:'integer' },
+        {name:'proj_detail_id'   ,type:'integer' },
         {name:'total_share'      ,type:'string' },
         {name:'status'           ,type:'string' },
         {name:'exclusive'        ,type:'string' },
@@ -175,20 +194,21 @@ Ext.require([
         {name:'flow_of_fund'     ,type:'string' },
         {name:'highlights'       ,type:'string' },
         {name:'month'            ,type:'integer'},
-        {name:'scale'            ,type:'float'},
+        {name:'scale'            ,type:'float'  },
         {name:'cycle'            ,type:'string' },
         {name:'amount'           ,type:'integer'},
         {name:'profit_property'  ,type:'string' },
         {name:'profit'           ,type:'float'  },
         {name:'manager'          ,type:'string' },
-        {name:'contract'      ,type:'string' },
+        {name:'contract'         ,type:'string' },
         {name:'remark'           ,type:'string' },
-        {name:'pay_account'            ,type:'string' },
-        {name:'countdown'            ,type:'string' },
+        {name:'pay_account'      ,type:'string' },
+        {name:'countdown'        ,type:'string' },
         {name:'commission_b_tax' ,type:'float'  },
         {name:'commission_a_tax' ,type:'float'  },
         {name:'inner_commission' ,type:'float'  },
         {name:'outer_commission' ,type:'float'  },
+        {name:'imm_payment'      ,type:'float'  },
         {name:'pay'              ,type:'date'   },
         {name:'paid'             ,type:'integer'},
         {name:'found'            ,type:'date'   },
@@ -200,7 +220,7 @@ Ext.require([
         {name:'channel_contact'  ,type:'string' },
         {name:'billing_company'  ,type:'string' },
         {name:'manager_remark'   ,type:'string' },
-        {name:'create_ts'   ,type:'date' }
+        {name:'create_ts'        ,type:'date',dateFormat:"Y-m-d H:i:s" }
       ]
   var sampleStore=Ext.create('Ext.data.JsonStore', {
       fields: sampleStoreFields,
@@ -237,11 +257,11 @@ Ext.require([
       }
     });
   var sampleChanges=Ext.create('Ext.data.ArrayStore', {
-  	fields:[
-  	  {name:'operate_ts',type:'date',dateFormat:"Y-m-d H:i:s"},
-  	  {name:'realname',type:'string'},
-  	  {name:'operation',type:'string'}
-  	],
+      fields:[
+        {name:'operate_ts',type:'date',dateFormat:"Y-m-d H:i:s"},
+        {name:'realname',type:'string'},
+        {name:'operation',type:'string'}
+      ],
       proxy: {
         type: 'ajax',
         url:'/ts/index.php/proj/operation_history',
@@ -283,6 +303,7 @@ Ext.require([
         {type:'numeric',dataIndex:'commission_a_tax' },
         {type:'numeric',dataIndex:'inner_commission' },
         {type:'numeric',dataIndex:'outer_commission' },
+        {type:'numeric',dataIndex:'imm_payment'      },
         {type:'date'   ,dataIndex:'pay'              },
         {type:'numeric',dataIndex:'paid'             },
         {type:'date'   ,dataIndex:'found'            },
@@ -294,6 +315,6 @@ Ext.require([
         {type:'string' ,dataIndex:'channel_contact'  },
         {type:'string' ,dataIndex:'billing_company'  },
         {type:'string' ,dataIndex:'manager_remark'   },
-        {type:'date' ,dataIndex:'create_ts'   }
+        {type:'date' ,dataIndex:'create_ts'          }
       ]
-  };    
+  };

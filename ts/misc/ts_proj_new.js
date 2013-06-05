@@ -33,6 +33,7 @@ Ext.onReady(function() {
         {name:'commission_a_tax' ,type:'float'  },
         {name:'inner_commission' ,type:'float'  },
         {name:'outer_commission' ,type:'float'  },
+        {name:'imm_payment' ,type:'float'  },
         {name:'pay'              ,type:'date'   },
         {name:'paid'             ,type:'integer'},
         {name:'found'            ,type:'date'   },
@@ -84,6 +85,7 @@ Ext.onReady(function() {
         {name:'commission_a_tax' ,type:'float'  },
         {name:'inner_commission' ,type:'float'  },
         {name:'outer_commission' ,type:'float'  },
+        {name:'imm_payment' ,type:'float'  },
         {name:'pay'              ,type:'date'   },
         {name:'paid'             ,type:'integer'},
         {name:'found'            ,type:'date'   },
@@ -109,13 +111,16 @@ Ext.onReady(function() {
 
   var fileListStore=Ext.create('Ext.data.JsonStore', {
       fields: [
-        {name:'file_name'     ,type:'string' },
-        {name:'file_size'     ,type:'integer' },
-        {name:'upload_ts'     ,type:'date' },
+        {name:'id'     ,type:'integer' },
+        {name:'proj_id'     ,type:'integer' },
+        {name:'filename'     ,type:'string' },
+        {name:'filesize'     ,type:'integer' },
+        {name:'editor'     ,type:'string' },
+        {name:'create_ts'     ,type:'date' },
       ],
       proxy: {
         type: 'ajax',
-        url: '/ts/index.php/proj/file_list?proj_id='+proj_id,
+        url: '/ts/index.php/upload/get_list?proj_id=',
         reader: {
             type: 'json',
             root: 'data'
@@ -183,6 +188,15 @@ Ext.onReady(function() {
                         root: 'data'
                     }
                   });
+                  fileListStore.setProxy({
+                    type: 'ajax',
+                    url: '/ts/index.php/upload/get_list?proj_id=',
+                    reader: {
+                        type: 'json',
+                        root: 'data'
+                    }
+                  });
+                  fileListStore.load();
   projStore.load(function(records, operation, success) {
     projdetailStore.load(function(records, operation, success) {
       var detailString="";
@@ -265,6 +279,7 @@ Ext.onReady(function() {
         }
       ]);
       proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
+      
       //proj_info_window.show();
     });    
   });
@@ -632,14 +647,20 @@ Ext.onReady(function() {
         allowBlank: false
       },{
         xtype:'numberfield',
-        fieldLabel: '平台费用',
+        fieldLabel: '平台费用(%)',
         name:'inner_commission',
         decimalPrecision:3,
         allowBlank: false
       },{
         xtype:'numberfield',
-        fieldLabel: '费用',
+        fieldLabel: '费用(%)',
         name:'outer_commission',
+        decimalPrecision:3,
+        allowBlank: false
+      },{
+        xtype:'numberfield',
+        fieldLabel: '现结费用(%)',
+        name:'imm_payment',
         decimalPrecision:3,
         allowBlank: false
       }]
@@ -739,35 +760,54 @@ Ext.onReady(function() {
     }]
   });
 
-  var uploadWin=Ext.create('Ext.form.Panel', {
+  var uploadWin=Ext.create("Ext.window.Window",{
     title: '上传项目文件',
-    width: 400,
+    width: 550,
+    resizeable:false,
+    closeAction:"hide",
+    closable:true,
     bodyPadding: 10,
-    items: [{
-        xtype: 'filefield',
-        name: '文件：',
-        fieldLabel: 'file',
-        labelWidth: 50,
-        msgTarget: 'side',
-        allowBlank: false,
-        anchor: '100%',
-        buttonText: '选择文件...'
-    }],
-
-    buttons: [{
-        text: '上传',
-        handler: function() {
-            var form = this.up('form').getForm();
-            if(form.isValid()){
-                form.submit({
-                    url: 'upload.php',
-                    waitMsg: '正在上传文件...',
-                    success: function(fp, o) {
-                        Ext.Msg.alert('上传成功！', '您的文件 "' + o.result.file + '" 已成功上传。');
-                    }
-                });
-            }
-        }
+    items:[
+    {
+      xtype:"form",
+      bodyPadding:5,
+      trackResetOnLoad:true,
+      border:0,
+      waitTitle:"Pleas wait...",
+      layout:'fit',
+      items: [{
+          xtype:'hiddenfield',
+          name:'proj_id',
+          allowBlank:false
+      }, {
+          xtype: 'filefield',
+          name: 'file',
+          fieldLabel: '文件',
+          labelWidth: 50,
+          width:500,
+          msgTarget: 'side',
+          allowBlank: false,
+          anchor: '100%',
+          buttonText: '选择文件...'
+      }],
+      
+      buttons: [{
+          text: '上传',
+          handler: function() {
+              var form = this.up('form').getForm();
+              if(form.isValid()){
+                  form.submit({
+                      url: '/ts/index.php/upload/submit',
+                      waitMsg: '正在上传文件...',
+                      success: function(fp, o) {
+                          Ext.Msg.alert('上传成功！', '您的文件 "' + o.result.file + '" 已成功上传。');
+                          uploadWin.close();
+                          fileListStore.load();
+                      }
+                  });
+              }
+          }
+      }]
     }]
   });
 
@@ -909,12 +949,16 @@ Ext.onReady(function() {
     store: projdetailStore,
     border:1,
     title:'额度信息',
-    region:'north',
-    flex:1,
-    columns:[{
+    region:'south',
+    minHeight:156,
+//    flex:1,
+    emptyText:'暂无额度信息',
+    columns:[
+      {text:'认购金额',     dataIndex:'amount',           filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
+      {
         xtype: 'actioncolumn',
         text:'删除',
-        width:30,
+        width:40,style: "text-align:center;",align: 'center', 
         sortable: false,
         items: [{
           icon: '/ts/misc/resources/icons/cross.gif',
@@ -937,7 +981,7 @@ Ext.onReady(function() {
       },{
         xtype: 'actioncolumn',
         text:'编辑',
-        width:30,
+        width:40,style: "text-align:center;",align: 'center', 
         sortable: false,
         items: [{
           icon: '/ts/misc/resources/icons/cog_edit.png',
@@ -948,15 +992,14 @@ Ext.onReady(function() {
             AmountEditForm.show();
           }
         }]
-      },
-      {text:'份额',         dataIndex:'total_share',      filtable:true, width:50},
+      },      {text:'份额',         dataIndex:'total_share',      filtable:true, width:50},
       {text:'销售状态',     dataIndex:'status',           filtable:true, width:70},
-      {text:'认购金额',     dataIndex:'amount',           filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
       {text:'项目收益',     dataIndex:'profit',           filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
       {text:'税前佣金',     dataIndex:'commission_b_tax', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
       {text:'税后佣金',     dataIndex:'commission_a_tax', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
       {text:'平台费用',     dataIndex:'inner_commission', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
       {text:'费用',         dataIndex:'outer_commission', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+      {text:'费用',         dataIndex:'imm_payment', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
       {text:'打款日期',     dataIndex:'pay',              filtable:true, width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
       {text:'已打款金额',   dataIndex:'paid',             filtable:true, width:80},
       {text:'包销/分销额度',dataIndex:'quota',            filtable:true, width:90},
@@ -979,12 +1022,14 @@ Ext.onReady(function() {
     store: fileListStore,
     border:1,
     title:'文件列表',
-    region:'center',
-    flex:1,
+    emptyText:'暂无文件信息',
+    minHeight:156,
+    region:'south',
+//    flex:1,
     columns:[{
         xtype: 'actioncolumn',
         text:'删除',
-        width:30,
+        width:40,style: "text-align:center;",align: 'center', 
         sortable: false,
         items: [{
           icon: '/ts/misc/resources/icons/cross.gif',
@@ -1004,10 +1049,29 @@ Ext.onReady(function() {
             });
           }
         }]
+      },{
+        xtype: 'actioncolumn',
+        text:'下载',
+        width:40,style: "text-align:center;",align: 'center', 
+        sortable: false,
+        items: [{
+          icon: '/ts/misc/resources/icons/download.gif',
+          tooltip: '下载该文件',
+          handler: function(grid, rowIndex, colIndex) {
+            var filename=grid.getStore().getAt(rowIndex).get("filename");
+            window.open('/ts/index.php/upload/get?file='+filename);
+          }
+        }]
       },
-      {text:'文件名',         dataIndex:'file_name',      filtable:true, width:300},
-      {text:'文件大小',       dataIndex:'file_size',      filtable:true, width:70},
-      {text:'文件上传日期',   dataIndex:'upload_ts',      filtable:true, width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
+      {text:'文件名',         dataIndex:'filename',      filtable:true, width:300},
+      {text:'文件大小',       dataIndex:'filesize',      filtable:true, width:70,
+         renderer:function(value,metaData,record,colIndex,store,view) {
+           if(value>=1048676) {var v=value/1048576;return v.toFixed(2)+'MB';}
+           else if(value>=1024) {var v=value/1024;return v.toFixed(2)+'KB';}
+           else return value;
+         }
+      },
+      {text:'文件上传日期',   dataIndex:'create_ts',      filtable:true, width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
     ]
   });
 
@@ -1037,10 +1101,15 @@ Ext.onReady(function() {
       	xtype:'box',
       	flex:1
       },{
-      	text:'返回',
+      	text:'返回项目管理列表',
       	icon:'/ts/misc/resources/icons/plugin.gif',
         scale:'medium',
-      	handler:function(){Ext.util.History.back();}
+      	handler:function(){window.location.href='/ts/index.php/proj/manage';}
+      },{
+      	text:'关闭窗口',
+      	icon:'/ts/misc/resources/icons/cross.gif',
+        scale:'medium',
+      	handler:function(){window.close();}
       }]
     },{
       xtype:'panel', 
@@ -1060,10 +1129,9 @@ Ext.onReady(function() {
           //ProjInfoForm,
         {
           id:'projInfoPanel',
-          region:'north',
-          minHeight:380,
+          region:'center',
+          height:380,
           minWidth:800,
-          flex:2,
           html:'正在加载项目信息...',
           autoScroll :true,
           dockedItems: [{
@@ -1094,6 +1162,7 @@ Ext.onReady(function() {
                 AmountEditForm.show();
               }
             },{
+              icon: '/ts/misc/resources/icons/upload.gif',
               text:'上传项目文件',
               scale:'medium',
               handler:function(){
@@ -1104,14 +1173,14 @@ Ext.onReady(function() {
         },
         {
           xtype:'box',
-          region:'north',
+          region:'south',
           //weight:-200,
           height:15
         }, 
         AmountDetailsGrid,
         {
           xtype:'box',
-          region:'north',
+          region:'south',
           //weight:-100,
           height:15
         },

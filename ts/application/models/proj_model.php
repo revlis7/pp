@@ -102,7 +102,7 @@ class Proj_model extends CI_Model {
 		return $proj_id;
 	}
 	
-	function create_detail($proj_id, $total_share = '', $status = '', $exclusive = '', $grade = '', $amount = '', $profit = '', $commission_b_tax = '', $commission_a_tax = '', $inner_commission = '', $outer_commission = '', $pay = '', $paid = '', $quota = '', $quota_paid = '', $quota_remain = '', $main_channel = '', $channel_company = '', $channel_contact = '', $billing_company = '', $manager_remark = '', $creator = '') {
+	function create_detail($proj_id, $total_share = '', $status = '', $exclusive = '', $grade = '', $amount = '', $profit = '', $commission_b_tax = '', $commission_a_tax = '', $inner_commission = '', $outer_commission = '', $imm_payment = '', $pay = '', $paid = '', $quota = '', $quota_paid = '', $quota_remain = '', $main_channel = '', $channel_company = '', $channel_contact = '', $billing_company = '', $manager_remark = '', $creator = '') {
 		$proj_detail = array(
 			'proj_id' => $proj_id,
 			'total_share' => $total_share,
@@ -115,6 +115,7 @@ class Proj_model extends CI_Model {
 			'commission_a_tax' => $commission_a_tax,
 			'inner_commission' => $inner_commission,
 			'outer_commission' => $outer_commission,
+			'imm_payment' => $imm_payment,
 			'pay' => $pay,
 			'paid' => $paid,
 			'quota' => $quota,
@@ -135,7 +136,7 @@ class Proj_model extends CI_Model {
 		return $this->db->insert_id();
 	}
 	
-	function update_detail($proj_detail_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, $editor) {
+	function update_detail($proj_detail_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, $editor) {
 		//查询旧记录，插入历史表
 		$old_proj_detail = $this->get_detail($proj_detail_id);
 		if(!$old_proj_detail) {
@@ -154,6 +155,7 @@ class Proj_model extends CI_Model {
 			'commission_a_tax' => $old_proj_detail->commission_a_tax,
 			'inner_commission' => $old_proj_detail->inner_commission,
 			'outer_commission' => $old_proj_detail->outer_commission,
+			'imm_payment' => $old_proj_detail->imm_payment,
 			'pay' => $old_proj_detail->pay,
 			'paid' => $old_proj_detail->paid,
 			'quota' => $old_proj_detail->quota,
@@ -183,6 +185,7 @@ class Proj_model extends CI_Model {
 			'commission_a_tax' => $commission_a_tax,
 			'inner_commission' => $inner_commission,
 			'outer_commission' => $outer_commission,
+			'imm_payment' => $imm_payment,
 			'pay' => $pay,
 			'paid' => $paid,
 			'quota' => $quota,
@@ -259,7 +262,7 @@ class Proj_model extends CI_Model {
 			return false;
 		}
 		//$month = $proj->month;
-		$this->db->select('proj_detail.proj_id as proj_id, proj_detail.id as proj_detail_id, proj_detail.total_share, proj_detail.status, proj_detail.exclusive, proj_detail.grade, proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, proj_detail.commission_a_tax, proj_detail.inner_commission, proj_detail.outer_commission, proj_detail.pay, proj_detail.paid, proj_detail.quota, proj_detail.quota_paid, proj_detail.quota_remain, proj_detail.main_channel, proj_detail.channel_company, proj_detail.channel_contact, proj_detail.billing_company, proj_detail.manager_remark');
+		$this->db->select('proj_detail.proj_id as proj_id, proj_detail.id as proj_detail_id, proj_detail.total_share, proj_detail.status, proj_detail.exclusive, proj_detail.grade, proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, proj_detail.commission_a_tax, proj_detail.inner_commission, proj_detail.outer_commission, proj_detail.imm_payment, proj_detail.pay, proj_detail.paid, proj_detail.quota, proj_detail.quota_paid, proj_detail.quota_remain, proj_detail.main_channel, proj_detail.channel_company, proj_detail.channel_contact, proj_detail.billing_company, proj_detail.manager_remark');
 		$this->db->from('proj_detail')->where('proj_id', $proj_id);
 		$this->db->order_by('proj_detail_id', 'asc');
 		$query = $this->db->get();
@@ -290,7 +293,7 @@ class Proj_model extends CI_Model {
 				'proj_detail.status, proj_detail.exclusive, proj_detail.grade, '.
 				'proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, '.
 				'proj_detail.commission_a_tax, proj_detail.inner_commission, '.
-				'proj_detail.outer_commission, proj_detail.pay, proj_detail.paid, '.
+				'proj_detail.outer_commission, proj_detail.imm_payment, proj_detail.pay, proj_detail.paid, '.
 				'proj_detail.quota, proj_detail.quota_paid, proj_detail.quota_remain, '. 
 				'proj_detail.main_channel, proj_detail.channel_company, '.
 				'proj_detail.channel_contact, proj_detail.billing_company, '. 

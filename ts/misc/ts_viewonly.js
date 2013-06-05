@@ -1,22 +1,68 @@
-Ext.require(['Ext.ux.RowExpander']);
+//Ext.require(['Ext.ux.RowExpander']);
 
 Ext.onReady(function() {
   Ext.QuickTips.init();
-  var accPanel;
+  var accPanel,fullGridC1,fullGridC2;
   
   var recentChangeGrid=Ext.create('Ext.grid.Panel', {
-//    maxHeight:150,
-//    width:966,
     border:0,
-//    hidden:true,
     store:sampleChanges,
-        margin:10,//    hideHeaders : true,
+    margin:10,
     columns:[
     {text:'时间',             dataIndex:'operate_ts',     filtable:true, width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
     {text:'修改内容',         dataIndex:'operation',     filtable:true, width:820}
     ]
   });
   	  
+  var FileListGrid=Ext.create('Ext.grid.Panel',{
+    store: fileListStore,
+    border:1,
+    //title:'文件列表',
+    emptyText:'本项目无可用文件可供下载',
+    region:'center',
+    flex:1,
+    border:0,
+    columns:[{
+        xtype: 'actioncolumn',
+        text:'下载',
+        width:40,style: "text-align:center;",align: 'center', 
+        sortable: false,
+        items: [{
+          icon: '/ts/misc/resources/icons/download.gif',
+          tooltip: '下载该文件',
+          handler: function(grid, rowIndex, colIndex) {
+            var filename=grid.getStore().getAt(rowIndex).get("filename");
+            window.open('/ts/index.php/upload/get?file='+filename);
+          }
+        }]
+      },
+      {text:'文件名',         dataIndex:'filename',      filtable:true,style: "text-align:center;",align: 'left', width:355},
+      {text:'文件大小',       dataIndex:'filesize',      filtable:true,style: "text-align:center;",align: 'right', width:80,
+         renderer:function(value,metaData,record,colIndex,store,view) {
+           if(value>=1048676) {var v=value/1048576;return v.toFixed(2)+' MB';}
+           else if(value>=1024) {var v=value/1024;return v.toFixed(2)+' KB';}
+           else return value;
+         }
+      },
+      {text:'文件上传日期',   dataIndex:'create_ts',      filtable:true, width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")}
+    ]
+  });
+  var fileWin=Ext.create('Ext.window.Window',{
+    resizeable:false,
+    closeAction:"hide",
+    title:'文件列表',
+    width:600,
+    height:250,
+    layout:'fit',
+    items:FileListGrid
+  });
+  fileWin.on({
+    hide: function(){
+      Ext.getBody().unmask();
+    }
+  });
+//  fileWin.show();
+
   var projInfoWin=Ext.create('Ext.window.Window',{
     resizeable:false,
     closeAction:"hide",
@@ -65,6 +111,7 @@ Ext.onReady(function() {
       {name:'commission_a_tax' ,type:'boolean' },
       {name:'inner_commission' ,type:'boolean' },
       {name:'outer_commission' ,type:'boolean' },
+      {name:'imm_payment'      ,type:'boolean' },
       {name:'pay'              ,type:'boolean' },
       {name:'paid'             ,type:'boolean' },
       {name:'found'            ,type:'boolean' },
@@ -93,6 +140,11 @@ Ext.onReady(function() {
     }
   });
   
+  function slidepanel(co){co.animate({from:{left:500},to:{left:10}})};
+  function slideproj(co){
+    co.animate({from:{y:co.y-300},to:{y:co.y+88},easeing:'backOut',duration:500})
+  };
+  
   function cellclick(grid,td,cellIndex,record,tr,rowIndex,e) { 
             var tStore=grid.getStore();
             var queryResult=tStore.queryBy(function(record){
@@ -105,13 +157,13 @@ Ext.onReady(function() {
             var proj_info_tpl=Ext.create('Ext.XTemplate',[
               '<table cellpadding=0 cellspacing=0><tr><td style="padding:10px;border:1px;"><table>',
               '<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}->{sub_category}</pre></td></tr>',
-              '<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><b><pre>{issue}　{name}</pre></b></td></tr>',
+              '<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><b><pre>{issue} {name}</pre></b></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main">{profit_property}收益项目，期限{month}个月，融资规模{scale:this.cusNum()}，按{cycle}分配</td></tr>',
               '<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
               detailString, '</td></tr>',
-              '<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
+              '<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{flow_of_fund}</pre></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{highlights}</pre></td></tr>',
-              '<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
+              '<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{contract}</pre></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{pay_account}</pre></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>打款进度</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{countdown}</pre></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{remark}</pre></td></tr>',
@@ -131,7 +183,7 @@ Ext.onReady(function() {
           
   function on_loadC1(store,records,success){
         if(success==true){
-          var ad_list=[[3,1],[3,3]]
+          var ad_list=[[463,0],[451,1],[427,3]]
           Ext.Array.forEach(ad_list,function(ad_item){
             var queryResult=store.queryBy(function(record){
               return record.get("proj_id")==ad_item[0]?true:false;
@@ -143,11 +195,11 @@ Ext.onReady(function() {
             var proj_info_tpl=Ext.create('Ext.XTemplate',[
               '<table cellpadding=0 cellspacing=0><tr><td style="padding:10px;border:1px;"><table>',
               '<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}->{sub_category}</pre></td></tr>',
-              '<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><b><pre>{issue}　{name}</pre></b></td></tr>',
+              '<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><b><pre>{issue} {name}</pre></b></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main">{profit_property}收益项目，期限{month}个月，融资规模{scale:this.cusNum()}，按{cycle}分配</td></tr>',
               '<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
               detailString, '</td></tr>',
-              '<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
+              '<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{flow_of_fund}</pre></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{highlights}</pre></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>打款进度</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{countdown}</pre></td></tr>',
@@ -171,7 +223,7 @@ Ext.onReady(function() {
     
   function on_loadC2(store,records,success){
         if(success==true){
-          var ad_list=[[5,2],[5,4]]
+          var ad_list=[[170,2],[293,4]]
           Ext.Array.forEach(ad_list,function(ad_item){
             var queryResult=store.queryBy(function(record){
               return record.get("proj_id")==ad_item[0]?true:false;
@@ -183,11 +235,11 @@ Ext.onReady(function() {
             var proj_info_tpl=Ext.create('Ext.XTemplate',[
               '<table cellpadding=0 cellspacing=0><tr><td style="padding:10px;border:1px;"><table>',
               '<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}->{sub_category}</pre></td></tr>',
-              '<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><b><pre>{issue}　{name}</pre></b></td></tr>',
+              '<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><b><pre>{issue} {name}</pre></b></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main">{profit_property}收益项目，期限{month}个月，融资规模{scale:this.cusNum()}，按{cycle}分配</td></tr>',
               '<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
               detailString, '</td></tr>',
-              '<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
+              '<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{flow_of_fund}</pre></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{highlights}</pre></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>打款进度</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{countdown}</pre></td></tr>',
@@ -234,6 +286,36 @@ listControl.load(function(records, operation, success) {
           //if(rowIndex==0){return res;}
           //return (store.getAt(rowIndex-1).data.name==record.data.name)?null:res; 
         }},
+        {text:'项目名称',     dataIndex:'name',          filtable:true,sortable : true, width:220,style: "text-align:center;",align: 'left', hidden:records[0].get("name"),
+        renderer: function(value,metaData,record,rowIndex,colIndex,store,view) {  
+          metaData.tdAttr = 'data-qtip="'+value+'"';  
+          //if(rowIndex==0){return '<b>'+value+'</b>';}
+          //return (store.getAt(rowIndex-1).data.name==record.data.name)?null:'<b>'+value+'</b>'; 
+          return '<b>'+value+'</b>';
+        }},{
+          xtype: 'actioncolumn',
+          text:'下载文件',
+          width:60,style: "text-align:center;",align: 'center', 
+          sortable: false,
+          items: [{
+            icon: '/ts/misc/resources/icons/download.gif',
+            tooltip: '查看该项目的文件，您可以下载它们',
+            handler: function(grid, rowIndex, colIndex) {
+              var proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
+              fileListStore.setProxy({
+                type: 'ajax',
+                url: '/ts/index.php/upload/get_list?proj_id='+proj_id,
+                reader: {
+                  type: 'json',
+                  root: 'data'
+                }
+              });
+              fileListStore.load();
+              Ext.getBody().mask();
+              fileWin.show();
+            }
+          }]
+        },
         {text:'类别',       dataIndex:'sub_category',    filtable:true,sortable : true, width:150,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_category"),
         renderer: function(value,metaData,record,rowIndex,colIndex,store,view) {  
           metaData.tdAttr = 'data-qtip="'+value+'"';  
@@ -247,15 +329,7 @@ listControl.load(function(records, operation, success) {
           //if(rowIndex==0){return value;}
           //return (store.getAt(rowIndex-1).data.name==record.data.name)?null:value; 
           return value;
-        }},
-        {text:'项目名称',     dataIndex:'name',          filtable:true,sortable : true, width:220,style: "text-align:center;",align: 'left', hidden:records[0].get("name"),
-        renderer: function(value,metaData,record,rowIndex,colIndex,store,view) {  
-          metaData.tdAttr = 'data-qtip="'+value+'"';  
-          //if(rowIndex==0){return '<b>'+value+'</b>';}
-          //return (store.getAt(rowIndex-1).data.name==record.data.name)?null:'<b>'+value+'</b>'; 
-          return '<b>'+value+'</b>';
-        }
-       }
+        }}
 //        {text:'合同信息',     dataIndex:'contract',        filtable:true,sortable : true, width:100, style: "text-align:center;",align: 'center',hidden:records[0].get("contract"),
 //          renderer: function(value,metaData,record,colIndex,store,view) {  
 //            metaData.tdAttr = 'data-qtip="<pre>'+value+'</pre>"';  
@@ -339,6 +413,15 @@ listControl.load(function(records, operation, success) {
                 metaData.style='color:#8E8E8E';
                 return 'N/A';
               }
+        }},
+        {text:'现结费用', dataIndex:'imm_payment', filtable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("imm_payment"),
+        renderer: function(value,metaData,record,colIndex,store,view) {  
+          if(value>0){
+                return value+'%';
+              } else {
+                metaData.style='color:#8E8E8E';
+                return 'N/A';
+              }
         }}
       ]},
       {text:'附加信息',columns:[
@@ -350,7 +433,7 @@ listControl.load(function(records, operation, success) {
           return value;
         }},
       {text:'渠道公司',dataIndex:'channel_company',filtable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("channel_company")},
-      {text:'添加时间',dataIndex:'create_ts',filtable:true,sortable : true, width:80, style: "text-align:center;",align: 'center',renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
+        {text:'添加时间',dataIndex:'create_ts',filtable:true,sortable : true, width:80, style: "text-align:center;",align: 'center',renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
       {text:'打款进度', dataIndex:'countdown', filtable:true,sortable : true, minWidth:200,hidden:records[0].get("countdown"),
         renderer: function(value,metaData,record,rowIndex,colIndex,store,view) {  
           metaData.tdAttr = 'data-qtip="'+value+'"';  
@@ -369,7 +452,7 @@ listControl.load(function(records, operation, success) {
       }]}
       ];
     
-    var fullGridC1=Ext.create('searchPanel', {
+    fullGridC1=Ext.create('searchPanel', {
       store: sampleStoreC1,
       border:0,
       columnLines: true,
@@ -399,7 +482,7 @@ listControl.load(function(records, operation, success) {
       emptyText: '没有匹配的记录'
     });
 
-    var fullGridC2=Ext.create('searchPanel', {
+    fullGridC2=Ext.create('searchPanel', {
       store: sampleStoreC2,
       border:0,
       width:1320,
@@ -572,41 +655,59 @@ listControl.load(function(records, operation, success) {
                 }
             }     ]);
     
-    fullGridC1.on({celldblclick:cellclick});
-    fullGridC2.on({celldblclick:cellclick});
-    
     var recommendPanel=Ext.create('Ext.panel.Panel',{
       layout:{
         type: 'vbox',
         align: 'center'
       },
-          autoScroll :true,
+      border:0,
+      autoScroll :true,
       items:[{
           xtype:'panel',
           border:0,
           margin:10,
           layout:'hbox',
-          height:120,
+          height:60,
           width:842,
           items:[{
-            xtype:'image',
-            border:0,
-            height:120,
-            width:800,
-            id:'ad1',
-            src:'/ts/misc/resources/ad_temp.jpg'
-          },{
             xtype:'button',
-            text:'查看',
-            height:120,
-            width:40,
+            text:'玉尔财富推荐： <span class="promote_title">华澳信托 长信37号山西运城</span> 点击查看',
+            height:60,
+            width:842,
             border:0,
             handler:function(){
-              if(this.text=='查看'){
-                this.setText('收起');
+              if(this.text=='玉尔财富推荐： <span class="promote_title">华澳信托 长信37号山西运城</span> 点击查看'){
+                this.setText('玉尔财富推荐： <span class="promote_title">华澳信托 长信37号山西运城</span> 点击收起');
+                Ext.getCmp('ad0_table').show();
+              } else {
+                this.setText('玉尔财富推荐： <span class="promote_title">华澳信托 长信37号山西运城</span> 点击查看');
+                Ext.getCmp('ad0_table').hide();
+              }
+            }
+          }]
+        },{
+          xtype:'panel',
+          border:0,
+          id:'ad0_table'
+        },{
+          xtype:'panel',
+          border:0,
+          margin:10,
+          layout:'hbox',
+          height:60,
+          width:842,
+          items:[{
+            xtype:'button',
+            text:'玉尔财富推荐： <span class="promote_title">新华信托 南京六合</span> 点击查看',
+            height:60,
+            width:842,
+            border:0,
+            handler:function(){
+              if(this.text=='玉尔财富推荐： <span class="promote_title">新华信托 南京六合</span> 点击查看'){
+                this.setText('玉尔财富推荐： <span class="promote_title">新华信托 南京六合</span> 点击收起');
                 Ext.getCmp('ad1_table').show();
               } else {
-                this.setText('查看');
+                this.setText('玉尔财富推荐： <span class="promote_title">新华信托 南京六合</span> 点击查看');
                 Ext.getCmp('ad1_table').hide();
               }
             }
@@ -620,27 +721,20 @@ listControl.load(function(records, operation, success) {
           border:0,
           margin:10,
           layout:'hbox',
-          height:120,
+          height:60,
           width:842,
           items:[{
-            xtype:'image',
-            border:0,
-            height:120,
-            width:800,
-            id:'ad2',
-            src:'/ts/misc/resources/ad_temp.jpg'
-          },{
             xtype:'button',
-            text:'查看',
-            height:120,
-            width:40,
+            text:'玉尔财富推荐： <span class="promote_title">西部信托 信合东方集合资金信托计划</span> 点击查看',
+            height:60,
+            width:842,
             border:0,
             handler:function(){
-              if(this.text=='查看'){
-                this.setText('收起');
+              if(this.text=='玉尔财富推荐： <span class="promote_title">西部信托 信合东方集合资金信托计划</span> 点击查看'){
+                this.setText('玉尔财富推荐： <span class="promote_title">西部信托 信合东方集合资金信托计划</span> 点击收起');
                 Ext.getCmp('ad2_table').show();
               } else {
-                this.setText('查看');
+                this.setText('玉尔财富推荐： <span class="promote_title">西部信托 信合东方集合资金信托计划</span> 点击查看');
                 Ext.getCmp('ad2_table').hide();
               }
             }
@@ -653,28 +747,21 @@ listControl.load(function(records, operation, success) {
           xtype:'panel',
           border:0,
           layout:'hbox',
-          height:120,
+          height:60,
           width:842,
           margin:10,
           items:[{
-            xtype:'image',
-            border:0,
-            height:120,
-            width:800,
-            id:'ad3',
-            src:'/ts/misc/resources/ad_temp.jpg'
-          },{
             xtype:'button',
-            height:120,
-            width:40,
+            height:60,
+            width:842,
             border:0,
-            text:'查看',
+            text:'玉尔财富推荐： <span class="promote_title">沿海景荣 金地集团武汉格林东郡A1类</span> 点击查看',
             handler:function(){
-              if(this.text=='查看'){
-                this.setText('收起');
+              if(this.text=='玉尔财富推荐： <span class="promote_title">沿海景荣 金地集团武汉格林东郡A1类</span> 点击查看'){
+                this.setText('玉尔财富推荐： <span class="promote_title">沿海景荣 金地集团武汉格林东郡A1类</span> 点击收起');
                 Ext.getCmp('ad3_table').show();
               } else {
-                this.setText('查看');
+                this.setText('玉尔财富推荐： <span class="promote_title">沿海景荣 金地集团武汉格林东郡A1类</span> 点击查看');
                 Ext.getCmp('ad3_table').hide();
               }
             }
@@ -687,28 +774,21 @@ listControl.load(function(records, operation, success) {
           xtype:'panel',
           border:0,
           layout:'hbox',
-          height:120,
+          height:60,
           width:842,
           margin:10,
           items:[{
-            xtype:'image',
-            border:0,
-            height:120,
-            width:800,
-            id:'ad4',
-            src:'/ts/misc/resources/ad_temp.jpg'
-          },{
             xtype:'button',
-            height:120,
-            width:40,
+            height:60,
+            width:842,
             border:0,
-            text:'查看',
+            text:'玉尔财富推荐： <span class="promote_title">博弘数君基金管理公司 双隆量化对冲保收益基金</span> 点击查看',
             handler:function(){
-              if(this.text=='查看'){
-                this.setText('收起');
+              if(this.text=='玉尔财富推荐： <span class="promote_title">博弘数君基金管理公司 双隆量化对冲保收益基金</span> 点击查看'){
+                this.setText('玉尔财富推荐： <span class="promote_title">博弘数君基金管理公司 双隆量化对冲保收益基金</span> 点击收起');
                 Ext.getCmp('ad4_table').show();
               } else {
-                this.setText('查看');
+                this.setText('玉尔财富推荐： <span class="promote_title">博弘数君基金管理公司 双隆量化对冲保收益基金</span> 点击查看');
                 Ext.getCmp('ad4_table').hide();
               }
             }
@@ -823,11 +903,29 @@ listControl.load(function(records, operation, success) {
         },{xtype:'box',flex:1}]
       }]
     });
-});
-  sampleStoreC1.on({load:on_loadC1});
-  sampleStoreC2.on({load:on_loadC2});
+    //Ext.getCmp('ad0_table').on({show:slideproj});
+    //Ext.getCmp('ad1_table').on({show:slideproj});
+    //Ext.getCmp('ad2_table').on({show:slideproj});
+    //Ext.getCmp('ad3_table').on({show:slideproj});
+    //Ext.getCmp('ad4_table').on({show:slideproj});
+    
+    fullGridC1.on({
+      celldblclick:cellclick,
+      show:slidepanel
+    });
+    fullGridC2.on({
+      celldblclick:cellclick,
+      show:slidepanel
+    });
+    recommendPanel.on({show:slidepanel});
+    recentChangeGrid.on({show:slidepanel});
+    sampleStoreC1.on({load:on_loadC1});
+    sampleStoreC2.on({load:on_loadC2});
+  });
+  
   sampleStoreC1.load();
   sampleStoreC2.load();
+//  fileWin.hide();
   projInfoWin.hide();
   window.setInterval(function(){
     sampleStoreC1.load();

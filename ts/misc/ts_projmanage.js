@@ -107,7 +107,7 @@ Ext.onReady(function() {
               '<tr><td class="r_ex_td_pre"><b>打款进度</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{countdown}</pre></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{pay_account}</pre></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{remark}</pre></td></tr>',
-//              strPay+strQuota+strChannel+strManagerRemark,
+              strPay+strQuota+strChannel+strManagerRemark,
               '</table></td></tr></table>',
               {
                 cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
@@ -132,7 +132,7 @@ Ext.onReady(function() {
           handler: function(grid, rowIndex, colIndex) {
             //sampleStore.removeAt(rowIndex);      
             var proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
-            window.location.href='/ts/index.php/proj/update?proj_id='+proj_id;
+            window.open('/ts/index.php/proj/update?proj_id='+proj_id);
           }
         }]
       },
@@ -256,6 +256,15 @@ var res;
               }
         }},
         {text:'费用', dataIndex:'outer_commission', filtable:true,sortable : true, width:50, style: "text-align:center;",align: 'center',
+        renderer: function(value,metaData,record,colIndex,store,view) {  
+          if(value>0){
+                return value+'%';
+              } else {
+                metaData.style='color:#8E8E8E';
+                return 'N/A';
+              }
+        }},
+        {text:'现结费用', dataIndex:'imm_payment', filtable:true,sortable : true, width:50, style: "text-align:center;",align: 'center',
         renderer: function(value,metaData,record,colIndex,store,view) {  
           if(value>0){
                 return value+'%';

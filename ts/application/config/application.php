@@ -5,9 +5,9 @@ $config['login_expire'] = 1800;
 $config['group_cfg'] = array(
 	'administrator'   => array('administrator', 'CEO', '产品总监', '综合部', 'CTO'),
 	'product_manager' => array('产品经理'),
-	'staff'           => array('渠道人员'),
-	'part_time_job'   => array('外部兼职人员','业务人员', '独立理财顾问','财富中心合伙人'),
-	'other'           => array('其他人员'),
+	'staff'           => array('大区总监','渠道经理','财富中心合伙人'),
+	'part_time_job'   => array('外部兼职人员','业务人员', '独立理财顾问'),
+	'other'           => array('其他人员','VIP客户'),
 );
 
 $config['access_fields_cfg'] = array(
@@ -51,7 +51,8 @@ $config['access_fields_cfg'] = array(
 		'channel_contact' => false,
 		'billing_company' => false,
 		'manager_remark' => false,
-		'create_ts' => false
+		'create_ts' => false,
+        'imm_payment'=>false
 	),
 	'product_manager' => array(
 		'manage_button' => false,
@@ -93,7 +94,8 @@ $config['access_fields_cfg'] = array(
 		'channel_contact' => false,
 		'billing_company' => false,
 		'manager_remark' => false,
-		'create_ts' => false
+		'create_ts' => false,
+        'imm_payment'=>false
 	),
 	'staff' => array(
 		'manage_button' => true,
@@ -135,7 +137,8 @@ $config['access_fields_cfg'] = array(
 		'channel_contact' => true,
 		'billing_company' => true,
 		'manager_remark' => true,
-		'create_ts' => false
+		'create_ts' => false,
+        'imm_payment'=>false
 	),
 	'part_time_job' => array(
 		'manage_button' => true,
@@ -177,7 +180,8 @@ $config['access_fields_cfg'] = array(
 		'channel_contact' => true,
 		'billing_company' => true,
 		'manager_remark' => true,
-		'create_ts' => false
+		'create_ts' => false,
+        'imm_payment'=>false
 	),
 	'other' => array(
 		'manage_button' => true,
@@ -219,6 +223,7 @@ $config['access_fields_cfg'] = array(
 		'channel_contact' => true,
 		'billing_company' => true,
 		'manager_remark' => true,
-		'create_ts' => false
+		'create_ts' => false,
+        'imm_payment'=>true
 	),
 );

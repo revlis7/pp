@@ -265,6 +265,9 @@ class Proj extends Auth_Controller {
 			$proj_detail = $this->Proj_model->get_detail($proj_detail_id);
 
 			$proj_detail_id = $this->Proj_model->update_detail($proj_detail_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, element('loginname', $this->session->userdata('user')));
+			if($proj_detail_id === false) {
+				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
+			}
 
 			//比较新旧值，记录操作历史
 			if($status != $proj_detail->status) {

@@ -52,7 +52,7 @@ $config['access_fields_cfg'] = array(
 		'billing_company' => false,
 		'manager_remark' => false,
 		'create_ts' => false,
-        'imm_payment'=>false
+		'imm_payment'=>false
 	),
 	'product_manager' => array(
 		'manage_button' => false,
@@ -95,7 +95,7 @@ $config['access_fields_cfg'] = array(
 		'billing_company' => false,
 		'manager_remark' => false,
 		'create_ts' => false,
-        'imm_payment'=>false
+		'imm_payment'=>false
 	),
 	'staff' => array(
 		'manage_button' => true,
@@ -138,7 +138,7 @@ $config['access_fields_cfg'] = array(
 		'billing_company' => true,
 		'manager_remark' => true,
 		'create_ts' => false,
-        'imm_payment'=>false
+		'imm_payment'=>false
 	),
 	'part_time_job' => array(
 		'manage_button' => true,
@@ -181,7 +181,7 @@ $config['access_fields_cfg'] = array(
 		'billing_company' => true,
 		'manager_remark' => true,
 		'create_ts' => false,
-        'imm_payment'=>false
+		'imm_payment'=>false
 	),
 	'other' => array(
 		'manage_button' => true,
@@ -224,6 +224,6 @@ $config['access_fields_cfg'] = array(
 		'billing_company' => true,
 		'manager_remark' => true,
 		'create_ts' => false,
-        'imm_payment'=>true
+		'imm_payment'=>true
 	),
 );

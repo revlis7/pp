@@ -1166,6 +1166,7 @@ Ext.onReady(function() {
               text:'上传项目文件',
               scale:'medium',
               handler:function(){
+              	uploadWin.down('hiddenfield[name="proj_id"]').setValue(proj_id);
                 uploadWin.show();
               }
             }]

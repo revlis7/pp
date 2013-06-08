@@ -190,7 +190,7 @@ Ext.onReady(function() {
                   });
                   fileListStore.setProxy({
                     type: 'ajax',
-                    url: '/ts/index.php/upload/get_list?proj_id=',
+                    url: '/ts/index.php/upload/get_list?proj_id='+proj_id,
                     reader: {
                         type: 'json',
                         root: 'data'

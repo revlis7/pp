@@ -224,6 +224,6 @@ $config['access_fields_cfg'] = array(
 		'billing_company' => true,
 		'manager_remark' => true,
 		'create_ts' => false,
-		'imm_payment'=>true,
+		'imm_payment' => true,
 	),
 );

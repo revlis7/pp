@@ -41,16 +41,16 @@ class Proj extends Auth_Controller {
 	  $ending_status =  $this->input->get('e', true);
 		$category_id = $this->input->get('c', true);
 		if($category_id >= 1) {
-		  if($ending_status >= 1) {
-		    $data = $this->Proj_model->get_all_proj_detail($category_id,$ending_status);
-		  } else {
-			  $data = $this->Proj_model->get_all_proj_detail($category_id,-1);
+			if($ending_status >= 1) {
+				$data = $this->Proj_model->get_all_proj_detail($category_id, $ending_status);
+			} else {
+				$data = $this->Proj_model->get_all_proj_detail($category_id, -1);
 			}
 		} else {
-		  if($ending_status >= 1) {
-		    $data = $this->Proj_model->get_all_proj_detail(-1,$ending_status);
-		  } else {
-			  $data = $this->Proj_model->get_all_proj_detail(-1,-1);
+			if($ending_status >= 1) {
+				$data = $this->Proj_model->get_all_proj_detail(-1, $ending_status);
+			} else {
+				$data = $this->Proj_model->get_all_proj_detail(-1, -1);
 			}
 		}
 		//根据用户组过滤可见信息
@@ -83,7 +83,6 @@ class Proj extends Auth_Controller {
 			array_to_csv($temp, 'proj-'.date('Y-m-d').'.csv');
 			exit;
 		}
-
 		$this->json->output(array('success' => true, 'data' => $temp));
 	}
 	
@@ -148,8 +147,12 @@ class Proj extends Auth_Controller {
 		$countdown = $this->input->post('countdown', true);
 		$found = $this->input->post('found', true);
 		$pdt_status = $this->input->post('pdt_status', true);
+		$proj_status = $this->input->post('proj_status', true);
+		$proj_exclusive = $this->input->post('proj_exclusive', true);
+		$proj_grade = $this->input->post('proj_grade', true);
+		$proj_manager_remark = $this->input->post('proj_manager_remark', true);
 
-		$proj_id = $this->Proj_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $pdt_status, element('loginname', $this->session->userdata('user')));
+		$proj_id = $this->Proj_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $pdt_status, $proj_status, $proj_exclusive, $proj_grade, $proj_manager_remark, element('loginname', $this->session->userdata('user')));
 		if($proj_id === false) {
 			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 		}
@@ -182,6 +185,10 @@ class Proj extends Auth_Controller {
 		$countdown = $this->input->post('countdown', true);
 		$found = $this->input->post('found', true);
 		$pdt_status = $this->input->post('pdt_status', true);
+		$proj_status = $this->input->post('proj_status', true);
+		$proj_exclusive = $this->input->post('proj_exclusive', true);
+		$proj_grade = $this->input->post('proj_grade', true);
+		$proj_manager_remark = $this->input->post('proj_manager_remark', true);
 		
 		if($this->utility->is_pm() && $this->Proj_model->get_proj_manager($proj_id) !== $this->get_user_info('realname')) {
 			$this->json->output(array('success' => false, 'm' => '您不能对他人的记录进行操作'));
@@ -197,7 +204,7 @@ class Proj extends Auth_Controller {
 			$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'将['.$proj->issue.']的项目：['.$proj->name.']的备注修改为［'.$remark.'］');
 		}
 		
-		$proj_id = $this->Proj_model->update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $pdt_status, element('loginname', $this->session->userdata('user')));
+		$proj_id = $this->Proj_model->update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $pdt_status, $proj_status, $proj_exclusive, $proj_grade, $proj_manager_remark, element('loginname', $this->session->userdata('user')));
 		if($proj_id === false) {
 			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
 		}
@@ -210,7 +217,7 @@ class Proj extends Auth_Controller {
 		}
 		$proj_id = $this->input->post('proj_id', true) === false ? '' : $this->input->post('proj_id', true);
 		$proj_detail_id = $this->input->post('proj_detail_id', true) === false ? '' : $this->input->post('proj_detail_id', true);
-		$sub_name => $this->input->post('sub_name', true);
+		$sub_name = $this->input->post('sub_name', true);
 		$total_share = $this->input->post('total_share', true);
 		$status = $this->input->post('status', true);
 		$exclusive = $this->input->post('exclusive', true);

@@ -124,7 +124,8 @@ class Utility {
 				'channel_contact' => false,
 				'billing_company' => false,
 				'manager_remark' => false,
-				'create_ts' => false
+				'create_ts' => false,
+				'imm_payment'=>false,
 			);
 		}
 		return $_cfg[$group];

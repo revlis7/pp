@@ -41,9 +41,12 @@ class Proj extends Auth_Controller {
 		$category_id   = $this->input->get('c', true);
 		$ending_status = $this->input->get('e', true);
 
+		$recently      = $this->input->get('r', true) ? true : false;
+
 		$category_id   = $category_id >= 1 ? $category_id : -1;
-		$ending_status = $$ending_status >= 1 ? $ending_status : -1;
-		$data = $this->Proj_model->get_all_proj_detail($category_id, $ending_status);
+		$ending_status = $ending_status >= 1 ? $ending_status : -1;
+
+		$data = $this->Proj_model->get_all_proj_detail($category_id, $ending_status, $recently);
 
 		//根据用户组过滤可见信息
 		$temp = array();

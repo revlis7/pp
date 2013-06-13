@@ -274,44 +274,47 @@ class Proj_model extends CI_Model {
 		return $result;
 	}
 	
-	function get_all_proj_detail($category_id, $ending_status) {
-		$t_q = 'select proj.id as proj_id, proj.category, proj.sub_category, '.
-				'proj.issue, proj.name, proj.flow_of_fund, proj.highlights, '.
-				'proj.scale, proj.cycle, proj.profit_property, '.
-				'proj.manager, proj.contract, proj.remark, proj.pay_account, proj.countdown, proj.found, proj.pdt_status, '.
-				'proj.status, proj.exclusive, proj.grade, proj.manager_remark, '.
-				'proj_detail.id as proj_detail_id, proj_detail.sub_name, proj_detail.total_share, '.
-				'proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, '.
-				'proj_detail.commission_a_tax, proj_detail.inner_commission, '.
-				'proj_detail.outer_commission, proj_detail.imm_payment, proj_detail.pay, proj_detail.paid, '.
-				'proj_detail.quota, proj_detail.quota_paid, proj_detail.quota_remain, '. 
-				'proj_detail.main_channel, proj_detail.channel_company, '.
-				'proj_detail.channel_contact, proj_detail.billing_company, proj.create_ts, '.
-				'case proj.grade when "五星级" then 5 when "四星级" then 4 when "三星级" then 3 when "二星级" then 2 else 1 end as order_2, '.
-				'proj_detail.month '.
-			'from proj '.
-			'left join proj_detail on proj_detail.proj_id = proj.id ';
-		$t_q_end = 'order by order_2 desc,sub_category desc,proj.name,proj_detail.month,proj_detail.amount';
-		
-		if($category_id == 1) {
-			if($ending_status >= 1) {
-				$query = $this->db->query($t_q.'where (proj.status = "结束" or proj.status is null) and category="固定收益类" '.$t_q_end);
-			} else {
-				$query = $this->db->query($t_q.'where proj.status <> "结束" and category="固定收益类" '.$t_q_end);
-			}
-		} else if($category_id == 2) {
-			if($ending_status >= 1) {
-				$query = $this->db->query($t_q.'where (proj.status = "结束" or proj.status is null) and category="浮动收益类" '.$t_q_end);
-			} else {
-				$query = $this->db->query($t_q.'where proj.status <> "结束" and category="浮动收益类"'.$t_q_end);
-			}
+	function get_all_proj_detail($category_id, $ending_status, $recently = false) {
+		$raw_sql  = 'SELECT proj.id AS proj_id, proj.category, proj.sub_category, ';
+		$raw_sql .= 'proj.issue, proj.name, proj.flow_of_fund, proj.highlights, ';
+		$raw_sql .= 'proj.scale, proj.cycle, proj.profit_property, ';
+		$raw_sql .= 'proj.manager, proj.contract, proj.remark, proj.pay_account, proj.countdown, proj.found, proj.pdt_status, ';
+		$raw_sql .= 'proj.status, proj.exclusive, proj.grade, proj.manager_remark, ';
+		$raw_sql .= 'proj_detail.id as proj_detail_id, proj_detail.sub_name, proj_detail.total_share, ';
+		$raw_sql .= 'proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, ';
+		$raw_sql .= 'proj_detail.commission_a_tax, proj_detail.inner_commission, ';
+		$raw_sql .= 'proj_detail.outer_commission, proj_detail.imm_payment, proj_detail.pay, proj_detail.paid, ';
+		$raw_sql .= 'proj_detail.quota, proj_detail.quota_paid, proj_detail.quota_remain, ';
+		$raw_sql .= 'proj_detail.main_channel, proj_detail.channel_company, ';
+		$raw_sql .= 'proj_detail.channel_contact, proj_detail.billing_company, proj.create_ts, ';
+		$raw_sql .= 'CASE proj.grade WHEN "五星级" THEN 5 WHEN "四星级" THEN 4 WHEN "三星级" THEN 3 WHEN "二星级" THEN 2 ELSE 1 END AS order_2, ';
+		$raw_sql .= 'proj_detail.month ';
+		$raw_sql .= 'FROM proj ';
+		$raw_sql .= 'LEFT JOIN proj_detail ON proj_detail.proj_id = proj.id ';
+
+		// status条件
+		if($ending_status >= 1) {
+			$raw_sql .= ' WHERE (proj.status = "结束"  proj.status IS null) ';
 		} else {
-			if($ending_status >= 1) {
-				$query = $this->db->query($t_q.'(proj.status = "结束" or proj.status is null) '.$t_q_end);
-			} else {
-				$query = $this->db->query($t_q.'where proj.status <> "结束" '.$t_q_end);
-			}
+			$raw_sql .= ' WHERE proj.status <> "结束" ';
 		}
+
+		// category条件
+		$category_query = '';
+		if($category_id == 1) {
+			$raw_sql .= ' AND category = "固定收益类" ';
+		} else {
+			$raw_sql .= ' AND category = "浮动收益类" ';
+		}
+
+		// 最近三个月项目条件
+		if($recently) {
+			$raw_sql .= ' AND DATEDIFF(NOW(), proj.update_ts) <= 90 ';
+		}
+
+		$raw_sql .= ' ORDER BY order_2 DESC, sub_category DESC, proj.name, proj_detail.month, proj_detail.amount ';
+
+		$query = $this->db->query($raw_sql);
 		return $query->result();
 	}
 

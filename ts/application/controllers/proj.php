@@ -210,6 +210,7 @@ class Proj extends Auth_Controller {
 		}
 		$proj_id = $this->input->post('proj_id', true) === false ? '' : $this->input->post('proj_id', true);
 		$proj_detail_id = $this->input->post('proj_detail_id', true) === false ? '' : $this->input->post('proj_detail_id', true);
+		$sub_name => $this->input->post('sub_name', true);
 		$total_share = $this->input->post('total_share', true);
 		$status = $this->input->post('status', true);
 		$exclusive = $this->input->post('exclusive', true);
@@ -236,7 +237,8 @@ class Proj extends Auth_Controller {
 		if($this->utility->is_pm() && $this->Proj_model->get_proj_manager($proj_id) !== $this->get_user_info('realname')) {
 			$this->json->output(array('success' => false, 'm' => '您不能对他人的记录进行操作'));
 		}
-		
+
+		//detail_id为-1时，表示创建新的detail记录
 		if($proj_detail_id != '-1') {
 			if(!$this->utility->chk_id($proj_detail_id)) {
 				$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
@@ -245,18 +247,16 @@ class Proj extends Auth_Controller {
 			$proj = $this->Proj_model->get_proj($proj_id);
 			$proj_detail = $this->Proj_model->get_detail($proj_detail_id);
 
-			$proj_detail_id = $this->Proj_model->update_detail($proj_detail_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, element('loginname', $this->session->userdata('user')));
+			$proj_detail_id = $this->Proj_model->update_detail($proj_detail_id, $sub_name, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, element('loginname', $this->session->userdata('user')));
 			if($proj_detail_id === false) {
 				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 			}
-
 			//比较新旧值，记录操作历史
 			if($status != $proj_detail->status) {
 				$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'将['.$proj->issue.']的项目：['.$proj->name.']，额度为['.$proj_detail->amount.']万，由［'.$proj_detail->status.'］状态修改为［'.$status.'］');
 			}
-
 		} else {
-			$proj_detail_id = $this->Proj_model->create_detail($proj_id, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, element('loginname', $this->session->userdata('user')));
+			$proj_detail_id = $this->Proj_model->create_detail($proj_id, $sub_name, $total_share, $status, $exclusive, $grade, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $manager_remark, element('loginname', $this->session->userdata('user')));
 			if($proj_detail_id === false) {
 				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 			}

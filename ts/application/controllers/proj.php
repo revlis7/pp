@@ -147,8 +147,9 @@ class Proj extends Auth_Controller {
 		$pay_account = $this->input->post('pay_account', true);
 		$countdown = $this->input->post('countdown', true);
 		$found = $this->input->post('found', true);
+		$pdt_status = $this->input->post('pdt_status', true);
 
-		$proj_id = $this->Proj_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, element('loginname', $this->session->userdata('user')));
+		$proj_id = $this->Proj_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $pdt_status, element('loginname', $this->session->userdata('user')));
 		if($proj_id === false) {
 			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 		}
@@ -180,6 +181,7 @@ class Proj extends Auth_Controller {
 		$pay_account = $this->input->post('pay_account', true);
 		$countdown = $this->input->post('countdown', true);
 		$found = $this->input->post('found', true);
+		$pdt_status = $this->input->post('pdt_status', true);
 		
 		if($this->utility->is_pm() && $this->Proj_model->get_proj_manager($proj_id) !== $this->get_user_info('realname')) {
 			$this->json->output(array('success' => false, 'm' => '您不能对他人的记录进行操作'));
@@ -195,7 +197,7 @@ class Proj extends Auth_Controller {
 			$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'将['.$proj->issue.']的项目：['.$proj->name.']的备注修改为［'.$remark.'］');
 		}
 		
-		$proj_id = $this->Proj_model->update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, element('loginname', $this->session->userdata('user')));
+		$proj_id = $this->Proj_model->update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $pdt_status, element('loginname', $this->session->userdata('user')));
 		if($proj_id === false) {
 			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
 		}

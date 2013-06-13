@@ -16,7 +16,7 @@ class Proj_model extends CI_Model {
 		return $proj->manager;
 	}
 	
-	function create_proj($category = '', $sub_category = '', $issue = '', $name = '', $flow_of_fund = '', $highlights = '', $scale = '', $cycle = '', $profit_property = '', $manager = '', $contract = '', $remark = '', $pay_account = '', $countdown = '', $found = '', $creator = '') {
+	function create_proj($category = '', $sub_category = '', $issue = '', $name = '', $flow_of_fund = '', $highlights = '', $scale = '', $cycle = '', $profit_property = '', $manager = '', $contract = '', $remark = '', $pay_account = '', $countdown = '', $found = '', $pdt_status = '', $creator = '') {
 		$proj = array(
 			'category' => $category,
 			'sub_category' => $sub_category,
@@ -33,6 +33,7 @@ class Proj_model extends CI_Model {
 			'pay_account' => $pay_account,
 			'countdown' => $countdown,
 			'found' => $found,
+			'pdt_status' => $pdt_status,
 			'creator' => $creator,
 			'create_ts' => date('Y-m-d H:i:s'),
 		);
@@ -43,7 +44,7 @@ class Proj_model extends CI_Model {
 		return $this->db->insert_id();
 	}
 	
-	function update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $editor) {
+	function update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $pdt_status, $editor) {
 		//查询旧记录，插入历史表
 		$old_proj = $this->get_proj($proj_id);
 		if(!$old_proj) {
@@ -66,6 +67,7 @@ class Proj_model extends CI_Model {
 			'pay_account' => $old_proj->pay_account,
 			'countdown' => $old_proj->countdown,
 			'found' => $old_proj->found,
+			'pdt_status' => $old_proj->pdt_status,
 			'editor' => $editor,
 			'edit_ts' => date('Y-m-d H:i:s'),
 		);
@@ -90,6 +92,7 @@ class Proj_model extends CI_Model {
 			'pay_account' => $pay_account,
 			'countdown' => $countdown,
 			'found' => $found,
+			'pdt_status' => $pdt_status,
 		);
 		$this->db->where('id', $proj_id);
 		$this->db->update('proj', $proj);
@@ -270,7 +273,7 @@ class Proj_model extends CI_Model {
 		$t_q = 'select proj.id as proj_id, proj.category, proj.sub_category, '.
 				'proj.issue, proj.name, proj.flow_of_fund, proj.highlights, '.
 				'proj.scale, proj.cycle, proj.profit_property, '.
-				'proj.manager, proj.contract, proj.remark, proj.pay_account, proj.countdown, proj.found, '.
+				'proj.manager, proj.contract, proj.remark, proj.pay_account, proj.countdown, proj.found, proj.pdt_status '.
 				'proj_detail.id as proj_detail_id, proj_detail.total_share, '.
 				'proj_detail.status, proj_detail.exclusive, proj_detail.grade, '.
 				'proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, '.

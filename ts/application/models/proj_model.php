@@ -16,7 +16,7 @@ class Proj_model extends CI_Model {
 		return $proj->manager;
 	}
 	
-	function create_proj($category = '', $sub_category = '', $issue = '', $name = '', $flow_of_fund = '', $highlights = '', $scale = '', $cycle = '', $profit_property = '', $manager = '', $contract = '', $remark = '', $pay_account = '', $countdown = '', $found = '', $pdt_status = '', $status = '', $exclusive = '', $grade = '', $manager_remark = '', $creator = '') {
+	function create_proj($category = '', $sub_category = '', $issue = '', $name = '', $flow_of_fund = '', $highlights = '', $scale = '', $cycle = '', $profit_property = '', $manager = '', $contract = '', $remark = '', $pay_account = '', $countdown = '', $found = '', $status = '', $exclusive = '', $grade = '', $manager_remark = '', $creator = '') {
 		$proj = array(
 			'category' => $category,
 			'sub_category' => $sub_category,
@@ -33,7 +33,7 @@ class Proj_model extends CI_Model {
 			'pay_account' => $pay_account,
 			'countdown' => $countdown,
 			'found' => $found,
-			'pdt_status' => $pdt_status,
+			'pdt_status' => '申请中',
 			'status' => $status,
 			'exclusive' => $exclusive,
 			'grade' => $grade,

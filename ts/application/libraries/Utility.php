@@ -88,6 +88,7 @@ class Utility {
 				'manage_button' => true,
 				'proj_id' => true,
 				'proj_detail_id' => true,
+				'sub_name' => false,
 				'total_share' => false,
 				'status' => false,
 				'exclusive' => false,

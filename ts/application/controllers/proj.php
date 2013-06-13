@@ -38,21 +38,13 @@ class Proj extends Auth_Controller {
 	
 	//返回所有proj＋proj_detail的json数据
 	function view() {
-	  $ending_status =  $this->input->get('e', true);
-		$category_id = $this->input->get('c', true);
-		if($category_id >= 1) {
-			if($ending_status >= 1) {
-				$data = $this->Proj_model->get_all_proj_detail($category_id, $ending_status);
-			} else {
-				$data = $this->Proj_model->get_all_proj_detail($category_id, -1);
-			}
-		} else {
-			if($ending_status >= 1) {
-				$data = $this->Proj_model->get_all_proj_detail(-1, $ending_status);
-			} else {
-				$data = $this->Proj_model->get_all_proj_detail(-1, -1);
-			}
-		}
+		$category_id   = $this->input->get('c', true);
+		$ending_status = $this->input->get('e', true);
+
+		$category_id   = $category_id >= 1 ? $category_id : -1;
+		$ending_status = $$ending_status >= 1 ? $ending_status : -1;
+		$data = $this->Proj_model->get_all_proj_detail($category_id, $ending_status);
+
 		//根据用户组过滤可见信息
 		$temp = array();
 		$group = $this->utility->get_user_group();
@@ -146,13 +138,12 @@ class Proj extends Auth_Controller {
 		$pay_account = $this->input->post('pay_account', true);
 		$countdown = $this->input->post('countdown', true);
 		$found = $this->input->post('found', true);
-		$pdt_status = $this->input->post('pdt_status', true);
 		$status = $this->input->post('status', true);
 		$exclusive = $this->input->post('exclusive', true);
 		$grade = $this->input->post('grade', true);
 		$manager_remark = $this->input->post('manager_remark', true);
 
-		$proj_id = $this->Proj_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $pdt_status, $status, $exclusive, $grade, $manager_remark, element('loginname', $this->session->userdata('user')));
+		$proj_id = $this->Proj_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $status, $exclusive, $grade, $manager_remark, element('loginname', $this->session->userdata('user')));
 		if($proj_id === false) {
 			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 		}

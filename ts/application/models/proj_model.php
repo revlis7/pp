@@ -212,7 +212,21 @@ class Proj_model extends CI_Model {
 		}
 		return $proj_detail_id;
 	}
-	
+
+	function close_proj($proj_id) {
+		$proj_detail = array(
+			'total_share' => '无',
+			'status'      => '结束',
+		);
+		$this->db->where('proj_id', $proj_id);
+		$this->db->update('proj_detail', $proj_detail);
+		if($this->db->affected_rows() == 0) {
+			return false;
+		}
+		return true;
+	}
+
+
 	// TODO join delete
 	function delete_proj($proj_id) {
 		$this->db->from('proj')->where('id', $proj_id);

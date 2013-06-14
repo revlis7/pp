@@ -156,10 +156,6 @@ class Proj extends Auth_Controller {
 		$this->json->output(array('success' => true, 'proj_id' => $proj_id));
 	}
 
-	function proj_close_submit() {
-
-	}
-
 	function proj_update_submit() {
 		if(!$this->has_privilege()) {
 			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
@@ -206,7 +202,30 @@ class Proj extends Auth_Controller {
 		}
 		$this->json->output(array('success' => true, 'proj_id' => $proj_id));
 	}
-	
+
+	function proj_close_submit() {
+		$proj_id = $this->input->get('proj_id');
+
+		if(!$this->utility->chk_id($proj_id)) {
+			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+		}
+
+		$proj = $this->Proj_model->get_proj($proj_id);
+		$proj_details = $this->Proj_model->get_all_detail($proj_id);
+		if(!$proj || empty($proj_detail)) {
+			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+		}
+
+		foreach($proj_details as $proj_detail) {
+			$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'将['.$proj->issue.']的项目：['.$proj->name.']，额度为['.$proj_detail->amount.']万，由［'.$proj_detail->status.'］状态修改为［结束］');
+		}
+
+		if(!$this->Proj_model->close_proj($proj_id)) {
+			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
+		}
+		$this->json->output(array('success' => true));
+	}
+
 	function detail_create_submit() {
 		if(!$this->has_privilege()) {
 			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
@@ -246,6 +265,9 @@ class Proj extends Auth_Controller {
 			//获取需要记录历史操作的旧值
 			$proj = $this->Proj_model->get_proj($proj_id);
 			$proj_detail = $this->Proj_model->get_detail($proj_detail_id);
+			if(!$proj || empty($proj_detail)) {
+				$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+			}
 
 			$proj_detail_id = $this->Proj_model->update_detail($proj_detail_id, $sub_name, $total_share, $status, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, element('loginname', $this->session->userdata('user')));
 			if($proj_detail_id === false) {

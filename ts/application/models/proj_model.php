@@ -54,9 +54,58 @@ class Proj_model extends CI_Model {
 	function update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, 
 		$highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, 
 		$pay_account, $countdown, $found, $exclusive, $grade, $manager_remark, $editor) {
-		//查询旧记录，插入历史表
+		// 查询旧记录，插入历史表
+		if(!$this->archive_proj($proj_id, $editor)) {
+			return false;
+		}
+
+		$proj = array(
+			'category' => $category,
+			'sub_category' => $sub_category,
+			'issue' => $issue,
+			'name' => $name,
+			'flow_of_fund' => $flow_of_fund,
+			'highlights' => $highlights,
+			'scale' => $scale,
+			'cycle' => $cycle,
+			'profit_property' => $profit_property,
+			'manager' => $manager,
+			'contract' => $contract,
+			'remark' => $remark,
+			'pay_account' => $pay_account,
+			'countdown' => $countdown,
+			'found' => $found,
+			'exclusive' => $exclusive,
+			'grade' => $grade,
+			'manager_remark' => $manager_remark,
+			'update_ts' => date('Y-m-d H:i:s'),
+		);
+		$this->db->where('id', $proj_id);
+		$this->db->update('proj', $proj);
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return $proj_id;
+	}
+
+	function update_pdt_status($proj_id, $pdt_status, $editor) {
+		// 查询旧记录，插入历史表
+		if(!$this->archive_proj($proj_id, $editor)) {
+			return false;
+		}
+
+		$field = array('pdt_status' => $pdt_status);
+		$this->db->where('id', $proj_id);
+		$this->db->update('proj', $field);
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return $proj_id;
+	}
+
+	function archive_proj($proj_id, $editor) {
 		$old_proj = $this->get_proj($proj_id);
-		if(!$old_proj) {
+		if(empty($old_proj)) {
 			return false;
 		}
 		$proj = array(
@@ -87,36 +136,9 @@ class Proj_model extends CI_Model {
 		if($this->db->affected_rows() !== 1) {
 			return false;
 		}
-	
-		$proj = array(
-			'category' => $category,
-			'sub_category' => $sub_category,
-			'issue' => $issue,
-			'name' => $name,
-			'flow_of_fund' => $flow_of_fund,
-			'highlights' => $highlights,
-			'scale' => $scale,
-			'cycle' => $cycle,
-			'profit_property' => $profit_property,
-			'manager' => $manager,
-			'contract' => $contract,
-			'remark' => $remark,
-			'pay_account' => $pay_account,
-			'countdown' => $countdown,
-			'found' => $found,
-			'exclusive' => $exclusive,
-			'grade' => $grade,
-			'manager_remark' => $manager_remark,
-			'update_ts' => date('Y-m-d H:i:s'),
-		);
-		$this->db->where('id', $proj_id);
-		$this->db->update('proj', $proj);
-		if($this->db->affected_rows() !== 1) {
-			return false;
-		}
-		return $proj_id;
+		return true;
 	}
-	
+
 	function create_detail($proj_id, $sub_name = '', $total_share = '', $status = '', 
 		$amount = '', $profit = '', $commission_b_tax = '', $commission_a_tax = '', 
 		$inner_commission = '', $outer_commission = '', $imm_payment = '', $month = '', 
@@ -237,7 +259,6 @@ class Proj_model extends CI_Model {
 		}
 		return true;
 	}
-
 
 	// TODO join delete
 	function delete_proj($proj_id) {

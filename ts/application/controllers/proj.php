@@ -40,7 +40,6 @@ class Proj extends Auth_Controller {
 	function view() {
 		$category_id   = $this->input->get('c', true);
 		$ending_status = $this->input->get('e', true);
-
 		$recently      = $this->input->get('r', true) ? true : false;
 
 		$category_id   = $category_id >= 1 ? $category_id : -1;
@@ -102,12 +101,7 @@ class Proj extends Auth_Controller {
 		
 		$this->json->output(array('success' => true, 'data' => $data));
 	}
-	
-	//返回单条proj＋proj_detail的json数据
-	//function get() {
-	//	return null;
-	//}
-	
+
 	//返回单条proj的json数据
 	function proj_get() {
 		$proj_id = $this->input->get('proj_id', true);
@@ -116,12 +110,7 @@ class Proj extends Auth_Controller {
 		unset($data->id);
 		$this->json->output(array('success' => true, 'data' => $data));
 	}
-	
-	//返回单条proj_detail的json数据
-	//function detail_get() {
-	//	return null;
-	//}
-	
+
 	function proj_create_submit() {
 		if(!$this->has_privilege()) {
 			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
@@ -226,6 +215,10 @@ class Proj extends Auth_Controller {
 	}
 
 	function proj_accept_submit() {
+		if(!$this->User_model->has_action_access(element('loginname', $this->session->userdata('user')))) {
+			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
+
 		$proj_id = $this->input->get('proj_id');
 
 		if(!$this->utility->chk_id($proj_id)) {
@@ -239,6 +232,10 @@ class Proj extends Auth_Controller {
 	}
 
 	function proj_refuse_submit() {
+		if(!$this->User_model->has_action_access(element('loginname', $this->session->userdata('user')))) {
+			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
+
 		$proj_id = $this->input->get('proj_id');
 
 		if(!$this->utility->chk_id($proj_id)) {

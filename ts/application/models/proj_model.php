@@ -16,7 +16,10 @@ class Proj_model extends CI_Model {
 		return $proj->manager;
 	}
 	
-	function create_proj($category = '', $sub_category = '', $issue = '', $name = '', $flow_of_fund = '', $highlights = '', $scale = '', $cycle = '', $profit_property = '', $manager = '', $contract = '', $remark = '', $pay_account = '', $countdown = '', $found = '', $exclusive = '', $grade = '', $manager_remark = '', $creator = '') {
+	function create_proj($category = '', $sub_category = '', $issue = '', $name = '', 
+		$flow_of_fund = '', $highlights = '', $scale = '', $cycle = '', $profit_property = '', 
+		$manager = '', $contract = '', $remark = '', $pay_account = '', $countdown = '', 
+		$found = '', $exclusive = '', $grade = '', $manager_remark = '', $creator = '') {
 		$proj = array(
 			'category' => $category,
 			'sub_category' => $sub_category,
@@ -48,7 +51,9 @@ class Proj_model extends CI_Model {
 		return $this->db->insert_id();
 	}
 	
-	function update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $pdt_status, $exclusive, $grade, $manager_remark, $editor) {
+	function update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, 
+		$highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, 
+		$pay_account, $countdown, $found, $exclusive, $grade, $manager_remark, $editor) {
 		//查询旧记录，插入历史表
 		$old_proj = $this->get_proj($proj_id);
 		if(!$old_proj) {
@@ -99,7 +104,6 @@ class Proj_model extends CI_Model {
 			'pay_account' => $pay_account,
 			'countdown' => $countdown,
 			'found' => $found,
-			'pdt_status' => $pdt_status,
 			'exclusive' => $exclusive,
 			'grade' => $grade,
 			'manager_remark' => $manager_remark,
@@ -113,7 +117,12 @@ class Proj_model extends CI_Model {
 		return $proj_id;
 	}
 	
-	function create_detail($proj_id, $sub_name = '', $total_share = '', $status = '', $amount = '', $profit = '', $commission_b_tax = '', $commission_a_tax = '', $inner_commission = '', $outer_commission = '', $imm_payment = '', $month = '', $pay = '', $paid = '', $quota = '', $quota_paid = '', $quota_remain = '', $main_channel = '', $channel_company = '', $channel_contact = '', $billing_company = '', $creator = '') {
+	function create_detail($proj_id, $sub_name = '', $total_share = '', $status = '', 
+		$amount = '', $profit = '', $commission_b_tax = '', $commission_a_tax = '', 
+		$inner_commission = '', $outer_commission = '', $imm_payment = '', $month = '', 
+		$pay = '', $paid = '', $quota = '', $quota_paid = '', $quota_remain = '', 
+		$main_channel = '', $channel_company = '', $channel_contact = '', 
+		$billing_company = '', $creator = '') {
 		$proj_detail = array(
 			'proj_id' => $proj_id,
 			'sub_name' => $sub_name,
@@ -146,7 +155,10 @@ class Proj_model extends CI_Model {
 		return $this->db->insert_id();
 	}
 	
-	function update_detail($proj_detail_id, $sub_name, $total_share, $status, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, $editor) {
+	function update_detail($proj_detail_id, $sub_name, $total_share, $status, $amount, 
+		$profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, 
+		$imm_payment, $month, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, 
+		$channel_company, $channel_contact, $billing_company, $editor) {
 		//查询旧记录，插入历史表
 		$old_proj_detail = $this->get_detail($proj_detail_id);
 		if(!$old_proj_detail) {
@@ -375,7 +387,9 @@ class Proj_model extends CI_Model {
 		return $company_id;
 	}
 
-	function create_cproj($proj_name = '', $amount = '', $month = '', $profit_max = '', $profit_suggest = '', $guarantee_mode = '', $repayment = '', $proj_rel = '', $proj_deadline = '', $remark = '') {
+	function create_cproj($proj_name = '', $amount = '', $month = '', $profit_max = '', 
+		$profit_suggest = '', $guarantee_mode = '', $repayment = '', $proj_rel = '', 
+		$proj_deadline = '', $remark = '') {
 		$cproj = array(
 			'proj_name'      => $proj_name,
 			'amount'         => $amount,

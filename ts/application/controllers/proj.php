@@ -177,7 +177,6 @@ class Proj extends Auth_Controller {
 		$pay_account = $this->input->post('pay_account', true);
 		$countdown = $this->input->post('countdown', true);
 		$found = $this->input->post('found', true);
-		$pdt_status = $this->input->post('pdt_status', true);
 		$exclusive = $this->input->post('exclusive', true);
 		$grade = $this->input->post('grade', true);
 		$manager_remark = $this->input->post('manager_remark', true);
@@ -196,7 +195,7 @@ class Proj extends Auth_Controller {
 			$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'将['.$proj->issue.']的项目：['.$proj->name.']的备注修改为［'.$remark.'］');
 		}
 		
-		$proj_id = $this->Proj_model->update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $pdt_status, $exclusive, $grade, $manager_remark, element('loginname', $this->session->userdata('user')));
+		$proj_id = $this->Proj_model->update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $exclusive, $grade, $manager_remark, element('loginname', $this->session->userdata('user')));
 		if($proj_id === false) {
 			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
 		}

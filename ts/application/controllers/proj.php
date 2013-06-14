@@ -141,12 +141,11 @@ class Proj extends Auth_Controller {
 		$pay_account = $this->input->post('pay_account', true);
 		$countdown = $this->input->post('countdown', true);
 		$found = $this->input->post('found', true);
-		$status = $this->input->post('status', true);
 		$exclusive = $this->input->post('exclusive', true);
 		$grade = $this->input->post('grade', true);
 		$manager_remark = $this->input->post('manager_remark', true);
 
-		$proj_id = $this->Proj_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $status, $exclusive, $grade, $manager_remark, element('loginname', $this->session->userdata('user')));
+		$proj_id = $this->Proj_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $exclusive, $grade, $manager_remark, element('loginname', $this->session->userdata('user')));
 		if($proj_id === false) {
 			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 		}
@@ -156,7 +155,11 @@ class Proj extends Auth_Controller {
 
 		$this->json->output(array('success' => true, 'proj_id' => $proj_id));
 	}
-	
+
+	function proj_close_submit() {
+
+	}
+
 	function proj_update_submit() {
 		if(!$this->has_privilege()) {
 			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
@@ -179,7 +182,6 @@ class Proj extends Auth_Controller {
 		$countdown = $this->input->post('countdown', true);
 		$found = $this->input->post('found', true);
 		$pdt_status = $this->input->post('pdt_status', true);
-		$status = $this->input->post('status', true);
 		$exclusive = $this->input->post('exclusive', true);
 		$grade = $this->input->post('grade', true);
 		$manager_remark = $this->input->post('manager_remark', true);
@@ -198,7 +200,7 @@ class Proj extends Auth_Controller {
 			$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'将['.$proj->issue.']的项目：['.$proj->name.']的备注修改为［'.$remark.'］');
 		}
 		
-		$proj_id = $this->Proj_model->update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $pdt_status, $status, $exclusive, $grade, $manager_remark, element('loginname', $this->session->userdata('user')));
+		$proj_id = $this->Proj_model->update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, $pay_account, $countdown, $found, $pdt_status, $exclusive, $grade, $manager_remark, element('loginname', $this->session->userdata('user')));
 		if($proj_id === false) {
 			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
 		}
@@ -213,6 +215,7 @@ class Proj extends Auth_Controller {
 		$proj_detail_id = $this->input->post('proj_detail_id', true) === false ? '' : $this->input->post('proj_detail_id', true);
 		$sub_name = $this->input->post('sub_name', true);
 		$total_share = $this->input->post('total_share', true);
+		$status = $this->input->post('status', true);
 		$amount = $this->input->post('amount', true);
 		$profit = $this->input->post('profit', true);
 		$commission_b_tax = $this->input->post('commission_b_tax', true);
@@ -244,7 +247,7 @@ class Proj extends Auth_Controller {
 			$proj = $this->Proj_model->get_proj($proj_id);
 			$proj_detail = $this->Proj_model->get_detail($proj_detail_id);
 
-			$proj_detail_id = $this->Proj_model->update_detail($proj_detail_id, $sub_name, $total_share, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, element('loginname', $this->session->userdata('user')));
+			$proj_detail_id = $this->Proj_model->update_detail($proj_detail_id, $sub_name, $total_share, $status, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, element('loginname', $this->session->userdata('user')));
 			if($proj_detail_id === false) {
 				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 			}
@@ -253,7 +256,7 @@ class Proj extends Auth_Controller {
 				$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'将['.$proj->issue.']的项目：['.$proj->name.']，额度为['.$proj_detail->amount.']万，由［'.$proj_detail->status.'］状态修改为［'.$status.'］');
 			}
 		} else {
-			$proj_detail_id = $this->Proj_model->create_detail($proj_id, $sub_name, $total_share, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, element('loginname', $this->session->userdata('user')));
+			$proj_detail_id = $this->Proj_model->create_detail($proj_id, $sub_name, $total_share, $status, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, element('loginname', $this->session->userdata('user')));
 			if($proj_detail_id === false) {
 				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 			}

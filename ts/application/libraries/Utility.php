@@ -71,63 +71,20 @@ class Utility {
 	
 	function access_fields_filter($group, $data) {
 		$_data = $data;
-		$_cfg = $this->get_access_fields($group);
-		foreach($_cfg as $field => $hidden) {
-			if(isset($_data->$field) && $hidden) {
+		$_cfg = $this->get_forbidden_fields($group);
+		foreach($_cfg as $field) {
+			if(isset($_data->$field)) {
 				$_data->$field = '';
 			}
 		}
 		return $_data;
 	}
 	
-	function get_access_fields($group) {
+	function get_forbidden_fields($group) {
 		$_cfg = $this->get('access_fields_cfg');
 		
 		if(!isset($_cfg[$group])) {
-			return array(
-				'manage_button' => true,
-				'proj_id' => true,
-				'proj_detail_id' => true,
-				'sub_name' => false,
-				'total_share' => false,
-				'status' => false,
-				'exclusive' => false,
-				'grade' => false,
-				'category' => false,
-				'sub_category' => false,
-				'issue' => false,
-				'name' => false,
-				'flow_of_fund' => false,
-				'highlights' => false,
-				'month' => false,
-				'scale' => false,
-				'cycle' => false,
-				'amount' => false,
-				'profit_property' => false,
-				'profit' => false,
-				'manager' => false,
-				'contract' => false,
-				'remark' => false,
-				'pay_account' => false,
-				'countdown' => false,
-				'commission_b_tax' => false,
-				'commission_a_tax' => false,
-				'inner_commission' => false,
-				'outer_commission' => false,
-				'pay' => false,
-				'paid' => false,
-				'found' => false,
-				'quota' => false,
-				'quota_paid' => false,
-				'quota_remain' => false,
-				'main_channel' => false,
-				'channel_company' => false,
-				'channel_contact' => false,
-				'billing_company' => false,
-				'manager_remark' => false,
-				'create_ts' => false,
-				'imm_payment'=>false,
-			);
+			return array('manage_button', 'proj_id', 'proj_detail_id');
 		}
 		return $_cfg[$group];
 	}

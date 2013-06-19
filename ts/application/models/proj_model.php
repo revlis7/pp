@@ -321,7 +321,7 @@ class Proj_model extends CI_Model {
 		return $result;
 	}
 	
-	function get_all_proj_detail($category_id, $ending_status, $recently = false) {
+	function get_all_proj_detail($category_id, $ending_status, $recently = false, $manage_mode = false, $manager = null) {
 		$raw_sql  = 'SELECT proj.id AS proj_id, proj.category, proj.sub_category, ';
 		$raw_sql .= 'proj.issue, proj.name, proj.flow_of_fund, proj.highlights, ';
 		$raw_sql .= 'proj.scale, proj.cycle, proj.profit_property, ';
@@ -349,9 +349,9 @@ class Proj_model extends CI_Model {
 		// category条件
 		$category_query = '';
 		if($category_id == 1) {
-			$raw_sql .= ' AND category = "固定收益类" ';
+			$raw_sql .= ' AND proj.category = "固定收益类" ';
 		} else {
-			$raw_sql .= ' AND category = "浮动收益类" ';
+			$raw_sql .= ' AND proj.category = "浮动收益类" ';
 		}
 
 		// 最近三个月项目条件
@@ -359,9 +359,15 @@ class Proj_model extends CI_Model {
 			$raw_sql .= ' AND DATEDIFF(NOW(), proj.update_ts) <= 90 ';
 		}
 
+		if(!$manage_mode) {
+			$raw_sql .= ' AND proj.pdt_status = "上线通过" ';
+		} else {
+			$raw_sql .= ' AND (proj.pdt_status = "上线通过" OR proj.manager = ?) ';
+		}
+
 		$raw_sql .= ' ORDER BY order_2 DESC, sub_category DESC, proj.name, proj_detail.month, proj_detail.amount ';
 
-		$query = $this->db->query($raw_sql);
+		$query = $this->db->query($raw_sql, array($manager));
 		return $query->result();
 	}
 

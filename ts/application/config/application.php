@@ -10,7 +10,7 @@ $config['group_cfg'] = array(
 	'other'           => array('其他人员','VIP客户'),
 );
 
-// fields cannot be accessed by group
+// fields *cannot* be accessed
 $config['access_fields_cfg'] = array(
 	'administrator' => array(),
 	'product_manager' => array(),

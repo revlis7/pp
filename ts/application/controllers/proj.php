@@ -38,59 +38,60 @@ class Proj extends Auth_Controller {
 	
 	//返回所有proj＋proj_detail的json数据
 	function view() {
-		$category_id   = $this->input->get('c', true);
-		$ending_status = $this->input->get('e', true);
-		$recently      = $this->input->get('r', true) ? true : false;
+		$category_id   = $this->input->get('c');
+		$ending_status = $this->input->get('e');
+		$recently      = $this->input->get('r') ? true : false;
+		$manage_mode   = ($this->input->get('m') && $this->has_privilege()) ? true : false;
 
 		$category_id   = $category_id >= 1 ? $category_id : -1;
 		$ending_status = $ending_status >= 1 ? $ending_status : -1;
 
-		$data = $this->Proj_model->get_all_proj_detail($category_id, $ending_status, $recently);
+		$data = $this->Proj_model->get_all_proj_detail($category_id, $ending_status, $recently, $manage_mode, $this->get_user_info('realname'));
 
 		//根据用户组过滤可见信息
-		$temp = array();
 		$group = $this->utility->get_user_group();
 		foreach($data as $_t) {
-			$temp[] = $this->utility->access_fields_filter($group, $_t);
+			$this->utility->access_fields_filter($group, $_t);
 		}
-		
+
 		//对于项目经理组，不属于登录用户自己创建的记录需要过滤部分字段
 		if($this->utility->is_pm()) {
-			$n = count($temp);
+			$n = count($data);
 			for($i = 0; $i < $n; $i++) {
-				if($temp[$i]->manager != $this->get_user_info('realname')) {
-					$this->utility->manager_view_filter($temp[$i]);
+				if($data[$i]->manager != $this->get_user_info('realname')) {
+					$this->utility->manager_view_filter($data[$i]);
 				}
 			}
 		}
-		
+
 		$format = $this->input->get('format', true);
 		if($format == 'csv') {
 			$this->load->helper('csv');
-			$temp = $this->utility->object_to_array($temp);
-			foreach(array_keys($temp) as $n) {
-				foreach(array_keys($temp[$n]) as $m) {
-					$temp[$n][$m] = iconv('UTF-8', 'GB18030', $temp[$n][$m]);
+			$data = $this->utility->object_to_array($data);
+			foreach(array_keys($data) as $n) {
+				foreach(array_keys($data[$n]) as $m) {
+					$data[$n][$m] = iconv('UTF-8', 'GB18030', $data[$n][$m]);
 				}
 			}
-			//var_dump($temp);exit;
-			array_to_csv($temp, 'proj-'.date('Y-m-d').'.csv');
+
+			array_to_csv($data, 'proj-'.date('Y-m-d').'.csv');
 			exit;
 		}
-		$this->json->output(array('success' => true, 'data' => $temp));
+		$this->json->output(array('success' => true, 'data' => $data));
 	}
-	
-	//返回所有proj的json数据
-	//function proj_view() {
-	//	return null;
-	//}
-	
+
 	//返回proj下所有proj_detail的json数据
 	function detail_view() {
 		$proj_id = $this->input->get('proj_id', true);
 		
 		$data = $this->Proj_model->get_all_detail($proj_id);
-		
+
+		//根据用户组过滤可见信息
+		$group = $this->utility->get_user_group();
+		foreach($data as $_t) {
+			$this->utility->access_fields_filter($group, $_t);
+		}
+
 		//对于项目经理组，不属于登录用户自己创建的记录需要过滤部分字段
 		if($this->utility->is_pm() && $this->Proj_model->get_proj_manager($proj_id) !== $this->get_user_info('realname')) {
 			$n = count($data);
@@ -108,6 +109,8 @@ class Proj extends Auth_Controller {
 		$data = $this->Proj_model->get_proj($proj_id);
 		$data->proj_id = $data->id;
 		unset($data->id);
+		//根据用户组过滤可见信息
+		$this->utility->access_fields_filter($this->utility->get_user_group(), $data);
 		$this->json->output(array('success' => true, 'data' => $data));
 	}
 

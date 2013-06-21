@@ -140,505 +140,462 @@ Ext.onReady(function() {
       width:540,
       items:[
       {
-        xtype:"form",
-        bodyPadding:5,
-        trackResetOnLoad:true,
-        border:0,
-        waitTitle:"Pleas wait...",
-        layout:{
-          type:'hbox',
-          defaultMargins: {top: 0, right: 5, bottom: 0, left: 5}
-        },
-        fieldDefaults:{
-          lableWidth:90,
-          width:320
-        },
-        dockedItems: [{
-          dock: 'bottom',
-          xtype: 'toolbar',
-          bodyPadding: 5,
-          items: [{
-            icon:'/ts/misc/resources/icons/grid.png',
-            text: '确定',
-            formBind: true, //only enabled once the form is valid
-            disabled: true,
-            handler: function() {
-              this.up('form').getForm().submit({
-                url: '/ts/index.php/proj/proj_update_submit',
-                submitEmptyText: false,
-                waitMsg: 'Saving Data...',
-                success: function(form, action) {
-                  ProjWin.close();
-                  projStore.load(function(records, operation, success) {
-                //    ProjInfoForm.getForm().loadRecord(records[0]);
-                    proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
-                  });
-                } 
-                //,
-                //failure: function(form, action) {
-                //  Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
-                //}
-              });
-            }
-          },{
-            icon:'/ts/misc/resources/icons/cross.gif',
-            text: '取消',
-            handler: function(){
-              this.up('window').close();
-            }
-          }]
-        }],
-        items:[
-        {
-          xtype:'panel',
-          region:'east',
-          border:0,
-          items:[
-          {
-            xtype:'fieldset',
-            title: '项目信息',
-            //collapsible: true,
-            defaults: {
-              labelWidth: 89,
-              anchor: '100%',
-              layout: {
-                type: 'hbox',
-                defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
-              }
-            },
-            items:[
-            {
-              xtype:'hiddenfield',
-              fieldLabel: 'proj_id',
-              name:'proj_id',
-              allowBlank: false
-            },
-            {
-              xtype:'fieldcontainer',
-              layout:'hbox',
-              flex:1,
-              width:480,
-              region:'north',
-              fieldLabel: '项目类别',
-              items:[
-              {//主类别
-                 xtype:'combo',
-                 emptyText:"主类别...",  
-                 width:160,
-                 name:'category',
-                 store : chCategoryList,
-                 queryMode : 'local',
-                 forceSelection:true,
-                 triggerAction: 'all',
-                 valueField: 'id',   //value值字段
-                 displayField: 'text',  //显示文本字段
-//                 listeners: { // 监听选择事件
-//                     select: function() {
-//                        chSubCategoryList.removeAll();
-//                        if (this.getValue() == '固定收益类') {
-//                           chSubCategoryList.loadData(chFixedList,true);
-//                        } else if (this.getValue() == '浮动收益类') {
-//                           chSubCategoryList.loadData(chFloatingList,true);
-//                        }
-//                     }
-//                 }
-              }, 
-              {//子类别
-                 xtype:'textfield',
-                 emptyText:"子类别...",
-                 width:160,
-                 name:'sub_category',
-                 store : chSubCategoryList,
-                 queryMode: 'local',
-                 triggerAction: 'all',
-                 valueField: 'value',
-                 displayField: 'text',
-                 forceSelection:true,
-                 listeners: { 
-                     select: function() {
-//                         alert(comboBuild.getValue() + '-' + comboRoom.getValue());                          
-                        }
-                 }
-              }]
-            },{
-              xtype:'textfield',
-              fieldLabel: '发行方',
-              name:'issue',
-              allowBlank: false
-            },{
-              xtype:'textfield',
-              fieldLabel: '项目名称',
-              width:480,
-              name:'name',
-              allowBlank: false
-            },{
-              xtype:'textfield',
-              fieldLabel: '资金投向',
-              width:480,
-              name:'flow_of_fund',
-              allowBlank: false
-            },{
-              xtype:'textareafield',
-              fieldLabel: '项目亮点',
-              width:480,
-              height:100,
-              name:'highlights',
-              allowBlank: false
-            },{
-              xtype:'numberfield',
-              fieldLabel: '项目期限(月)',
-              name:'month',
-              allowBlank: false
-            },{
-              xtype:'numberfield',
-              fieldLabel: '融资规模(亿)',
-              name:'scale',
-              allowBlank: false
-            },{
-              xtype:'combo',
-              fieldLabel: '分配',
-              name:'cycle',
-              queryMode : 'local',
-              store : chCycleList,
-              valueField: 'id',
-              displayField: 'text',
-              forceSelection:true,
-              allowBlank: false
-            },{
-              xtype:'combo',
-              fieldLabel: '项目收益属性',
-              name:'profit_property',
-              queryMode : 'local',
-              store : chProfitPropertyList,
-              valueField: 'id',
-              displayField: 'text',
-              forceSelection:true,
-              allowBlank: false
-            },{
-              xtype:'textfield',
-              fieldLabel: '合同情况',
-              width:480,
-              name:'contract',
-              allowBlank: true
-            },{
-              xtype:'textareafield',
-              fieldLabel: '打款账户',
-              width:480,
-              name:'pay_account',
-              allowBlank: true
-            },{
-              xtype:'textareafield',
-              fieldLabel: '项目进度',
-              width:480,
-              name:'countdown',
-              allowBlank: true
-            },{
-              xtype:'combo',
-              fieldLabel: '产品经理',
-              name:'manager',
-              queryMode : 'local',
-              store : chManagerList,
-              valueField: 'id',
-              displayField: 'text',
-              forceSelection:true,
-              allowBlank: false
-            },{
-              xtype:'datefield',
-              fieldLabel: '成立日期',
-              forceSelection:true,
-              name:'found'
-            },{
-              xtype:'textfield',
-              fieldLabel: '备注',
-              width:480,
-              name:'remark',
-              allowBlank: true
-            }]
-          }]
-        }]
+      	xtype:"form",
+      	bodyPadding:5,
+      	trackResetOnLoad:true,
+      	border:0,
+      	waitTitle:"Pleas wait...",
+      	layout:{
+      	  type:'hbox',
+      	  defaultMargins: {top: 0, right: 5, bottom: 0, left: 5}
+      	},
+      	fieldDefaults:{
+      	  lableWidth:90,
+      	  width:320
+      	},
+      	dockedItems: [{
+      	  dock: 'bottom',
+      	  xtype: 'toolbar',
+      	  bodyPadding: 5,
+      	  items: [{
+      	    icon:'/ts/misc/resources/icons/grid.png',
+      	    text: '确定',
+      	    formBind: true, //only enabled once the form is valid
+      	    disabled: true,
+      	    handler: function() {
+      	      this.up('form').getForm().submit({
+      	        url: '/ts/index.php/proj/proj_update_submit',
+      	        submitEmptyText: false,
+      	        waitMsg: 'Saving Data...',
+      	        success: function(form, action) {
+      	          ProjWin.close();
+      	          projStore.load(function(records, operation, success) {
+      	        //    ProjInfoForm.getForm().loadRecord(records[0]);
+      	            proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
+      	          });
+      	        } 
+      	        //,
+      	        //failure: function(form, action) {
+      	        //  Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+      	        //}
+      	      });
+      	    }
+      	  },{
+      	    icon:'/ts/misc/resources/icons/cross.gif',
+      	    text: '取消',
+      	    handler: function(){
+      	      this.up('window').close();
+      	    }
+      	  }]
+      	}],
+      	items:[
+      	{
+					xtype:'panel',
+					region:'east',
+					border:0,
+					layout: {
+						type: 'hbox',
+						defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
+					},
+					items:[
+					{
+						xtype:'fieldset',
+						title: '====<b>项目基本信息</b>====',
+						border:0,
+						//collapsible: true,
+						defaults: {
+							labelWidth: 89,
+							anchor: '100%',
+							layout: {
+								type: 'vbox'
+							}
+						},
+						items:[{xtype:'box',height:10,border:0},
+						{
+							xtype:'hiddenfield',
+							fieldLabel: 'proj_id',
+							name:'proj_id'
+						},
+						{
+							xtype:'fieldcontainer',
+							layout:'hbox',
+							flex:1,
+							width:420,
+							region:'north',
+							labelAlign:'right',
+							fieldLabel: '项目类别*',
+							items:[
+							{//主类别
+								 xtype:'combo',
+								 emptyText:"主类别...",
+								 width:140,
+								 name:'category',
+								 store : chCategoryList,
+								 queryMode : 'local',
+								 forceSelection:true,
+								 triggerAction: 'all',
+								 valueField: 'id',   //value值字段
+								 displayField: 'text',  //显示文本字段
+								 listeners: { // 监听选择事件
+										 select: function() {
+												chSubCategoryList.removeAll();
+												if (this.getValue() == '固定收益类') {
+													 chSubCategoryList.loadData(chFixedList,true);
+												} else if (this.getValue() == '浮动收益类') {
+													 chSubCategoryList.loadData(chFloatingList,true);
+												}
+										 }
+								 }
+							},
+							{//子类别
+								 xtype:'combo',
+								 emptyText:"子类别...",
+								 width:200,
+								 name:'sub_category',
+								 store : chSubCategoryList,
+								 queryMode: 'local',
+								 triggerAction: 'all',
+								 valueField: 'value',
+								 displayField: 'text',
+								 forceSelection:true,
+								 listeners: {
+										 select: function() {
+//	  	                   alert(comboBuild.getValue() + '-' + comboRoom.getValue());
+												}
+								 }
+							}]
+						},{
+							xtype:'textfield',
+							fieldLabel: '发行方*',
+							name:'issue',
+							width:320
+						},{
+							xtype:'textfield',
+							fieldLabel: '项目名称*',
+							name:'name',
+							width:400
+						},{
+							xtype:'numberfield',
+							fieldLabel: '项目期限(月)*',
+							name:'month'
+						},{
+							xtype:'numberfield',
+							fieldLabel: '融资规模(亿)*',
+							name:'scale'
+						},{
+							xtype:'combo',
+							fieldLabel: '分配周期*',
+							name:'cycle',
+							queryMode : 'local',
+							store : chCycleList,
+							valueField: 'id',
+							displayField: 'text',
+							forceSelection:true
+						},{
+							xtype:'combo',
+							fieldLabel: '项目收益属性*',
+							name:'profit_property',
+							queryMode : 'local',
+							store : chProfitPropertyList,
+							valueField: 'id',
+							displayField: 'text',
+							forceSelection:true
+						},{
+							xtype:'textfield',
+							fieldLabel: '资金投向*',
+							width:420,
+							name:'flow_of_fund'
+						},{
+							xtype:'textareafield',
+							fieldLabel: '项目亮点*',
+							width:420,
+							height:100,
+							name:'highlights'
+						}, {
+							xtype:'combo',
+							fieldLabel: '产品经理*',
+							width:220,
+							name:'manager',
+							queryMode : 'local',
+							store : chManagerList,
+							valueField: 'id',
+							displayField: 'text',
+							forceSelection:true
+						}, {
+							xtype:'combo',
+							fieldLabel: '产品等级*',
+							width:220,
+							name:'grade',
+							queryMode : 'local',
+							store : chGradeList,
+							valueField: 'id',
+							displayField: 'text',
+							forceSelection:true
+						},{
+							xtype:'combo',
+							fieldLabel: '销售类别*',
+							name:'exclusive',
+							width:220,
+							queryMode : 'local',
+							store : chExclusiveList,
+							valueField: 'id',
+							displayField: 'text',
+							forceSelection:true
+						}]
+					},{
+						xtype:'fieldset',
+						title: '====<b>项目其他信息</b>====',
+						border:0,
+						//collapsible: true,
+						defaults: {
+							labelWidth: 89,
+							anchor: '100%',
+							labelAlign: 'top',
+							layout: {
+								type: 'hbox',
+								defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
+							}
+						},
+						items:[{xtype:'box',height:5,border:0},
+						{
+							xtype:'textareafield',
+							fieldLabel: '合同情况',
+							width:420,
+							name:'contract',
+							allowBlank: true
+						},{
+							xtype:'textareafield',
+							fieldLabel: '打款账户',
+							width:420,
+							name:'pay_account',
+							allowBlank: true
+						},{
+							xtype:'textareafield',
+							fieldLabel: '项目进度',
+							width:420,
+							height:80,
+							name:'countdown',
+							allowBlank: true
+						},{
+							xtype:'textareafield',
+							fieldLabel: '备注',
+							width:420,
+							height:80,
+							name:'remark',
+							allowBlank: true
+						},{
+							xtype:'textareafield',
+							fieldLabel: '产品经理备注',
+							width:420,
+							height:80,
+							name:'manager_remark',
+							allowBlank: true
+						 }]
+					}]
+				},{
+					xtype:'box',
+					html:'<span style="color:#666666">注：标记*号的是必填项。下列字段不会被渠道及外部用户所见：销售类别，产品经理备注。</span>'
+				}]
+			}]
       }]
     });
-  var AmountEditForm=Ext.create('Ext.form.Panel',{
-    region:'east',
-    width:320,
-    margin:'0 0 0 2',
-    bodyPadding:5,
-    autoScroll :true,
-    hidden:true,
-    //collapsible:true,
-    //collapseDirection : 'left',
-    //collapsed : true,
-    title:'额度信息编辑',
-    trackResetOnLoad:true,
-    border:0,
-    waitTitle:"Pleas wait...",
-    layout:{
-      type:'vbox',
-      defaultMargins: {top: 0, right: 5, bottom: 0, left: 5}
-    },
-    fieldDefaults:{
-      lableWidth:90,
-      width:260
-    },
-    dockedItems: [{
-      dock: 'bottom',
-      xtype: 'toolbar',
-      bodyPadding: 5,
-      items: [{
-        icon:'/ts/misc/resources/icons/accept.gif',
-        text: '确认',
-        formBind: true, //only enabled once the form is valid
-        disabled: true,
-        handler: function() {
-          this.up('form').getForm().submit({
-            url: '/ts/index.php/proj/detail_create_submit',
-            submitEmptyText: false,
-            waitMsg: 'Saving Data...',
-            success: function(form, action) {
-              AmountEditForm.hide();
-              projdetailStore.load();
-            } 
-            //,
-            //failure: function(form, action) {
-            //  Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
-            //}
-          });
-        }
-      },{
-        icon:'/ts/misc/resources/icons/cross.gif',
-        text: '取消',
-        handler: function(){
-          this.up('form').getForm().reset();
-          this.up('panel').hide(); 
-        }
-      }]
-    }],
-    items:[ {
-      xtype:'fieldset',
-      title: '额度信息',
-      collapsible: true,
-      defaults: {
-        labelWidth: 89,
-        anchor: '100%',
-        layout: {
-          type: 'hbox',
-          defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
-        }
-      },
-      items:[
-      {
-        xtype:'hiddenfield',
-        fieldLabel: 'proj_id',
-        name:'proj_id',
-        allowBlank: false
-      },
-      {
-        xtype:'hiddenfield',
-        fieldLabel: 'proj_detail_id',
-        name:'proj_detail_id',
-        allowBlank: false
-      },{
-        xtype:'numberfield',
-        fieldLabel: '认购金额(万)',
-        name:'amount',
-        allowBlank: false
-      },{
-        xtype:'numberfield',
-        fieldLabel: '项目收益(%)',
-        name:'profit',
-        allowBlank: false
-      }]
-    }, {
-      xtype:'fieldset',
-      title: '综合信息',
-      collapsible: true,
-      defaults: {
-        labelWidth: 89,
-        anchor: '100%',
-        layout: {
-          type: 'hbox',
-          defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
-        }
-      },
-      items:[{
-         xtype:'combo',
-         fieldLabel: '份额',
-         name:'total_share',
-         queryMode : 'local',
-         store : chTotalShareList,
-         valueField: 'id',
-         displayField: 'text',
-         forceSelection:true,
-         allowBlank: false
-       }, {
-         xtype:'combo',
-         fieldLabel: '销售状态',
-         name:'status',
-         queryMode : 'local',
-         store : chStatusList,
-         valueField: 'id',
-         displayField: 'text',
-         forceSelection:true,
-         allowBlank: false
-       }, {
-         xtype:'combo',
-         fieldLabel: '销售类别',
-         name:'exclusive',
-         queryMode : 'local',
-         store : chExclusiveList,
-         valueField: 'id',
-         displayField: 'text',
-         forceSelection:true,
-         allowBlank: false
-       }, {
-         xtype:'combo',
-         fieldLabel: '产品等级',
-         name:'grade',
-         queryMode : 'local',
-         store : chGradeList,
-         valueField: 'id',
-         displayField: 'text',
-         forceSelection:true,
-         allowBlank: false
-       }]
-    }, {
-      xtype:'fieldset',
-      title: '佣金信息',
-      collapsible: true,
-      defaults: {
-        labelWidth: 89,
-        anchor: '100%',
-        layout: {
-          type: 'hbox',
-          defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
-        }
-      },
-      items:[{
-        xtype:'numberfield',
-        fieldLabel: '税前佣金(%)',
-        name:'commission_b_tax',
-        decimalPrecision:3,
-        allowBlank: false
-      },{
-        xtype:'numberfield',
-        fieldLabel: '税后佣金(%)',
-        name:'commission_a_tax',
-        decimalPrecision:3,
-        allowBlank: false
-      },{
-        xtype:'numberfield',
-        fieldLabel: '平台费用(%)',
-        name:'inner_commission',
-        decimalPrecision:3,
-        allowBlank: false
-      },{
-        xtype:'numberfield',
-        fieldLabel: '费用(%)',
-        name:'outer_commission',
-        decimalPrecision:3,
-        allowBlank: false
-      },{
-        xtype:'numberfield',
-        fieldLabel: '现结费用(%)',
-        name:'imm_payment',
-        decimalPrecision:3,
-        allowBlank: false
-      }]
-    }, {
-      xtype:'fieldset',
-      title: '打款信息',
-      collapsible: true,
-      defaults: {
-        labelWidth: 89,
-        anchor: '100%',
-        layout: {
-          type: 'hbox',
-          defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
-        }
-      },
-      items:[{
-       xtype:'datefield',
-       fieldLabel: '打款日期',
-       forceSelection:true,
-       name:'pay'
-      },{
-       xtype:'numberfield',
-       fieldLabel: '已打款金额',
-       name:'paid'
-      }]
-    }, {
-      xtype:'fieldset',
-      title: '包销进度信息',
-      collapsible: true,
-      defaults: {
-        labelWidth: 89,
-        anchor: '100%',
-        layout: {
-          type: 'hbox',
-          defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
-        }
-      },
-      items:[{
-       xtype:'numberfield',
-       fieldLabel: '包销/分销额度',
-       name:'quota'
-      },{
-       xtype:'numberfield',
-       fieldLabel: '已打款额度',
-       name:'quota_paid'
-      },{
-       xtype:'numberfield',
-       fieldLabel: '剩余额度',
-       name:'quota_remain'
-      }]
-    },{
-      xtype:'fieldset',
-      title: '渠道信息',
-      collapsible: true,
-      defaults: {
-        labelWidth: 89,
-        anchor: '100%',
-        layout: {
-          type: 'hbox',
-          defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
-        }
-      },
-      items:[{
-       xtype:'textfield',
-       fieldLabel: '主销渠道',
-       name:'main_channel'
-      },{
-       xtype:'textfield',
-       fieldLabel: '渠道公司',
-       name:'channel_company'
-      },{
-       xtype:'textfield',
-       fieldLabel: '渠道联系人',
-       name:'channel_contact'
-      },{
-       xtype:'textfield',
-       fieldLabel: '走帐公司',
-       name:'billing_company'
-      }]
-    },{
-      xtype:'fieldset',
-      title: '其他',
-      collapsible: true,
-      defaults: {
-        labelWidth: 89,
-        anchor: '100%',
-        layout: {
-          type: 'hbox',
-          defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
-        }
-      },
-      items:[{
-       xtype:'textfield',
-       fieldLabel: '产品经理备注',
-       name:'manager_remark'
-      }]
-    }]
-  });
+	var AmountEditWin=Ext.create('Ext.window.Window',{
+		resizeable:false,
+		closeAction:"hide",
+		closable:false,
+		title:'额度信息编辑',
+		titleAlign:'center',
+		width:1006,
+		items:[
+		{
+			xtype:"form",
+			width:990,
+			margin:'0 0 0 2',
+			bodyPadding:5,
+			autoScroll :true,
+			//hidden:true,
+			//collapsible:true,
+			//collapseDirection : 'left',
+			//collapsed : true,
+			//title:'额度信息编辑',
+			trackResetOnLoad:true,
+			border:0,
+			waitTitle:"Pleas wait...",
+			layout:{
+				type:'hbox',
+				align: 'stretch',
+				defaultMargins: {top: 0, right: 5, bottom: 0, left: 5}
+			},
+			fieldDefaults:{
+				lableWidth:90,
+				width:240,
+				allowBlank: false,
+				labelAlign:'right'
+			},
+			dockedItems: [{
+				dock: 'bottom',
+				xtype: 'toolbar',
+				scale:'medium',
+				bodyPadding: 5,
+				items: [{xtype:'box',flex:1},{
+					icon:'/ts/misc/resources/icons/accept.gif',
+					text: '确认',
+					scale:'medium',
+					formBind: true, //only enabled once the form is valid
+					disabled: true,
+					handler: function() {
+						this.up('form').getForm().submit({
+							url: '/ts/index.php/proj/detail_create_submit',
+							submitEmptyText: false,
+							waitMsg: 'Saving Data...',
+							success: function(form, action) {
+								form.up('window').hide();
+								projdetailStore.load();
+							}
+							//,
+							//failure: function(form, action) {
+							//  Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+							//}
+						});
+					}
+				},{
+					icon:'/ts/misc/resources/icons/cross.gif',
+					text: '取消',
+					scale:'medium',
+					handler: function(){
+						this.up('form').getForm().reset();
+						this.up('window').hide();
+					}
+				},{xtype:'box',flex:1}]
+			}],
+			items:[
+			{
+				xtype:'fieldset',
+				title: '====<b>基本信息</b>====',
+				border:0,
+				layout: {
+					type: 'vbox'
+				},
+				items:[{
+					xtype:'textfield',
+					fieldLabel: '子名称*',
+					name:'sub_name',
+					width:320
+				},{
+					xtype:'numberfield',
+					fieldLabel: '项目期限(月)*',
+					name:'month'
+				},{
+					xtype:'numberfield',
+					fieldLabel: '认购金额(万)*',
+					name:'amount'
+				},{
+					xtype:'numberfield',
+					fieldLabel: '项目收益(%)*',
+					name:'profit'
+				},{
+					xtype:'combo',
+					fieldLabel: '销售状态*',
+					name:'status',
+					queryMode : 'local',
+					store : chStatusList,
+					valueField: 'id',
+					displayField: 'text',
+					forceSelection:true
+				}, {
+					xtype:'combo',
+					fieldLabel: '份额*',
+					name:'total_share',
+					queryMode : 'local',
+					store : chTotalShareList,
+					valueField: 'id',
+					displayField: 'text',
+					forceSelection:true
+				}, {
+					xtype:'datefield',
+					fieldLabel: '成立日期',
+					width:300,
+					forceSelection:true,
+					allowBlank: true
+				}]
+			},{
+				xtype:'fieldset',
+				title: '====<b>佣金信息</b>====',
+				border:0,
+				layout: {
+					type: 'vbox',
+					defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
+				},
+				items:[{
+					xtype:'numberfield',
+					fieldLabel: '税前佣金(%)*',
+					name:'commission_b_tax',
+					decimalPrecision:3
+				},{
+					xtype:'numberfield',
+					fieldLabel: '税后佣金(%)*',
+					name:'commission_a_tax',
+					decimalPrecision:3
+				},{
+					xtype:'numberfield',
+					fieldLabel: '平台费用(%)*',
+					name:'inner_commission',
+					decimalPrecision:3
+				},{
+					xtype:'numberfield',
+					fieldLabel: '费用(%)*',
+					name:'outer_commission',
+					decimalPrecision:3
+				},{
+					xtype:'numberfield',
+					fieldLabel: '现结费用(%)*',
+					name:'imm_payment',
+					decimalPrecision:3
+				},{
+					xtype:'hiddenfield',
+					fieldLabel: 'proj_id',
+					name:'proj_id'
+				},{
+					xtype:'hiddenfield',
+					fieldLabel: 'proj_detail_id',
+					name:'proj_detail_id'
+				}]
+			},{
+				xtype:'fieldset',
+				title: '====<b>渠道信息</b>====',
+				border:0,  
+				layout: {
+					type: 'vbox',
+					defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
+				},
+				items:[{
+					xtype:'textfield',
+					fieldLabel: '主销渠道',
+					width:320,
+					name:'main_channel',
+					allowBlank: true
+				},{
+					xtype:'textfield',
+					fieldLabel: '渠道公司',
+					width:320,
+					name:'channel_company',
+					allowBlank: true
+				},{
+					xtype:'textfield',
+					fieldLabel: '渠道联系人',
+					width:320,
+					name:'channel_contact',
+					allowBlank: true
+				},{
+					xtype:'textfield',
+					fieldLabel: '走帐公司',
+					width:320,
+					name:'billing_company',
+					allowBlank: true
+				}]
+			}]
+		}]
+	});
 
   var uploadWin=Ext.create("Ext.window.Window",{
     title: '上传项目文件',
@@ -691,155 +648,157 @@ Ext.onReady(function() {
     }]
   });
 
-var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
-    store: projdetailStore,
-    border:1,
-    title:'额度信息',
-    emptyText:'暂无额度信息',
-    region:'south',
-    minHeight:166,
-    autoScroll:true,
-    //flex:1,
-    columns:[{
-        xtype: 'actioncolumn',
-        text:'删除',
-        width:40,style: "text-align:center;",align: 'center', 
-        sortable: false,
-        items: [{
-          icon: '/ts/misc/resources/icons/cross.gif',
-          tooltip: '删除此条记录',
-          handler: function(grid, rowIndex, colIndex) {
-            var amount=grid.getStore().getAt(rowIndex).get("amount");
-            Ext.Msg.show({
-              title:'删除文件',
-              msg: '您是否确认要删除认购金额为 '+amount+' 万？',
-              buttons: Ext.Msg.OKCANCEL,
-              icon: Ext.Msg.QUESTION,
-              fn:function(buttonId){
-                if(buttonId=='ok'){
-                  AmountEditForm.getForm().loadRecord(grid.getStore().getAt(rowIndex));
-                  AmountEditForm.getForm().submit({
-                      url: '/ts/index.php/proj/detail_delete_submit',
-                      submitEmptyText: false,
-                      waitMsg: 'Saving Data...',
-                      success: function(form, action) {
-                        projdetailStore.removeAt(rowIndex);
-                      } ,
-                      failure: function(form, action) {
-                        Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
-                      }
-                  });
-                }
-              }
-            });
-          }
-        }]
-      },{
-        xtype: 'actioncolumn',
-        text:'编辑',
-        width:40,style: "text-align:center;",align: 'center', 
-        sortable: false,
-        items: [{
-          icon: '/ts/misc/resources/icons/cog_edit.png',
-          tooltip: '编辑此条记录',
-          handler: function(grid, rowIndex, colIndex) {
-            //sampleStore.removeAt(rowIndex);      
-            AmountEditForm.getForm().loadRecord(grid.getStore().getAt(rowIndex));
-            AmountEditForm.show();
-          }
-        }]
-      },
-      {text:'份额',         dataIndex:'total_share',      filtable:true, width:50},
-      {text:'销售状态',     dataIndex:'status',           filtable:true, width:70},
-      {text:'认购金额',     dataIndex:'amount',           filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
-      {text:'项目收益',     dataIndex:'profit',           filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-      {text:'税前佣金',     dataIndex:'commission_b_tax', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-      {text:'税后佣金',     dataIndex:'commission_a_tax', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-      {text:'平台费用',     dataIndex:'inner_commission', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-      {text:'费用',         dataIndex:'outer_commission', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-      {text:'现结费用',         dataIndex:'imm_payment', filtable:true, width:60,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-      {text:'打款日期',     dataIndex:'pay',              filtable:true, width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
-      {text:'已打款金额',   dataIndex:'paid',             filtable:true, width:80},
-      {text:'包销/分销额度',dataIndex:'quota',            filtable:true, width:90},
-      {text:'已打款额度',   dataIndex:'quota_paid',       filtable:true, width:80},
-      {text:'剩余额度',     dataIndex:'quota_remain',     filtable:true, width:80},
-      {text:'主销渠道',     dataIndex:'main_channel',     filtable:true, width:80},
-      {text:'渠道公司',     dataIndex:'channel_company',  filtable:true, width:80},
-      {text:'渠道联系人',   dataIndex:'channel_contact',  filtable:true, width:80},
-      {text:'走帐公司',     dataIndex:'billing_company',  filtable:true, width:80},
-      {text:'产品经理备注', dataIndex:'manager_remark',   filtable:true, width:140,
-          renderer: function(value,metaData,record,colIndex,store,view) {  
-            metaData.tdAttr = 'data-qtip="<pre>'+value+'</pre>"';  
-            return value; 
-          }
-      }
-    ]
-  });
+	var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
+		store: projdetailStore,
+		border:1,
+		title:'额度信息',
+		region:'south',
+		minHeight:156,
+//    flex:1,
+		emptyText:'暂无额度信息',
+		columns:[{
+			xtype: 'actioncolumn',
+			text:'删除',
+			width:40,
+			style: "text-align:center;",
+			align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/cross.gif',
+				tooltip: '删除此条记录',
+				handler: function(grid, rowIndex, colIndex) {
+					var amount=grid.getStore().getAt(rowIndex).get("amount");
+					Ext.Msg.show({
+						title:'删除文件',
+						msg: '您是否确认要删除认购金额为 '+amount+' 万？',
+						buttons: Ext.Msg.OKCANCEL,
+						icon: Ext.Msg.QUESTION,
+						fn:function(buttonId){
+							if(buttonId=='ok'){
+								AmountEditForm=AmountEditWin.down('form').getForm();
+								AmountEditForm.getForm().loadRecord(grid.getStore().getAt(rowIndex));
+								AmountEditForm.getForm().submit({
+									url: '/ts/index.php/proj/detail_delete_submit',
+									submitEmptyText: false,
+									waitMsg: 'Saving Data...',
+									success: function(form, action) {
+										projdetailStore.removeAt(rowIndex);
+									} ,
+									failure: function(form, action) {
+										Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+									}
+								});
+							}
+						}
+					});
+				}
+			}]
+		}, {
+			xtype: 'actioncolumn',
+			width:40,style: "text-align:center;",align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/cog_edit.png',
+				tooltip: '编辑此条记录',
+				handler: function(grid, rowIndex, colIndex) {
+					//sampleStore.removeAt(rowIndex);
+					AmountEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
+					Ext.getBody().mask();
+					AmountEditWin.show();
+				}
+			}]
+		},
+		{text:'子名称',     dataIndex:'sub_name',         filtable:true, width:60},
+		{text:'项目期限',   dataIndex:'month',            filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'个月';}},
+		{text:'认购金额',   dataIndex:'amount',           filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
+		{text:'项目收益',   dataIndex:'profit',           filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+		{text:'销售状态',   dataIndex:'status',           filtable:true, width:50},
+		{text:'份额',       dataIndex:'total_share',      filtable:true, width:50},
+		{text:'税前佣金',   dataIndex:'commission_b_tax', filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+		{text:'税后佣金',   dataIndex:'commission_a_tax', filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+		{text:'平台费用',   dataIndex:'inner_commission', filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+		{text:'费用',       dataIndex:'outer_commission', filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+		{text:'现结费用',   dataIndex:'imm_payment',      filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+		{text:'主销渠道',   dataIndex:'main_channel',     filtable:true, width:80},
+		{text:'渠道公司',   dataIndex:'channel_company',  filtable:true, width:80},
+		{text:'渠道联系人', dataIndex:'channel_contact',  filtable:true, width:80},
+		{text:'走帐公司',   dataIndex:'billing_company',  filtable:true, width:80}
+		]
+	});
 
-  var FileListGrid=Ext.create('Ext.grid.Panel',{
-    store: fileListStore,
-    border:1,
-    title:'文件列表',
-    emptyText:'暂无文件信息',
-    autoScroll:true,
-    minHeight:156,
-    region:'south',
-    //flex:1,
-    autoScroll : true,
-    columns:[{
-        xtype: 'actioncolumn',
-        text:'删除',
-        width:40,style: "text-align:center;",align: 'center', 
-        sortable: false,
-        items: [{
-          icon: '/ts/misc/resources/icons/cross.gif',
-          tooltip: '删除该文件',
-          handler: function(grid, rowIndex, colIndex) {
-            var filename=grid.getStore().getAt(rowIndex).get("filename");
-            Ext.Msg.show({
-              title:'删除文件',
-              msg: '您是否确认要删除文件 '+filename+' ？',
-              buttons: Ext.Msg.OKCANCEL,
-              icon: Ext.Msg.QUESTION,
-              fn:function(buttonId){
-                if(buttonId=='ok'){
-                  Ext.Ajax.request({
-                    url: '/ts/index.php/upload/delete?file='+filename,
-                    success: function(response){
-                      fileListStore.load();
-                      // process server response here
-                    }
-                  });
-                }
-              }
-            });
-          }
-        }]
-      },{
-        xtype: 'actioncolumn',
-        text:'下载',
-        width:40,style: "text-align:center;",align: 'center', 
-        sortable: false,
-        items: [{
-          icon: '/ts/misc/resources/icons/download.gif',
-          tooltip: '下载该文件',
-          handler: function(grid, rowIndex, colIndex) {
-            var filename=grid.getStore().getAt(rowIndex).get("filename");
-            window.open('/ts/index.php/upload/get?file='+filename);
-          }
-        }]
-      },
-      {text:'文件名',         dataIndex:'filename',      filtable:true, width:300},
-      {text:'文件大小',       dataIndex:'filesize',      filtable:true, width:70,
-         renderer:function(value,metaData,record,colIndex,store,view) {
-           if(value>=1048676) {var v=value/1048576;return v.toFixed(2)+' MB';}
-           else if(value>=1024) {var v=value/1024;return v.toFixed(2)+' KB';}
-           else return value;
-         }
-      },
-      {text:'文件上传日期',   dataIndex:'create_ts',      filtable:true, width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
-    ]
-  });
+	var FileListGrid=Ext.create('Ext.grid.Panel',{
+		store: fileListStore,
+		border:1,
+		title:'文件列表',
+		emptyText:'暂无文件信息',
+		minHeight:156,
+		region:'south',
+//    flex:1,
+		columns:[
+		{
+			xtype: 'actioncolumn',
+			text:'删除',
+			width:40,style: "text-align:center;",align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/cross.gif',
+				tooltip: '删除该文件',
+				handler: function(grid, rowIndex, colIndex) {
+					AmountEditForm.getForm().loadRecord(grid.getStore().getAt(rowIndex));
+					AmountEditForm.getForm().submit({
+							url: '/ts/index.php/proj/file_delete_submit',
+							submitEmptyText: false,
+							waitMsg: 'Saving Data...',
+							success: function(form, action) {
+								fileListStore.removeAt(rowIndex);
+							} ,
+							failure: function(form, action) {
+								Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+							}
+					});
+				}
+			}]
+		},{
+			xtype: 'actioncolumn',
+			text:'下载',
+			width:40,style: "text-align:center;",align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/download.gif',
+				tooltip: '下载该文件',
+				handler: function(grid, rowIndex, colIndex) {
+					var filename=grid.getStore().getAt(rowIndex).get("filename");
+					window.open('/ts/index.php/upload/get?file='+filename);
+				}
+			}]
+		},
+		{text:'文件名',         dataIndex:'filename',      filtable:true, width:300},
+		{text:'文件大小',       dataIndex:'filesize',      filtable:true, width:70,
+			 renderer:function(value,metaData,record,colIndex,store,view) {
+				 if(value>=1048676) {var v=value/1048576;return v.toFixed(2)+'MB';}
+				 else if(value>=1024) {var v=value/1024;return v.toFixed(2)+'KB';}
+				 else return value;
+			 }
+		},
+		{text:'文件上传日期',   dataIndex:'create_ts',      filtable:true, width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")}
+		]
+	});
+	
+	AmountEditWin.on({
+    	hide: function(){
+      		Ext.getBody().unmask();
+    	}
+	});
+	uploadWin.on({
+    	hide: function(){
+      		Ext.getBody().unmask();
+    	}
+	});
+	ProjWin.on({
+    	hide: function(){
+      		Ext.getBody().unmask();
+    	}
+	});
   var viewport = Ext.create('Ext.Viewport', {
     layout: {
         type: 'border',

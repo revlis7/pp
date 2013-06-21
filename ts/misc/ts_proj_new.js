@@ -369,7 +369,7 @@ Ext.onReady(function() {
 						{//子类别
 							 xtype:'combo',
 							 emptyText:"子类别...",
-							 width:160,
+							 width:200,
 							 name:'sub_category',
 							 store : chSubCategoryList,
 							 queryMode: 'local',
@@ -386,11 +386,13 @@ Ext.onReady(function() {
 					},{
 						xtype:'textfield',
 						fieldLabel: '发行方*',
-						name:'issue'
+						name:'issue',
+						width:320
 					},{
 						xtype:'textfield',
 						fieldLabel: '项目名称*',
-						name:'name'
+						name:'name',
+						width:400
 					},{
 						xtype:'numberfield',
 						fieldLabel: '项目期限(月)*',
@@ -760,201 +762,8 @@ Ext.onReady(function() {
 							});
 						}
 					}
-			}]
-		}
-	}]
-	});
-
-	var ProjInfoForm=Ext.create('Ext.form.Panel',{
-		xtype:'form',
-		border:1,
-		bodyPadding:5,
-		region:'north',
-		//weight:-100,
-		flex:2,
-		autoScroll :true,
-		fieldDefault:{
-			maskOnDisable:false,
-			disabledCls:"x-item",
-			width:240,
-			allowBlank: false
-		},
-/*    listeners:{
-			show: function(){
-				this.up('form').getForm().loadRecord(sampleStore.first().data);
-			}
-		},
-*/
-		dockedItems: [{
-			dock: 'top',
-			xtype: 'toolbar',
-			bodyPadding: 5,
-			items: [{
-				text:'编辑项目信息',
-				icon: '/ts/misc/resources/icons/cog_edit.png',
-				handler:function(){
-					ProjWin.down('form').getForm().loadRecord(projStore.first());
-					Ext.getBody().mask();
-					ProjWin.show();
-				}
-			}]
-		}],
-		items:[{
-			xtype:'fieldset',
-			title: '====<b>项目基本信息</b>====',
-			border:0,
-			//collapsible: true,
-			defaults: {
-				labelWidth: 89,
-				anchor: '100%',
-				layout: {
-					type: 'vbox',
-					defaultMargins: {top: 5, right: 5, bottom: 5, left: 5}
-				}
-			},
-			items:[{xtype:'box',height:5,border:0},
-			{
-				xtype:'hiddenfield',
-				fieldLabel: 'proj_id',
-				name:'proj_id'
-			},{
-				xtype:'fieldcontainer',
-				layout:'hbox',
-				flex:1,
-				width:420,
-				region:'north',
-				labelAlign:'right',
-				fieldLabel: '项目类别*',
-				items:[
-				{//主类别
-					 xtype:'textfield',
-					 width:120,
-					 name:'category'
-				},
-				{//子类别
-					 xtype:'textfield',
-					 width:200,
-					 name:'sub_category'
 				}]
-			},{
-				xtype:'textfield',
-				fieldLabel: '发行方*',
-				name:'issue',
-				width:320
-			},{
-				xtype:'textfield',
-				fieldLabel: '项目名称*',
-				width:400,
-				name:'name'
-			},{
-				xtype:'numberfield',
-				fieldLabel: '项目期限(月)*',
-				name:'month'
-			},{
-				xtype:'numberfield',
-				fieldLabel: '融资规模(亿)*',
-				name:'scale'
-			},{
-				xtype:'combo',
-				fieldLabel: '分配周期*',
-				name:'cycle',
-				queryMode : 'local',
-				store : chCycleList,
-				valueField: 'id',
-				displayField: 'text',
-				forceSelection:true
-			},{
-				xtype:'combo',
-				fieldLabel: '项目收益属性*',
-				name:'profit_property',
-				queryMode : 'local',
-				store : chProfitPropertyList,
-				valueField: 'id',
-				displayField: 'text',
-				forceSelection:true
-			},{
-				xtype:'textfield',
-				fieldLabel: '资金投向*',
-				width:420,
-				name:'flow_of_fund'
-			},{
-				xtype:'textareafield',
-				fieldLabel: '项目亮点*',
-				width:420,
-				height:100,
-				name:'highlights'
-			}, {
-				xtype:'combo',
-				fieldLabel: '产品经理*',
-				name:'manager',
-				queryMode : 'local',
-				store : chManagerList,
-				valueField: 'id',
-				displayField: 'text',
-				forceSelection:true
-			}, {
-				xtype:'combo',
-				fieldLabel: '产品等级*',
-				name:'grade',
-				queryMode : 'local',
-				store : chGradeList,
-				valueField: 'id',
-				displayField: 'text',
-				forceSelection:true
-			},{
-				xtype:'combo',
-				fieldLabel: '销售类别*',
-				name:'exclusive',
-				queryMode : 'local',
-				store : chExclusiveList,
-				valueField: 'id',
-				displayField: 'text',
-				forceSelection:true
-			}]
-		},{
-			xtype:'fieldset',
-			title: '====<b>项目其他信息</b>====',
-			border:0,
-			//collapsible: true,
-			defaults: {
-				labelWidth: 89,
-				width:420,
-				anchor: '100%',
-				layout: {
-					type: 'hbox',
-					defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
-				}
-			},
-			items:[
-			{
-				xtype:'textareafield',
-				fieldLabel: '合同情况',
-				name:'contract',
-				allowBlank: true
-			},{
-				xtype:'textareafield',
-				fieldLabel: '打款账户',
-				name:'pay_account',
-				allowBlank: true
-			},{
-				xtype:'textareafield',
-				fieldLabel: '项目进度',
-				height:80,
-				name:'countdown',
-				allowBlank: true
-			},{
-				xtype:'textareafield',
-				fieldLabel: '备注',
-				height:80,
-				name:'remark',
-				allowBlank: true
-			},{
-				xtype:'textareafield',
-				fieldLabel: '产品经理备注',
-				height:80,
-				name:'manager_remark',
-				allowBlank: true
-			 }]
+			}
 		}]
 	});
 

@@ -275,11 +275,6 @@ class Proj extends Auth_Controller {
 		$outer_commission = $this->input->post('outer_commission', true);
 		$imm_payment = $this->input->post('imm_payment', true);
 		$month = $this->input->post('month', true);
-		$pay = $this->input->post('pay', true);
-		$paid = $this->input->post('paid', true);
-		$quota = $this->input->post('quota', true);
-		$quota_paid = $this->input->post('quota_paid', true);
-		$quota_remain = $this->input->post('quota_remain', true);
 		$main_channel = $this->input->post('main_channel', true);
 		$channel_company = $this->input->post('channel_company', true);
 		$channel_contact = $this->input->post('channel_contact', true);
@@ -301,7 +296,7 @@ class Proj extends Auth_Controller {
 				$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
 			}
 
-			$proj_detail_id = $this->Proj_model->update_detail($proj_detail_id, $sub_name, $total_share, $status, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, element('loginname', $this->session->userdata('user')));
+			$proj_detail_id = $this->Proj_model->update_detail($proj_detail_id, $sub_name, $total_share, $status, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $main_channel, $channel_company, $channel_contact, $billing_company, element('loginname', $this->session->userdata('user')));
 			if($proj_detail_id === false) {
 				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 			}
@@ -310,7 +305,7 @@ class Proj extends Auth_Controller {
 				$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'将['.$proj->issue.']的项目：['.$proj->name.']，额度为['.$proj_detail->amount.']万，由［'.$proj_detail->status.'］状态修改为［'.$status.'］');
 			}
 		} else {
-			$proj_detail_id = $this->Proj_model->create_detail($proj_id, $sub_name, $total_share, $status, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, $channel_company, $channel_contact, $billing_company, element('loginname', $this->session->userdata('user')));
+			$proj_detail_id = $this->Proj_model->create_detail($proj_id, $sub_name, $total_share, $status, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $main_channel, $channel_company, $channel_contact, $billing_company, element('loginname', $this->session->userdata('user')));
 			if($proj_detail_id === false) {
 				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 			}

@@ -142,7 +142,6 @@ class Proj_model extends CI_Model {
 	function create_detail($proj_id, $sub_name = '', $total_share = '', $status = '', 
 		$amount = '', $profit = '', $commission_b_tax = '', $commission_a_tax = '', 
 		$inner_commission = '', $outer_commission = '', $imm_payment = '', $month = '', 
-		$pay = '', $paid = '', $quota = '', $quota_paid = '', $quota_remain = '', 
 		$main_channel = '', $channel_company = '', $channel_contact = '', 
 		$billing_company = '', $creator = '') {
 		$proj_detail = array(
@@ -158,11 +157,6 @@ class Proj_model extends CI_Model {
 			'outer_commission' => $outer_commission,
 			'imm_payment' => $imm_payment,
 			'month' => $month,
-			'pay' => $pay,
-			'paid' => $paid,
-			'quota' => $quota,
-			'quota_paid' => $quota_paid,
-			'quota_remain' => $quota_remain,
 			'main_channel' => $main_channel,
 			'channel_company' => $channel_company,
 			'channel_contact' => $channel_contact,
@@ -179,8 +173,8 @@ class Proj_model extends CI_Model {
 	
 	function update_detail($proj_detail_id, $sub_name, $total_share, $status, $amount, 
 		$profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, 
-		$imm_payment, $month, $pay, $paid, $quota, $quota_paid, $quota_remain, $main_channel, 
-		$channel_company, $channel_contact, $billing_company, $editor) {
+		$imm_payment, $month, $main_channel, $channel_company, $channel_contact, 
+		$billing_company, $editor) {
 		//查询旧记录，插入历史表
 		$old_proj_detail = $this->get_detail($proj_detail_id);
 		if(!$old_proj_detail) {
@@ -200,11 +194,6 @@ class Proj_model extends CI_Model {
 			'outer_commission' => $old_proj_detail->outer_commission,
 			'imm_payment' => $old_proj_detail->imm_payment,
 			'month' => $old_proj_detail->month,
-			'pay' => $old_proj_detail->pay,
-			'paid' => $old_proj_detail->paid,
-			'quota' => $old_proj_detail->quota,
-			'quota_paid' => $old_proj_detail->quota_paid,
-			'quota_remain' => $old_proj_detail->quota_remain,
 			'main_channel' => $old_proj_detail->main_channel,
 			'channel_company' => $old_proj_detail->channel_company,
 			'channel_contact' => $old_proj_detail->channel_contact,
@@ -229,11 +218,6 @@ class Proj_model extends CI_Model {
 			'outer_commission' => $outer_commission,
 			'imm_payment' => $imm_payment,
 			'month' => $month,
-			'pay' => $pay,
-			'paid' => $paid,
-			'quota' => $quota,
-			'quota_paid' => $quota_paid,
-			'quota_remain' => $quota_remain,
 			'main_channel' => $main_channel,
 			'channel_company' => $channel_company,
 			'channel_contact' => $channel_contact,
@@ -313,7 +297,7 @@ class Proj_model extends CI_Model {
 		if(!$proj) {
 			return false;
 		}
-		$this->db->select('proj_detail.proj_id as proj_id, proj_detail.id as proj_detail_id, proj_detail.sub_name, proj_detail.total_share, proj_detail.status, proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, proj_detail.commission_a_tax, proj_detail.inner_commission, proj_detail.outer_commission, proj_detail.imm_payment, proj_detail.month, proj_detail.pay, proj_detail.paid, proj_detail.quota, proj_detail.quota_paid, proj_detail.quota_remain, proj_detail.main_channel, proj_detail.channel_company, proj_detail.channel_contact, proj_detail.billing_company');
+		$this->db->select('proj_detail.proj_id as proj_id, proj_detail.id as proj_detail_id, proj_detail.sub_name, proj_detail.total_share, proj_detail.status, proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, proj_detail.commission_a_tax, proj_detail.inner_commission, proj_detail.outer_commission, proj_detail.imm_payment, proj_detail.month, proj_detail.main_channel, proj_detail.channel_company, proj_detail.channel_contact, proj_detail.billing_company');
 		$this->db->from('proj_detail')->where('proj_id', $proj_id);
 		$this->db->order_by('proj_detail_id', 'asc');
 		$query = $this->db->get();
@@ -330,8 +314,7 @@ class Proj_model extends CI_Model {
 		$raw_sql .= 'proj_detail.id as proj_detail_id, proj_detail.sub_name, proj_detail.total_share, proj_detail.status, ';
 		$raw_sql .= 'proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, ';
 		$raw_sql .= 'proj_detail.commission_a_tax, proj_detail.inner_commission, ';
-		$raw_sql .= 'proj_detail.outer_commission, proj_detail.imm_payment, proj_detail.pay, proj_detail.paid, ';
-		$raw_sql .= 'proj_detail.quota, proj_detail.quota_paid, proj_detail.quota_remain, ';
+		$raw_sql .= 'proj_detail.outer_commission, proj_detail.imm_payment, ';
 		$raw_sql .= 'proj_detail.main_channel, proj_detail.channel_company, ';
 		$raw_sql .= 'proj_detail.channel_contact, proj_detail.billing_company, proj.create_ts, ';
 		$raw_sql .= 'CASE proj.grade WHEN "五星级" THEN 5 WHEN "四星级" THEN 4 WHEN "三星级" THEN 3 WHEN "二星级" THEN 2 ELSE 1 END AS order_2, ';

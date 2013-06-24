@@ -1,6 +1,6 @@
 <!-- page specific -->
 <style type="text/css">
-/*
+
 .app-header1 {
     color: #596F8F;
     font-size: 22px;
@@ -22,8 +22,9 @@
   .x-grid-cell-inner {height:26px;font-size:12px;padding:6px;line-height:26px}
   .r_ex_td_pre {width:75px;padding:8px;border:1px solid #C1DAD7;background: #fff;color: #3f5b62;font-size:12px}
   .r_ex_td_main {width:890px;padding:8px;border:1px solid #C1DAD7;background: #fff;color: #3f5b62;font-size:12px}
+  .r_ex_td_pre pre{margin:0}
+  .r_ex_td_main pre{margin:0}
   .customT {background-color:#FFF !important;}
-*/
 </style>
 <script type="text/javascript" src="<?php echo base_url('misc/ts_base.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('misc/ts_proj.js'); ?>"></script>

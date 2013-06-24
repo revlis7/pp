@@ -644,10 +644,6 @@ Ext.onReady(function() {
 		minHeight:156,
 //		flex:1,
 		emptyText:'暂无额度信息',
-		defaults:{
-			style: "text-align:center;",
-			align: 'center'
-		},
 		columns:[{
 			xtype: 'actioncolumn',
 			//text:'删除',
@@ -700,21 +696,21 @@ Ext.onReady(function() {
 				}
 			}]
 		},
-		{text:'子名称',		 dataIndex:'sub_name',				 filtable:true, width:80},
-		{text:'项目期限',	 dataIndex:'month',						filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'个月';}},
-		{text:'认购金额',	 dataIndex:'amount',					 filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
-		{text:'项目收益',	 dataIndex:'profit',					 filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-		{text:'销售状态',	 dataIndex:'status',					 filtable:true, width:80},
-		{text:'份额',			 dataIndex:'total_share',			filtable:true, width:60},
-		{text:'税前佣金',	 dataIndex:'commission_b_tax', filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-		{text:'税后佣金',	 dataIndex:'commission_a_tax', filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-		{text:'平台费用',	 dataIndex:'inner_commission', filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-		{text:'费用',			 dataIndex:'outer_commission', filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-		{text:'现结费用',	 dataIndex:'imm_payment',			filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-		{text:'主销渠道',	 dataIndex:'main_channel',		 filtable:true, width:90},
-		{text:'渠道公司',	 dataIndex:'channel_company',	filtable:true, width:90},
-		{text:'渠道联系人', dataIndex:'channel_contact',	filtable:true, width:90},
-		{text:'走帐公司',	 dataIndex:'billing_company',	filtable:true, width:90}
+		{text:'子名称',		 dataIndex:'sub_name', filtable:true, style: "text-align:center;",align: 'center',width:80},
+		{text:'项目期限',	 dataIndex:'month', filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'个月';}},
+		{text:'认购金额',	 dataIndex:'amount', filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
+		{text:'项目收益',	 dataIndex:'profit', filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
+		{text:'销售状态',	 dataIndex:'status', filtable:true, style: "text-align:center;",align: 'center',width:80},
+		{text:'份额',		 dataIndex:'total_share', filtable:true, style: "text-align:center;",align: 'center',width:60},
+		{text:'税前佣金',	 dataIndex:'commission_b_tax', filtable:true, style: "text-align:center;",align: 'right',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
+		{text:'税后佣金',	 dataIndex:'commission_a_tax', filtable:true, style: "text-align:center;",align: 'right',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
+		{text:'平台费用',	 dataIndex:'inner_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
+		{text:'费用',		 dataIndex:'outer_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
+		{text:'现结费用',	 dataIndex:'imm_payment', filtable:true, style: "text-align:center;",align: 'right',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
+		{text:'主销渠道',	 dataIndex:'main_channel', filtable:true, style: "text-align:center;",align: 'center',width:90},
+		{text:'渠道公司',	 dataIndex:'channel_company', filtable:true, style: "text-align:center;",align: 'center',width:90},
+		{text:'渠道联系人',  dataIndex:'channel_contact', filtable:true, style: "text-align:center;",align: 'center',width:90},
+		{text:'走帐公司',	 dataIndex:'billing_company', filtable:true, style: "text-align:center;",align: 'center',width:90}
 		]
 	});
 
@@ -792,70 +788,26 @@ Ext.onReady(function() {
 		}
 	});
 	var viewport = Ext.create('Ext.Viewport', {
-	layout: {
-		type: 'border',
-//				padding: 5
-	},
-	defaults: {
-//				split: true								//可改变窗体大小
-	},
-	items: [{
-		xtype:'toolbar',
-		region:'north',
-		height:40,
-		border:0,
-		items:[
-		{
-		xtype:'image',
-		src:'/ts/misc/resources/firstshin.jpg',
-		width:240,
-		height:38
-		},{
-		xtype:'box',
-		html:'<span class="app-header2">项目编辑</span>'
-		},{
-		xtype:'box',
-		flex:1
-		},{
-		text:'返回项目管理列表',
-		icon:'/ts/misc/resources/icons/plugin.gif',
-		scale:'medium',
-		handler:function(){window.location.href='/ts/index.php/proj/manage';}
-		},{
-		text:'关闭窗口',
-		icon:'/ts/misc/resources/icons/cross.gif',
-		scale:'medium',
-		handler:function(){window.close();}
-		}]
-	},{
-		xtype:'panel', 
-		margin:'0 20 20 20',
-		border:0,
-		region:'center',
-		layout:'border',
-		items:[{
-		xtype:'panel',
-		//autoScroll :true,
-		border:0,
-		//minWidth:500,
-		//minHeight:200,
-		layout:'border',
-		region:'center',
-		items:[
-			//ProjInfoForm,
-		{
-			id:'projInfoPanel',
-			region:'center',
-			//height:320,
-			minWidth:800,
-			flex:1,
-			html:'正在加载项目信息...',
-			autoScroll :true,
-			dockedItems: [{
-			dock: 'top',
-			xtype: 'toolbar',
-			bodyPadding: 5,
-			items: [{
+		layout: {
+			type: 'border'
+		},
+		defaults: {
+		},
+		items: [{
+			xtype:'toolbar',
+			region:'north',
+			height:50,
+			border:0,
+			items:[
+			{
+				xtype:'image',
+				src:'/ts/misc/resources/firstshin.jpg',
+				width:240,
+				height:38
+			},{
+				xtype:'box',
+				html:'<span class="app-header2">项目编辑</span>'
+			},,{
 				xtype:'tbtext',
 				text:'您可以：'
 			},{
@@ -872,10 +824,10 @@ Ext.onReady(function() {
 				scale:'medium',
 				text:'新增额度信息' ,
 				handler:function(){
-				//todo
+					//todo
 					AmountEditForm=AmountEditWin.down('form');
 					AmountEditForm.getForm().reset();
-					AmountEditForm.down('hiddenfield[name="proj_id"]').setValue(proj_id);
+					AmountEditForm.down('hiddenfield[name="proj_id"]').setValue(params.proj_id);
 					AmountEditForm.down('hiddenfield[name="proj_detail_id"]').setValue(-1);
 					AmountEditForm.down('numberfield[name="amount"]').setValue(null);
 					Ext.getBody().mask();
@@ -886,31 +838,75 @@ Ext.onReady(function() {
 				text:'上传项目文件',
 				scale:'medium',
 				handler:function(){
-					uploadWin.down('hiddenfield[name="proj_id"]').setValue(proj_id);
+					uploadWin.down('hiddenfield[name="proj_id"]').setValue(params.proj_id);
 					Ext.getBody().mask();
 					uploadWin.show();
 				}
+			},{
+				xtype:'box',
+				flex:1
+			},{
+				text:'返回项目管理列表',
+				icon:'/ts/misc/resources/icons/plugin.gif',
+				scale:'medium',
+				handler:function(){window.location.href='/ts/index.php/proj/manage';}
+			},{
+				text:'关闭窗口',
+				icon:'/ts/misc/resources/icons/cross.gif',
+				scale:'medium',
+				handler:function(){window.close();}
 			}]
-			}]
-		},
-		{
-			xtype:'box',
-			region:'south',
-			//weight:-200,
-			height:15
-		}, 
-		AmountDetailsGrid,
-		{
-			xtype:'box',
-			region:'south',
-			//weight:-100,
-			height:15
-		},
-		FileListGrid
-		]
-		}
-		]
-	}]
+		},{
+			xtype:'panel', 
+			margin:'0 0 0 0',
+			border:0,
+			region:'center',
+			layout:'border',
+			items:[{
+				xtype:'panel',
+				//autoScroll :true,
+				border:0,
+				//minWidth:500,
+				//minHeight:200,
+				layout:'border',
+				region:'center',
+				items:[
+					//ProjInfoForm,
+				{
+					id:'projInfoPanel',
+					region:'center',
+					//height:320,
+					minWidth:800,
+					flex:1,
+					html:'正在加载项目信息...',
+					autoScroll :true
+				},
+				{
+					xtype:'box',
+					region:'south',
+					//weight:-200,
+					style: {
+						color: '#FFFFFF',
+						backgroundColor:'#dddddd'
+					},
+					height:15
+				}, 
+				AmountDetailsGrid,
+				{
+					xtype:'box',
+					region:'south',
+					//weight:-100,
+					style: {
+						color: '#FFFFFF',
+						backgroundColor:'#dddddd'
+					},
+					height:15
+				},
+				FileListGrid
+				]
+			}
+			]
+		}]
 	});
 	
 	projStore.load(function(records, operation, success) {

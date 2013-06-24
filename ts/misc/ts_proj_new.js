@@ -369,7 +369,7 @@ Ext.onReady(function() {
 						{//子类别
 							 xtype:'combo',
 							 emptyText:"子类别...",
-							 width:200,
+							 width:170,
 							 name:'sub_category',
 							 store : chSubCategoryList,
 							 queryMode: 'local',
@@ -773,11 +773,15 @@ Ext.onReady(function() {
 		title:'额度信息',
 		region:'south',
 		minHeight:156,
-//    flex:1,
+//		flex:1,
 		emptyText:'暂无额度信息',
+		defaults:{
+			style: "text-align:center;",
+			align: 'center'
+		}
 		columns:[{
 			xtype: 'actioncolumn',
-			text:'删除',
+			//text:'删除',
 			width:40,
 			style: "text-align:center;",
 			align: 'center',
@@ -827,21 +831,21 @@ Ext.onReady(function() {
 				}
 			}]
 		},
-		{text:'子名称',     dataIndex:'sub_name',         filtable:true, width:60},
-		{text:'项目期限',   dataIndex:'month',            filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'个月';}},
-		{text:'认购金额',   dataIndex:'amount',           filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
-		{text:'项目收益',   dataIndex:'profit',           filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-		{text:'销售状态',   dataIndex:'status',           filtable:true, width:50},
-		{text:'份额',       dataIndex:'total_share',      filtable:true, width:50},
-		{text:'税前佣金',   dataIndex:'commission_b_tax', filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-		{text:'税后佣金',   dataIndex:'commission_a_tax', filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-		{text:'平台费用',   dataIndex:'inner_commission', filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-		{text:'费用',       dataIndex:'outer_commission', filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-		{text:'现结费用',   dataIndex:'imm_payment',      filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-		{text:'主销渠道',   dataIndex:'main_channel',     filtable:true, width:80},
-		{text:'渠道公司',   dataIndex:'channel_company',  filtable:true, width:80},
-		{text:'渠道联系人', dataIndex:'channel_contact',  filtable:true, width:80},
-		{text:'走帐公司',   dataIndex:'billing_company',  filtable:true, width:80}
+		{text:'子名称',		 dataIndex:'sub_name',				 filtable:true, width:80},
+		{text:'项目期限',	 dataIndex:'month',						filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'个月';}},
+		{text:'认购金额',	 dataIndex:'amount',					 filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
+		{text:'项目收益',	 dataIndex:'profit',					 filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+		{text:'销售状态',	 dataIndex:'status',					 filtable:true, width:80},
+		{text:'份额',			 dataIndex:'total_share',			filtable:true, width:60},
+		{text:'税前佣金',	 dataIndex:'commission_b_tax', filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+		{text:'税后佣金',	 dataIndex:'commission_a_tax', filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+		{text:'平台费用',	 dataIndex:'inner_commission', filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+		{text:'费用',			 dataIndex:'outer_commission', filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+		{text:'现结费用',	 dataIndex:'imm_payment',			filtable:true, width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
+		{text:'主销渠道',	 dataIndex:'main_channel',		 filtable:true, width:90},
+		{text:'渠道公司',	 dataIndex:'channel_company',	filtable:true, width:90},
+		{text:'渠道联系人', dataIndex:'channel_contact',	filtable:true, width:90},
+		{text:'走帐公司',	 dataIndex:'billing_company',	filtable:true, width:90}
 		]
 	});
 

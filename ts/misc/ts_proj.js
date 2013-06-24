@@ -647,7 +647,7 @@ Ext.onReady(function() {
 		defaults:{
 			style: "text-align:center;",
 			align: 'center'
-		}
+		},
 		columns:[{
 			xtype: 'actioncolumn',
 			//text:'删除',

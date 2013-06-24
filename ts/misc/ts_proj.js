@@ -908,8 +908,7 @@ Ext.onReady(function() {
 		},
 		FileListGrid
 		]
-		},
-		AmountEditForm
+		}
 		]
 	}]
 	});

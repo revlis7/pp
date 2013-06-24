@@ -48,6 +48,13 @@ class Proj extends Auth_Controller {
 
 		$data = $this->Proj_model->get_all_proj_detail($category_id, $ending_status, $recently, $manage_mode, $this->get_user_info('realname'));
 
+		//viewonly模式过滤部分字段
+		if(!$manage_mode) {
+			foreach($data as $_t) {
+				unset($_t->main_channel, $_t->channel_company, $_t->channel_contact, $_t->billing_company, $_t->manager_remark);
+			}
+		}
+
 		//根据用户组过滤可见信息
 		$group = $this->utility->get_user_group();
 		foreach($data as $_t) {

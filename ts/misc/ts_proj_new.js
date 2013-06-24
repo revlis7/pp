@@ -629,6 +629,7 @@ Ext.onReady(function() {
 				}, {
 					xtype:'datefield',
 					fieldLabel: '成立日期',
+					name:'found',
 					width:300,
 					forceSelection:true,
 					allowBlank: true
@@ -775,10 +776,6 @@ Ext.onReady(function() {
 		minHeight:156,
 //		flex:1,
 		emptyText:'暂无额度信息',
-		defaults:{
-			style: "text-align:center;",
-			align: 'center'
-		},
 		columns:[{
 			xtype: 'actioncolumn',
 			//text:'删除',
@@ -834,14 +831,82 @@ Ext.onReady(function() {
 		{text:'子名称',		 dataIndex:'sub_name', filtable:true, style: "text-align:center;",align: 'center',width:80},
 		{text:'项目期限',	 dataIndex:'month', filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'个月';}},
 		{text:'认购金额',	 dataIndex:'amount', filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
-		{text:'项目收益',	 dataIndex:'profit', filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'%';}},
-		{text:'销售状态',	 dataIndex:'status', filtable:true, style: "text-align:center;",align: 'center',width:80},
-		{text:'份额',		 dataIndex:'total_share', filtable:true, style: "text-align:center;",align: 'center',width:60},
-		{text:'税前佣金',	 dataIndex:'commission_b_tax', filtable:true, style: "text-align:center;",align: 'right',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return toFixed( value, 3)+'%';}},
-		{text:'税后佣金',	 dataIndex:'commission_a_tax', filtable:true, style: "text-align:center;",align: 'right',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return toFixed( value, 3)+'%';}},
-		{text:'平台费用',	 dataIndex:'inner_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return toFixed( value, 3)+'%';}},
-		{text:'费用',		 dataIndex:'outer_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return toFixed( value, 3)+'%';}},
-		{text:'现结费用',	 dataIndex:'imm_payment', filtable:true, style: "text-align:center;",align: 'right',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return toFixed( value, 3)+'%';}},
+		{text:'项目收益',	 dataIndex:'profit', filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
+		{text:'销售状态',	 dataIndex:'status', filtable:true, style: "text-align:center;",align: 'center',width:80,
+			renderer:function(value,metaData){
+        		if(value=="在售"){
+        			metaData.style='background:#CCFFCC;color:#000000'
+        		} else if(value=="结束"){
+        			metaData.style='background:#DFDFDF;color:#606060;'
+        		} else {
+        			metaData.style='background:#FFFF99;color:#000000'
+        		}
+        		return value;
+        	}
+        },
+		{text:'份额',		 dataIndex:'total_share', filtable:true, style: "text-align:center;",align: 'center',width:60,
+			renderer:function(value,metaData){
+        		if(value=="OPEN"){
+        			metaData.style='background:#CCFFCC;color:#000000'
+        		} else if(value=="无"){
+        			metaData.style='background:#DFDFDF;color:#606060;'
+        		} else {
+        			metaData.style='background:#FFFF99;color:#000000'
+        		}
+        		return value;
+        	}
+        },
+		{text:'成立日期',	 dataIndex:'found', filtable:true, style: "text-align:center;",align: 'center',width:60,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
+		{text:'税前佣金',	 dataIndex:'commission_b_tax', filtable:true, style: "text-align:center;",align: 'right',width:80,       
+			renderer: function(value,metaData,record,colIndex,store,view) {  
+        		if(value>0){
+        			return value.toFixed(3)+'%';
+        		} else {
+        			metaData.style='color:#8E8E8E';
+        		return 'N/A';
+        		}
+        	}
+        },
+		{text:'税后佣金',	 dataIndex:'commission_a_tax', filtable:true, style: "text-align:center;",align: 'right',width:80,       
+			renderer: function(value,metaData,record,colIndex,store,view) {  
+        		if(value>0){
+        			return value.toFixed(3)+'%';
+        		} else {
+        			metaData.style='color:#8E8E8E';
+        		return 'N/A';
+        		}
+        	}
+        },
+		{text:'平台费用',	 dataIndex:'inner_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,       
+			renderer: function(value,metaData,record,colIndex,store,view) {  
+        		if(value>0){
+        			return value.toFixed(3)+'%';
+        		} else {
+        			metaData.style='color:#8E8E8E';
+        		return 'N/A';
+        		}
+        	}
+        },
+		{text:'费用',		 dataIndex:'outer_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,       
+			renderer: function(value,metaData,record,colIndex,store,view) {  
+        		if(value>0){
+        			return value.toFixed(3)+'%';
+        		} else {
+        			metaData.style='color:#8E8E8E';
+        		return 'N/A';
+        		}
+        	}
+        },
+		{text:'现结费用',	 dataIndex:'imm_payment', filtable:true, style: "text-align:center;",align: 'right',width:80,       
+			renderer: function(value,metaData,record,colIndex,store,view) {  
+        		if(value>0){
+        			return value.toFixed(3)+'%';
+        		} else {
+        			metaData.style='color:#8E8E8E';
+        		return 'N/A';
+        		}
+        	}
+        },
 		{text:'主销渠道',	 dataIndex:'main_channel', filtable:true, style: "text-align:center;",align: 'center',width:90},
 		{text:'渠道公司',	 dataIndex:'channel_company', filtable:true, style: "text-align:center;",align: 'center',width:90},
 		{text:'渠道联系人',  dataIndex:'channel_contact', filtable:true, style: "text-align:center;",align: 'center',width:90},

@@ -466,9 +466,10 @@ Ext.onReady(function() {
 				},
 				items:[{
 					xtype:'textfield',
-					fieldLabel: '子名称*',
+					fieldLabel: '子名称',
 					name:'sub_name',
-					width:320
+					width:320,
+					allowBlank: true
 				},{
 					xtype:'numberfield',
 					fieldLabel: '项目期限(月)*',

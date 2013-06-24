@@ -725,7 +725,6 @@ Ext.onReady(function() {
 		columns:[
 		{
 			xtype: 'actioncolumn',
-			text:'删除',
 			width:40,style: "text-align:center;",align: 'center',
 			sortable: false,
 			items: [{
@@ -748,7 +747,6 @@ Ext.onReady(function() {
 			}]
 		},{
 			xtype: 'actioncolumn',
-			text:'下载',
 			width:40,style: "text-align:center;",align: 'center',
 			sortable: false,
 			items: [{
@@ -760,15 +758,15 @@ Ext.onReady(function() {
 				}
 			}]
 		},
-		{text:'文件名',				 dataIndex:'filename',			filtable:true, width:300},
-		{text:'文件大小',			 dataIndex:'filesize',			filtable:true, width:70,
+		{text:'文件名',         dataIndex:'filename',      filtable:true, style: "text-align:center;",align: 'left',width:300},
+		{text:'文件大小',       dataIndex:'filesize',      filtable:true, style: "text-align:center;",align: 'right',width:80,
 			 renderer:function(value,metaData,record,colIndex,store,view) {
 				 if(value>=1048676) {var v=value/1048576;return v.toFixed(2)+'MB';}
 				 else if(value>=1024) {var v=value/1024;return v.toFixed(2)+'KB';}
 				 else return value;
 			 }
 		},
-		{text:'文件上传日期',	 dataIndex:'create_ts',			filtable:true, width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")}
+		{text:'文件上传日期',   dataIndex:'create_ts',      filtable:true, width:120,renderer:new Ext.util.Format.dateRenderer("Y-m-d")}
 		]
 	});
 	
@@ -878,12 +876,14 @@ Ext.onReady(function() {
 					//height:320,
 					minWidth:800,
 					flex:1,
+					title:'项目信息',
 					html:'正在加载项目信息...',
 					autoScroll :true
 				},
 				{
 					xtype:'box',
 					region:'south',
+					border:0,
 					//weight:-200,
 					style: {
 						color: '#FFFFFF',
@@ -896,6 +896,7 @@ Ext.onReady(function() {
 					xtype:'box',
 					region:'south',
 					//weight:-100,
+					border:0,
 					style: {
 						color: '#FFFFFF',
 						backgroundColor:'#dddddd'

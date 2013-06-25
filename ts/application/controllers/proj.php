@@ -224,6 +224,23 @@ class Proj extends Auth_Controller {
 		$this->json->output(array('success' => true));
 	}
 
+	function proj_apply_submit() {
+		if(!$this->User_model->has_action_access(element('loginname', $this->session->userdata('user')))) {
+			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
+
+		$proj_id = $this->input->get('proj_id');
+
+		if(!$this->utility->chk_id($proj_id)) {
+			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+		}
+
+		if(!$this->Proj_model->update_pdt_status($proj_id, '申请中', element('loginname', $this->session->userdata('user')))) {
+			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
+		}
+		$this->json->output(array('success' => true));
+	}
+
 	function proj_accept_submit() {
 		if(!$this->User_model->has_action_access(element('loginname', $this->session->userdata('user')))) {
 			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));

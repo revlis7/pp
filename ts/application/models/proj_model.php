@@ -36,7 +36,7 @@ class Proj_model extends CI_Model {
 			'pay_account' => $pay_account,
 			'countdown' => $countdown,
 			'found' => $found,
-			'pdt_status' => '申请中',
+			'pdt_status' => '初始',
 			'exclusive' => $exclusive,
 			'grade' => $grade,
 			'manager_remark' => $manager_remark,

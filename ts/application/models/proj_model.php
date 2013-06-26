@@ -19,7 +19,7 @@ class Proj_model extends CI_Model {
 	function create_proj($category = '', $sub_category = '', $issue = '', $name = '', 
 		$flow_of_fund = '', $highlights = '', $scale = '', $cycle = '', $profit_property = '', 
 		$manager = '', $contract = '', $remark = '', $pay_account = '', $countdown = '', 
-		$found = '', $exclusive = '', $grade = '', $manager_remark = '', $creator = '') {
+		$exclusive = '', $grade = '', $manager_remark = '', $creator = '') {
 		$proj = array(
 			'category' => $category,
 			'sub_category' => $sub_category,
@@ -35,7 +35,6 @@ class Proj_model extends CI_Model {
 			'remark' => $remark,
 			'pay_account' => $pay_account,
 			'countdown' => $countdown,
-			'found' => $found,
 			'pdt_status' => '初始',
 			'exclusive' => $exclusive,
 			'grade' => $grade,
@@ -53,7 +52,7 @@ class Proj_model extends CI_Model {
 	
 	function update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, 
 		$highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, 
-		$pay_account, $countdown, $found, $exclusive, $grade, $manager_remark, $editor) {
+		$pay_account, $countdown, $exclusive, $grade, $manager_remark, $editor) {
 		// 查询旧记录，插入历史表
 		if(!$this->archive_proj($proj_id, $editor)) {
 			return false;
@@ -74,7 +73,6 @@ class Proj_model extends CI_Model {
 			'remark' => $remark,
 			'pay_account' => $pay_account,
 			'countdown' => $countdown,
-			'found' => $found,
 			'exclusive' => $exclusive,
 			'grade' => $grade,
 			'manager_remark' => $manager_remark,
@@ -124,7 +122,6 @@ class Proj_model extends CI_Model {
 			'remark' => $old_proj->remark,
 			'pay_account' => $old_proj->pay_account,
 			'countdown' => $old_proj->countdown,
-			'found' => $old_proj->found,
 			'pdt_status' => $old_proj->pdt_status,
 			'exclusive' => $old_proj->exclusive,
 			'grade' => $old_proj->grade,
@@ -139,7 +136,7 @@ class Proj_model extends CI_Model {
 		return true;
 	}
 
-	function create_detail($proj_id, $sub_name = '', $total_share = '', $status = '', 
+	function create_detail($proj_id, $sub_name = '', $found = '', $total_share = '', $status = '', 
 		$amount = '', $profit = '', $commission_b_tax = '', $commission_a_tax = '', 
 		$inner_commission = '', $outer_commission = '', $imm_payment = '', $month = '', 
 		$main_channel = '', $channel_company = '', $channel_contact = '', 
@@ -147,6 +144,7 @@ class Proj_model extends CI_Model {
 		$proj_detail = array(
 			'proj_id' => $proj_id,
 			'sub_name' => $sub_name,
+			'found' => $found,
 			'total_share' => $total_share,
 			'status' => $status,
 			'amount' => $amount,
@@ -171,7 +169,7 @@ class Proj_model extends CI_Model {
 		return $this->db->insert_id();
 	}
 	
-	function update_detail($proj_detail_id, $sub_name, $total_share, $status, $amount, 
+	function update_detail($proj_detail_id, $sub_name, $found, $total_share, $status, $amount, 
 		$profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, 
 		$imm_payment, $month, $main_channel, $channel_company, $channel_contact, 
 		$billing_company, $editor) {
@@ -184,6 +182,7 @@ class Proj_model extends CI_Model {
 			'proj_detail_id' => $old_proj_detail->id,
 			'proj_id' => $old_proj_detail->proj_id,
 			'sub_name' => $old_proj_detail->sub_name,
+			'found' => $old_proj_detail->found,
 			'total_share' => $old_proj_detail->total_share,
 			'status' => $old_proj_detail->status,
 			'amount' => $old_proj_detail->amount,
@@ -208,6 +207,7 @@ class Proj_model extends CI_Model {
 		
 		$proj_detail = array(
 			'sub_name' => $sub_name,
+			'found' => $found,
 			'total_share' => $total_share,
 			'status' => $status,
 			'amount' => $amount,
@@ -297,7 +297,7 @@ class Proj_model extends CI_Model {
 		if(!$proj) {
 			return false;
 		}
-		$this->db->select('proj_detail.proj_id as proj_id, proj_detail.id as proj_detail_id, proj_detail.sub_name, proj_detail.total_share, proj_detail.status, proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, proj_detail.commission_a_tax, proj_detail.inner_commission, proj_detail.outer_commission, proj_detail.imm_payment, proj_detail.month, proj_detail.main_channel, proj_detail.channel_company, proj_detail.channel_contact, proj_detail.billing_company');
+		$this->db->select('proj_detail.proj_id as proj_id, proj_detail.id as proj_detail_id, proj_detail.sub_name, proj_detail.found, proj_detail.total_share, proj_detail.status, proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, proj_detail.commission_a_tax, proj_detail.inner_commission, proj_detail.outer_commission, proj_detail.imm_payment, proj_detail.month, proj_detail.main_channel, proj_detail.channel_company, proj_detail.channel_contact, proj_detail.billing_company');
 		$this->db->from('proj_detail')->where('proj_id', $proj_id);
 		$this->db->order_by('proj_detail_id', 'asc');
 		$query = $this->db->get();
@@ -309,9 +309,9 @@ class Proj_model extends CI_Model {
 		$raw_sql  = 'SELECT proj.id AS proj_id, proj.category, proj.sub_category, ';
 		$raw_sql .= 'proj.issue, proj.name, proj.flow_of_fund, proj.highlights, ';
 		$raw_sql .= 'proj.scale, proj.cycle, proj.profit_property, ';
-		$raw_sql .= 'proj.manager, proj.contract, proj.remark, proj.pay_account, proj.countdown, proj.found, proj.pdt_status, ';
+		$raw_sql .= 'proj.manager, proj.contract, proj.remark, proj.pay_account, proj.countdown, proj.pdt_status, ';
 		$raw_sql .= 'proj.exclusive, proj.grade, proj.manager_remark, ';
-		$raw_sql .= 'proj_detail.id as proj_detail_id, proj_detail.sub_name, proj_detail.total_share, proj_detail.status, ';
+		$raw_sql .= 'proj_detail.id as proj_detail_id, proj_detail.sub_name, proj_detail.found, proj_detail.total_share, proj_detail.status, ';
 		$raw_sql .= 'proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, ';
 		$raw_sql .= 'proj_detail.commission_a_tax, proj_detail.inner_commission, ';
 		$raw_sql .= 'proj_detail.outer_commission, proj_detail.imm_payment, ';

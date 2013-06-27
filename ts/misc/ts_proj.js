@@ -137,7 +137,7 @@ Ext.onReady(function() {
 		closeAction:"hide",
 		closable:false,
 		title:'编辑项目',
-		width:540,
+		width:940,
 		items:[
 		{
 			xtype:"form",
@@ -151,41 +151,51 @@ Ext.onReady(function() {
 			},
 			fieldDefaults:{
 				lableWidth:90,
-				width:320
+				width:240,
+				labelAlign:'right',
+				allowBlank: false
 			},
 			dockedItems: [{
+				xtype:'box',
+				flex:1
+			},{
 				dock: 'bottom',
 				xtype: 'toolbar',
 				bodyPadding: 5,
 				items: [{
-				icon:'/ts/misc/resources/icons/grid.png',
-				text: '确定',
-				formBind: true, //only enabled once the form is valid
-				disabled: true,
-				handler: function() {
-					this.up('form').getForm().submit({
-					url: '/ts/index.php/proj/proj_update_submit',
-					submitEmptyText: false,
-					waitMsg: 'Saving Data...',
-					success: function(form, action) {
-						ProjWin.close();
-						projStore.load(function(records, operation, success) {
-					//		ProjInfoForm.getForm().loadRecord(records[0]);
-						proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
+					icon:'/ts/misc/resources/icons/grid.png',
+					text: '确定',
+					scale: 'medium',
+					formBind: true, //only enabled once the form is valid
+					disabled: true,
+					handler: function() {
+						this.up('form').getForm().submit({
+						url: '/ts/index.php/proj/proj_update_submit',
+						submitEmptyText: false,
+						waitMsg: 'Saving Data...',
+						success: function(form, action) {
+							ProjWin.close();
+							projStore.load(function(records, operation, success) {
+						//		ProjInfoForm.getForm().loadRecord(records[0]);
+							proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
+							});
+						} 
+						//,
+						//failure: function(form, action) {
+						//	Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+						//}
 						});
-					} 
-					//,
-					//failure: function(form, action) {
-					//	Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
-					//}
-					});
-				}
+					}
 				},{
-				icon:'/ts/misc/resources/icons/cross.gif',
-				text: '取消',
-				handler: function(){
-					this.up('window').close();
-				}
+					icon:'/ts/misc/resources/icons/cross.gif',
+					text: '取消',
+						scale: 'medium',
+					handler: function(){
+						this.up('window').close();
+					}
+				},{
+					xtype:'box',
+					flex:1
 				}]
 			}],
 			items:[
@@ -996,11 +1006,11 @@ Ext.onReady(function() {
 		detailString, '</td></tr>',
 		//'{[(records[0].get("profit_property")==true)?"aaa":"bbb"]}',
 		'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{highlights}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{contract}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{countdown}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{pay_account}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre style="overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;">{remark}</pre></td></tr>',
+		'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
+		'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
+		'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
+		'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
+		'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
 		'</table></td></tr></table>',
 		{
 			cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}

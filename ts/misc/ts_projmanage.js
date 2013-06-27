@@ -388,6 +388,7 @@ var res;
               text:'【集合信托产品：'
             },{
                 text:'上市公司股票质押',
+              scale:'medium',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
                   sampleStoreC1.filterBy( function(record,id){
@@ -396,6 +397,7 @@ var res;
                 }
             },{
                 text:'政府基建',
+              scale:'medium',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
                   sampleStoreC1.filterBy( function(record,id){
@@ -404,6 +406,7 @@ var res;
                 }
             },{
                 text:'房地产',
+              scale:'medium',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
                   sampleStoreC1.filterBy( function(record,id){
@@ -412,6 +415,7 @@ var res;
                 }
             },{
                 text:'其他信托',
+              scale:'medium',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
                   sampleStoreC1.filterBy( function(record,id){
@@ -420,6 +424,7 @@ var res;
                 }
             },{
                 text:'所有信托】',
+              scale:'medium',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
                   sampleStoreC1.filterBy( function(record,id){
@@ -431,6 +436,7 @@ var res;
                 }
             },{
                 text:'【私募基金】',
+              scale:'medium',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
                   sampleStoreC1.filterBy( function(record,id){
@@ -439,6 +445,7 @@ var res;
                 }
             },{
                 text:'【P2P理财】',
+              scale:'medium',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
                   sampleStoreC1.filterBy( function(record,id){
@@ -447,6 +454,7 @@ var res;
                 }
             },{
                 text:'【其他固定收益产品】',
+              scale:'medium',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
                   sampleStoreC1.filterBy( function(record,id){
@@ -455,6 +463,7 @@ var res;
                 }
             },'-',{
                 text:'全部显示',
+              scale:'medium',
                 icon:'/ts/misc/resources/icons/grid.png',
                 handler:function(){
                   fullGridC1.filters.clearFilters();
@@ -462,6 +471,7 @@ var res;
                 }
             },'-',{
                 text:'导出',
+              scale:'medium',
                 icon:'/ts/misc/resources/icons/folder_go.png',
                 handler:function(){
                   window.open('/ts/index.php/proj/view?c=1&format=csv');
@@ -474,6 +484,7 @@ var res;
                 text:'快速筛选：'
             },{
                 text:'【债券基金】',
+              scale:'medium',
                 handler:function(){
                   fullGridC2.filters.clearFilters();
                   sampleStoreC2.filterBy( function(record,id){
@@ -482,6 +493,7 @@ var res;
                 }
             },{
                 text:'【证券基金】',
+              scale:'medium',
                 handler:function(){
                   fullGridC2.filters.clearFilters();
                   sampleStoreC2.filterBy( function(record,id){
@@ -490,6 +502,7 @@ var res;
                 }
             },{
                 text:'【股权基金】',
+              scale:'medium',
                 handler:function(){
                   fullGridC2.filters.clearFilters();
                   sampleStoreC2.filterBy( function(record,id){
@@ -498,6 +511,7 @@ var res;
                 }
             },{
                 text:'【其他浮动收益产品】',
+              scale:'medium',
                 handler:function(){
                   fullGridC2.filters.clearFilters();
                   sampleStoreC2.filterBy( function(record,id){
@@ -506,6 +520,7 @@ var res;
                 }
             },'-',{
                 text:'全部显示',
+              scale:'medium',
                 icon:'/ts/misc/resources/icons/grid.png',
                 handler:function(){
                   fullGridC2.filters.clearFilters();
@@ -513,6 +528,7 @@ var res;
                 }
             },'-',{
                 text:'导出',
+              scale:'medium',
                 icon:'/ts/misc/resources/icons/folder_go.png',
                 handler:function(){
                   window.open('/ts/index.php/proj/view?c=2&format=csv');

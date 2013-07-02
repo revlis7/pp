@@ -24,9 +24,23 @@
 }
   .style_row_proj0 tr{background-color:#FFFFFF !important;font-size:12px;cursor: pointer;color: #2f4b52}
   .style_row_proj1 tr{background-color:#F9EEF2 !important;font-size:12px;cursor: pointer;color: #2f4b52}
-  .x-grid-row {height:28px;vertical-align:middle;font-size:12px}
+/*  .x-grid-row {height:28px;vertical-align:middle;font-size:12px}
   .x-grid-cell {height:26px;vertical-align:middle}
   .x-grid-cell-inner {height:26px;font-size:12px;padding:6px;line-height:26px}
+*/
+.x-grid3-row td,.x-grid3-summary-row td{  
+  line-height:22px;
+  vertical-align:top;
+  border-right: 1px solid #eceff6 !important;
+  border-top: 1px solid #eceff6 !important;
+}
+.x-grid3-row-checker, .x-grid3-hd-checker {
+width:100%;
+height:30px;
+background-position:2px 2px;
+background-repeat:no-repeat;
+background-color:transparent;
+}
   .r_ex_td_pre {border-collapse:collapse;width:75px;padding:8px;border:1px solid #C1DAD7;background: #fff;color: #3f5b62;font-size:12px}
   .r_ex_td_main {border-collapse:collapse;width:760px;padding:8px;border:1px solid #C1DAD7;background: #fff;color: #3f5b62;font-size:12px}
   .r_ex_td_pre pre{margin:0;overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;}

@@ -164,13 +164,6 @@ Ext.onReady(function() {
 								fileListStore.load();
 								projStore.load(function(records, operation, success) {
 									projdetailStore.load(function(records, operation, success) {
-										if(records.get("pdt_status")!="上线通过" && records.get("pdt_status")!="申请中"){
-											Ext.getCmp('BtnPdtApply').show();
-										}
-										var loginname = Ext.util.Cookies.get("loginname");
-										if(records.get("pdt_status")=="申请中" && loginname.indexOf("DR">0)){
-											Ext.getCmp('BtnPdtAccept').show();
-										}
 										var detailString="";
 										//ProjInfoForm.getForm().loadRecord(records[0]);
 										Ext.Array.forEach(records,function(record){
@@ -220,10 +213,17 @@ Ext.onReady(function() {
 												}
 												return res;
 											}
-										}}
-									]);
-									proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
-								});
+										}
+										]);
+										proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
+									});
+									if(records.get("pdt_status")!="上线通过" && records.get("pdt_status")!="申请中"){
+										Ext.getCmp('BtnPdtApply').show();
+									}
+									var loginname = Ext.util.Cookies.get("loginname");
+									if(records.get("pdt_status")=="申请中" && loginname.indexOf("DR">0)){
+										Ext.getCmp('BtnPdtAccept').show();
+									}
 								});
 							}
 							//,
@@ -249,13 +249,6 @@ Ext.onReady(function() {
 								ProjWin.close();
 								projStore.load(function(records, operation, success) {
 									projdetailStore.load(function(records, operation, success) {
-										if(records.get("pdt_status")!="上线通过" && records.get("pdt_status")!="申请中"){
-											Ext.getCmp('BtnPdtApply').show();
-										}
-										var loginname = Ext.util.Cookies.get("loginname");
-										if(records.get("pdt_status")=="申请中" && loginname.indexOf("DR">0)){
-											Ext.getCmp('BtnPdtAccept').show();
-										}
 										var detailString="";
 										//ProjInfoForm.getForm().loadRecord(records[0]);
 										Ext.Array.forEach(records,function(record){
@@ -305,12 +298,18 @@ Ext.onReady(function() {
 												}
 												return res;
 											}
-										}}
+										}
 										]);
 										proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
-		
 										//proj_info_window.show();
 									});
+									if(records.get("pdt_status")!="上线通过" && records.get("pdt_status")!="申请中"){
+										Ext.getCmp('BtnPdtApply').show();
+									}
+									var loginname = Ext.util.Cookies.get("loginname");
+									if(records.get("pdt_status")=="申请中" && loginname.indexOf("DR">0)){
+										Ext.getCmp('BtnPdtAccept').show();
+									}
 								});
 							}
 							//,

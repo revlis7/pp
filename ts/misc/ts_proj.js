@@ -808,6 +808,40 @@ Ext.onReady(function() {
 		{text:'文件上传日期',   dataIndex:'create_ts',      filtable:true, width:120,renderer:new Ext.util.Format.dateRenderer("Y-m-d")}
 		]
 	});
+	var RecentChangeGrid=Ext.create('Ext.grid.Panel',{
+		store: fileListStore,
+		border:1,
+		title:'最新进展',
+		emptyText:'暂无信息',
+		minHeight:156,
+		region:'south',
+//		flex:1,
+		columns:[
+		{
+			xtype: 'actioncolumn',
+			width:40,style: "text-align:center;",align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/cross.gif',
+				tooltip: '删除这条消息',
+				handler: function(grid, rowIndex, colIndex) {
+				}
+			}]
+		},{
+			xtype: 'actioncolumn',
+			width:40,style: "text-align:center;",align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/download.gif',
+				tooltip: '修改这条消息',
+				handler: function(grid, rowIndex, colIndex) {
+				}
+			}]
+		},
+		{text:'时间',         dataIndex:'addtime',      filtable:true, style: "text-align:center;",align: 'left',width:100},
+		{text:'修改信息',       dataIndex:'messages',      filtable:true, style: "text-align:center;",align: 'right',width:380}
+		]
+	});
 	
 	AmountEditWin.on({
 		hide: function(){
@@ -913,14 +947,22 @@ Ext.onReady(function() {
 					id:'projInfoPanel',
 					region:'center',
 					//height:320,
-					minWidth:800,
-					flex:1,
+					minWidth:480,
 					title:'项目信息',
 					html:'正在加载项目信息...',
 					autoScroll :true
-				}, 
-				AmountDetailsGrid,
-				FileListGrid
+				}, {
+					id:'projDetailPanel',
+					region:'east',
+					//height:320,
+					minWidth:800,
+					layout:'vbox',
+					items:[{
+						RecentChangeGrid,
+						AmountDetailsGrid,
+						FileListGrid
+					}]
+				}
 				]
 			}
 			]

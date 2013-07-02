@@ -26,8 +26,7 @@
   .style_row_proj1 tr{background-color:#F9EEF2 !important;cursor: pointer;color: #2f4b52}
   .x-grid-row {height:28px;vertical-align:top}
   .x-grid-cell {height:26px;vertical-align:top}
-/*  .x-grid-cell-inner {height:26px;font-size:12px;padding:6px;line-height:26px}
-*/
+  .x-grid-cell-inner {height:26px;font-size:12px;padding:6px;line-height:26px}
   .r_ex_td_pre {border-collapse:collapse;width:75px;padding:8px;border:1px solid #C1DAD7;background: #fff;color: #3f5b62;font-size:12px}
   .r_ex_td_main {border-collapse:collapse;width:400px;padding:8px;border:1px solid #C1DAD7;background: #fff;color: #3f5b62;font-size:12px}
   .r_ex_td_pre pre{margin:0;overflow:auto;white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;word-wrap:break-word;}

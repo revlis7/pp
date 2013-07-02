@@ -1026,7 +1026,7 @@ Ext.onReady(function() {
 	
 	projStore.load(function(records, operation, success) {
 		projdetailStore.load(function(records, operation, success) {
-			if(records.get("pdt_status")<>"上线通过" && records.get("pdt_status")<>"申请中"){
+			if(records.get("pdt_status")!="上线通过" && records.get("pdt_status")!="申请中"){
 				Ext.getCmp('BtnPdtApply').show();
 			}
 			var loginname = Ext.util.Cookies.get("loginname");
@@ -1036,7 +1036,7 @@ Ext.onReady(function() {
 			var detailString="";
 			//ProjInfoForm.getForm().loadRecord(records[0]);
 			Ext.Array.forEach(records,function(record){
-			detailString+='<pre>'+record.get("sub_name")+record.get("month")+", "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+record.get("profit")+'%</pre>';
+				detailString+='<pre>'+record.get("sub_name")+record.get("month")+", "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+record.get("profit")+'%</pre>';
 			});
 			proj_info_tpl=Ext.create('Ext.XTemplate',[
     	    '<table style="border-collapse:collapse;">{pdt_status:this.cusPdtStatus()}<tr><td style="padding:20px;border:1px;"><table style="border-collapse:collapse;">',
@@ -1058,7 +1058,7 @@ Ext.onReady(function() {
 				cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
 			},{
 				cusPdtStatus:function(d){
-					if(d<>"上线通过"){
+					if(d!="上线通过"){
 						return '<tr><td style="padding:20px;border:1px;"><span style="background-color:#003366;color:#FFFFFF">请注意该项目尚未上线！</span></td></tr>';
 					} else {
 						return '';

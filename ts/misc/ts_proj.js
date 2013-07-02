@@ -927,7 +927,8 @@ Ext.onReady(function() {
 				scale:'medium',
 				handler:function(){window.close();}
 			}]
-		},{
+		}],
+		items:[{
 			xtype:'panel', 
 			margin:'0 0 0 0',
 			border:0,

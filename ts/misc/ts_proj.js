@@ -957,11 +957,11 @@ Ext.onReady(function() {
 					//height:320,
 					minWidth:800,
 					layout:'vbox',
-					items:[{
+					items:[
 						RecentChangeGrid,
 						AmountDetailsGrid,
 						FileListGrid
-					}]
+					]
 				}
 				]
 			}

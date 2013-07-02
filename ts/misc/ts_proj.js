@@ -869,7 +869,7 @@ Ext.onReady(function() {
         	name: 'proj_id',
         	allowBlank: false
     	}]
-    };
+    });
 	var projApplyForm = Ext.create('Ext.form.Panel', {
 		bodyPadding: 5,
     	width: 350,
@@ -880,7 +880,7 @@ Ext.onReady(function() {
         	name: 'proj_id',
         	allowBlank: false
     	}]
-    };
+    });
 	
 	var viewport = Ext.create('Ext.Viewport', {
 		layout: {

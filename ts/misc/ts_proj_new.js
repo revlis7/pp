@@ -164,47 +164,54 @@ Ext.onReady(function() {
 								fileListStore.load();
 								projStore.load(function(records, operation, success) {
 									projdetailStore.load(function(records, operation, success) {
-		var detailString="";
-		//ProjInfoForm.getForm().loadRecord(records[0]);
-		Ext.Array.forEach(records,function(record){
-		detailString+='<pre>'+record.get("sub_name")+record.get("month")+", "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+record.get("profit")+'%</pre>';
-		});
-		proj_info_tpl=Ext.create('Ext.XTemplate',[
-        '<table style="border-collapse:collapse;"><tr><td style="padding:20px;border:1px;"><table style="border-collapse:collapse;">',
-		'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}, {exclusive}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
-		detailString, '</td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
-		'</table></td></tr></table>',
-		{
-			cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
-		},{
-			cusNum:function(n){return (n<1)?(n*10000+"万"):(n+"亿")}
-		},{
-			cusGrade:function(value){  
-			var res;        
-			if(value=="五星级"){
-        	  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
-        	} else if (value=="四星级"){
-        	  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
-        	} else if (value=="三星级"){
-        	  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
-        	} else if (value=="二星级"){
-        	  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
-        	} else if (value=="一星级"){
-        	  res= '<img src="/ts/misc/resources/icons/star.gif" />'
-			}
-			return res;
-		}}
+										if(records.get("pdt_status")<>"上线通过" && records.get("pdt_status")<>"申请中"){
+											Ext.getCmp('BtnPdtApply').show();
+										}
+										var loginname = Ext.util.Cookies.get("loginname");
+										if(records.get("pdt_status")=="申请中" && loginname.indexOf("DR">0)){
+											Ext.getCmp('BtnPdtAccept').show();
+										}
+										var detailString="";
+										//ProjInfoForm.getForm().loadRecord(records[0]);
+										Ext.Array.forEach(records,function(record){
+										detailString+='<pre>'+record.get("sub_name")+record.get("month")+", "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+record.get("profit")+'%</pre>';
+										});
+										proj_info_tpl=Ext.create('Ext.XTemplate',[
+    									'<table style="border-collapse:collapse;"><tr><td style="padding:20px;border:1px;"><table style="border-collapse:collapse;">',
+										'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}, {exclusive}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>项目评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
+										detailString, '</td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
+										'</table></td></tr></table>',
+										{
+											cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
+										},{
+											cusNum:function(n){return (n<1)?(n*10000+"万"):(n+"亿")}
+										},{
+											cusGrade:function(value){  
+											var res;        
+											if(value=="五星级"){
+    										  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
+    										} else if (value=="四星级"){
+    										  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
+    										} else if (value=="三星级"){
+    										  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
+    										} else if (value=="二星级"){
+    										  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
+    										} else if (value=="一星级"){
+    										  res= '<img src="/ts/misc/resources/icons/star.gif" />'
+											}
+											return res;
+										}}
 									]);
 									proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
 								});
@@ -233,47 +240,54 @@ Ext.onReady(function() {
 								ProjWin.close();
 								projStore.load(function(records, operation, success) {
 									projdetailStore.load(function(records, operation, success) {
-		var detailString="";
-		//ProjInfoForm.getForm().loadRecord(records[0]);
-		Ext.Array.forEach(records,function(record){
-		detailString+='<pre>'+record.get("sub_name")+record.get("month")+", "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+record.get("profit")+'%</pre>';
-		});
-		proj_info_tpl=Ext.create('Ext.XTemplate',[
-        '<table style="border-collapse:collapse;"><tr><td style="padding:20px;border:1px;"><table style="border-collapse:collapse;">',
-		'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}, {exclusive}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
-		detailString, '</td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
-		'</table></td></tr></table>',
-		{
-			cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
-		},{
-			cusNum:function(n){return (n<1)?(n*10000+"万"):(n+"亿")}
-		},{
-			cusGrade:function(value){  
-			var res;        
-			if(value=="五星级"){
-        	  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
-        	} else if (value=="四星级"){
-        	  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
-        	} else if (value=="三星级"){
-        	  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
-        	} else if (value=="二星级"){
-        	  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
-        	} else if (value=="一星级"){
-        	  res= '<img src="/ts/misc/resources/icons/star.gif" />'
-			}
-			return res;
-		}}
+										if(records.get("pdt_status")<>"上线通过" && records.get("pdt_status")<>"申请中"){
+											Ext.getCmp('BtnPdtApply').show();
+										}
+										var loginname = Ext.util.Cookies.get("loginname");
+										if(records.get("pdt_status")=="申请中" && loginname.indexOf("DR">0)){
+											Ext.getCmp('BtnPdtAccept').show();
+										}
+										var detailString="";
+										//ProjInfoForm.getForm().loadRecord(records[0]);
+										Ext.Array.forEach(records,function(record){
+										detailString+='<pre>'+record.get("sub_name")+record.get("month")+", "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+record.get("profit")+'%</pre>';
+										});
+										proj_info_tpl=Ext.create('Ext.XTemplate',[
+        								'<table style="border-collapse:collapse;"><tr><td style="padding:20px;border:1px;"><table style="border-collapse:collapse;">',
+										'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}, {exclusive}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>项目评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
+										detailString, '</td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
+										'</table></td></tr></table>',
+										{
+											cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
+										},{
+											cusNum:function(n){return (n<1)?(n*10000+"万"):(n+"亿")}
+										},{
+											cusGrade:function(value){  
+											var res;        
+											if(value=="五星级"){
+        									  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
+        									} else if (value=="四星级"){
+        									  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
+        									} else if (value=="三星级"){
+        									  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
+        									} else if (value=="二星级"){
+        									  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
+        									} else if (value=="一星级"){
+        									  res= '<img src="/ts/misc/resources/icons/star.gif" />'
+											}
+											return res;
+										}}
 										]);
 										proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
 		
@@ -974,6 +988,51 @@ Ext.onReady(function() {
 		]
 	});
 	
+	var RecentChangeGrid=Ext.create('Ext.grid.Panel',{
+		store: fileListStore,
+		border:1,
+		title:'最新进展',
+		emptyText:'暂无信息',
+		minHeight:156,
+		region:'south',
+		flex:1,
+		columns:[
+		{
+			xtype: 'actioncolumn',
+			width:40,style: "text-align:center;",align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/cross.gif',
+				tooltip: '删除这条消息',
+				handler: function(grid, rowIndex, colIndex) {
+				}
+			}]
+		},{
+			xtype: 'actioncolumn',
+			width:40,style: "text-align:center;",align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/download.gif',
+				tooltip: '修改这条消息',
+				handler: function(grid, rowIndex, colIndex) {
+				}
+			}]
+		},
+		{text:'时间',         dataIndex:'addtime',      filtable:true, style: "text-align:center;",align: 'left',width:100},
+		{text:'修改信息',       dataIndex:'messages',      filtable:true, style: "text-align:center;",align: 'right',width:380}
+		]
+	});
+	var projApplyForm = Ext.create('Ext.form.Panel', {
+		bodyPadding: 5,
+    	width: 350,
+    	url: '/ts/index.php/proj/proj_apply_submit',
+    	hidden:true,
+    	items: [{
+    		fieldLabel: 'proj_id',
+        	name: 'proj_id',
+        	allowBlank: false
+    	}]
+    });
 	AmountEditWin.on({
     	hide: function(){
       		Ext.getBody().unmask();
@@ -997,10 +1056,10 @@ Ext.onReady(function() {
 		defaults: {
 		},
 		items: [{
-			xtype:'toolbar',
-			region:'north',
+			xtype: 'toolbar',
 			height:50,
 			border:0,
+			region:'north',
 			items:[
 			{
 				xtype:'image',
@@ -1030,7 +1089,7 @@ Ext.onReady(function() {
 					//todo
 					AmountEditForm=AmountEditWin.down('form');
 					AmountEditForm.getForm().reset();
-					AmountEditForm.down('hiddenfield[name="proj_id"]').setValue(proj_id);
+					AmountEditForm.down('hiddenfield[name="proj_id"]').setValue(params.proj_id);
 					AmountEditForm.down('hiddenfield[name="proj_detail_id"]').setValue(-1);
 					AmountEditForm.down('numberfield[name="amount"]').setValue(null);
 					Ext.getBody().mask();
@@ -1041,9 +1100,49 @@ Ext.onReady(function() {
 				text:'上传项目文件',
 				scale:'medium',
 				handler:function(){
-					uploadWin.down('hiddenfield[name="proj_id"]').setValue(proj_id);
+					uploadWin.down('hiddenfield[name="proj_id"]').setValue(params.proj_id);
 					Ext.getBody().mask();
 					uploadWin.show();
+				}
+			},{
+				icon: '/ts/misc/resources/icons/upload.gif',
+				id:'BtnPdtApply',
+				text:'申请上线',
+				scale:'medium',
+				hidden:true,
+				handler:function(){
+					projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+					projApplyForm.getForm.submit({
+						url:'/ts/index.php/proj/proj_apply_submit',
+						submitEmptyText: false,
+						waitMsg: '正在保存后台数据……',
+						success: function(form, action) {
+							Ext.getCmp('BtnPdtApply').hide();
+						} ,
+						failure: function(form, action) {
+							Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+						}
+					})
+				}
+			},{
+				icon: '/ts/misc/resources/icons/upload.gif',
+				id:'BtnPdtAccept',
+				text:'批准上线',
+				scale:'medium',
+				hidden:true,
+				handler:function(){
+					projAcceptForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+					projAcceptForm.getForm.submit({
+						url:'/ts/index.php/proj/proj_accept_submit',
+						submitEmptyText: false,
+						waitMsg: '正在保存后台数据……',
+						success: function(form, action) {
+							Ext.getCmp('BtnPdtAccept').hide();
+						} ,
+						failure: function(form, action) {
+							Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+						}
+					})
 				}
 			},{
 				xtype:'box',
@@ -1060,36 +1159,35 @@ Ext.onReady(function() {
 				handler:function(){window.close();}
 			}]
 		},{
-			xtype:'panel',
-			margin:0,
+			xtype:'panel', 
+			margin:'0 0 0 0',
 			border:0,
 			region:'center',
 			layout:'border',
 			items:[{
+				id:'projInfoPanel',
 				xtype:'panel',
-				//autoScroll :true,
-				border:0,
-				//minWidth:500,
-				//minHeight:200,
-				layout:'border',
+				region:'west',
+				width:480,
+				title:'项目信息',
+				html:'正在加载项目信息...',
+				autoScroll :true
+			}, {
+				id:'projDetailPanel',
+				xtype:'panel',
+				width:800,
 				region:'center',
-				items:[
-				//ProjInfoForm,
-				{
-					id:'projInfoPanel',
-					region:'center',
-					height:380,
-					minWidth:800,
-					html:'正在加载项目信息...',
-					title:'项目信息',
-					border:0,
-					autoScroll :true
+				border:0,
+				layout:{
+					type:'vbox',
+					align:'stretch'
 				},
-				AmountDetailsGrid,
-				FileListGrid
+				items:[
+					RecentChangeGrid,
+					AmountDetailsGrid,
+					FileListGrid
 				]
-			}
-			]
+			}]
 		}]
 	});
 	Ext.getBody().mask();

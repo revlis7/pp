@@ -95,7 +95,7 @@ Ext.onReady(function() {
               detailString+=("<pre>"+((record.data.amount<10000)?(record.data.amount+"万"):(record.data.amount/10000+"亿"))+": "+record.data.profit+"%</pre>");
             });
             var proj_info_tpl=Ext.create('Ext.XTemplate',[
-              '<table cellpadding=0 cellspacing=0><tr><td style="padding:10px;border:1px;"><table>',
+            '<table style="border-collapse:collapse;"><tr><td style="padding:20px;border:1px;"><table style="border-collapse:collapse;">',
               '<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}->{sub_category}</pre></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><b><pre>{issue}　{name}</pre></b></td></tr>',
               '<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main">{profit_property}收益项目，期限{month}个月，融资规模{scale:this.cusNum()}，按{cycle}分配</td></tr>',
@@ -304,7 +304,7 @@ var res;
           ptype: 'rowexpander',
           selectRowOnExpand : true,
           rowBodyTpl : [
-            '<table><tr><td style="padding:10px;border:1px;"><table>',
+            '<table style="border-collapse:collapse;"><tr><td style="padding:20px;border:1px;"><table style="border-collapse:collapse;">',
             '<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
             '<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，期限<b>{month}</b>个月，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
             //'{[(records[0].get("profit_property")==true)?"aaa":"bbb"]}',

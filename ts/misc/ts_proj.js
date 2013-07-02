@@ -873,17 +873,6 @@ Ext.onReady(function() {
         	allowBlank: false
     	}]
     });
-	var projApplyForm = Ext.create('Ext.form.Panel', {
-		bodyPadding: 5,
-    	width: 350,
-    	url: '/ts/index.php/proj/proj_apply_submit',
-    	hidden:true,
-    	items: [{
-    		fieldLabel: 'proj_id',
-        	name: 'proj_id',
-        	allowBlank: false
-    	}]
-    });
 	
 	var viewport = Ext.create('Ext.Viewport', {
 		layout: {
@@ -963,17 +952,37 @@ Ext.onReady(function() {
 			},{
 				icon: '/ts/misc/resources/icons/upload.gif',
 				id:'BtnPdtAccept',
-				text:'批准上线',
+				text:'上线批准',
 				scale:'medium',
 				hidden:true,
 				handler:function(){
-					projAcceptForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
-					projAcceptForm.getForm.submit({
+					projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+					projApplyForm.getForm.submit({
 						url:'/ts/index.php/proj/proj_accept_submit',
 						submitEmptyText: false,
 						waitMsg: '正在保存后台数据……',
 						success: function(form, action) {
 							Ext.getCmp('BtnPdtAccept').hide();
+						} ,
+						failure: function(form, action) {
+							Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+						}
+					})
+				}
+			},{
+				icon: '/ts/misc/resources/icons/upload.gif',
+				id:'BtnPdtRefuse',
+				text:'上线驳回',
+				scale:'medium',
+				hidden:true,
+				handler:function(){
+					projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+					projApplyForm.getForm.submit({
+						url:'/ts/index.php/proj/proj_refuse_submit',
+						submitEmptyText: false,
+						waitMsg: '正在保存后台数据……',
+						success: function(form, action) {
+							Ext.getCmp('BtnPdtRefuse').hide();
 						} ,
 						failure: function(form, action) {
 							Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
@@ -1091,8 +1100,10 @@ Ext.onReady(function() {
 		var loginname = Ext.util.Cookies.get("loginname");
 		if(records[0].get("pdt_status")=="申请中" && loginname.indexOf("DR">0)){
 			Ext.getCmp('BtnPdtAccept').show();
+			Ext.getCmp('BtnPdtRefuse').show();
 		} else {
 			Ext.getCmp('BtnPdtAccept').hide();
+			Ext.getCmp('BtnPdtRefuse').hide();
 		}
 	});
 	//projdetailStore.load();

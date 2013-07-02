@@ -9,6 +9,7 @@ Ext.onReady(function() {
 		{name:'proj_id',type:'integer'},
 		{name:'category',type:'string'},
 		{name:'sub_category',type:'string'},
+		{name:'exclusive',type:'string'},
 		{name:'issue',type:'string'},
 		{name:'name',type:'string'},
 		{name:'flow_of_fund',type:'string'},
@@ -23,7 +24,9 @@ Ext.onReady(function() {
 		{name:'countdown',type:'string'},
 		{name:'exclusive',type:'string'},
 		{name:'grade',type:'string'},
-		{name:'manager_remark',type:'string'}
+		{name:'manager_remark',type:'string'},
+		{name:'create_ts',type:'date',dateFormat:"Y-m-d H:i:s"},
+		{name:'pdt_status',type:'string'}
 		],
 		proxy: {
 			type: 'ajax',
@@ -217,12 +220,18 @@ Ext.onReady(function() {
 										]);
 										proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
 									});
-									if(records.get("pdt_status")!="上线通过" && records.get("pdt_status")!="申请中"){
+									if(records[0].get("pdt_status")=="上线通过" || records[0].get("pdt_status")=="申请中"){
+										Ext.getCmp('BtnPdtApply').hide();
+									} else {
 										Ext.getCmp('BtnPdtApply').show();
 									}
 									var loginname = Ext.util.Cookies.get("loginname");
-									if(records.get("pdt_status")=="申请中" && loginname.indexOf("DR">0)){
+									if(records[0].get("pdt_status")=="申请中" && loginname.indexOf("DR">0)){
 										Ext.getCmp('BtnPdtAccept').show();
+										Ext.getCmp('BtnPdtRefuse').show();
+									} else {
+										Ext.getCmp('BtnPdtAccept').hide();
+										Ext.getCmp('BtnPdtRefuse').hide();
 									}
 								});
 							}
@@ -303,12 +312,18 @@ Ext.onReady(function() {
 										proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
 										//proj_info_window.show();
 									});
-									if(records.get("pdt_status")!="上线通过" && records.get("pdt_status")!="申请中"){
+									if(records[0].get("pdt_status")=="上线通过" || records[0].get("pdt_status")=="申请中"){
+										Ext.getCmp('BtnPdtApply').hide();
+									} else {
 										Ext.getCmp('BtnPdtApply').show();
 									}
 									var loginname = Ext.util.Cookies.get("loginname");
-									if(records.get("pdt_status")=="申请中" && loginname.indexOf("DR">0)){
+									if(records[0].get("pdt_status")=="申请中" && loginname.indexOf("DR">0)){
 										Ext.getCmp('BtnPdtAccept').show();
+										Ext.getCmp('BtnPdtRefuse').show();
+									} else {
+										Ext.getCmp('BtnPdtAccept').hide();
+										Ext.getCmp('BtnPdtRefuse').hide();
 									}
 								});
 							}
@@ -1042,7 +1057,6 @@ Ext.onReady(function() {
 	var projApplyForm = Ext.create('Ext.form.Panel', {
 		bodyPadding: 5,
     	width: 350,
-    	url: '/ts/index.php/proj/proj_apply_submit',
     	hidden:true,
     	items: [{
     		fieldLabel: 'proj_id',
@@ -1106,7 +1120,7 @@ Ext.onReady(function() {
 					//todo
 					AmountEditForm=AmountEditWin.down('form');
 					AmountEditForm.getForm().reset();
-					AmountEditForm.down('hiddenfield[name="proj_id"]').setValue(params.proj_id);
+					AmountEditForm.down('hiddenfield[name="proj_id"]').setValue(proj_id);
 					AmountEditForm.down('hiddenfield[name="proj_detail_id"]').setValue(-1);
 					AmountEditForm.down('numberfield[name="amount"]').setValue(null);
 					Ext.getBody().mask();
@@ -1144,17 +1158,37 @@ Ext.onReady(function() {
 			},{
 				icon: '/ts/misc/resources/icons/upload.gif',
 				id:'BtnPdtAccept',
-				text:'批准上线',
+				text:'上线批准',
 				scale:'medium',
 				hidden:true,
 				handler:function(){
-					projAcceptForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
-					projAcceptForm.getForm.submit({
+					projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+					projApplyForm.getForm.submit({
 						url:'/ts/index.php/proj/proj_accept_submit',
 						submitEmptyText: false,
 						waitMsg: '正在保存后台数据……',
 						success: function(form, action) {
 							Ext.getCmp('BtnPdtAccept').hide();
+						} ,
+						failure: function(form, action) {
+							Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+						}
+					})
+				}
+			},{
+				icon: '/ts/misc/resources/icons/upload.gif',
+				id:'BtnPdtRefuse',
+				text:'上线驳回',
+				scale:'medium',
+				hidden:true,
+				handler:function(){
+					projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+					projApplyForm.getForm.submit({
+						url:'/ts/index.php/proj/proj_refuse_submit',
+						submitEmptyText: false,
+						waitMsg: '正在保存后台数据……',
+						success: function(form, action) {
+							Ext.getCmp('BtnPdtRefuse').hide();
 						} ,
 						failure: function(form, action) {
 							Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');

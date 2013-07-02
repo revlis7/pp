@@ -536,7 +536,7 @@ Ext.onReady(function() {
 							submitEmptyText: false,
 							waitMsg: 'Saving Data...',
 							success: function(form, action) {
-								form.up('window').hide();
+								AmountEditWin.hide();
 								projdetailStore.load();
 							}
 							//,

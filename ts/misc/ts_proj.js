@@ -860,13 +860,13 @@ Ext.onReady(function() {
 	});
 	var viewport = Ext.create('Ext.Viewport', {
 		layout: {
-			type: 'border'
+			type: 'fit'
 		},
 		defaults: {
 		},
-		items: [{
-			xtype:'toolbar',
-			region:'north',
+		dockedItems: [{
+			dock:'top',
+			xtype: 'toolbar',
 			height:50,
 			border:0,
 			items:[
@@ -878,7 +878,7 @@ Ext.onReady(function() {
 			},{
 				xtype:'box',
 				html:'<span class="app-header2">项目编辑</span>'
-			},,{
+			},{
 				xtype:'tbtext',
 				text:'您可以：'
 			},{
@@ -931,23 +931,20 @@ Ext.onReady(function() {
 			xtype:'panel', 
 			margin:'0 0 0 0',
 			border:0,
-			region:'center',
 			layout:'hbox',
 			align:'stretch',
 			items:[{
 				id:'projInfoPanel',
-				region:'center',
-				//height:320,
 				minWidth:480,
 				title:'项目信息',
 				html:'正在加载项目信息...',
 				autoScroll :true
 			}, {
 				id:'projDetailPanel',
-				region:'east',
-				//height:320,
 				minWidth:800,
 				layout:'vbox',
+				align:'stretch',
+				autoScroll :true,
 				items:[
 					RecentChangeGrid,
 					AmountDetailsGrid,

@@ -6,45 +6,24 @@ Ext.onReady(function() {
 	
 	var projStore=Ext.create('Ext.data.JsonStore', {
 		fields: [
-		{name:'proj_id',type:'integer' },
-		{name:'proj_detail_id',type:'integer' },
-		{name:'total_share',type:'string' },
-		{name:'status'				,type:'string' },
-		{name:'exclusive',type:'string' },
-		{name:'grade',type:'string' },
-		{name:'category'			,type:'string' },
-		{name:'sub_category'	,type:'string' },
-		{name:'issue',type:'string' },
-		{name:'name'					,type:'string' },
-		{name:'flow_of_fund'	,type:'string' },
-		{name:'highlights'		,type:'string' },
-		{name:'month',type:'integer'},
+		{name:'proj_id',type:'integer'},
+		{name:'category',type:'string'},
+		{name:'sub_category',type:'string'},
+		{name:'issue',type:'string'},
+		{name:'name',type:'string'},
+		{name:'flow_of_fund',type:'string'},
+		{name:'highlights',type:'string'},
 		{name:'scale',type:'float'},
-		{name:'cycle',type:'string' },
-		{name:'amount'				,type:'integer'},
-		{name:'profit_property',type:'string' },
-		{name:'profit'				,type:'float'	},
-		{name:'manager',type:'string' },
-		{name:'contract'			,type:'string' },
-		{name:'remark'				,type:'string' },
-		{name:'pay_account',type:'string' },
-		{name:'countdown',type:'string' },
-		{name:'commission_b_tax' ,type:'float'	},
-		{name:'commission_a_tax' ,type:'float'	},
-		{name:'inner_commission' ,type:'float'	},
-		{name:'outer_commission' ,type:'float'	},
-		{name:'imm_payment' ,type:'float'	},
-		{name:'pay',type:'date'	 },
-		{name:'paid'					,type:'integer'},
-		{name:'found',type:'date'	 },
-		{name:'quota',type:'integer'},
-		{name:'quota_paid'		,type:'integer'},
-		{name:'quota_remain'	,type:'integer'},
-		{name:'main_channel'	,type:'string' },
-		{name:'channel_company',type:'string' },
-		{name:'channel_contact',type:'string' },
-		{name:'billing_company',type:'string' },
-		{name:'manager_remark',type:'string' }
+		{name:'cycle',type:'string'},
+		{name:'profit_property',type:'string'},
+		{name:'manager',type:'string'},
+		{name:'contract',type:'string'},
+		{name:'remark',type:'string'},
+		{name:'pay_account',type:'string'},
+		{name:'countdown',type:'string'},
+		{name:'exclusive',type:'string'},
+		{name:'grade',type:'string'},
+		{name:'manager_remark',type:'string'}
 		],
 		proxy: {
 			type: 'ajax',
@@ -58,45 +37,24 @@ Ext.onReady(function() {
 
 	var projdetailStore=Ext.create('Ext.data.JsonStore', {
 		fields: [
-		{name:'proj_id',type:'integer' },
-		{name:'proj_detail_id',type:'integer' },
-		{name:'total_share',type:'string' },
-		{name:'status'				,type:'string' },
-		{name:'exclusive',type:'string' },
-		{name:'grade',type:'string' },
-		{name:'category'			,type:'string' },
-		{name:'sub_category'	,type:'string' },
-		{name:'issue',type:'string' },
-		{name:'name'					,type:'string' },
-		{name:'flow_of_fund'	,type:'string' },
-		{name:'highlights'		,type:'string' },
+		{name:'proj_id',type:'integer'},
+		{name:'proj_detail_id',type:'integer'},
+		{name:'sub_name',type:'string'},
 		{name:'month',type:'integer'},
-		{name:'scale',type:'float'},
-		{name:'cycle',type:'string' },
-		{name:'amount'				,type:'integer'},
-		{name:'profit_property',type:'string' },
-		{name:'profit'				,type:'float'	},
-		{name:'manager',type:'string' },
-		{name:'contract'			,type:'string' },
-		{name:'remark'				,type:'string' },
-		{name:'pay_account',type:'string' },
-		{name:'countdown',type:'string' },
-		{name:'commission_b_tax' ,type:'float'	},
-		{name:'commission_a_tax' ,type:'float'	},
-		{name:'inner_commission' ,type:'float'	},
-		{name:'outer_commission' ,type:'float'	},
-		{name:'imm_payment' ,type:'float'	},
-		{name:'pay',type:'date'	 },
-		{name:'paid'					,type:'integer'},
-		{name:'found',type:'date'	 },
-		{name:'quota',type:'integer'},
-		{name:'quota_paid'		,type:'integer'},
-		{name:'quota_remain'	,type:'integer'},
-		{name:'main_channel'	,type:'string' },
-		{name:'channel_company',type:'string' },
-		{name:'channel_contact',type:'string' },
-		{name:'billing_company',type:'string' },
-		{name:'manager_remark',type:'string' }
+		{name:'total_share',type:'string'},
+		{name:'status',type:'string'},
+		{name:'amount',type:'integer'},
+		{name:'profit',type:'float'},
+		{name:'commission_b_tax',type:'float'},
+		{name:'commission_a_tax',type:'float'},
+		{name:'inner_commission',type:'float'},
+		{name:'outer_commission',type:'float'},
+		{name:'imm_payment',type:'float'},
+		{name:'found',type:'date'},
+		{name:'main_channel',type:'string'},
+		{name:'channel_company',type:'string'},
+		{name:'channel_contact',type:'string'},
+		{name:'billing_company',type:'string'}
 		],
 		proxy: {
 			type: 'ajax',
@@ -137,6 +95,7 @@ Ext.onReady(function() {
 		closeAction:"hide",
 		closable:false,
 		title:'编辑项目',
+		titleAlign : "center",
 		width:940,
 		items:[
 		{
@@ -146,7 +105,7 @@ Ext.onReady(function() {
 			border:0,
 			waitTitle:"Pleas wait...",
 			layout:{
-				type:'hbox',
+				type:'vbox',
 				defaultMargins: {top: 0, right: 5, bottom: 0, left: 5}
 			},
 			fieldDefaults:{
@@ -447,7 +406,7 @@ Ext.onReady(function() {
 							submitEmptyText: false,
 							waitMsg: 'Saving Data...',
 							success: function(form, action) {
-								form.up('window').hide();
+								AmountEditWin.hide();
 								projdetailStore.load();
 							}
 							//,
@@ -598,54 +557,54 @@ Ext.onReady(function() {
 	});
 
 	var uploadWin=Ext.create("Ext.window.Window",{
-	title: '上传项目文件',
-	width: 550,
-	resizeable:false,
-	closeAction:"hide",
-	closable:true,
-	bodyPadding: 10,
-	items:[
-	{
-		xtype:"form",
-		bodyPadding:5,
-		trackResetOnLoad:true,
-		border:0,
-		waitTitle:"Pleas wait...",
-		layout:'fit',
-		items: [{
-			xtype:'hiddenfield',
-			name:'proj_id',
-			allowBlank:false
-		}, {
-			xtype: 'filefield',
-			name: 'file',
-			fieldLabel: '文件',
-			labelWidth: 50,
-			width:500,
-			msgTarget: 'side',
-			allowBlank: false,
-			anchor: '100%',
-			buttonText: '选择文件...'
-		}],
-		
-		buttons: [{
-			text: '上传',
-			handler: function() {
-				var form = this.up('form').getForm();
-				if(form.isValid()){
-					form.submit({
-						url: '/ts/index.php/upload/submit',
-						waitMsg: '正在上传文件...',
-						success: function(fp, o) {
-							Ext.Msg.alert('上传成功！', '您的文件 "' + o.result.file + '" 已成功上传。');
-							uploadWin.close();
-							fileListStore.load();
-						}
-					});
+		title: '上传项目文件',
+		width: 550,
+		resizeable:false,
+		closeAction:"hide",
+		closable:true,
+		bodyPadding: 10,
+		items:[
+		{
+			xtype:"form",
+			bodyPadding:5,
+			trackResetOnLoad:true,
+			border:0,
+			waitTitle:"Pleas wait...",
+			layout:'fit',
+			items: [{
+				xtype:'hiddenfield',
+				name:'proj_id',
+				allowBlank:false
+			}, {
+				xtype: 'filefield',
+				name: 'file',
+				fieldLabel: '文件',
+				labelWidth: 50,
+				width:500,
+				msgTarget: 'side',
+				allowBlank: false,
+				anchor: '100%',
+				buttonText: '选择文件...'
+			}],
+			
+			buttons: [{
+				text: '上传',
+				handler: function() {
+					var form = this.up('form').getForm();
+					if(form.isValid()){
+						form.submit({
+							url: '/ts/index.php/upload/submit',
+							waitMsg: '正在上传文件...',
+							success: function(fp, o) {
+								Ext.Msg.alert('上传成功！', '您的文件 "' + o.result.file + '" 已成功上传。');
+								uploadWin.close();
+								fileListStore.load();
+							}
+						});
+					}
 				}
-			}
+			}]
 		}]
-	}]
 	});
 
 	var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
@@ -736,7 +695,7 @@ Ext.onReady(function() {
         		return value;
         	}
         },
-		{text:'成立日期',	 dataIndex:'found', filtable:true, style: "text-align:center;",align: 'center',width:60,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
+		{text:'成立日期',	 dataIndex:'found', filtable:true, style: "text-align:center;",align: 'center',width:88,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
 		{text:'税前佣金',	 dataIndex:'commission_b_tax', filtable:true, style: "text-align:center;",align: 'right',width:80,       
 			renderer: function(value,metaData,record,colIndex,store,view) {  
         		if(value>0){

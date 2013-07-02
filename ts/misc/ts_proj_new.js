@@ -5,95 +5,67 @@ Ext.onReady(function() {
 	var proj_id;
 	var proj_info_tpl;
 	var projStore=Ext.create('Ext.data.JsonStore', {
-			fields: [
-				{name:'proj_id'          ,type:'integer' },
-				{name:'proj_detail_id'   ,type:'integer' },
-				{name:'exclusive'        ,type:'string' },
-				{name:'grade'            ,type:'string' },
-				{name:'category'         ,type:'string' },
-				{name:'sub_category'     ,type:'string' },
-				{name:'issue'            ,type:'string' },
-				{name:'name'             ,type:'string' },
-				{name:'flow_of_fund'     ,type:'string' },
-				{name:'highlights'       ,type:'string' },
-				{name:'month'            ,type:'integer'},
-				{name:'scale'            ,type:'float'},
-				{name:'cycle'            ,type:'string' },
-				{name:'amount'           ,type:'integer'},
-				{name:'profit_property'  ,type:'string' },
-				{name:'profit'           ,type:'float'  },
-				{name:'manager'          ,type:'string' },
-				{name:'contract'         ,type:'string' },
-				{name:'remark'           ,type:'string' },
-				{name:'pay_account'            ,type:'string' },
-				{name:'countdown'            ,type:'string' },
-				{name:'commission_b_tax' ,type:'float'  },
-				{name:'commission_a_tax' ,type:'float'  },
-				{name:'inner_commission' ,type:'float'  },
-				{name:'outer_commission' ,type:'float'  },
-				{name:'imm_payment' ,type:'float'  },
-				{name:'pay'              ,type:'date'   },
-				{name:'paid'             ,type:'integer'},
-				{name:'found'            ,type:'date'   },
-				{name:'quota'            ,type:'integer'},
-				{name:'quota_paid'       ,type:'integer'},
-				{name:'quota_remain'     ,type:'integer'},
-				{name:'main_channel'     ,type:'string' },
-				{name:'channel_company'  ,type:'string' },
-				{name:'channel_contact'  ,type:'string' },
-				{name:'billing_company'  ,type:'string' },
-				{name:'manager_remark'   ,type:'string' }
-			],
-			proxy: {
-				type: 'ajax',
-				url: '/ts/index.php/proj/detail_view?proj_id='+proj_id,
-				reader: {
-						type: 'json',
-						root: 'data'
-				}
+		fields: [
+		{name:'proj_id',type:'integer'},
+		{name:'category',type:'string'},
+		{name:'sub_category',type:'string'},
+		{name:'issue',type:'string'},
+		{name:'name',type:'string'},
+		{name:'flow_of_fund',type:'string'},
+		{name:'highlights',type:'string'},
+		{name:'scale',type:'float'},
+		{name:'cycle',type:'string'},
+		{name:'profit_property',type:'string'},
+		{name:'manager',type:'string'},
+		{name:'contract',type:'string'},
+		{name:'remark',type:'string'},
+		{name:'pay_account',type:'string'},
+		{name:'countdown',type:'string'},
+		{name:'exclusive',type:'string'},
+		{name:'grade',type:'string'},
+		{name:'manager_remark',type:'string'}
+		],
+		proxy: {
+			type: 'ajax',
+			url: '/ts/index.php/proj/detail_view?proj_id='+proj_id,
+			reader: {
+					type: 'json',
+					root: 'data'
 			}
-		});
+		}
+	});
 
 	var projdetailStore=Ext.create('Ext.data.JsonStore', {
-			fields: [
-				{name:'proj_id'          ,type:'integer'},
-				{name:'proj_detail_id'   ,type:'integer'},
-				{name:'total_share'      ,type:'string' },
-				{name:'status'           ,type:'string' },
-				{name:'sub_name'         ,type:'string' },
-				{name:'month'            ,type:'integer'},
-				{name:'scale'            ,type:'float'  },
-				{name:'cycle'            ,type:'string' },
-				{name:'amount'           ,type:'integer'},
-				{name:'profit_property'  ,type:'string' },
-				{name:'profit'           ,type:'float'  },
-				{name:'manager'          ,type:'string' },
-				{name:'contract'         ,type:'string' },
-				{name:'remark'           ,type:'string' },
-				{name:'pay_account'      ,type:'string' },
-				{name:'countdown'        ,type:'string' },
-				{name:'commission_b_tax' ,type:'float'  },
-				{name:'commission_a_tax' ,type:'float'  },
-				{name:'inner_commission' ,type:'float'  },
-				{name:'outer_commission' ,type:'float'  },
-				{name:'imm_payment'      ,type:'float'  },
-				{name:'found'            ,type:'date'   },
-				{name:'main_channel'     ,type:'string' },
-				{name:'channel_company'  ,type:'string' },
-				{name:'channel_contact'  ,type:'string' },
-				{name:'billing_company'  ,type:'string' },
-				{name:'manager_remark'   ,type:'string' }
-			],
-			proxy: {
-				type: 'ajax',
-				//url: 'proj_sample_data.json?para='+proj_id,
-				url: '/ts/index.php/proj/view',
-				reader: {
-						type: 'json',
-						root: 'data'
-				}
+		fields: [
+		{name:'proj_id',type:'integer'},
+		{name:'proj_detail_id',type:'integer'},
+		{name:'sub_name',type:'string'},
+		{name:'month',type:'integer'},
+		{name:'total_share',type:'string'},
+		{name:'status',type:'string'},
+		{name:'amount',type:'integer'},
+		{name:'profit',type:'float'},
+		{name:'commission_b_tax',type:'float'},
+		{name:'commission_a_tax',type:'float'},
+		{name:'inner_commission',type:'float'},
+		{name:'outer_commission',type:'float'},
+		{name:'imm_payment',type:'float'},
+		{name:'found',type:'date'},
+		{name:'main_channel',type:'string'},
+		{name:'channel_company',type:'string'},
+		{name:'channel_contact',type:'string'},
+		{name:'billing_company',type:'string'}
+		],
+		proxy: {
+			type: 'ajax',
+			//url: 'proj_sample_data.json?para='+proj_id,
+			url: '/ts/index.php/proj/view',
+			reader: {
+					type: 'json',
+					root: 'data'
 			}
-		});
+		}
+	});
 
 	var fileListStore=Ext.create('Ext.data.JsonStore', {
 		fields: [

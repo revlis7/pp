@@ -932,40 +932,28 @@ Ext.onReady(function() {
 			margin:'0 0 0 0',
 			border:0,
 			region:'center',
-			layout:'border',
+			layout:'hbox',
+			align:'stretch',
 			items:[{
-				xtype:'panel',
-				//autoScroll :true,
-				border:0,
-				//minWidth:500,
-				//minHeight:200,
-				layout:'border',
+				id:'projInfoPanel',
 				region:'center',
+				//height:320,
+				minWidth:480,
+				title:'项目信息',
+				html:'正在加载项目信息...',
+				autoScroll :true
+			}, {
+				id:'projDetailPanel',
+				region:'east',
+				//height:320,
+				minWidth:800,
+				layout:'vbox',
 				items:[
-					//ProjInfoForm,
-				{
-					id:'projInfoPanel',
-					region:'center',
-					//height:320,
-					minWidth:480,
-					title:'项目信息',
-					html:'正在加载项目信息...',
-					autoScroll :true
-				}, {
-					id:'projDetailPanel',
-					region:'east',
-					//height:320,
-					minWidth:800,
-					layout:'vbox',
-					items:[
-						RecentChangeGrid,
-						AmountDetailsGrid,
-						FileListGrid
-					]
-				}
+					RecentChangeGrid,
+					AmountDetailsGrid,
+					FileListGrid
 				]
-			}
-			]
+			}]
 		}]
 	});
 	

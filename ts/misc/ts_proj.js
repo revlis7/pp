@@ -858,6 +858,30 @@ Ext.onReady(function() {
 			Ext.getBody().unmask();
 		}
 	});
+	
+	var projAcceptForm = Ext.create('Ext.form.Panel', {
+		bodyPadding: 5,
+    	width: 350,
+    	url: '/ts/index.php/proj/proj_accept_submit',
+    	hidden:true,
+    	items: [{
+    		fieldLabel: 'proj_id',
+        	name: 'proj_id',
+        	allowBlank: false
+    	}]
+    };
+	var projApplyForm = Ext.create('Ext.form.Panel', {
+		bodyPadding: 5,
+    	width: 350,
+    	url: '/ts/index.php/proj/proj_apply_submit',
+    	hidden:true,
+    	items: [{
+    		fieldLabel: 'proj_id',
+        	name: 'proj_id',
+        	allowBlank: false
+    	}]
+    };
+	
 	var viewport = Ext.create('Ext.Viewport', {
 		layout: {
 			type: 'border'
@@ -914,6 +938,46 @@ Ext.onReady(function() {
 					uploadWin.show();
 				}
 			},{
+				icon: '/ts/misc/resources/icons/upload.gif',
+				id:'BtnPdtApply',
+				text:'申请上线',
+				scale:'medium',
+				hidden:true,
+				handler:function(){
+					projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+					projApplyForm.getForm.submit({
+						url:'/ts/index.php/proj/proj_apply_submit',
+						submitEmptyText: false,
+						waitMsg: '正在保存后台数据……',
+						success: function(form, action) {
+							Ext.getCmp('BtnPdtApply').hide();
+						} ,
+						failure: function(form, action) {
+							Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+						}
+					})
+				}
+			},{
+				icon: '/ts/misc/resources/icons/upload.gif',
+				id:'BtnPdtAccept',
+				text:'批准上线',
+				scale:'medium',
+				hidden:true,
+				handler:function(){
+					projAcceptForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+					projAcceptForm.getForm.submit({
+						url:'/ts/index.php/proj/proj_accept_submit',
+						submitEmptyText: false,
+						waitMsg: '正在保存后台数据……',
+						success: function(form, action) {
+							Ext.getCmp('BtnPdtAccept').hide();
+						} ,
+						failure: function(form, action) {
+							Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+						}
+					})
+				}
+			},{
 				xtype:'box',
 				flex:1
 			},{
@@ -946,6 +1010,7 @@ Ext.onReady(function() {
 				xtype:'panel',
 				width:800,
 				region:'center',
+				border:0,
 				layout:{
 					type:'vbox',
 					align:'stretch'
@@ -960,52 +1025,68 @@ Ext.onReady(function() {
 	});
 	
 	projStore.load(function(records, operation, success) {
-	projdetailStore.load(function(records, operation, success) {
-		var detailString="";
-		//ProjInfoForm.getForm().loadRecord(records[0]);
-		Ext.Array.forEach(records,function(record){
-		detailString+='<pre>'+record.get("sub_name")+record.get("month")+", "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+record.get("profit")+'%</pre>';
-		});
-		proj_info_tpl=Ext.create('Ext.XTemplate',[
-        '<table style="border-collapse:collapse;"><tr><td style="padding:20px;border:1px;"><table style="border-collapse:collapse;">',
-		'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}, {exclusive}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
-		detailString, '</td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
-		'</table></td></tr></table>',
-		{
-			cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
-		},{
-			cusNum:function(n){return (n<1)?(n*10000+"万"):(n+"亿")}
-		},{
-			cusGrade:function(value){  
-			var res;        
-			if(value=="五星级"){
-        	  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
-        	} else if (value=="四星级"){
-        	  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
-        	} else if (value=="三星级"){
-        	  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
-        	} else if (value=="二星级"){
-        	  res= '<img src="/ts/misc/resources/icons/star.gif" /><img src="/ts/misc/resources/icons/star.gif" />'
-        	} else if (value=="一星级"){
-        	  res= '<img src="/ts/misc/resources/icons/star.gif" />'
+		projdetailStore.load(function(records, operation, success) {
+			if(records.get("pdt_status")<>"上线通过" && records.get("pdt_status")<>"申请中"){
+				Ext.getCmp('BtnPdtApply').show();
 			}
-			return res;
-		}}
-		]);
-		proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
-		//proj_info_window.show();
-	});		
+			var loginname = Ext.util.Cookies.get("loginname");
+			if(records.get("pdt_status")=="申请中" && loginname.indexOf("DR">0)){
+				Ext.getCmp('BtnPdtAccept').show();
+			}
+			var detailString="";
+			//ProjInfoForm.getForm().loadRecord(records[0]);
+			Ext.Array.forEach(records,function(record){
+			detailString+='<pre>'+record.get("sub_name")+record.get("month")+", "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+record.get("profit")+'%</pre>';
+			});
+			proj_info_tpl=Ext.create('Ext.XTemplate',[
+    	    '<table style="border-collapse:collapse;">{pdt_status:this.cusPdtStatus()}<tr><td style="padding:20px;border:1px;"><table style="border-collapse:collapse;">',
+			'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}, {exclusive}</pre></td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>项目评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
+			detailString, '</td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
+			'</table></td></tr></table>',
+			{
+				cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
+			},{
+				cusPdtStatus:function(d){
+					if(d<>"上线通过"){
+						return '<tr><td style="padding:20px;border:1px;"><span style="background-color:#003366;color:#FFFFFF">请注意该项目尚未上线！</span></td></tr>';
+					} else {
+						return '';
+					}
+				}
+			},{
+				cusNum:function(n){return (n<1)?(n*10000+"万"):(n+"亿")}
+			},{
+				cusGrade:function(value){  
+					var res;        
+					if(value=="五星级"){
+    	    		  res= '★★★★★'
+    	    		} else if (value=="四星级"){
+    	    		  res= '★★★★'
+    	    		} else if (value=="三星级"){
+    	    		  res= '★★★'
+    	    		} else if (value=="二星级"){
+    	    		  res= '★★'
+    	    		} else if (value=="一星级"){
+    	    		  res= '★'
+					}
+					return res;
+				}
+			}
+			]);
+			proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
+			//proj_info_window.show();
+		});		
 	});
 	//projdetailStore.load();
 	fileListStore.load();

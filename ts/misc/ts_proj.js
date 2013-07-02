@@ -935,12 +935,14 @@ Ext.onReady(function() {
 			align:'stretch',
 			items:[{
 				id:'projInfoPanel',
+				xtype:'panel',
 				minWidth:480,
 				title:'项目信息',
 				html:'正在加载项目信息...',
 				autoScroll :true
 			}, {
 				id:'projDetailPanel',
+				xtype:'panel',
 				minWidth:800,
 				layout:'vbox',
 				align:'stretch',

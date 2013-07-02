@@ -613,7 +613,7 @@ Ext.onReady(function() {
 		title:'额度信息',
 		region:'south',
 		minHeight:156,
-//		flex:1,
+		flex:1,
 		emptyText:'暂无额度信息',
 		columns:[{
 			xtype: 'actioncolumn',
@@ -760,7 +760,7 @@ Ext.onReady(function() {
 		emptyText:'暂无文件信息',
 		minHeight:156,
 		region:'south',
-//		flex:1,
+		flex:1,
 		columns:[
 		{
 			xtype: 'actioncolumn',
@@ -815,7 +815,7 @@ Ext.onReady(function() {
 		emptyText:'暂无信息',
 		minHeight:156,
 		region:'south',
-//		flex:1,
+		flex:1,
 		columns:[
 		{
 			xtype: 'actioncolumn',
@@ -860,15 +860,15 @@ Ext.onReady(function() {
 	});
 	var viewport = Ext.create('Ext.Viewport', {
 		layout: {
-			type: 'fit'
+			type: 'border'
 		},
 		defaults: {
 		},
-		dockedItems: [{
-			dock:'top',
+		items: [{
 			xtype: 'toolbar',
 			height:50,
 			border:0,
+			region:'north',
 			items:[
 			{
 				xtype:'image',
@@ -927,27 +927,29 @@ Ext.onReady(function() {
 				scale:'medium',
 				handler:function(){window.close();}
 			}]
-		}],
-		items:[{
+		},{
 			xtype:'panel', 
 			margin:'0 0 0 0',
 			border:0,
-			layout:'hbox',
-			align:'stretch',
+			region:'center',
+			layout:'border',
 			items:[{
 				id:'projInfoPanel',
 				xtype:'panel',
-				minWidth:480,
+				region:'west',
+				width:480,
 				title:'项目信息',
 				html:'正在加载项目信息...',
 				autoScroll :true
 			}, {
 				id:'projDetailPanel',
 				xtype:'panel',
-				minWidth:800,
-				layout:'vbox',
-				align:'stretch',
-				autoScroll :true,
+				width:800,
+				region:'center',
+				layout:{
+					type:'vbox',
+					align:'stretch'
+				},
 				items:[
 					RecentChangeGrid,
 					AmountDetailsGrid,
@@ -956,7 +958,7 @@ Ext.onReady(function() {
 			}]
 		}]
 	});
-	
+/*	
 	projStore.load(function(records, operation, success) {
 	projdetailStore.load(function(records, operation, success) {
 		var detailString="";
@@ -1007,5 +1009,5 @@ Ext.onReady(function() {
 	});
 	//projdetailStore.load();
 	fileListStore.load();
-	
+*/	
 });

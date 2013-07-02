@@ -958,7 +958,7 @@ Ext.onReady(function() {
 			}]
 		}]
 	});
-/*	
+	
 	projStore.load(function(records, operation, success) {
 	projdetailStore.load(function(records, operation, success) {
 		var detailString="";
@@ -1009,5 +1009,5 @@ Ext.onReady(function() {
 	});
 	//projdetailStore.load();
 	fileListStore.load();
-*/	
+	
 });

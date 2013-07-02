@@ -9,6 +9,7 @@ Ext.onReady(function() {
 		{name:'proj_id',type:'integer'},
 		{name:'category',type:'string'},
 		{name:'sub_category',type:'string'},
+		{name:'exclusive',type:'string'},
 		{name:'issue',type:'string'},
 		{name:'name',type:'string'},
 		{name:'flow_of_fund',type:'string'},
@@ -23,7 +24,9 @@ Ext.onReady(function() {
 		{name:'countdown',type:'string'},
 		{name:'exclusive',type:'string'},
 		{name:'grade',type:'string'},
-		{name:'manager_remark',type:'string'}
+		{name:'manager_remark',type:'string'},
+		{name:'create_ts',type:'date',dateFormat:"Y-m-d H:i:s"},
+		{name:'pdt_status',type:'string'}
 		],
 		proxy: {
 			type: 'ajax',
@@ -1080,12 +1083,16 @@ Ext.onReady(function() {
 			proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
 			//proj_info_window.show();
 		});		
-		if(records[0].get("pdt_status")!="上线通过" && records[0].get("pdt_status")!="申请中"){
+		if(records[0].get("pdt_status")=="上线通过" || records[0].get("pdt_status")=="申请中"){
+			Ext.getCmp('BtnPdtApply').hide();
+		} else {
 			Ext.getCmp('BtnPdtApply').show();
 		}
 		var loginname = Ext.util.Cookies.get("loginname");
 		if(records[0].get("pdt_status")=="申请中" && loginname.indexOf("DR">0)){
 			Ext.getCmp('BtnPdtAccept').show();
+		} else {
+			Ext.getCmp('BtnPdtAccept').hide();
 		}
 	});
 	//projdetailStore.load();

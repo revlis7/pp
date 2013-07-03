@@ -237,10 +237,6 @@ Ext.onReady(function() {
 						width:400
 					},{
 						xtype:'numberfield',
-						fieldLabel: '项目期限(月)*',
-						name:'month'
-					},{
-						xtype:'numberfield',
 						fieldLabel: '融资规模(亿)*',
 						name:'scale'
 					},{
@@ -1041,7 +1037,7 @@ Ext.onReady(function() {
 			var detailString="";
 			//ProjInfoForm.getForm().loadRecord(records[0]);
 			Ext.Array.forEach(records,function(record){
-				detailString+='<pre>'+record.get("sub_name")+record.get("month")+", "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+record.get("profit")+'%</pre>';
+				detailString+='<pre>'+record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+': '+record.get("profit")+'%</pre>';
 			});
 			proj_info_tpl=Ext.create('Ext.XTemplate',[
     	    '<table style="border-collapse:collapse;">{pdt_status:this.cusPdtStatus()}<tr><td style="padding:20px;border:1px;"><table style="border-collapse:collapse;">',
@@ -1064,7 +1060,7 @@ Ext.onReady(function() {
 			},{
 				cusPdtStatus:function(d){
 					if(d!="上线通过"){
-						return '<tr><td style="padding:20px;border:1px;"><span style="background-color:#003366;color:#FFFFFF">请注意该项目尚未上线！</span></td></tr>';
+						return '<tr><td style="padding:20px;border:1px;"><span style="background-color:#003366;color:#FFFFFF;font-size:20px;font_weight:bold;">请注意该项目尚未上线！</span></td></tr>';
 					} else {
 						return '';
 					}

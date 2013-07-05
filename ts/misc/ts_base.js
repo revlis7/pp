@@ -8,6 +8,101 @@ Ext.require([
  'Ext.state.*',
  'Ext.ux.grid.FiltersFeature',
 ]);
+var chTotalShareList=Ext.create('Ext.data.ArrayStore', {
+	fields: ['id', 'text'],
+	data: [
+	  ['OPEN','OPEN'],
+	  ['大带小','大带小'],
+	  ['无','无']
+	]
+});
+
+var chStatusList=Ext.create('Ext.data.ArrayStore', {
+	fields: ['id', 'text'],
+	data: [
+	  ['在售','在售'],
+	  ['预约','预约'],
+	  ['结束','结束']
+	]
+});
+
+var chExclusiveList=Ext.create('Ext.data.ArrayStore', {
+	fields: ['id', 'text'],
+	data: [
+	  ['自主开发类','自主开发类'],
+	  ['包销类','包销类'],
+	  ['通道类','通道类']
+	]
+});
+
+var chGradeList=Ext.create('Ext.data.ArrayStore', {
+	fields: ['id', 'text'],
+	data: [
+	  ['五星级','五星级'],
+	  ['四星级','四星级'],
+	  ['三星级','三星级'],
+	  ['二星级','二星级'],
+	  ['一星级','一星级']
+	]
+});
+
+var chCategoryList=Ext.create('Ext.data.ArrayStore', {
+	fields: ['id', 'text'],
+	data: [
+	  ['固定收益类','固定收益类'],
+	  ['浮动收益类','浮动收益类']
+	]
+});
+
+var chCycleList=Ext.create('Ext.data.ArrayStore', {
+	fields: ['id', 'text'],
+	data: [
+	  ['项目期','项目期'],
+	  ['年','年'],
+	  ['半年','半年'],
+	  ['季度','季度'],
+	  ['月','月'],
+	  ['其他','其他'],
+	  ['不适用','不适用']
+	]
+});
+
+var chProfitPropertyList=Ext.create('Ext.data.ArrayStore', {
+	fields: ['id', 'text'],
+	data: [
+	  ['固定','固定'],
+	  ['浮动','浮动'],
+	  ['固定加浮动','固定加浮动'],
+	  ['其他','其他']
+	]
+});
+
+var chManagerList=Ext.create('Ext.data.ArrayStore', {
+	fields: ['id', 'text'],
+	data: [
+	  ['申玉玺','申玉玺'],
+	  ['孟祥春','孟祥春'],
+	  ['王璐','王璐'],
+	  ['翟晓凤','翟晓凤']
+	]
+});
+
+var chFixedList=[
+  ['集合信托：上市公司股票质押类','集合信托：上市公司股票质押类'],
+  ['集合信托：政府基建类','集合信托：政府基建类'],
+  ['集合信托：房地产类','集合信托：房地产类'],
+  ['集合信托：其他类','集合信托：其他类'],
+  ['私募基金','私募基金'],
+  ['P2P理财','P2P理财'],
+  ['其他','其他']
+]
+
+var chFloatingList=[
+  ['债券基金','债券基金'],
+  ['证券基金','证券基金'],
+  ['股权基金','股权基金'],
+  ['其他','其他']
+]
 
 var	fileListStore=Ext.create('Ext.data.JsonStore', {
 	fields:	[
@@ -60,38 +155,6 @@ var	FileListGrid=Ext.create('Ext.grid.Panel',{
 	{text:'文件上传日期',	dataIndex:'create_ts', filtable:true, width:120,renderer:new Ext.util.Format.dateRenderer("Y-m-d")}
 	]
 });
-
-var	projdetailStore=Ext.create('Ext.data.JsonStore', {
-	fields:	[
-	{name:'proj_id',type:'integer'},
-	{name:'proj_detail_id',type:'integer'},
-	{name:'sub_name',type:'string'},
-	{name:'month',type:'integer'},
-	{name:'total_share',type:'string'},
-	{name:'status',type:'string'},
-	{name:'amount',type:'integer'},
-	{name:'profit',type:'float'},
-	{name:'commission_b_tax',type:'float'},
-	{name:'commission_a_tax',type:'float'},
-	{name:'inner_commission',type:'float'},
-	{name:'outer_commission',type:'float'},
-	{name:'imm_payment',type:'float'},
-	{name:'found',type:'date'},
-	{name:'main_channel',type:'string'},
-	{name:'channel_company',type:'string'},
-	{name:'channel_contact',type:'string'},
-	{name:'billing_company',type:'string'}
-	],
-	proxy: {
-		type: 'ajax',
-		//url: 'proj_sample_data.json?para='+proj_id,
-		url: '/ts/index.php/proj/view',
-		reader:	{
-				type: 'json',
-				root: 'data'
-		}
-	}
-});
 var	AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
 	store: projAllStore,
 	border:1,
@@ -107,79 +170,79 @@ var	AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
 	{text:'项目收益',	 dataIndex:'profit', filtable:true,	style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
 	{text:'销售状态',	 dataIndex:'status', filtable:true,	style: "text-align:center;",align: 'center',width:80,
 		renderer:function(value,metaData){
-		if(value=="在售"){
-			metaData.style='background:#CCFFCC;color:#000000'
-		} else if(value=="结束"){
-			metaData.style='background:#DFDFDF;color:#606060;'
-		} else {
-			metaData.style='background:#FFFF99;color:#000000'
+			if(value=="在售"){
+				metaData.style='background:#CCFFCC;color:#000000'
+			} else if(value=="结束"){
+				metaData.style='background:#DFDFDF;color:#606060;'
+			} else {
+				metaData.style='background:#FFFF99;color:#000000'
+			}
+			return value;
 		}
-		return value;
-	}
- },
+	},
 	{text:'份额',		 dataIndex:'total_share', filtable:true, style:	"text-align:center;",align:	'center',width:60,
 		renderer:function(value,metaData){
-		if(value=="OPEN"){
-			metaData.style='background:#CCFFCC;color:#000000'
-		} else if(value=="无"){
-			metaData.style='background:#DFDFDF;color:#606060;'
-		} else {
-			metaData.style='background:#FFFF99;color:#000000'
+			if(value=="OPEN"){
+				metaData.style='background:#CCFFCC;color:#000000'
+			} else if(value=="无"){
+				metaData.style='background:#DFDFDF;color:#606060;'
+			} else {
+				metaData.style='background:#FFFF99;color:#000000'
+			}
+			return value;
 		}
-		return value;
-	}
- },
+	},
 	{text:'成立日期',	 dataIndex:'found',	filtable:true, style: "text-align:center;",align: 'center',width:60,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
 	{text:'税前佣金',	 dataIndex:'commission_b_tax', filtable:true, style: "text-align:center;",align: 'right',width:80, 
 		renderer: function(value,metaData,record,colIndex,store,view) {	
-		if(value>0){
-			return value.toFixed(3)+'%';
-		} else {
-			metaData.style='color:#8E8E8E';
-		return 'N/A';
+			if(value>0){
+				return value.toFixed(3)+'%';
+			} else {
+				metaData.style='color:#8E8E8E';
+			return 'N/A';
+			}
 		}
-	}
- },
+	},
 	{text:'税后佣金',	 dataIndex:'commission_a_tax', filtable:true, style: "text-align:center;",align: 'right',width:80, 
 		renderer: function(value,metaData,record,colIndex,store,view) {	
-		if(value>0){
-			return value.toFixed(3)+'%';
-		} else {
-			metaData.style='color:#8E8E8E';
-		return 'N/A';
+			if(value>0){
+				return value.toFixed(3)+'%';
+			} else {
+				metaData.style='color:#8E8E8E';
+			return 'N/A';
+			}
 		}
-	}
- },
+	},
 	{text:'平台费用',	 dataIndex:'inner_commission', filtable:true, style: "text-align:center;",align: 'right',width:80, 
 		renderer: function(value,metaData,record,colIndex,store,view) {	
-		if(value>0){
-			return value.toFixed(3)+'%';
-		} else {
-			metaData.style='color:#8E8E8E';
-		return 'N/A';
+			if(value>0){
+				return value.toFixed(3)+'%';
+			} else {
+				metaData.style='color:#8E8E8E';
+			return 'N/A';
+			}
 		}
-	}
- },
+	},
 	{text:'费用',		 dataIndex:'outer_commission', filtable:true, style: "text-align:center;",align: 'right',width:80, 
 		renderer: function(value,metaData,record,colIndex,store,view) {	
-		if(value>0){
-			return value.toFixed(3)+'%';
-		} else {
-			metaData.style='color:#8E8E8E';
-		return 'N/A';
+			if(value>0){
+				return value.toFixed(3)+'%';
+			} else {
+				metaData.style='color:#8E8E8E';
+			return 'N/A';
+			}
 		}
-	}
- },
+	},
 	{text:'现结费用',	 dataIndex:'imm_payment', filtable:true, style:	"text-align:center;",align:	'right',width:80, 
 		renderer: function(value,metaData,record,colIndex,store,view) {	
-		if(value>0){
-			return value.toFixed(3)+'%';
-		} else {
-			metaData.style='color:#8E8E8E';
-		return 'N/A';
+			if(value>0){
+				return value.toFixed(3)+'%';
+			} else {
+				metaData.style='color:#8E8E8E';
+			return 'N/A';
+			}
 		}
-	}
- },
+	},
 	{text:'主销渠道',	 dataIndex:'main_channel', filtable:true, style: "text-align:center;",align: 'center',width:90},
 	{text:'渠道公司',	 dataIndex:'channel_company', filtable:true, style:	"text-align:center;",align:	'center',width:90},
 	{text:'渠道联系人', dataIndex:'channel_contact',	filtable:true, style: "text-align:center;",align: 'center',width:90},

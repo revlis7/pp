@@ -626,7 +626,7 @@ var	projModelPanel={
 				};
 				fileListStore.setProxy({
 					type: 'ajax',
-					url: '/ts/index.php/upload/get_list?proj_id='+proj_id,
+					url: '/ts/index.php/upload/get_list?proj_id='+e.proj_id,
 					reader:	{
 						type: 'json',
 						root: 'data'
@@ -634,7 +634,7 @@ var	projModelPanel={
 				});
 				fileListStore.load();
 				projAllStore.clearFilter(true);
-				projAllStore.filter(filterFn:function(item)	{ return item.get("proj_id") > this.proj_id; });
+				projAllStore.filter(filterFn:function(item)	{ return item.get("proj_id") > e.proj_id; });
 			},
 			scope:this
 		},

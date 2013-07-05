@@ -634,7 +634,11 @@ var	projModelPanel={
 				});
 				fileListStore.load();
 				projAllStore.clearFilter(true);
-				projAllStore.filter(filterFn:function(item)	{ return item.get("proj_id") > e.proj_id; });
+				projAllStore.filter([{
+					filterFn:function(item)	{
+						return item.get("proj_id") > e.proj_id; 
+					}
+				});
 			},
 			scope:this
 		},

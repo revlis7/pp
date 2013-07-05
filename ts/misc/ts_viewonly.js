@@ -542,7 +542,7 @@ listControl.load(function(records, operation, success) {
 				  titleCollapse: true,
 				  activeOnTop: true
 				},
-				items:[];
+				items:[]
 			}, {
 				xtype:'panel',
 				id:'projListPanel',

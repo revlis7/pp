@@ -359,14 +359,7 @@ var	AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
 	minHeight:156,
 	flex:1,
 	emptyText:'暂无额度信息',
-	columns:[{
-		xtype: 'actioncolumn',
-		//text:'删除',
-		width:40,
-		style: "text-align:center;",
-		align: 'center',
-		sortable: false,
-		items: [
+	columns:[
 	{text:'子名称',		 dataIndex:'sub_name', filtable:true, style: "text-align:center;",align: 'center',width:80},
 	{text:'项目期限',	 dataIndex:'month',	filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'个月';}},
 	{text:'认购金额',	 dataIndex:'amount', filtable:true,	style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},

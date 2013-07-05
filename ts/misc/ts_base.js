@@ -638,7 +638,7 @@ var	projModelPanel={
 					filterFn:function(item)	{
 						return item.get("proj_id") > e.proj_id; 
 					}
-				});
+				}]);
 			},
 			scope:this
 		},

@@ -569,7 +569,8 @@ listControl.load(function(records, operation, success) {
 				items:[],
 				listeners:{
 					hide:{
-						this.removeAll();
+						fn:function(e){e.removeAll()}，
+						scope: this
 					}
 				}
 			}]

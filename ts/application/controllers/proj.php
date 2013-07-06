@@ -243,6 +243,13 @@ class Proj extends Auth_Controller {
 		$this->json->output(array('success' => true));
 	}
 
+	function proj_operate_privilege() {
+		if(!$this->User_model->has_action_access(element('loginname', $this->session->userdata('user')))) {
+			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		}
+		$this->json->output(array('success' => true));
+	}
+
 	function proj_accept_submit() {
 		if(!$this->User_model->has_action_access(element('loginname', $this->session->userdata('user')))) {
 			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));

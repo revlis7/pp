@@ -333,7 +333,7 @@ class Proj_model extends CI_Model {
 		$category_query = '';
 		if($category_id == 1) {
 			$raw_sql .= ' AND proj.category = "固定收益类" ';
-		} else {
+		} else if($category_id == 2){
 			$raw_sql .= ' AND proj.category = "浮动收益类" ';
 		}
 

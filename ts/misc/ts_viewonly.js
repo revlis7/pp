@@ -87,75 +87,7 @@ listControl.load(function(records, operation, success) {
 				icon: '/ts/misc/resources/icons/download.gif',
 				tooltip: '查看该项目的详细信息',
 				handler: function(grid, rowIndex, colIndex) {
-					var proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
-					var foundRecords = projAllStore.query('proj_id',proj_id);
-					if(foundRecords.getCount()>0){
-						var detailString='';
-						foundRecords.each(function(record){
-							detailString+=record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+': '+record.get("profit")+'%; ';
-						});
-						var r=foundRecords.getAt(0);
-						var recommendTempPanel=Ext.create('Ext.panel.Panel',{
-							margin:'0 0 0 0',
-							border:0,
-							layout:'border',
-							proj_id:r.get("proj_id"),
-							title:"<b>"+r.get("issue")+" "+r.get("name")+"</b>, "+detailString,
-							proj_info_tpl:'',
-							items:[{
-								itemId:'projDetailPanel',
-								xtype:'panel',
-								region:'center',
-								border:0,
-								layout:{
-									type:'vbox',
-									align:'stretch'
-								},
-								items:[]
-							},{
-								itemId:'projInfoPanel',
-								xtype:'panel',
-								region:'west',
-								width:480,
-								title:'项目信息',
-								html:'正在加载项目信息...',
-								autoScroll :true
-							}],
-							listeners:{
-								beforeshow:{
-									fn:generatePanelFn,
-									scope:this
-								},
-								beforeexpand:{
-									fn:generatePanelFn,
-									scope:this
-								},
-								beforedeactivate:{
-									fn:generatePanelFn,
-									scope:this
-								},
-								deactivate:{
-									fn:function(e){
-										e.down('panel#projDetailPanel').removeAll(false);
-									},
-									scope:this
-								},
-								hide:{
-									fn:function(e){
-										e.down('panel#projDetailPanel').removeAll(false);
-									},
-									scope:this
-								},
-								collapse:{
-									fn:function(e){
-										e.down('panel#projDetailPanel').removeAll(false);
-									},
-									scope:this
-								}
-							}
-						});
-						Ext.ComponentQuery.query('#projPanel')[0].add(recommendTempPanel);
-					}
+					Ext.ComponentQuery.query('#topInfo')[0].proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
 					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);
 				}
           }]
@@ -628,19 +560,62 @@ listControl.load(function(records, operation, success) {
 				items:[]
 			}, {
 				xtype:'panel',
-				border:0,
-				width:1320,
 				id:'projPanel',
-				region:'center',
-				layout:{
-					type:'vbox',
-					align:'stretch'
-				},
-				items:[],
+				margin:'0 0 0 0',
+				border:0,
+				layout:'border',
+				proj_id:r.get("proj_id"),
+				title:"<b>"+r.get("issue")+" "+r.get("name")+"</b>, "+detailString,
+				proj_info_tpl:'',
+				items:[{
+					itemId:'projDetailPanel',
+					xtype:'panel',
+					region:'center',
+					border:0,
+					layout:{
+						type:'vbox',
+						align:'stretch'
+					},
+					items:[]
+				},{
+					itemId:'projInfoPanel',
+					xtype:'panel',
+					region:'west',
+					width:480,
+					title:'项目信息',
+					html:'正在加载项目信息...',
+					autoScroll :true
+				}],
 				listeners:{
+					beforeshow:{
+						fn:generatePanelFn,
+						scope:this
+					},
+					beforeexpand:{
+						fn:generatePanelFn,
+						scope:this
+					},
+					beforedeactivate:{
+						fn:generatePanelFn,
+						scope:this
+					},
+					deactivate:{
+						fn:function(e){
+							e.down('panel#projDetailPanel').removeAll(false);
+						},
+						scope:this
+					},
 					hide:{
-						fn:function(e){e.removeAll(false)},
-						scope: this
+						fn:function(e){
+							e.down('panel#projDetailPanel').removeAll(false);
+						},
+						scope:this
+					},
+					collapse:{
+						fn:function(e){
+							e.down('panel#projDetailPanel').removeAll(false);
+						},
+						scope:this
 					}
 				}
 			}]

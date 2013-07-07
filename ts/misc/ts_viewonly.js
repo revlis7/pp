@@ -105,6 +105,7 @@ listControl.load(function(records, operation, success) {
 					var proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
 					var foundRecords = projAllStore.query('proj_id',proj_id);
 					if(foundRecords.getCount()>0){
+						var detailString='';
 						foundRecords.each(function(record){
 								detailString+=record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+': '+record.get("profit")+'%';
 						});
@@ -468,6 +469,7 @@ listControl.load(function(records, operation, success) {
 			Ext.Array.forEach(recommendRecords,function(recommendRecord){
 				var foundRecords = projAllStore.query('proj_id',recommendRecord.get("proj_id"));
 				if(foundRecords.getCount()>0){
+					var detailString='';
 					foundRecords.each(function(record){
 						detailString+=record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+': '+record.get("profit")+'%';
 					});

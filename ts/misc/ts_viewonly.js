@@ -433,7 +433,7 @@ listControl.load(function(records, operation, success) {
 							autoScroll :true
 						}],
 						listeners:{
-							show:{
+							active:{
 								fn:function(e){
 									e.down('panel#projDetailPanel').add(RecentChangeGrid);
 									e.down('panel#projDetailPanel').add(AmountDetailsGrid);
@@ -495,7 +495,7 @@ listControl.load(function(records, operation, success) {
 								},
 								scope:this
 							},
-							hide:{
+							deactivate:{
 								fn:function(e){
 									e.down('panel#projDetailPanel').removeAll(false);
 								},

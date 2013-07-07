@@ -497,7 +497,7 @@ listControl.load(function(records, operation, success) {
 							},
 							hide:{
 								fn:function(e){
-									e.removeAll();
+									e.down('panel#projDetailPanel').removeAll(false);
 								},
 								scope:this
 							}
@@ -543,7 +543,7 @@ listControl.load(function(records, operation, success) {
 				text:'查看在售列表',
 				icon:'/ts/misc/resources/icons/plugin.gif',
 				scale:'medium',
-				handler:function(){Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);}
+				handler:function(){Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);}
 			},{
 				text:'进入管理模式',
 				icon:'/ts/misc/resources/icons/plugin.gif',
@@ -609,7 +609,7 @@ listControl.load(function(records, operation, success) {
 				items:[],
 				listeners:{
 					hide:{
-						fn:function(e){e.removeAll()},
+						fn:function(e){e.removeAll(false)},
 						scope: this
 					}
 				}

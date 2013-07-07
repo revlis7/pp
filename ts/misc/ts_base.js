@@ -8,6 +8,13 @@ Ext.require([
  'Ext.state.*',
  'Ext.ux.grid.FiltersFeature',
 ]);
+var recommendStore=Ext.create('Ext.data.ArrayStore', {
+	fields: ['proj_id'],
+	data: [
+	  ['498'],
+	  ['498']
+	]
+});
 var chTotalShareList=Ext.create('Ext.data.ArrayStore', {
 	fields: ['id', 'text'],
 	data: [

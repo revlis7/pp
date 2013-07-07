@@ -262,218 +262,222 @@ listControl.load(function(records, operation, success) {
 		}]
 	}];
 	
-	fullGridC1=Ext.create('searchPanel', {
-		store: sampleStoreC1,
-		border:0,
-		columnLines: true,
-		//forceFit: true,
-		width:1320,
-		margin:10,
-		columns: fullGridColumns,
-		viewConfig: {
-		  stripeRows: true,
-		  forceFit:true,
-		  sortAscText:'正序',
-		  sortDescText:'降序',
-		  getRowClass: function(record,rowIndex,rowParams,store){    
-			var sumVal=0;
-			for (var i=0;i<rowIndex;i++) {
-			  if(store.getAt(i+1).data.name!=store.getAt(i).data.name){
-				sumVal++;
+	
+	projAllStore.load(function(){
+		fullGridC1=Ext.create('searchPanel', {
+			store: projAllStore,
+			border:0,
+			columnLines: true,
+			//forceFit: true,
+			width:1320,
+			margin:10,
+			columns: fullGridColumns,
+			viewConfig: {
+			  stripeRows: true,
+			  forceFit:true,
+			  sortAscText:'正序',
+			  sortDescText:'降序',
+			  getRowClass: function(record,rowIndex,rowParams,store){    
+				var sumVal=0;
+				for (var i=0;i<rowIndex;i++) {
+				  if(store.getAt(i+1).data.name!=store.getAt(i).data.name){
+					sumVal++;
+				  }
+				}
+				return (sumVal%2==0) ? 'style_row_proj0':'style_row_proj1';
 			  }
+			},
+			loadMask: true,
+			features: [filtersCfg],
+			emptyText: '没有匹配的记录'
+		});
+    	
+		fullGridC2=Ext.create('searchPanel', {
+		  store: projAllStore,
+		  border:0,
+		  width:1320,
+		  margin:10,
+		  columnLines: true,
+		  columns: fullGridColumns,
+		  viewConfig: {
+			stripeRows: true,
+			forceFit:true,
+			sortAscText:'正序',
+			sortDescText:'降序',
+			getRowClass: function(record,rowIndex,rowParams,store){    
+			  var sumVal=0;
+			  for (var i=0;i<rowIndex;i++) {
+				if(store.getAt(i+1).data.name!=store.getAt(i).data.name){
+				  sumVal++;
+				}
+			  }
+			  return (sumVal%2==0) ? 'style_row_proj0':'style_row_proj1';
 			}
-			return (sumVal%2==0) ? 'style_row_proj0':'style_row_proj1';
-		  }
-		},
-		loadMask: true,
-		features: [filtersCfg],
-		emptyText: '没有匹配的记录'
-	});
-
-	fullGridC2=Ext.create('searchPanel', {
-	  store: sampleStoreC2,
-	  border:0,
-	  width:1320,
-	  margin:10,
-	  columnLines: true,
-	  columns: fullGridColumns,
-	  viewConfig: {
-		stripeRows: true,
-		forceFit:true,
-		sortAscText:'正序',
-		sortDescText:'降序',
-		getRowClass: function(record,rowIndex,rowParams,store){    
-		  var sumVal=0;
-		  for (var i=0;i<rowIndex;i++) {
-			if(store.getAt(i+1).data.name!=store.getAt(i).data.name){
-			  sumVal++;
+		  },
+		  loadMask: true,
+		  features: [filtersCfg],
+		  emptyText: '没有匹配的记录'
+		});
+    	
+		fullGridC1.child('toolbar').add([
+		{
+			xtype:'tbtext',
+			text:'快速筛选：'
+		},{
+			xtype:'tbtext',
+		  scale:'medium',
+		  text:'【集合信托产品：'
+		},{
+			text:'上市公司股票质押',
+		  scale:'medium',
+			handler:function(){
+			  fullGridC1.filters.clearFilters();
+			  sampleStoreC1.filterBy( function(record,id){
+				return record.get("sub_category")=="集合信托：上市公司股票质押类" ;
+			  });
 			}
-		  }
-		  return (sumVal%2==0) ? 'style_row_proj0':'style_row_proj1';
-		}
-	  },
-	  loadMask: true,
-	  features: [filtersCfg],
-	  emptyText: '没有匹配的记录'
-	});
-
-	fullGridC1.child('toolbar').add([
-	{
-		xtype:'tbtext',
-		text:'快速筛选：'
-	},{
-		xtype:'tbtext',
-	  scale:'medium',
-	  text:'【集合信托产品：'
-	},{
-		text:'上市公司股票质押',
-	  scale:'medium',
-		handler:function(){
-		  fullGridC1.filters.clearFilters();
-		  sampleStoreC1.filterBy( function(record,id){
-			return record.get("sub_category")=="集合信托：上市公司股票质押类" ;
-		  });
-		}
-	},{
-		text:'政府基建',
-		scale:'medium',
-		handler:function(){
-		  fullGridC1.filters.clearFilters();
-		  sampleStoreC1.filterBy( function(record,id){
-			return record.get("sub_category")=="集合信托：政府基建类";
-		  });
-		}
-	},{
-		text:'房地产',
-		scale:'medium',
-		handler:function(){
-		  fullGridC1.filters.clearFilters();
-		  sampleStoreC1.filterBy( function(record,id){
-			return record.get("sub_category")=="集合信托：房地产类";
-		  });
-		}
-	},{
-		text:'其他信托',
-		scale:'medium',
-		handler:function(){
-		  fullGridC1.filters.clearFilters();
-		  sampleStoreC1.filterBy( function(record,id){
-			return record.get("sub_category")=="集合信托：其他类";
-		  });
-		}
-	},{
-		text:'所有信托】',
-		scale:'medium',
-		handler:function(){
-		  fullGridC1.filters.clearFilters();
-		  sampleStoreC1.filterBy( function(record,id){
-			return record.get("sub_category")=="集合信托：其他类" ||
-			  record.get("sub_category")=="集合信托：房地产类" ||
-			  record.get("sub_category")=="集合信托：政府基建类" ||
-			  record.get("sub_category")=="集合信托：上市公司股票质押类";
-		  });
-		}
-	},{
-		text:'【私募基金】',
-		scale:'medium',
-		handler:function(){
-		  fullGridC1.filters.clearFilters();
-		  sampleStoreC1.filterBy( function(record,id){
-			return record.get("sub_category")=="私募基金";
-		  });
-		}
-	},{
-		text:'【P2P理财】',
-		scale:'medium',
-		handler:function(){
-		  fullGridC1.filters.clearFilters();
-		  sampleStoreC1.filterBy( function(record,id){
-			return record.get("sub_category")=="P2P理财";
-		  });
-		}
-	},{
-		text:'【其他固定收益产品】',
-		scale:'medium',
-		handler:function(){
-		  fullGridC1.filters.clearFilters();
-		  sampleStoreC1.filterBy( function(record,id){
-			return record.get("sub_category")=="其他" ;
-		  });
-		}
-	},'-',{
-		text:'全部显示',
-		scale:'medium',
-		icon:'/ts/misc/resources/icons/grid.png',
-		handler:function(){
-		  fullGridC1.filters.clearFilters();
-		  sampleStoreC1.load();
-		}
-	}     
-	]);
-	fullGridC2.child('toolbar').add([
-	{
-		xtype:'tbtext',
-		text:'快速筛选：'
-	},{
-		text:'【债券基金】',
-		scale:'medium',
-		handler:function(){
-		  fullGridC2.filters.clearFilters();
-		  sampleStoreC2.filterBy( function(record,id){
-			return record.get("sub_category")=="债券基金";
-		  });
-		}
-	},{
-		text:'【证券基金】',
-		scale:'medium',
-		handler:function(){
-		  fullGridC2.filters.clearFilters();
-		  sampleStoreC2.filterBy( function(record,id){
-			return record.get("sub_category")=="证券基金";
-		  });
-		}
-	},{
-		text:'【股权基金】',
-		scale:'medium',
-		handler:function(){
-		  fullGridC2.filters.clearFilters();
-		  sampleStoreC2.filterBy( function(record,id){
-			return record.get("sub_category")=="股权基金";
-		  });
-		}
-	},{
-		text:'【其他浮动收益产品】',
-		scale:'medium',
-		handler:function(){
-		  fullGridC2.filters.clearFilters();
-		  sampleStoreC2.filterBy( function(record,id){
-			return record.get("sub_category")=="其他";
-		  });
-		}
-	},'-',{
-		text:'全部显示',
-		scale:'medium',
-		icon:'/ts/misc/resources/icons/grid.png',
-		handler:function(){
-		  fullGridC2.filters.clearFilters();
-		  sampleStoreC2.load();
-		}
-	}]);
-	
-	
-	recommendStore.load(function(recommendRecords, operation, success) {
-		Ext.Array.forEach(recommendRecords,function(recommendRecord){
-			var foundRecords = projAllStore.query('proj_id',recommendRecord.get("proj_id"));
-			if(foundRecords.getCount()>0){
-				foundRecords.each(function(record){
-					detailString+=record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+': '+record.get("profit")+'%';
-				});
-				var r=foundRecords.getAt(0);
-				projModelPanel.title=r.get("issue")+" "+r.get("name")+", "+detailString;
-				projModelPanel.proj_id=r.get("proj_id");
-				Ext.ComponentQuery.query('#recommendPanel')[0].add(projModelPanel);
+		},{
+			text:'政府基建',
+			scale:'medium',
+			handler:function(){
+			  fullGridC1.filters.clearFilters();
+			  sampleStoreC1.filterBy( function(record,id){
+				return record.get("sub_category")=="集合信托：政府基建类";
+			  });
 			}
-		})
+		},{
+			text:'房地产',
+			scale:'medium',
+			handler:function(){
+			  fullGridC1.filters.clearFilters();
+			  sampleStoreC1.filterBy( function(record,id){
+				return record.get("sub_category")=="集合信托：房地产类";
+			  });
+			}
+		},{
+			text:'其他信托',
+			scale:'medium',
+			handler:function(){
+			  fullGridC1.filters.clearFilters();
+			  sampleStoreC1.filterBy( function(record,id){
+				return record.get("sub_category")=="集合信托：其他类";
+			  });
+			}
+		},{
+			text:'所有信托】',
+			scale:'medium',
+			handler:function(){
+			  fullGridC1.filters.clearFilters();
+			  sampleStoreC1.filterBy( function(record,id){
+				return record.get("sub_category")=="集合信托：其他类" ||
+				  record.get("sub_category")=="集合信托：房地产类" ||
+				  record.get("sub_category")=="集合信托：政府基建类" ||
+				  record.get("sub_category")=="集合信托：上市公司股票质押类";
+			  });
+			}
+		},{
+			text:'【私募基金】',
+			scale:'medium',
+			handler:function(){
+			  fullGridC1.filters.clearFilters();
+			  sampleStoreC1.filterBy( function(record,id){
+				return record.get("sub_category")=="私募基金";
+			  });
+			}
+		},{
+			text:'【P2P理财】',
+			scale:'medium',
+			handler:function(){
+			  fullGridC1.filters.clearFilters();
+			  sampleStoreC1.filterBy( function(record,id){
+				return record.get("sub_category")=="P2P理财";
+			  });
+			}
+		},{
+			text:'【其他固定收益产品】',
+			scale:'medium',
+			handler:function(){
+			  fullGridC1.filters.clearFilters();
+			  sampleStoreC1.filterBy( function(record,id){
+				return record.get("sub_category")=="其他" ;
+			  });
+			}
+		},'-',{
+			text:'全部显示',
+			scale:'medium',
+			icon:'/ts/misc/resources/icons/grid.png',
+			handler:function(){
+			  fullGridC1.filters.clearFilters();
+			  sampleStoreC1.load();
+			}
+		}     
+		]);
+		fullGridC2.child('toolbar').add([
+		{
+			xtype:'tbtext',
+			text:'快速筛选：'
+		},{
+			text:'【债券基金】',
+			scale:'medium',
+			handler:function(){
+			  fullGridC2.filters.clearFilters();
+			  sampleStoreC2.filterBy( function(record,id){
+				return record.get("sub_category")=="债券基金";
+			  });
+			}
+		},{
+			text:'【证券基金】',
+			scale:'medium',
+			handler:function(){
+			  fullGridC2.filters.clearFilters();
+			  sampleStoreC2.filterBy( function(record,id){
+				return record.get("sub_category")=="证券基金";
+			  });
+			}
+		},{
+			text:'【股权基金】',
+			scale:'medium',
+			handler:function(){
+			  fullGridC2.filters.clearFilters();
+			  sampleStoreC2.filterBy( function(record,id){
+				return record.get("sub_category")=="股权基金";
+			  });
+			}
+		},{
+			text:'【其他浮动收益产品】',
+			scale:'medium',
+			handler:function(){
+			  fullGridC2.filters.clearFilters();
+			  sampleStoreC2.filterBy( function(record,id){
+				return record.get("sub_category")=="其他";
+			  });
+			}
+		},'-',{
+			text:'全部显示',
+			scale:'medium',
+			icon:'/ts/misc/resources/icons/grid.png',
+			handler:function(){
+			  fullGridC2.filters.clearFilters();
+			  sampleStoreC2.load();
+			}
+		}]);
+		Ext.ComponentQuery.query('#projListPanel')[0].add(fullGridC1);
+		Ext.ComponentQuery.query('#projListPanel')[0].add(fullGridC2);
+		
+		recommendStore.load(function(recommendRecords, operation, success) {
+			Ext.Array.forEach(recommendRecords,function(recommendRecord){
+				var foundRecords = projAllStore.query('proj_id',recommendRecord.get("proj_id"));
+				if(foundRecords.getCount()>0){
+					foundRecords.each(function(record){
+						detailString+=record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+': '+record.get("profit")+'%';
+					});
+					var r=foundRecords.getAt(0);
+					projModelPanel.title=r.get("issue")+" "+r.get("name")+", "+detailString;
+					projModelPanel.proj_id=r.get("proj_id");
+					Ext.ComponentQuery.query('#recommendPanel')[0].add(projModelPanel);
+				}
+			});
+		});
 	});
 	var loginname = Ext.util.Cookies.get("loginname");
 	var viewport = Ext.create('Ext.Viewport', {
@@ -590,7 +594,8 @@ listControl.load(function(records, operation, success) {
 		}]
 	});
 });
-  
+
+
 	window.setInterval(function(){
 		sampleStoreC1.load();
 		sampleStoreC2.load();

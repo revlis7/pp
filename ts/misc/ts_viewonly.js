@@ -411,7 +411,7 @@ listControl.load(function(records, operation, success) {
 						title:"<b>"+r.get("issue")+" "+r.get("name")+"</b>, "+detailString,
 						proj_info_tpl:'',
 						items:[{
-							itemid:'projDetailPanel',
+							itemId:'projDetailPanel',
 							xtype:'panel',
 							region:'center',
 							border:0,
@@ -421,7 +421,7 @@ listControl.load(function(records, operation, success) {
 							},
 							items:[]
 						},{
-							itemid:'projInfoPanel',
+							itemId:'projInfoPanel',
 							xtype:'panel',
 							region:'west',
 							width:480,

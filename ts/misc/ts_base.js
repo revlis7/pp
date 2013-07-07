@@ -612,7 +612,7 @@ var	projModelPanel={
 		show:{
 			fn:function(e){
 				e.add({
-					itemid:'projDetailPanel',
+					itemId:'projDetailPanel',
 					xtype:'panel',
 					region:'center',
 					border:0,
@@ -627,7 +627,7 @@ var	projModelPanel={
 					]
 				});
 				e.add({
-					itemid:'projInfoPanel',
+					itemId:'projInfoPanel',
 					xtype:'panel',
 					region:'west',
 					width:480,

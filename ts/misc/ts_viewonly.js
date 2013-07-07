@@ -564,8 +564,8 @@ listControl.load(function(records, operation, success) {
 				margin:'0 0 0 0',
 				border:0,
 				layout:'border',
-				proj_id:r.get("proj_id"),
-				title:"<b>"+r.get("issue")+" "+r.get("name")+"</b>, "+detailString,
+				proj_id:'',
+				title:'',
 				proj_info_tpl:'',
 				items:[{
 					itemId:'projDetailPanel',

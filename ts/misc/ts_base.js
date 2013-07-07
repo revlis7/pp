@@ -637,7 +637,6 @@ var generatePanelFn=function(e){
 	e.down('panel#projDetailPanel').add(AmountDetailsGrid).show();
 	e.down('panel#projDetailPanel').add(RecentChangeGrid).show();
 	e.down('panel#projDetailPanel').add(FileListGrid).show();
-	e.
 	var	foundRecords = projAllStore.query('proj_id',e.proj_id);
 	if(foundRecords.getCount()>0){
 		var	detailString;

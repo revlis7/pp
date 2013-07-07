@@ -797,7 +797,7 @@ var generatePanelFn=function(e){
 			cusGrade:gradeFn
 		}]);
 	};
-	e.proj_info_tpl.overwrite(e.down('panel#projInfoPanel').body,projStore.getAt(0).data);
+	e.proj_info_tpl.overwrite(e.down('panel#projInfoPanel').body,foundRecords.getAt(0).data);
 	fileListStore.setProxy({
 		type: 'ajax',
 		url: '/ts/index.php/upload/get_list?proj_id='+e.proj_id,

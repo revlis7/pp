@@ -32,7 +32,7 @@ var gradeFn=function(value) {
 };
 var toolTipFn=function(value,metaData) { 
 	metaData.tdAttr = 'data-qtip="'+value+'"'; 
-	return '<b>'+value+'</b>';
+	return value;
 }
 var commissionFn=function(value,metaData) { 
 	if(value>0){

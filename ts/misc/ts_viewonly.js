@@ -102,10 +102,7 @@ listControl.load(function(records, operation, success) {
 					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(3);
 				}
           }]
-        },{
-			text:'子类', dataIndex:'sub_name', filtable:true,sortable : true, width:220,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_name"),
-			renderer: toolTipFn
-		}, {
+        }, {
 			text:'类别', dataIndex:'sub_category', filtable:true,sortable : true, width:150,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_category"),
 			renderer: toolTipFn
 		}, {
@@ -115,6 +112,9 @@ listControl.load(function(records, operation, success) {
 	}, {
 		text:'认购信息',columns:[
 		{
+			text:'子类', dataIndex:'sub_name', filtable:true,sortable : true, width:100,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_name"),
+			renderer: toolTipFn
+		}, {
 			text:'销售状态', dataIndex:'status', filtable:true,sortable : true, width:60,style: "text-align:center;",align: 'center', hidden:records[0].get("status"), 
 			renderer:function(value,metaData){
 				if(value=="在售"){
@@ -141,9 +141,7 @@ listControl.load(function(records, operation, success) {
 			}
 		}, {
 			text:'收益', dataIndex:'profit', filtable:true,sortable : true, width:50, style: "text-align:center;",align: 'center',hidden:records[0].get("profit"),
-			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
-				return value+'%'; 
-			}
+			renderer: commissionFn
 		}, {
 			text:'份额', dataIndex:'total_share', filtable:true,sortable : true, width:50,style: "text-align:center;",align: 'center',hidden:records[0].get("total_share"), 
 			renderer:function(value,metaData){
@@ -180,8 +178,7 @@ listControl.load(function(records, operation, success) {
 	}, {
 		text:'附加信息',columns:[
 		{
-			text:'产品经理', dataIndex:'manager', filtable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("manager"),
-			renderer: toolTipFn
+			text:'产品经理', dataIndex:'manager', filtable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("manager")
 		}, {
 			text:'渠道公司',dataIndex:'channel_company',filtable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("channel_company")
 		}, {
@@ -508,7 +505,7 @@ listControl.load(function(records, operation, success) {
 			});
 		});
 		
-		if(loginname=='admin'){Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);}
+		//if(loginname=='admin'){Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);}
 	});
 	
 	var viewport = Ext.create('Ext.Viewport', {

@@ -481,19 +481,11 @@ listControl.load(function(records, operation, success) {
 				xtype:'box',
 				flex:1
 			},{
-				xtype: 'tbtext',
-				text:"小提示：双击可以查看项目详细信息。"
-			},{
-				xtype:'box',
-				flex:1
-			},{
 				text:'查看推荐项目',
 				icon:'/ts/misc/resources/icons/plugin.gif',
 				scale:'medium',
 				itemId:"recommendBtn",
 				handler:function(){
-					this.hide();
-					this.up('toolbar').down("#ListBtn").show();
 					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(0);
 				}
 			},{
@@ -502,8 +494,6 @@ listControl.load(function(records, operation, success) {
 				scale:'medium',
 				itemId:"ListBtn",
 				handler:function(){
-					this.hide();
-					this.up('toolbar').down("#recommendBtn").show();
 					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
 				}
 			},{

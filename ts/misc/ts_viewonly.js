@@ -87,7 +87,7 @@ listControl.load(function(records, operation, success) {
 				icon: '/ts/misc/resources/icons/download.gif',
 				tooltip: '查看该项目的详细信息',
 				handler: function(grid, rowIndex, colIndex) {
-					Ext.ComponentQuery.query('#topInfo')[0].proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
+					Ext.ComponentQuery.query('#projPanel')[0].proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
 					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);
 				}
           }]

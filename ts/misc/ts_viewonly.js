@@ -95,11 +95,68 @@ listControl.load(function(records, operation, success) {
 							detailString+=record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+': '+record.get("profit")+'%; ';
 						});
 						var r=foundRecords.getAt(0);
-						projModelPanel.title=r.get("issue")+" "+r.get("name")+", "+detailString;
-						projModelPanel.proj_id=r.get("proj_id");
-						Ext.ComponentQuery.query('#projPanel')[0].add(projModelPanel);
+						var recommendTempPanel=Ext.create('Ext.panel.Panel',{
+							margin:'0 0 0 0',
+							border:0,
+							layout:'border',
+							proj_id:r.get("proj_id"),
+							title:"<b>"+r.get("issue")+" "+r.get("name")+"</b>, "+detailString,
+							proj_info_tpl:'',
+							items:[{
+								itemId:'projDetailPanel',
+								xtype:'panel',
+								region:'center',
+								border:0,
+								layout:{
+									type:'vbox',
+									align:'stretch'
+								},
+								items:[]
+							},{
+								itemId:'projInfoPanel',
+								xtype:'panel',
+								region:'west',
+								width:480,
+								title:'项目信息',
+								html:'正在加载项目信息...',
+								autoScroll :true
+							}],
+							listeners:{
+								beforeshow:{
+									fn:generatePanelFn,
+									scope:this
+								},
+								beforeexpand:{
+									fn:generatePanelFn,
+									scope:this
+								},
+								beforedeactivate:{
+									fn:generatePanelFn,
+									scope:this
+								},
+								deactivate:{
+									fn:function(e){
+										e.down('panel#projDetailPanel').removeAll(false);
+									},
+									scope:this
+								},
+								hide:{
+									fn:function(e){
+										e.down('panel#projDetailPanel').removeAll(false);
+									},
+									scope:this
+								},
+								collapse:{
+									fn:function(e){
+										e.down('panel#projDetailPanel').removeAll(false);
+									},
+									scope:this
+								}
+							}
+						});
+						Ext.ComponentQuery.query('#projPanel')[0].add(recommendTempPanel);
 					}
-					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(3);
+					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);
 				}
           }]
         }, {
@@ -191,7 +248,6 @@ listControl.load(function(records, operation, success) {
 			renderer: toolTipFn
 		}]
 	}];
-	
 	
 	projAllStore.load(function(){
 		fullGridC1=Ext.create('searchPanel', {
@@ -404,7 +460,7 @@ listControl.load(function(records, operation, success) {
 					});
 					var r=foundRecords.getAt(0);
 					var recommendTempPanel=Ext.create('Ext.panel.Panel',{
-						margin:'0 0	0 0',
+						margin:'0 0 0 0',
 						border:0,
 						layout:'border',
 						proj_id:r.get("proj_id"),
@@ -499,10 +555,25 @@ listControl.load(function(records, operation, success) {
 				xtype:'box',
 				flex:1
 			},{
+				text:'查看推荐项目',
+				icon:'/ts/misc/resources/icons/plugin.gif',
+				scale:'medium',
+				itemId:"recommendBtn",
+				handler:function(){
+					this.hide();
+					this.up('toolbar').down("#ListBtn").show();
+					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(0);
+				}
+			},{
 				text:'查看在售列表',
 				icon:'/ts/misc/resources/icons/plugin.gif',
 				scale:'medium',
-				handler:function(){Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);}
+				itemId:"ListBtn",
+				handler:function(){
+					this.hide();
+					this.up('toolbar').down("#recommendBtn").show();
+					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
+				}
 			},{
 				text:'进入管理模式',
 				icon:'/ts/misc/resources/icons/plugin.gif',

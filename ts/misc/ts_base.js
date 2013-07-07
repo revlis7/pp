@@ -660,7 +660,9 @@ var generatePanelFn=function(e){
 		'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
 		'</table></td></tr></table>',
 		{
-			cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
+			cusDate:function(d){
+				return Ext.Date.format(d,'Y年m月d日');
+			}
 		},{
 			cusPdtStatus:function(d){
 				if(d!="上线通过"){
@@ -670,7 +672,9 @@ var generatePanelFn=function(e){
 				}
 			}
 		},{
-			cusNum:function(n){return (n<1)?(n*10000+"万"):(n+"亿")}
+			cusNum:function(n){
+				return (n<1)?(n*10000+"万"):(n+"亿")
+			}
 		},{
 			cusGrade:gradeFn
 		}]);

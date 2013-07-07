@@ -3,7 +3,7 @@
 Ext.onReady(function() {
   Ext.QuickTips.init();
   var accPanel,fullGridC1,fullGridC2;
-  
+  var loginname = Ext.util.Cookies.get("loginname");
   var listControl=Ext.create('Ext.data.JsonStore', {
 	fields: [
 	  {name:'manage_button'    ,type:'boolean' },
@@ -72,22 +72,7 @@ listControl.load(function(records, operation, success) {
 	}, {
 		text:'产品信息',columns:[
 		{
-			text:'产品等级', dataIndex:'grade', filtable:true,sortable : true, width:94, hidden:records[0].get("grade"),
-			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
-				var res;
-				if(value=="五星级"){
-					res= '★★★★★'
-				} else if (value=="四星级"){
-					res= '★★★★'
-				} else if (value=="三星级"){
-					res= '★★★'
-				} else if (value=="二星级"){
-					res= '★★'
-				} else if (value=="一星级"){
-					res= '★'
-				}
-				return res;
-			}
+			text:'产品等级', dataIndex:'grade', filtable:true,sortable : true, width:94, hidden:records[0].get("grade"),renderer: gradeFn
 		}, {
 			text:'项目名称', dataIndex:'name', filtable:true,sortable : true, width:220,style: "text-align:center;",align: 'left', hidden:records[0].get("name"),
 			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
@@ -107,7 +92,7 @@ listControl.load(function(records, operation, success) {
 					if(foundRecords.getCount()>0){
 						var detailString='';
 						foundRecords.each(function(record){
-								detailString+=record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+': '+record.get("profit")+'%';
+							detailString+=record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+': '+record.get("profit")+'%; ';
 						});
 						var r=foundRecords.getAt(0);
 						projModelPanel.title=r.get("issue")+" "+r.get("name")+", "+detailString;
@@ -119,22 +104,13 @@ listControl.load(function(records, operation, success) {
           }]
         },{
 			text:'子类', dataIndex:'sub_name', filtable:true,sortable : true, width:220,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_name"),
-			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
-				metaData.tdAttr = 'data-qtip="'+value+'"'; 
-				return '<b>'+value+'</b>';
-			}
+			renderer: toolTipFn
 		}, {
 			text:'类别', dataIndex:'sub_category', filtable:true,sortable : true, width:150,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_category"),
-			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
-				metaData.tdAttr = 'data-qtip="'+value+'"'; 
-				return value;
-			}
+			renderer: toolTipFn
 		}, {
 			text:'发行方', dataIndex:'issue', filtable:true,sortable : true, width:86,style: "text-align:center;",align: 'center', hidden:records[0].get("issue"),
-			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
-				metaData.tdAttr = 'data-qtip="'+value+'"'; 
-				return value;
-			}
+			renderer: toolTipFn
 		}]
 	}, {
 		text:'认购信息',columns:[
@@ -187,79 +163,35 @@ listControl.load(function(records, operation, success) {
 		text:'佣金信息',columns:[
 		{
 			text:'税前佣金', dataIndex:'commission_b_tax', filtable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("commission_b_tax"),
-			renderer: function(value,metaData,record,colIndex,store,view) { 
-				if(value>0){
-					return value+'%';
-				} else {
-					metaData.style='color:#8E8E8E';
-					return 'N/A';
-				}
-			}
+			renderer: commissionFn
 		}, {
 			text:'税后佣金', dataIndex:'commission_a_tax', filtable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("commission_a_tax"),
-			renderer: function(value,metaData,record,colIndex,store,view) { 
-				if(value>0){
-					return value+'%';
-				} else {
-					metaData.style='color:#8E8E8E';
-					return 'N/A';
-				}
-			}
+			renderer: commissionFn
 		}, {
 			text:'平台费用', dataIndex:'inner_commission', filtable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("inner_commission"),
-			renderer: function(value,metaData,record,colIndex,store,view) { 
-				if(value>0){
-					return value+'%';
-				} else {
-					metaData.style='color:#8E8E8E';
-					return 'N/A';
-				}
-			}
+			renderer: commissionFn
 		}, {
 			text:'费用', dataIndex:'outer_commission', filtable:true,sortable : true, width:50, style: "text-align:center;",align: 'center',hidden:records[0].get("outer_commission"),
-			renderer: function(value,metaData,record,colIndex,store,view) { 
-				if(value>0){
-					return value+'%';
-				} else {
-					metaData.style='color:#8E8E8E';
-					return 'N/A';
-				}
-			}
+			renderer: commissionFn
 		}, {
 			text:'现结费用', dataIndex:'imm_payment', filtable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("imm_payment"),
-			renderer: function(value,metaData,record,colIndex,store,view) { 
-				if(value>0){
-					return value+'%';
-				} else {
-					metaData.style='color:#8E8E8E';
-					return 'N/A';
-				}
-			}
+			renderer: commissionFn
 		}]
 	}, {
 		text:'附加信息',columns:[
 		{
 			text:'产品经理', dataIndex:'manager', filtable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("manager"),
-			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
-				metaData.tdAttr = 'data-qtip="'+value+'"'; 
-				return value;
-			}
+			renderer: toolTipFn
 		}, {
 			text:'渠道公司',dataIndex:'channel_company',filtable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("channel_company")
 		}, {
 			text:'添加时间',dataIndex:'create_ts',filtable:true,sortable : true, width:80, style: "text-align:center;",align: 'center',renderer:new Ext.util.Format.dateRenderer("Y-m-d")
 		}, {
 			text:'打款进度', dataIndex:'countdown', filtable:true,sortable : true, minWidth:200,hidden:records[0].get("countdown"),
-			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
-				metaData.tdAttr = 'data-qtip="'+value+'"'; 
-				return value;
-			}
+			renderer: toolTipFn
 		}, {
 			text:'备注', dataIndex:'remark', filtable:true,sortable : true, minWidth:200,hidden:records[0].get("remark"),
-			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
-				metaData.tdAttr = 'data-qtip="'+value+'"'; 
-				return value;
-			}
+			renderer: toolTipFn
 		}]
 	}];
 	
@@ -471,17 +403,114 @@ listControl.load(function(records, operation, success) {
 				if(foundRecords.getCount()>0){
 					var detailString='';
 					foundRecords.each(function(record){
-						detailString+=record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+': '+record.get("profit")+'%';
+						detailString+=record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+': '+record.get("profit")+'%; ';
 					});
 					var r=foundRecords.getAt(0);
-					projModelPanel.title=r.get("issue")+" "+r.get("name")+", "+detailString;
-					projModelPanel.proj_id=r.get("proj_id");
-					Ext.ComponentQuery.query('#recommendPanel')[0].add(projModelPanel);
+					var recommendTempPanel=Ext.create('Ext.panel.Panel',{
+						margin:'0 0	0 0',
+						border:0,
+						layout:'border',
+						proj_id:r.get("proj_id"),
+						title:"<b>"+r.get("issue")+" "+r.get("name")+"</b>, "+detailString,
+						proj_info_tpl:'',
+						items:[{
+							itemid:'projDetailPanel',
+							xtype:'panel',
+							region:'center',
+							border:0,
+							layout:{
+								type:'vbox',
+								align:'stretch'
+							},
+							items:[]
+						},{
+							itemid:'projInfoPanel',
+							xtype:'panel',
+							region:'west',
+							width:480,
+							title:'项目信息',
+							html:'正在加载项目信息...',
+							autoScroll :true
+						}],
+						listeners:{
+							show:{
+								fn:function(e){
+									e.down('panel#projDetailPanel').add(RecentChangeGrid);
+									e.down('panel#projDetailPanel').add(AmountDetailsGrid);
+									e.down('panel#projDetailPanel').add(FileListGrid);
+									var	foundRecords = projAllStore.query('proj_id',e.proj_id);
+									if(foundRecords.getCount()>0){
+										var	detailString;
+										foundRecords.each(function(record){
+											detailString+='<pre>'+record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+':	'+record.get("profit")+'%</pre>';
+										});
+										e.proj_info_tpl = Ext.create('Ext.XTemplate',[
+										'<table	style="border-collapse:collapse;">{pdt_status:this.cusPdtStatus()}<tr><td style="padding:20px;border:1px;"><table style="border-collapse:collapse;">',
+										'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}, {exclusive}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>项目评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
+										detailString, '</td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
+										'</table></td></tr></table>',
+										{
+											cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
+										},{
+											cusPdtStatus:function(d){
+												if(d!="上线通过"){
+													return '<tr><td	style="padding:20px;border:1px;"><span style="background-color:#003366;color:#FFFFFF;font-size:20px;font_weight:bold;">请注意该项目尚未上线！</span></td></tr>';
+												} else {
+													return '';
+												}
+											}
+										},{
+											cusNum:function(n){return (n<1)?(n*10000+"万"):(n+"亿")}
+										},{
+											cusGrade:gradeFn
+										}]);
+									};
+									proj_info_tpl.overwrite(e.down('panel#projInfoPanel').body,projStore.getAt(0).data);
+									fileListStore.setProxy({
+										type: 'ajax',
+										url: '/ts/index.php/upload/get_list?proj_id='+e.proj_id,
+										reader:	{
+											type: 'json',
+											root: 'data'
+										}
+									});
+									fileListStore.load();
+									projAllStore.clearFilter(true);
+									projAllStore.filter([{
+										filterFn:function(item)	{
+											return item.get("proj_id") > e.proj_id; 
+										}
+									}]);
+								},
+								scope:this
+							},
+							hide:{
+								fn:function(e){
+									e.removeAll();
+								},
+								scope:this
+							}
+						}
+					});
+					Ext.ComponentQuery.query('#recommendPanel')[0].add(recommendTempPanel);
 				}
 			});
 		});
+		
+		if(loginname=='admin'){Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);}
 	});
-	var loginname = Ext.util.Cookies.get("loginname");
+	
 	var viewport = Ext.create('Ext.Viewport', {
 		layout: {
 			type: 'border',
@@ -510,6 +539,11 @@ listControl.load(function(records, operation, success) {
 			},{
 				xtype:'box',
 				flex:1
+			},{
+				text:'查看在售列表',
+				icon:'/ts/misc/resources/icons/plugin.gif',
+				scale:'medium',
+				handler:function(){Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);}
 			},{
 				text:'进入管理模式',
 				icon:'/ts/misc/resources/icons/plugin.gif',

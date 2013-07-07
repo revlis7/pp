@@ -15,6 +15,34 @@ var recommendStore=Ext.create('Ext.data.ArrayStore', {
 	  ['498']
 	]
 });
+var gradeFn=function(value) { 
+	var res;
+	if(value=="五星级"){
+		res= '★★★★★'
+	} else if (value=="四星级"){
+		res= '★★★★'
+	} else if (value=="三星级"){
+		res= '★★★'
+	} else if (value=="二星级"){
+		res= '★★'
+	} else if (value=="一星级"){
+		res= '★'
+	}
+	return res;
+};
+var toolTipFn=function(value,metaData) { 
+	metaData.tdAttr = 'data-qtip="'+value+'"'; 
+	return '<b>'+value+'</b>';
+}
+var commissionFn=function(value,metaData) { 
+	if(value>0){
+		return value+'%';
+	} else {
+		metaData.style='color:#8E8E8E';
+		return 'N/A';
+	}
+}
+
 var chTotalShareList=Ext.create('Ext.data.ArrayStore', {
 	fields: ['id', 'text'],
 	data: [

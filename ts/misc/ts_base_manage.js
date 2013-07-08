@@ -239,108 +239,241 @@ var	filtersCfg = {
 	]
 };
 
-var	AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
-	store: projAllStore,
-	border:1,
-	title:'额度信息',
-	region:'center',
-	minHeight:156,
-	flex:1,
-	emptyText:'暂无额度信息',
-	columns:[
-	{text:'子名称',		 dataIndex:'sub_name', filtable:true, style: "text-align:center;",align: 'center',width:114},
-	{text:'项目期限',	 dataIndex:'month',	filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'个月';}},
-	{text:'认购金额',	 dataIndex:'amount', filtable:true,	style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
-	{text:'项目收益',	 dataIndex:'profit', filtable:true,	style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
-	{text:'销售状态',	 dataIndex:'status', filtable:true,	style: "text-align:center;",align: 'center',width:80,
-		renderer:function(value,metaData){
-			if(value=="在售"){
-				metaData.style='background:#CCFFCC;color:#000000'
-			} else if(value=="结束"){
-				metaData.style='background:#DFDFDF;color:#606060;'
-			} else {
-				metaData.style='background:#FFFF99;color:#000000'
-			}
-			return value;
-		}
-	},
-	{text:'份额',		 dataIndex:'total_share', filtable:true, style:	"text-align:center;",align:	'center',width:60,
-		renderer:function(value,metaData){
-			if(value=="OPEN"){
-				metaData.style='background:#CCFFCC;color:#000000'
-			} else if(value=="无"){
-				metaData.style='background:#DFDFDF;color:#606060;'
-			} else {
-				metaData.style='background:#FFFF99;color:#000000'
-			}
-			return value;
-		}
-	},
-	{text:'成立日期',	 dataIndex:'found',	filtable:true, style: "text-align:center;",align: 'center',width:88,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
-	{text:'税前佣金',	 dataIndex:'commission_b_tax', filtable:true, style: "text-align:center;",align: 'right',width:80,		 
-		renderer: commissionFn
-	},
-	{text:'税后佣金',	 dataIndex:'commission_a_tax', filtable:true, style: "text-align:center;",align: 'right',width:80,		 
-		renderer: commissionFn
-	},
-	{text:'平台费用',	 dataIndex:'inner_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,		 
-		renderer: commissionFn
-	},
-	{text:'费用',		 dataIndex:'outer_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,		 
-		renderer: commissionFn
-	},
-	{text:'现结费用',	 dataIndex:'imm_payment', filtable:true, style:	"text-align:center;",align:	'right',width:80,		
-		renderer: commissionFn
-	}
-	]
-});
+	var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
+		store: projdetailStore,
+		border:1,
+		title:'额度信息',
+		region:'south',
+		minHeight:156,
+		flex:1,
+		emptyText:'暂无额度信息',
+		columns:[{
+			xtype: 'actioncolumn',
+			//text:'删除',
+			width:40,
+			style: "text-align:center;",
+			align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/cross.gif',
+				tooltip: '删除此条记录',
+				handler: function(grid, rowIndex, colIndex) {
+					var amount=grid.getStore().getAt(rowIndex).get("amount");
+					Ext.Msg.show({
+						title:'删除文件',
+						msg: '您是否确认要删除认购金额为 '+amount+' 万？',
+						buttons: Ext.Msg.OKCANCEL,
+						icon: Ext.Msg.QUESTION,
+						fn:function(buttonId){
+							if(buttonId=='ok'){
+								AmountEditForm=AmountEditWin.down('form').getForm();
+								AmountEditForm.getForm().loadRecord(grid.getStore().getAt(rowIndex));
+								AmountEditForm.getForm().submit({
+									url: '/ts/index.php/proj/detail_delete_submit',
+									submitEmptyText: false,
+									waitMsg: 'Saving Data...',
+									success: function(form, action) {
+										projdetailStore.removeAt(rowIndex);
+									} ,
+									failure: function(form, action) {
+										Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+									}
+								});
+							}
+						}
+					});
+				}
+			}]
+		}, {
+			xtype: 'actioncolumn',
+			width:40,style: "text-align:center;",align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/cog_edit.png',
+				tooltip: '编辑此条记录',
+				handler: function(grid, rowIndex, colIndex) {
+					//sampleStore.removeAt(rowIndex);
+					AmountEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
+					Ext.getBody().mask();
+					AmountEditWin.show();
+				}
+			}]
+		},
+		{text:'子名称',		 dataIndex:'sub_name', filtable:true, style: "text-align:center;",align: 'center',width:80},
+		{text:'项目期限',	 dataIndex:'month', filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'个月';}},
+		{text:'认购金额',	 dataIndex:'amount', filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
+		{text:'项目收益',	 dataIndex:'profit', filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
+		{text:'销售状态',	 dataIndex:'status', filtable:true, style: "text-align:center;",align: 'center',width:80,
+			renderer:function(value,metaData){
+        		if(value=="在售"){
+        			metaData.style='background:#CCFFCC;color:#000000'
+        		} else if(value=="结束"){
+        			metaData.style='background:#DFDFDF;color:#606060;'
+        		} else {
+        			metaData.style='background:#FFFF99;color:#000000'
+        		}
+        		return value;
+        	}
+        },
+		{text:'份额',		 dataIndex:'total_share', filtable:true, style: "text-align:center;",align: 'center',width:60,
+			renderer:function(value,metaData){
+        		if(value=="OPEN"){
+        			metaData.style='background:#CCFFCC;color:#000000'
+        		} else if(value=="无"){
+        			metaData.style='background:#DFDFDF;color:#606060;'
+        		} else {
+        			metaData.style='background:#FFFF99;color:#000000'
+        		}
+        		return value;
+        	}
+        },
+		{text:'成立日期',	 dataIndex:'found', filtable:true, style: "text-align:center;",align: 'center',width:88,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
+		{text:'税前佣金',	 dataIndex:'commission_b_tax', filtable:true, style: "text-align:center;",align: 'right',width:80,       
+			renderer: function(value,metaData,record,colIndex,store,view) {  
+        		if(value>0){
+        			return value.toFixed(3)+'%';
+        		} else {
+        			metaData.style='color:#8E8E8E';
+        		return 'N/A';
+        		}
+        	}
+        },
+		{text:'税后佣金',	 dataIndex:'commission_a_tax', filtable:true, style: "text-align:center;",align: 'right',width:80,       
+			renderer: function(value,metaData,record,colIndex,store,view) {  
+        		if(value>0){
+        			return value.toFixed(3)+'%';
+        		} else {
+        			metaData.style='color:#8E8E8E';
+        		return 'N/A';
+        		}
+        	}
+        },
+		{text:'平台费用',	 dataIndex:'inner_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,       
+			renderer: function(value,metaData,record,colIndex,store,view) {  
+        		if(value>0){
+        			return value.toFixed(3)+'%';
+        		} else {
+        			metaData.style='color:#8E8E8E';
+        		return 'N/A';
+        		}
+        	}
+        },
+		{text:'费用',		 dataIndex:'outer_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,       
+			renderer: function(value,metaData,record,colIndex,store,view) {  
+        		if(value>0){
+        			return value.toFixed(3)+'%';
+        		} else {
+        			metaData.style='color:#8E8E8E';
+        		return 'N/A';
+        		}
+        	}
+        },
+		{text:'现结费用',	 dataIndex:'imm_payment', filtable:true, style: "text-align:center;",align: 'right',width:80,       
+			renderer: function(value,metaData,record,colIndex,store,view) {  
+        		if(value>0){
+        			return value.toFixed(3)+'%';
+        		} else {
+        			metaData.style='color:#8E8E8E';
+        		return 'N/A';
+        		}
+        	}
+        },
+		{text:'主销渠道',	 dataIndex:'main_channel', filtable:true, style: "text-align:center;",align: 'center',width:90},
+		{text:'渠道公司',	 dataIndex:'channel_company', filtable:true, style: "text-align:center;",align: 'center',width:90},
+		{text:'渠道联系人',  dataIndex:'channel_contact', filtable:true, style: "text-align:center;",align: 'center',width:90},
+		{text:'走帐公司',	 dataIndex:'billing_company', filtable:true, style: "text-align:center;",align: 'center',width:90}
+		]
+	});
 
-var	FileListGrid=Ext.create('Ext.grid.Panel',{
-	store: fileListStore,
-	border:1,
-	title:'文件列表',
-	emptyText:'暂无文件信息',
-	minHeight:156,
-	region:'south',
-	flex:1,
-	columns:[
-	{
-		xtype: 'actioncolumn',
-		width:40,style:	"text-align:center;",align:	'center',
-		sortable: false,
-		items: [{
-			icon: '/ts/misc/resources/icons/download.gif',
-			tooltip: '下载该文件',
-			handler: function(grid,	rowIndex, colIndex)	{
-				var	filename=grid.getStore().getAt(rowIndex).get("filename");
-				window.open('/ts/index.php/upload/get?file='+filename);
-			}
-		}]
-	},
-	{text:'文件名',		 dataIndex:'filename',		filtable:true, style: "text-align:center;",align: 'left',width:642},
-	{text:'文件大小',		dataIndex:'filesize',	   filtable:true, style: "text-align:center;",align: 'right',width:120,
-		 renderer:function(value,metaData,record,colIndex,store,view) {
-			 if(value>=1048676)	{var v=value/1048576;return	v.toFixed(2)+'MB';}
-			 else if(value>=1024) {var v=value/1024;return v.toFixed(2)+'KB';}
-			 else return value;
-		 }
-	},
-	{text:'文件上传日期',	  dataIndex:'create_ts',	  filtable:true, width:140,style: "text-align:center;",align: 'left',renderer:new Ext.util.Format.dateRenderer("Y-m-d")}
-	]
-});
-var	RecentChangeGrid=Ext.create('Ext.grid.Panel',{
-	store: fileListStore,
-	border:1,
-	title:'最新进展',
-	emptyText:'暂无信息',
-	minHeight:156,
-	region:'north',
-	flex:1,
-	columns:[
-	{text:'时间',			dataIndex:'addtime',	  filtable:true, style:	"text-align:center;",align:	'left',width:100},
-	{text:'修改信息',		dataIndex:'messages',	   filtable:true, style: "text-align:center;",align: 'right',width:800}
-	]
-});
+	var FileListGrid=Ext.create('Ext.grid.Panel',{
+		store: fileListStore,
+		border:1,
+		title:'文件列表',
+		emptyText:'暂无文件信息',
+		minHeight:156,
+		region:'south',
+		flex:1,
+		columns:[
+		{
+			xtype: 'actioncolumn',
+			width:40,style: "text-align:center;",align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/cross.gif',
+				tooltip: '删除该文件',
+				handler: function(grid, rowIndex, colIndex) {
+					AmountEditForm.getForm().loadRecord(grid.getStore().getAt(rowIndex));
+					AmountEditForm.getForm().submit({
+							url: '/ts/index.php/proj/file_delete_submit',
+							submitEmptyText: false,
+							waitMsg: 'Saving Data...',
+							success: function(form, action) {
+								fileListStore.removeAt(rowIndex);
+							} ,
+							failure: function(form, action) {
+								Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+							}
+					});
+				}
+			}]
+		},{
+			xtype: 'actioncolumn',
+			width:40,style: "text-align:center;",align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/download.gif',
+				tooltip: '下载该文件',
+				handler: function(grid, rowIndex, colIndex) {
+					var filename=grid.getStore().getAt(rowIndex).get("filename");
+					window.open('/ts/index.php/upload/get?file='+filename);
+				}
+			}]
+		},
+		{text:'文件名',         dataIndex:'filename',      filtable:true, style: "text-align:center;",align: 'left',width:580},
+		{text:'文件大小',       dataIndex:'filesize',      filtable:true, style: "text-align:center;",align: 'right',width:80,
+			 renderer:function(value,metaData,record,colIndex,store,view) {
+				 if(value>=1048676) {var v=value/1048576;return v.toFixed(2)+'MB';}
+				 else if(value>=1024) {var v=value/1024;return v.toFixed(2)+'KB';}
+				 else return value;
+			 }
+		},
+		{text:'文件上传日期',   dataIndex:'create_ts',      filtable:true, width:120,renderer:new Ext.util.Format.dateRenderer("Y-m-d")}
+		]
+	});
+	var RecentChangeGrid=Ext.create('Ext.grid.Panel',{
+		store: fileListStore,
+		border:1,
+		title:'最新进展',
+		emptyText:'暂无信息',
+		minHeight:156,
+		region:'south',
+		flex:1,
+		columns:[
+		{
+			xtype: 'actioncolumn',
+			width:40,style: "text-align:center;",align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/cross.gif',
+				tooltip: '删除这条消息',
+				handler: function(grid, rowIndex, colIndex) {
+				}
+			}]
+		},{
+			xtype: 'actioncolumn',
+			width:40,style: "text-align:center;",align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/download.gif',
+				tooltip: '修改这条消息',
+				handler: function(grid, rowIndex, colIndex) {
+				}
+			}]
+		},
+		{text:'时间',         dataIndex:'addtime',      filtable:true, style: "text-align:center;",align: 'left',width:100},
+		{text:'修改信息',       dataIndex:'messages',      filtable:true, style: "text-align:center;",align: 'right',width:780}
+		]
+	});
 
 var recommendStore=Ext.create('Ext.data.ArrayStore', {
 	fields: ['proj_id'],

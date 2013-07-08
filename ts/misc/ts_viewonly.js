@@ -248,7 +248,7 @@ listControl.load(function(records, operation, success) {
 			},
 			loadMask: true,
 			features: [filtersCfg],
-			emptyText: '没有匹配的记录'，
+			emptyText: '没有匹配的记录',
 			listeners:{
 				beforeexpand:{
 					fn:function(p){

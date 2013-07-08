@@ -88,6 +88,7 @@ listControl.load(function(records, operation, success) {
 				tooltip: '查看该项目的详细信息',
 				handler: function(grid, rowIndex, colIndex) {
 					Ext.ComponentQuery.query('#projPanel')[0].proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
+					Ext.ComponentQuery.query('#projPanel')[0].setTitle(grid.getStore().getAt(rowIndex).get("issue")+" "+grid.getStore().getAt(rowIndex).get("name"))
 					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);
 				}
           }]
@@ -190,19 +191,19 @@ listControl.load(function(records, operation, success) {
 			margin:10,
 			columns: fullGridColumns,
 			viewConfig: {
-			  stripeRows: true,
-			  forceFit:true,
-			  sortAscText:'正序',
-			  sortDescText:'降序',
-			  getRowClass: function(record,rowIndex,rowParams,store){    
-				var sumVal=0;
-				for (var i=0;i<rowIndex;i++) {
-				  if(store.getAt(i+1).data.name!=store.getAt(i).data.name){
-					sumVal++;
-				  }
+				stripeRows: true,
+				forceFit:true,
+				sortAscText:'正序',
+				sortDescText:'降序',
+				getRowClass: function(record,rowIndex,rowParams,store){
+					var sumVal=0;
+					for (var i=0;i<rowIndex;i++) {
+						if(store.getAt(i+1).data.name!=store.getAt(i).data.name){
+							sumVal++;
+						}
+					}
+					return (sumVal%2==0) ? 'style_row_proj0':'style_row_proj1';
 				}
-				return (sumVal%2==0) ? 'style_row_proj0':'style_row_proj1';
-			  }
 			},
 			loadMask: true,
 			features: [filtersCfg],
@@ -427,7 +428,7 @@ listControl.load(function(records, operation, success) {
 					});
 					var r=foundRecords.getAt(0);
 					var recommendTempPanel=Ext.create('Ext.panel.Panel',{
-						margin:'0 0 0 0',
+						margin:10,
 						border:0,
 						layout:'border',
 						proj_id:r.get("proj_id"),
@@ -533,6 +534,14 @@ listControl.load(function(records, operation, success) {
 					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
 				}
 			},{
+				text:'查看近期结束项目',
+				icon:'/ts/misc/resources/icons/plugin.gif',
+				scale:'medium',
+				itemId:"ListBtn",
+				handler:function(){
+					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
+				}
+			},{
 				text:'进入管理模式',
 				icon:'/ts/misc/resources/icons/plugin.gif',
 				scale:'medium',
@@ -565,10 +574,10 @@ listControl.load(function(records, operation, success) {
 				id:'recommendPanel',
 				region:'center',
 				layout:{
-				  type: 'accordion',
-				  animate: true,
-				  titleCollapse: true,
-				  activeOnTop: true
+					type: 'accordion',
+					animate: true,
+					titleCollapse: true,
+					activeOnTop: true
 				},
 				items:[]
 			}, {
@@ -587,7 +596,7 @@ listControl.load(function(records, operation, success) {
 			}, {
 				xtype:'panel',
 				id:'projPanel',
-				margin:'0 0 0 0',
+				margin:10,
 				border:0,
 				layout:'border',
 				proj_id:'',

@@ -132,7 +132,8 @@ var	fileListStore=Ext.create('Ext.data.JsonStore', {
 		}
 	}
 });
-var	sampleStoreFields=[
+var	projAllStore=Ext.create('Ext.data.JsonStore', {
+ fields: [
 	{name:'proj_id'	,type:'integer'	},
 	{name:'proj_detail_id' ,type:'integer' },
 	{name:'total_share'	,type:'string' },
@@ -163,15 +164,8 @@ var	sampleStoreFields=[
 	{name:'outer_commission' ,type:'float' },
 	{name:'imm_payment'	,type:'float' },
 	{name:'found' ,type:'date' },
-	{name:'main_channel' ,type:'string'	},
-	{name:'channel_company'	,type:'string' },
-	{name:'channel_contact'	,type:'string' },
-	{name:'billing_company'	,type:'string' },
-	{name:'manager_remark' ,type:'string' },
 	{name:'create_ts' ,type:'date',dateFormat:"Y-m-d H:i:s"	}
-]
-var	projAllStore=Ext.create('Ext.data.JsonStore', {
- fields: sampleStoreFields,
+],
  proxy:	{
 	type: 'ajax',
 	url: '/ts/index.php/proj/view',
@@ -294,28 +288,6 @@ var	FileListGrid=Ext.create('Ext.grid.Panel',{
 		width:40,style:	"text-align:center;",align:	'center',
 		sortable: false,
 		items: [{
-			icon: '/ts/misc/resources/icons/cross.gif',
-			tooltip: '删除该文件',
-			handler: function(grid,	rowIndex, colIndex)	{
-				AmountEditForm.getForm().loadRecord(grid.getStore().getAt(rowIndex));
-				AmountEditForm.getForm().submit({
-						url: '/ts/index.php/proj/file_delete_submit',
-						submitEmptyText: false,
-						waitMsg: 'Saving Data...',
-						success: function(form,	action)	{
-							fileListStore.removeAt(rowIndex);
-						} ,
-						failure: function(form,	action)	{
-							Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
-						}
-				});
-			}
-		}]
-	},{
-		xtype: 'actioncolumn',
-		width:40,style:	"text-align:center;",align:	'center',
-		sortable: false,
-		items: [{
 			icon: '/ts/misc/resources/icons/download.gif',
 			tooltip: '下载该文件',
 			handler: function(grid,	rowIndex, colIndex)	{
@@ -344,27 +316,6 @@ var	RecentChangeGrid=Ext.create('Ext.grid.Panel',{
 	region:'north',
 	flex:1,
 	columns:[
-	{
-		xtype: 'actioncolumn',
-		width:40,style:	"text-align:center;",align:	'center',
-		sortable: false,
-		items: [{
-			icon: '/ts/misc/resources/icons/cross.gif',
-			tooltip: '删除这条消息',
-			handler: function(grid,	rowIndex, colIndex)	{
-			}
-		}]
-	},{
-		xtype: 'actioncolumn',
-		width:40,style:	"text-align:center;",align:	'center',
-		sortable: false,
-		items: [{
-			icon: '/ts/misc/resources/icons/download.gif',
-			tooltip: '修改这条消息',
-			handler: function(grid,	rowIndex, colIndex)	{
-			}
-		}]
-	},
 	{text:'时间',			dataIndex:'addtime',	  filtable:true, style:	"text-align:center;",align:	'left',width:100},
 	{text:'修改信息',		dataIndex:'messages',	   filtable:true, style: "text-align:center;",align: 'right',width:800}
 	]

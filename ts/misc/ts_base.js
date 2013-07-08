@@ -425,8 +425,8 @@ var generatePanelFn=function(e){
 				return Ext.Date.format(d,'Y年m月d日');
 			}
 		},{
-			cusPdtStatus:function(d){
-				if(d!="上线通过"){
+			cusPdtStatus:function(str){
+				if(str!="上线通过"){
 					return '<tr><td	style="padding:20px;border:1px;"><span style="background-color:#003366;color:#FFFFFF;font-size:20px;font_weight:bold;">请注意该项目尚未上线！</span></td></tr>';
 				} else {
 					return '';

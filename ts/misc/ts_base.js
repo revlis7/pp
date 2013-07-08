@@ -56,6 +56,7 @@ var chFloatingList=Ext.create('Ext.data.ArrayStore', {
 		['其他','其他']
 	]
 });
+
 var chTotalShareList=Ext.create('Ext.data.ArrayStore', {
 	fields: ['id', 'text'],
 	data: [

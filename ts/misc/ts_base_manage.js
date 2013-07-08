@@ -56,21 +56,28 @@ var chFloatingList=Ext.create('Ext.data.ArrayStore', {
 		['其他','其他']
 	]
 });
+
+var chSubCategoryList = Ext.create('Ext.data.Store', {
+	fields: ['value', 'text'],
+	data:[],
+	autoLoad : true
+});
+
 var chTotalShareList=Ext.create('Ext.data.ArrayStore', {
 	fields: ['id', 'text'],
 	data: [
-	  ['OPEN','OPEN'],
-	  ['大带小','大带小'],
-	  ['无','无']
+		['OPEN','OPEN'],
+		['大带小','大带小'],
+		['无','无']
 	]
 });
 
 var chStatusList=Ext.create('Ext.data.ArrayStore', {
 	fields: ['id', 'text'],
 	data: [
-	  ['在售','在售'],
-	  ['预约','预约'],
-	  ['结束','结束']
+		['在售','在售'],
+		['预约','预约'],
+		['结束','结束']
 	]
 });
 

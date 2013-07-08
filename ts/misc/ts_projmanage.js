@@ -322,7 +322,7 @@ var res;
         ]
       }];
     var fullGridC1=Ext.create('searchPanel', {
-      store: sampleStoreC1,
+      store: projAllStore,
       border:0,
       columnLines: true,
 //      forceFit: true,
@@ -351,7 +351,7 @@ var res;
     });
 
     var fullGridC2=Ext.create('searchPanel', {
-      store: sampleStoreC2,
+      store: projAllStore,
       border:0,
       width:1320,
       title: '&nbsp;&nbsp;<b>&gt;&gt;&nbsp;浮动收益产品&nbsp;&lt;&lt;</b> -- 点击展开',

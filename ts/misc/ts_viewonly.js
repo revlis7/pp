@@ -66,15 +66,15 @@ Ext.onReady(function() {
 listControl.load(function(records, operation, success) {
 	var fullGridColumns=[
 	{
-		text:'proj_id', dataIndex:'proj_id', filtable:true, width:100,hidden:true
+		text:'proj_id', dataIndex:'proj_id', filterable:true, width:100,hidden:true
 	}, {
-		text:'proj_detail_id', dataIndex:'proj_detail_id', filtable:true, width:100,hidden:true
+		text:'proj_detail_id', dataIndex:'proj_detail_id', filterable:true, width:100,hidden:true
 	}, {
 		text:'产品信息',columns:[
 		{
-			text:'产品等级', dataIndex:'grade', filtable:true,sortable : true, width:94, hidden:records[0].get("grade"),renderer: gradeFn
+			text:'产品等级', dataIndex:'grade', filterable:true,sortable : true, width:94, hidden:records[0].get("grade"),renderer: gradeFn
 		}, {
-			text:'项目名称', dataIndex:'name', filtable:true,sortable : true, width:220,style: "text-align:center;",align: 'left', hidden:records[0].get("name"),
+			text:'项目名称', dataIndex:'name', filterable:true,sortable : true, width:220,style: "text-align:center;",align: 'left', hidden:records[0].get("name"),
 			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
 				metaData.tdAttr = 'data-qtip="'+value+'"'; 
 				return '<b>'+value+'</b>';
@@ -92,19 +92,19 @@ listControl.load(function(records, operation, success) {
 				}
           }]
         }, {
-			text:'类别', dataIndex:'sub_category', filtable:true,sortable : true, width:150,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_category"),
+			text:'类别', dataIndex:'sub_category', filterable:true,sortable : true, width:150,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_category"),
 			renderer: toolTipFn
 		}, {
-			text:'发行方', dataIndex:'issue', filtable:true,sortable : true, width:86,style: "text-align:center;",align: 'center', hidden:records[0].get("issue"),
+			text:'发行方', dataIndex:'issue', filterable:true,sortable : true, width:86,style: "text-align:center;",align: 'center', hidden:records[0].get("issue"),
 			renderer: toolTipFn
 		}]
 	}, {
 		text:'认购信息',columns:[
 		{
-			text:'子类', dataIndex:'sub_name', filtable:true,sortable : true, width:100,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_name"),
+			text:'子类', dataIndex:'sub_name', filterable:true,sortable : true, width:100,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_name"),
 			renderer: toolTipFn
 		}, {
-			text:'销售状态', dataIndex:'status', filtable:true,sortable : true, width:60,style: "text-align:center;",align: 'center', hidden:records[0].get("status"), 
+			text:'销售状态', dataIndex:'status', filterable:true,sortable : true, width:60,style: "text-align:center;",align: 'center', hidden:records[0].get("status"), 
 			renderer:function(value,metaData){
 				if(value=="在售"){
 					metaData.style='background:#CCFFCC;color:#000000'
@@ -118,21 +118,21 @@ listControl.load(function(records, operation, success) {
 				return value;
 			}
 		}, {
-			text:'认购金额', dataIndex:'amount', filtable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("amount"),
+			text:'认购金额', dataIndex:'amount', filterable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("amount"),
 			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
 				if(value>=10000){ return value/10000+'亿'; } 
 				if(value<10000){ return value+'万'; } 
 			}
 		}, {
-			text:'期限', dataIndex:'month', filtable:true,sortable : true, width:50,style: "text-align:center;",align: 'center', hidden:records[0].get("month"),
+			text:'期限', dataIndex:'month', filterable:true,sortable : true, width:50,style: "text-align:center;",align: 'center', hidden:records[0].get("month"),
 			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
 				return value+'月';
 			}
 		}, {
-			text:'收益', dataIndex:'profit', filtable:true,sortable : true, width:50, style: "text-align:center;",align: 'center',hidden:records[0].get("profit"),
+			text:'收益', dataIndex:'profit', filterable:true,sortable : true, width:50, style: "text-align:center;",align: 'center',hidden:records[0].get("profit"),
 			renderer: commissionFn
 		}, {
-			text:'份额', dataIndex:'total_share', filtable:true,sortable : true, width:50,style: "text-align:center;",align: 'center',hidden:records[0].get("total_share"), 
+			text:'份额', dataIndex:'total_share', filterable:true,sortable : true, width:50,style: "text-align:center;",align: 'center',hidden:records[0].get("total_share"), 
 			renderer:function(value,metaData){
 				if(value=="OPEN"){
 					metaData.style='background:#CCFFCC;color:#000000'
@@ -149,34 +149,34 @@ listControl.load(function(records, operation, success) {
 	}, {
 		text:'佣金信息',columns:[
 		{
-			text:'税前佣金', dataIndex:'commission_b_tax', filtable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("commission_b_tax"),
+			text:'税前佣金', dataIndex:'commission_b_tax', filterable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("commission_b_tax"),
 			renderer: commissionFn
 		}, {
-			text:'税后佣金', dataIndex:'commission_a_tax', filtable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("commission_a_tax"),
+			text:'税后佣金', dataIndex:'commission_a_tax', filterable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("commission_a_tax"),
 			renderer: commissionFn
 		}, {
-			text:'平台费用', dataIndex:'inner_commission', filtable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("inner_commission"),
+			text:'平台费用', dataIndex:'inner_commission', filterable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("inner_commission"),
 			renderer: commissionFn
 		}, {
-			text:'费用', dataIndex:'outer_commission', filtable:true,sortable : true, width:50, style: "text-align:center;",align: 'center',hidden:records[0].get("outer_commission"),
+			text:'费用', dataIndex:'outer_commission', filterable:true,sortable : true, width:50, style: "text-align:center;",align: 'center',hidden:records[0].get("outer_commission"),
 			renderer: commissionFn
 		}, {
-			text:'现结费用', dataIndex:'imm_payment', filtable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("imm_payment"),
+			text:'现结费用', dataIndex:'imm_payment', filterable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("imm_payment"),
 			renderer: commissionFn
 		}]
 	}, {
 		text:'附加信息',columns:[
 		{
-			text:'产品经理', dataIndex:'manager', filtable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("manager")
+			text:'产品经理', dataIndex:'manager', filterable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("manager")
 		}, {
-			text:'渠道公司',dataIndex:'channel_company',filtable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("channel_company")
+			text:'渠道公司',dataIndex:'channel_company',filterable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("channel_company")
 		}, {
-			text:'添加时间',dataIndex:'create_ts',filtable:true,sortable : true, width:80, style: "text-align:center;",align: 'center',renderer:new Ext.util.Format.dateRenderer("Y-m-d")
+			text:'添加时间',dataIndex:'create_ts',filterable:true,sortable : true, width:80, style: "text-align:center;",align: 'center',renderer:new Ext.util.Format.dateRenderer("Y-m-d")
 		}, {
-			text:'打款进度', dataIndex:'countdown', filtable:true,sortable : true, minWidth:200,hidden:records[0].get("countdown"),
+			text:'打款进度', dataIndex:'countdown', filterable:true,sortable : true, minWidth:200,hidden:records[0].get("countdown"),
 			renderer: toolTipFn
 		}, {
-			text:'备注', dataIndex:'remark', filtable:true,sortable : true, minWidth:200,hidden:records[0].get("remark"),
+			text:'备注', dataIndex:'remark', filterable:true,sortable : true, minWidth:200,hidden:records[0].get("remark"),
 			renderer: toolTipFn
 		}]
 	}];
@@ -279,7 +279,7 @@ listControl.load(function(records, operation, success) {
 		  scale:'medium',
 			handler:function(){
 			  fullGridC1.filters.clearFilters();
-			  sampleStoreC1.filterBy( function(record,id){
+			  projAllStore.filterBy( function(record,id){
 				return record.get("sub_category")=="集合信托：上市公司股票质押类" ;
 			  });
 			}
@@ -288,7 +288,7 @@ listControl.load(function(records, operation, success) {
 			scale:'medium',
 			handler:function(){
 			  fullGridC1.filters.clearFilters();
-			  sampleStoreC1.filterBy( function(record,id){
+			  projAllStore.filterBy( function(record,id){
 				return record.get("sub_category")=="集合信托：政府基建类";
 			  });
 			}
@@ -297,7 +297,7 @@ listControl.load(function(records, operation, success) {
 			scale:'medium',
 			handler:function(){
 			  fullGridC1.filters.clearFilters();
-			  sampleStoreC1.filterBy( function(record,id){
+			  projAllStore.filterBy( function(record,id){
 				return record.get("sub_category")=="集合信托：房地产类";
 			  });
 			}
@@ -306,7 +306,7 @@ listControl.load(function(records, operation, success) {
 			scale:'medium',
 			handler:function(){
 			  fullGridC1.filters.clearFilters();
-			  sampleStoreC1.filterBy( function(record,id){
+			  projAllStore.filterBy( function(record,id){
 				return record.get("sub_category")=="集合信托：其他类";
 			  });
 			}
@@ -315,7 +315,7 @@ listControl.load(function(records, operation, success) {
 			scale:'medium',
 			handler:function(){
 			  fullGridC1.filters.clearFilters();
-			  sampleStoreC1.filterBy( function(record,id){
+			  projAllStore.filterBy( function(record,id){
 				return record.get("sub_category")=="集合信托：其他类" ||
 				  record.get("sub_category")=="集合信托：房地产类" ||
 				  record.get("sub_category")=="集合信托：政府基建类" ||
@@ -327,7 +327,7 @@ listControl.load(function(records, operation, success) {
 			scale:'medium',
 			handler:function(){
 			  fullGridC1.filters.clearFilters();
-			  sampleStoreC1.filterBy( function(record,id){
+			  projAllStore.filterBy( function(record,id){
 				return record.get("sub_category")=="私募基金";
 			  });
 			}
@@ -336,7 +336,7 @@ listControl.load(function(records, operation, success) {
 			scale:'medium',
 			handler:function(){
 			  fullGridC1.filters.clearFilters();
-			  sampleStoreC1.filterBy( function(record,id){
+			  projAllStore.filterBy( function(record,id){
 				return record.get("sub_category")=="P2P理财";
 			  });
 			}
@@ -345,8 +345,8 @@ listControl.load(function(records, operation, success) {
 			scale:'medium',
 			handler:function(){
 			  fullGridC1.filters.clearFilters();
-			  sampleStoreC1.filterBy( function(record,id){
-				return record.get("sub_category")=="其他" ;
+			  projAllStore.filterBy( function(record,id){
+				return (record.get("sub_category")=="其他" && record.get("category")=="固定收益类");
 			  });
 			}
 		},'-',{
@@ -354,8 +354,11 @@ listControl.load(function(records, operation, success) {
 			scale:'medium',
 			icon:'/ts/misc/resources/icons/grid.png',
 			handler:function(){
-			  fullGridC1.filters.clearFilters();
-			  sampleStoreC1.load();
+				fullGridC1.filters.clearFilters();
+				projAllStore.load();
+				projAllStore.filterBy( function(record,id){
+					return record.get("category")=="固定收益类" ;
+				});
 			}
 		}     
 		]);
@@ -368,7 +371,7 @@ listControl.load(function(records, operation, success) {
 			scale:'medium',
 			handler:function(){
 			  fullGridC2.filters.clearFilters();
-			  sampleStoreC2.filterBy( function(record,id){
+			  projAllStore.filterBy( function(record,id){
 				return record.get("sub_category")=="债券基金";
 			  });
 			}
@@ -377,7 +380,7 @@ listControl.load(function(records, operation, success) {
 			scale:'medium',
 			handler:function(){
 			  fullGridC2.filters.clearFilters();
-			  sampleStoreC2.filterBy( function(record,id){
+			  projAllStore.filterBy( function(record,id){
 				return record.get("sub_category")=="证券基金";
 			  });
 			}
@@ -386,7 +389,7 @@ listControl.load(function(records, operation, success) {
 			scale:'medium',
 			handler:function(){
 			  fullGridC2.filters.clearFilters();
-			  sampleStoreC2.filterBy( function(record,id){
+			  projAllStore.filterBy( function(record,id){
 				return record.get("sub_category")=="股权基金";
 			  });
 			}
@@ -395,8 +398,8 @@ listControl.load(function(records, operation, success) {
 			scale:'medium',
 			handler:function(){
 			  fullGridC2.filters.clearFilters();
-			  sampleStoreC2.filterBy( function(record,id){
-				return record.get("sub_category")=="其他";
+			  projAllStore.filterBy( function(record,id){
+				return (record.get("sub_category")=="其他" && record.get("category")=="浮动收益类");
 			  });
 			}
 		},'-',{
@@ -404,8 +407,11 @@ listControl.load(function(records, operation, success) {
 			scale:'medium',
 			icon:'/ts/misc/resources/icons/grid.png',
 			handler:function(){
-			  fullGridC2.filters.clearFilters();
-			  sampleStoreC2.load();
+				fullGridC1.filters.clearFilters();
+				projAllStore.load();
+				projAllStore.filterBy( function(record,id){
+					return record.get("category")=="浮动收益类" ;
+				});
 			}
 		}]);
 		Ext.ComponentQuery.query('#projListPanel')[0].add(fullGridC1);
@@ -485,6 +491,7 @@ listControl.load(function(records, operation, success) {
 		});
 		
 		//if(loginname=='admin'){Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);}
+		Ext.ComponentQuery.query('#recommendPanel')[0].items.items[0].collapse();
 	});
 	
 	var viewport = Ext.create('Ext.Viewport', {
@@ -655,7 +662,6 @@ listControl.load(function(records, operation, success) {
 	});
 });
 
-Ext.ComponentQuery.query('#recommendPanel')[0].down('panel').expand();
 
 	window.setInterval(function(){
 		sampleStoreC1.load();

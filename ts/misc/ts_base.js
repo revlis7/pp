@@ -114,23 +114,6 @@ var chManagerList=Ext.create('Ext.data.ArrayStore', {
 	]
 });
 
-var chFixedList=[
-  ['集合信托：上市公司股票质押类','集合信托：上市公司股票质押类'],
-  ['集合信托：政府基建类','集合信托：政府基建类'],
-  ['集合信托：房地产类','集合信托：房地产类'],
-  ['集合信托：其他类','集合信托：其他类'],
-  ['私募基金','私募基金'],
-  ['P2P理财','P2P理财'],
-  ['其他','其他']
-]
-
-var chFloatingList=[
-  ['债券基金','债券基金'],
-  ['证券基金','证券基金'],
-  ['股权基金','股权基金'],
-  ['其他','其他']
-]
-
 var	fileListStore=Ext.create('Ext.data.JsonStore', {
 	fields:	[
 	{name:'id'	,type:'integer'	},
@@ -200,7 +183,7 @@ var	projAllStore=Ext.create('Ext.data.JsonStore', {
  });
 var	filtersCfg = {
 	ftype: 'filters',
-	 autoReload: true, //don't reload automatically
+	autoReload: true, //don't reload automatically
 	local: true, //only	filter locally
 	// filters may be configured through the plugin,
 	// or in the column	definition within the headers configuration
@@ -391,12 +374,12 @@ var recommendStore=Ext.create('Ext.data.ArrayStore', {
 	fields: ['proj_id'],
 	data: [
 	  ['498'],
-	  ['498']
+	  ['499']
 	]
 });
 var generatePanelFn=function(e){
-	e.down('panel#projDetailPanel').add(AmountDetailsGrid).show();
 	e.down('panel#projDetailPanel').add(RecentChangeGrid).show();
+	e.down('panel#projDetailPanel').add(AmountDetailsGrid).show();
 	e.down('panel#projDetailPanel').add(FileListGrid).show();
 	var	foundRecords = projAllStore.query('proj_id',e.proj_id);
 	if(foundRecords.getCount()>0){

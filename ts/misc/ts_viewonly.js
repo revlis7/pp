@@ -435,7 +435,7 @@ listControl.load(function(records, operation, success) {
 						title:"<b>"+r.get("issue")+" "+r.get("name")+"</b>, "+detailString,
 						proj_info_tpl:'',
 						dockedItems:[{
-							dock: 'bottom',
+							dock: 'top',
 							xtype: 'toolbar',
 							scale:'medium',
 							bodyPadding: 5,
@@ -459,7 +459,6 @@ listControl.load(function(records, operation, success) {
 						items:[{
 							itemId:'projDetailPanel',
 							xtype:'panel',
-							margin:'10 10 10 0',
 							region:'center',
 							border:0,
 							layout:{
@@ -470,7 +469,6 @@ listControl.load(function(records, operation, success) {
 						},{
 							itemId:'projInfoPanel',
 							xtype:'panel',
-							margin:'10 0 10 10',
 							region:'west',
 							width:480,
 							title:'项目信息',
@@ -571,7 +569,7 @@ listControl.load(function(records, operation, success) {
 				text:'查看近期结束项目',
 				icon:'/ts/misc/resources/icons/plugin.gif',
 				scale:'medium',
-				itemId:"ListBtn",
+				itemId:"endProjListBtn",
 				handler:function(){
 					this.up('toolbar').down('#recommendBtn').hide();
 					projAllStore.setProxy({
@@ -647,7 +645,7 @@ listControl.load(function(records, operation, success) {
 				title:'',
 				proj_info_tpl:'',
 				dockedItems:[{
-					dock: 'bottom',
+					dock: 'top',
 					xtype: 'toolbar',
 					scale:'medium',
 					bodyPadding: 5,
@@ -671,7 +669,6 @@ listControl.load(function(records, operation, success) {
 				items:[{
 					itemId:'projDetailPanel',
 					xtype:'panel',
-					margin:'10 10 10 0',
 					region:'center',
 					border:0,
 					layout:{
@@ -682,7 +679,6 @@ listControl.load(function(records, operation, success) {
 				},{
 					itemId:'projInfoPanel',
 					xtype:'panel',
-					margin:'10 0 10 10',
 					region:'west',
 					width:480,
 					title:'项目信息',

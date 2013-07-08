@@ -186,8 +186,7 @@ listControl.load(function(records, operation, success) {
 			store: projAllStore,
 			border:0,
 			columnLines: true,
-			//forceFit: true,
-			width:1320,
+			title: '&nbsp;&nbsp;<b>&gt;&gt;&nbsp;固定收益产品&nbsp;&lt;&lt;</b> -- 点击折叠',
 			margin:10,
 			columns: fullGridColumns,
 			viewConfig: {
@@ -207,34 +206,64 @@ listControl.load(function(records, operation, success) {
 			},
 			loadMask: true,
 			features: [filtersCfg],
-			emptyText: '没有匹配的记录'
+			emptyText: '没有匹配的记录',
+			listeners:{
+				beforeexpand:{
+					fn:function(p){
+						p.filters.clearFilters();
+						projAllStore.filterBy( function(record,id){
+							return record.get("category")=="固定收益类" ;
+						});
+						p.setTitle('&nbsp;&nbsp;<b>&gt;&gt;&nbsp;固定收益产品&nbsp;&lt;&lt;</b> -- 点击折叠');
+					},
+					scope:this
+				},
+				beforeCollapse:function(p){
+					p.setTitle('&nbsp;&nbsp;<b>&gt;&gt;&nbsp;固定收益产品&nbsp;&lt;&lt;</b> -- 点击展开');
+				}
+			}
 		});
     	
 		fullGridC2=Ext.create('searchPanel', {
-		  store: projAllStore,
-		  border:0,
-		  width:1320,
-		  margin:10,
-		  columnLines: true,
-		  columns: fullGridColumns,
-		  viewConfig: {
-			stripeRows: true,
-			forceFit:true,
-			sortAscText:'正序',
-			sortDescText:'降序',
-			getRowClass: function(record,rowIndex,rowParams,store){    
-			  var sumVal=0;
-			  for (var i=0;i<rowIndex;i++) {
-				if(store.getAt(i+1).data.name!=store.getAt(i).data.name){
-				  sumVal++;
+			store: projAllStore,
+			border:0,
+			margin:10,
+			columnLines: true,
+			title: '&nbsp;&nbsp;<b>&gt;&gt;&nbsp;固定收益产品&nbsp;&lt;&lt;</b> -- 点击折叠',
+			columns: fullGridColumns,
+			viewConfig: {
+				stripeRows: true,
+				forceFit:true,
+				sortAscText:'正序',
+				sortDescText:'降序',
+				getRowClass: function(record,rowIndex,rowParams,store){    
+					var sumVal=0;
+					for (var i=0;i<rowIndex;i++) {
+						if(store.getAt(i+1).data.name!=store.getAt(i).data.name){
+							sumVal++;
+						}
+					}
+					return (sumVal%2==0) ? 'style_row_proj0':'style_row_proj1';
 				}
-			  }
-			  return (sumVal%2==0) ? 'style_row_proj0':'style_row_proj1';
+			},
+			loadMask: true,
+			features: [filtersCfg],
+			emptyText: '没有匹配的记录'，
+			listeners:{
+				beforeexpand:{
+					fn:function(p){
+						p.filters.clearFilters();
+						projAllStore.filterBy( function(record,id){
+							return record.get("category")=="浮动收益类" ;
+						});
+						p.setTitle('&nbsp;&nbsp;<b>&gt;&gt;&nbsp;浮动收益产品&nbsp;&lt;&lt;</b> -- 点击折叠');
+					},
+					scope:this
+				},
+				beforeCollapse:function(p){
+					p.setTitle('&nbsp;&nbsp;<b>&gt;&gt;&nbsp;浮动收益产品&nbsp;&lt;&lt;</b> -- 点击展开');
+				}
 			}
-		  },
-		  loadMask: true,
-		  features: [filtersCfg],
-		  emptyText: '没有匹配的记录'
 		});
     	
 		fullGridC1.child('toolbar').add([
@@ -626,6 +655,7 @@ listControl.load(function(records, operation, success) {
 	});
 });
 
+Ext.ComponentQuery.query('#recommendPanel')[0].down('panel').expand();
 
 	window.setInterval(function(){
 		sampleStoreC1.load();

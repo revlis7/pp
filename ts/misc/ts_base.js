@@ -250,7 +250,7 @@ var	AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
 	flex:1,
 	emptyText:'暂无额度信息',
 	columns:[
-	{text:'子名称',		 dataIndex:'sub_name', filtable:true, style: "text-align:center;",align: 'center',width:80},
+	{text:'子名称',		 dataIndex:'sub_name', filtable:true, style: "text-align:center;",align: 'center',width:114},
 	{text:'项目期限',	 dataIndex:'month',	filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'个月';}},
 	{text:'认购金额',	 dataIndex:'amount', filtable:true,	style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
 	{text:'项目收益',	 dataIndex:'profit', filtable:true,	style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
@@ -341,7 +341,7 @@ var	FileListGrid=Ext.create('Ext.grid.Panel',{
 			}
 		}]
 	},
-	{text:'文件名',		 dataIndex:'filename',		filtable:true, style: "text-align:center;",align: 'left',width:460},
+	{text:'文件名',		 dataIndex:'filename',		filtable:true, style: "text-align:center;",align: 'left',width:642},
 	{text:'文件大小',		dataIndex:'filesize',	   filtable:true, style: "text-align:center;",align: 'right',width:120,
 		 renderer:function(value,metaData,record,colIndex,store,view) {
 			 if(value>=1048676)	{var v=value/1048576;return	v.toFixed(2)+'MB';}
@@ -383,7 +383,7 @@ var	RecentChangeGrid=Ext.create('Ext.grid.Panel',{
 		}]
 	},
 	{text:'时间',			dataIndex:'addtime',	  filtable:true, style:	"text-align:center;",align:	'left',width:100},
-	{text:'修改信息',		dataIndex:'messages',	   filtable:true, style: "text-align:center;",align: 'right',width:580}
+	{text:'修改信息',		dataIndex:'messages',	   filtable:true, style: "text-align:center;",align: 'right',width:800}
 	]
 });
 

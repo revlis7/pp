@@ -230,7 +230,7 @@ listControl.load(function(records, operation, success) {
 			border:0,
 			margin:10,
 			columnLines: true,
-			title: '&nbsp;&nbsp;<b>&gt;&gt;&nbsp;固定收益产品&nbsp;&lt;&lt;</b> -- 点击折叠',
+			title: '&nbsp;&nbsp;<b>&gt;&gt;&nbsp;浮动收益产品&nbsp;&lt;&lt;</b> -- 点击展开',
 			columns: fullGridColumns,
 			viewConfig: {
 				stripeRows: true,
@@ -434,9 +434,32 @@ listControl.load(function(records, operation, success) {
 						proj_id:r.get("proj_id"),
 						title:"<b>"+r.get("issue")+" "+r.get("name")+"</b>, "+detailString,
 						proj_info_tpl:'',
+						dockedItems:[{
+							dock: 'bottom',
+							xtype: 'toolbar',
+							scale:'medium',
+							bodyPadding: 5,
+							items: [{
+								icon:'/ts/misc/resources/icons/accept.gif',
+								text: '查看完整项目列表',
+								scale:'medium',
+								handler: function() {
+									this.up('panel').down('#projDetailPanel').removeAll(false);
+									Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
+								}
+							},{
+								icon:'/ts/misc/resources/icons/accept.gif',
+								text: '我要预约该项目',
+								scale:'medium',
+								handler: function() {
+									Ext.Msg.alert("提示","该功能尚未开放！");
+								}
+							}]
+						}],
 						items:[{
 							itemId:'projDetailPanel',
 							xtype:'panel',
+							margin:'10 10 10 0',
 							region:'center',
 							border:0,
 							layout:{
@@ -447,6 +470,7 @@ listControl.load(function(records, operation, success) {
 						},{
 							itemId:'projInfoPanel',
 							xtype:'panel',
+							margin:'10 0 10 10',
 							region:'west',
 							width:480,
 							title:'项目信息',
@@ -531,6 +555,16 @@ listControl.load(function(records, operation, success) {
 				scale:'medium',
 				itemId:"ListBtn",
 				handler:function(){
+					this.up('toolbar').down('#recommendBtn').show();
+					projAllStore.setProxy({
+						type: 'ajax',
+						url: '/ts/index.php/proj/view',
+						reader:	{
+							type: 'json',
+							root: 'data'
+						}
+					});
+					projAllStore.load();
 					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
 				}
 			},{
@@ -539,6 +573,16 @@ listControl.load(function(records, operation, success) {
 				scale:'medium',
 				itemId:"ListBtn",
 				handler:function(){
+					this.up('toolbar').down('#recommendBtn').hide();
+					projAllStore.setProxy({
+						type: 'ajax',
+						url: '/ts/index.php/proj/view?r=true',
+						reader:	{
+							type: 'json',
+							root: 'data'
+						}
+					});
+					projAllStore.load();
 					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
 				}
 			},{
@@ -602,9 +646,32 @@ listControl.load(function(records, operation, success) {
 				proj_id:'',
 				title:'',
 				proj_info_tpl:'',
+				dockedItems:[{
+					dock: 'bottom',
+					xtype: 'toolbar',
+					scale:'medium',
+					bodyPadding: 5,
+					items: [{
+						icon:'/ts/misc/resources/icons/accept.gif',
+						text: '返回项目列表',
+						scale:'medium',
+						handler: function() {
+							this.up('panel').down('#projDetailPanel').removeAll(false);
+							Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
+						}
+					},{
+						icon:'/ts/misc/resources/icons/accept.gif',
+						text: '我要预约该项目',
+						scale:'medium',
+						handler: function() {
+							Ext.Msg.alert("提示","该功能尚未开放！");
+						}
+					}]
+				}],
 				items:[{
 					itemId:'projDetailPanel',
 					xtype:'panel',
+					margin:'10 10 10 0',
 					region:'center',
 					border:0,
 					layout:{
@@ -615,6 +682,7 @@ listControl.load(function(records, operation, success) {
 				},{
 					itemId:'projInfoPanel',
 					xtype:'panel',
+					margin:'10 0 10 10',
 					region:'west',
 					width:480,
 					title:'项目信息',

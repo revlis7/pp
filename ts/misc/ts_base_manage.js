@@ -266,9 +266,10 @@ var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
 			tooltip: '删除此条记录',
 			handler: function(grid, rowIndex, colIndex) {
 				var amount=grid.getStore().getAt(rowIndex).get("amount");
+				var profit=grid.getStore().getAt(rowIndex).get("profit");
 				Ext.Msg.show({
 					title:'删除文件',
-					msg: '您是否确认要删除认购金额为 '+amount+' 万？',
+					msg: '您是否确认要删除认购金额为 '+amount+' 万, 收益为 '+profit+' 的条目吗？',
 					buttons: Ext.Msg.OKCANCEL,
 					icon: Ext.Msg.QUESTION,
 					fn:function(buttonId){
@@ -336,54 +337,19 @@ var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
     },
 	{text:'成立日期',	 dataIndex:'found', filtable:true, style: "text-align:center;",align: 'center',width:88,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
 	{text:'税前佣金',	 dataIndex:'commission_b_tax', filtable:true, style: "text-align:center;",align: 'right',width:80,       
-		renderer: function(value,metaData,record,colIndex,store,view) {  
-    		if(value>0){
-    			return value.toFixed(3)+'%';
-    		} else {
-    			metaData.style='color:#8E8E8E';
-    		return 'N/A';
-    		}
-    	}
+		renderer: commissionFn
     },
 	{text:'税后佣金',	 dataIndex:'commission_a_tax', filtable:true, style: "text-align:center;",align: 'right',width:80,       
-		renderer: function(value,metaData,record,colIndex,store,view) {  
-    		if(value>0){
-    			return value.toFixed(3)+'%';
-    		} else {
-    			metaData.style='color:#8E8E8E';
-    		return 'N/A';
-    		}
-    	}
+		renderer: commissionFn
     },
 	{text:'平台费用',	 dataIndex:'inner_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,       
-		renderer: function(value,metaData,record,colIndex,store,view) {  
-    		if(value>0){
-    			return value.toFixed(3)+'%';
-    		} else {
-    			metaData.style='color:#8E8E8E';
-    		return 'N/A';
-    		}
-    	}
+		renderer: commissionFn
     },
 	{text:'费用',		 dataIndex:'outer_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,       
-		renderer: function(value,metaData,record,colIndex,store,view) {  
-    		if(value>0){
-    			return value.toFixed(3)+'%';
-    		} else {
-    			metaData.style='color:#8E8E8E';
-    		return 'N/A';
-    		}
-    	}
+		renderer: commissionFn
     },
 	{text:'现结费用',	 dataIndex:'imm_payment', filtable:true, style: "text-align:center;",align: 'right',width:80,       
-		renderer: function(value,metaData,record,colIndex,store,view) {  
-    		if(value>0){
-    			return value.toFixed(3)+'%';
-    		} else {
-    			metaData.style='color:#8E8E8E';
-    		return 'N/A';
-    		}
-    	}
+		renderer: commissionFn
     },
 	{text:'主销渠道',	 dataIndex:'main_channel', filtable:true, style: "text-align:center;",align: 'center',width:90},
 	{text:'渠道公司',	 dataIndex:'channel_company', filtable:true, style: "text-align:center;",align: 'center',width:90},

@@ -308,10 +308,11 @@ class Proj_model extends CI_Model {
 	function get_all_proj_detail($category_id, $ending_status, $recently = false, $manage_mode = false, $manager = null) {
 		$raw_sql  = 'SELECT proj.id AS proj_id, proj.category, proj.sub_category, ';
 		$raw_sql .= 'proj.issue, proj.name, proj.flow_of_fund, proj.highlights, ';
-		$raw_sql .= 'proj.scale, proj.cycle, proj.profit_property, ';
-		$raw_sql .= 'proj.manager, proj.contract, proj.remark, proj.pay_account, proj.countdown, proj.pdt_status, ';
-		$raw_sql .= 'proj.exclusive, proj.grade, proj.manager_remark, ';
-		$raw_sql .= 'proj_detail.id as proj_detail_id, proj_detail.sub_name, proj_detail.found, proj_detail.total_share, proj_detail.status, ';
+		$raw_sql .= 'proj.scale, proj.cycle, proj.profit_property, proj.manager, ';
+		$raw_sql .= 'proj.contract, proj.remark, proj.pay_account, proj.countdown, ';
+		$raw_sql .= 'proj.pdt_status, proj.exclusive, proj.grade, proj.manager_remark, ';
+		$raw_sql .= 'proj_detail.id as proj_detail_id, proj_detail.sub_name, ';
+		$raw_sql .= 'proj_detail.found, proj_detail.total_share, proj_detail.status, ';
 		$raw_sql .= 'proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, ';
 		$raw_sql .= 'proj_detail.commission_a_tax, proj_detail.inner_commission, ';
 		$raw_sql .= 'proj_detail.outer_commission, proj_detail.imm_payment, ';
@@ -322,22 +323,22 @@ class Proj_model extends CI_Model {
 		$raw_sql .= 'FROM proj ';
 		$raw_sql .= 'LEFT JOIN proj_detail ON proj_detail.proj_id = proj.id ';
 
-		// status条件
+		// status条件 //e
 		if($ending_status >= 1) {
 			$raw_sql .= ' WHERE (proj_detail.status = "结束" OR proj_detail.status IS null) ';
 		} else {
 			$raw_sql .= ' WHERE proj_detail.status <> "结束" ';
 		}
 
-		// category条件
+		// category条件 //c
 		$category_query = '';
 		if($category_id == 1) {
 			$raw_sql .= ' AND proj.category = "固定收益类" ';
-		} else if($category_id == 2){
+		} else if($category_id == 2) {
 			$raw_sql .= ' AND proj.category = "浮动收益类" ';
 		}
 
-		// 最近三个月项目条件
+		// 最近三个月项目条件 //r
 		if($recently) {
 			$raw_sql .= ' AND DATEDIFF(NOW(), proj.update_ts) <= 90 ';
 		}

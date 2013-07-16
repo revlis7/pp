@@ -356,7 +356,7 @@ var generatePanelFn=function(e){
 	e.down('panel#projDetailPanel').add(FileListGrid).show();
 	var	foundRecords = projAllStore.query('proj_id',e.proj_id);
 	if(foundRecords.getCount()>0){
-		var	detailString;
+		var	detailString="";
 		foundRecords.each(function(record){
 			detailString+='<pre>'+record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+':	'+record.get("profit")+'%</pre>';
 		});

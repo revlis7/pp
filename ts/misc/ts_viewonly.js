@@ -1,5 +1,3 @@
-//Ext.require(['Ext.ux.RowExpander']);
-
 Ext.onReady(function() {
   Ext.QuickTips.init();
   var accPanel,fullGridC1,fullGridC2;
@@ -484,16 +482,6 @@ listControl.load(function(records, operation, success) {
 								fn:generatePanelFn,
 								scope:this
 							},
-							beforedeactivate:{
-								fn:generatePanelFn,
-								scope:this
-							},
-							deactivate:{
-								fn:function(e){
-									e.down('panel#projDetailPanel').removeAll(false);
-								},
-								scope:this
-							},
 							hide:{
 								fn:function(e){
 									e.down('panel#projDetailPanel').removeAll(false);
@@ -529,7 +517,7 @@ listControl.load(function(records, operation, success) {
 			height: 40,
 			id:'topMenu',
 			border:0,
-			margin:'0 0 5 0',
+			margin:0,
 			items:[
 			{
 				xtype:'image',
@@ -545,6 +533,16 @@ listControl.load(function(records, operation, success) {
 				scale:'medium',
 				itemId:"recommendBtn",
 				handler:function(){
+					this.up('toolbar').down('#recommendBtn').show();
+					projAllStore.setProxy({
+						type: 'ajax',
+						url: '/ts/index.php/proj/view',
+						reader:	{
+							type: 'json',
+							root: 'data'
+						}
+					});
+					projAllStore.load();
 					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(0);
 				}
 			},{
@@ -574,7 +572,7 @@ listControl.load(function(records, operation, success) {
 					this.up('toolbar').down('#recommendBtn').hide();
 					projAllStore.setProxy({
 						type: 'ajax',
-						url: '/ts/index.php/proj/view?r=true',
+						url: '/ts/index.php/proj/view?r=true&e=1',
 						reader:	{
 							type: 'json',
 							root: 'data'
@@ -651,14 +649,6 @@ listControl.load(function(records, operation, success) {
 					bodyPadding: 5,
 					items: [{
 						icon:'/ts/misc/resources/icons/accept.gif',
-						text: '返回项目列表',
-						scale:'medium',
-						handler: function() {
-							this.up('panel').down('#projDetailPanel').removeAll(false);
-							Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
-						}
-					},{
-						icon:'/ts/misc/resources/icons/accept.gif',
 						text: '我要预约该项目',
 						scale:'medium',
 						handler: function() {
@@ -694,16 +684,6 @@ listControl.load(function(records, operation, success) {
 						fn:generatePanelFn,
 						scope:this
 					},
-					beforedeactivate:{
-						fn:generatePanelFn,
-						scope:this
-					},
-					deactivate:{
-						fn:function(e){
-							e.down('panel#projDetailPanel').removeAll(false);
-						},
-						scope:this
-					},
 					hide:{
 						fn:function(e){
 							e.down('panel#projDetailPanel').removeAll(false);
@@ -737,8 +717,7 @@ listControl.load(function(records, operation, success) {
 
 
 	window.setInterval(function(){
-		sampleStoreC1.load();
-		sampleStoreC2.load();
+		projAllStoreC1.load();
 	},1200000);
 });
 

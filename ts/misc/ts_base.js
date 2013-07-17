@@ -214,7 +214,7 @@ var recentChangeStore=Ext.create('Ext.data.JsonStore', {
 		}
 	}
 });
-var projdetailStore=Ext.create('Ext.data.JsonStore', {
+var projDetailStore=Ext.create('Ext.data.JsonStore', {
 	fields: [
 	{name:'proj_id',type:'integer'},
 	{name:'proj_detail_id',type:'integer'},
@@ -440,15 +440,15 @@ var generatePanelFn=function(e){
 			type: 'json',
 			root: 'data'
 		}
-	}).load();
-	projdetailStore.setProxy({
+	});
+	projDetailStore.setProxy({
 		type: 'ajax',
 		url: '/ts/index.php/proj/detail_view?proj_id='+e.proj_id,
 		reader: {
 			type: 'json',
 			root: 'data'
 		}
-	}).load();
+	});
 	RecentChangeStore.setProxy({
 		type: 'ajax',
 		url: '/ts/index.php/proj/detail_view?proj_id='+e.proj_id,
@@ -456,5 +456,8 @@ var generatePanelFn=function(e){
 			type: 'json',
 			root: 'data'
 		}
-	}).load();
+	});
+	fileListStore.load();
+	projDetailStore.load();
+	RecentChangeStore.load();
 }

@@ -407,9 +407,10 @@ listControl.load(function(records, operation, success) {
 			icon:'/ts/misc/resources/icons/grid.png',
 			handler:function(){
 				fullGridC1.filters.clearFilters();
-				projAllStore.load();
-				projAllStore.filterBy( function(record,id){
-					return record.get("category")=="浮动收益类" ;
+				projAllStore.load(function(){
+					projAllStore.filterBy( function(record,id){
+						return record.get("category")=="浮动收益类" ;
+					});
 				});
 			}
 		}]);
@@ -474,11 +475,11 @@ listControl.load(function(records, operation, success) {
 							autoScroll :true
 						}],
 						listeners:{
-							beforeshow:{
+							show:{
 								fn:generatePanelFn,
 								scope:this
 							},
-							beforeexpand:{
+							expand:{
 								fn:generatePanelFn,
 								scope:this
 							},
@@ -619,7 +620,12 @@ listControl.load(function(records, operation, success) {
 					titleCollapse: true,
 					activeOnTop: true
 				},
-				items:[]
+				items:[],
+				listeners:{
+					activate:function(e){
+						e.down("panel").show();						
+					}
+				}
 			}, {
 				xtype:'panel',
 				id:'projListPanel',
@@ -632,7 +638,12 @@ listControl.load(function(records, operation, success) {
 					titleCollapse: true,
 					activeOnTop: true
 				},
-				items:[]
+				items:[],
+				listeners:{
+					activate:function(e){
+						e.down("panel").show();
+					}
+				}
 			}, {
 				xtype:'panel',
 				id:'projPanel',
@@ -676,21 +687,11 @@ listControl.load(function(records, operation, success) {
 					autoScroll :true
 				}],
 				listeners:{
-					beforeshow:{
+					activate:{
 						fn:generatePanelFn,
 						scope:this
 					},
-					beforeexpand:{
-						fn:generatePanelFn,
-						scope:this
-					},
-					hide:{
-						fn:function(e){
-							e.down('panel#projDetailPanel').removeAll(false);
-						},
-						scope:this
-					},
-					collapse:{
+					deactivate:{
 						fn:function(e){
 							e.down('panel#projDetailPanel').removeAll(false);
 						},

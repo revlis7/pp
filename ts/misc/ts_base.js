@@ -188,15 +188,58 @@ var	projAllStore=Ext.create('Ext.data.JsonStore', {
 	{name:'found' ,type:'date' },
 	{name:'create_ts' ,type:'date',dateFormat:"Y-m-d H:i:s"	}
 ],
- proxy:	{
-	type: 'ajax',
-	url: '/ts/index.php/proj/view',
-	reader:	{
-	 type: 'json',
-	 root: 'data'
+	proxy:	{
+		type: 'ajax',
+		url: '/ts/index.php/proj/view',
+		reader:	{
+			type: 'json',
+			root: 'data'
+		}
 	}
- }
- });
+});
+var recentChangeStore=Ext.create('Ext.data.JsonStore', {
+	fields: [
+	{name:'proj_id',type:'integer'},
+	{name:'msgdate',type:'date'},
+	{name:'message',type:'string'},
+	{name:'last_update',type:'date'},
+	{name:'updater',type:'string'}
+	],
+	proxy: {
+		type: 'ajax',
+		url: '/ts/index.php/proj/detail_view?proj_id=',
+		reader: {
+			type: 'json',
+			root: 'data'
+		}
+	}
+});
+var projdetailStore=Ext.create('Ext.data.JsonStore', {
+	fields: [
+	{name:'proj_id',type:'integer'},
+	{name:'proj_detail_id',type:'integer'},
+	{name:'sub_name',type:'string'},
+	{name:'month',type:'integer'},
+	{name:'total_share',type:'string'},
+	{name:'status',type:'string'},
+	{name:'amount',type:'integer'},
+	{name:'profit',type:'float'},
+	{name:'commission_b_tax',type:'float'},
+	{name:'commission_a_tax',type:'float'},
+	{name:'inner_commission',type:'float'},
+	{name:'outer_commission',type:'float'},
+	{name:'imm_payment',type:'float'},
+	{name:'found',type:'date'}
+	],
+	proxy: {
+		type: 'ajax',
+		url: '/ts/index.php/proj/detail_view?proj_id=',
+		reader: {
+			type: 'json',
+			root: 'data'
+		}
+	}
+});
 var	filtersCfg = {
 	ftype: 'filters',
 	autoReload: true, //don't reload automatically
@@ -241,7 +284,7 @@ var	filtersCfg = {
 };
 
 var	AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
-	store: projAllStore,
+	store: projdetailStore,
 	border:1,
 	title:'额度信息',
 	region:'center',
@@ -293,7 +336,20 @@ var	AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
 	{text:'现结费用',	 dataIndex:'imm_payment', filtable:true, style:	"text-align:center;",align:	'right',width:80,		
 		renderer: commissionFn
 	}
-	]
+	],
+	listener:{
+		added:function(e, c){
+			projdetailStore.setProxy({
+				type: 'ajax',
+				url: '/ts/index.php/proj/detail_view?proj_id='+e.proj_id,
+				reader: {
+					type: 'json',
+					root: 'data'
+				}
+			});
+			projdetailStore.load();
+		}
+	}
 });
 
 var	FileListGrid=Ext.create('Ext.grid.Panel',{
@@ -327,10 +383,23 @@ var	FileListGrid=Ext.create('Ext.grid.Panel',{
 		 }
 	},
 	{text:'文件上传日期',	  dataIndex:'create_ts',	  filtable:true, width:140,style: "text-align:center;",align: 'left',renderer:new Ext.util.Format.dateRenderer("Y-m-d")}
-	]
+	],
+	listener:{
+		added:function(e, c){
+			fileListStore.setProxy({
+				type: 'ajax',
+				url: '/ts/index.php/upload/get_list?proj_id='+e.proj_id,
+				reader:	{
+					type: 'json',
+					root: 'data'
+				}
+			});
+			fileListStore.load();
+		}
+	}
 });
 var	RecentChangeGrid=Ext.create('Ext.grid.Panel',{
-	store: fileListStore,
+	store: recentChangeStore,
 	border:1,
 	title:'最新进展',
 	emptyText:'暂无信息',
@@ -338,9 +407,22 @@ var	RecentChangeGrid=Ext.create('Ext.grid.Panel',{
 	region:'north',
 	flex:1,
 	columns:[
-	{text:'时间',			dataIndex:'addtime',	  filtable:true, style:	"text-align:center;",align:	'left',width:100},
-	{text:'修改信息',		dataIndex:'messages',	   filtable:true, style: "text-align:center;",align: 'right',width:800}
-	]
+	{text:'时间',			dataIndex:'msgdate',	  filtable:true, style:	"text-align:center;",align:	'left',width:100},
+	{text:'最新进展信息',		dataIndex:'message',	   filtable:true, style: "text-align:center;",align: 'right',width:800}
+	],
+	listener:{
+		added:function(e, c){
+			recentChangeStore.setProxy({
+				type: 'ajax',
+				url: '/ts/index.php/upload/get_list?proj_id='+e.proj_id,
+				reader:	{
+					type: 'json',
+					root: 'data'
+				}
+			});
+			fileListStore.load();
+		}
+	}
 });
 
 var recommendStore=Ext.create('Ext.data.ArrayStore', {
@@ -389,19 +471,4 @@ var generatePanelFn=function(e){
 		}]);
 	};
 	e.proj_info_tpl.overwrite(e.down('panel#projInfoPanel').body,foundRecords.getAt(0).data);
-	fileListStore.setProxy({
-		type: 'ajax',
-		url: '/ts/index.php/upload/get_list?proj_id='+e.proj_id,
-		reader:	{
-			type: 'json',
-			root: 'data'
-		}
-	});
-	fileListStore.load();
-	projAllStore.clearFilter(true);
-	projAllStore.filter([{
-		filterFn:function(item)	{
-			return item.get("proj_id") == e.proj_id; 
-		}
-	}]);
 }

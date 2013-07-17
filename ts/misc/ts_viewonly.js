@@ -416,7 +416,7 @@ listControl.load(function(records, operation, success) {
 		}]);
 		Ext.ComponentQuery.query('#projListPanel')[0].add(fullGridC1);
 		Ext.ComponentQuery.query('#projListPanel')[0].add(fullGridC2);
-		Ext.ComponentQuery.query('#projListPanel')[0].({
+		Ext.ComponentQuery.query('#projListPanel')[0].on({
 			activate:{
 				fn:function(e){e.down("pane;").show();},
 				scope:this

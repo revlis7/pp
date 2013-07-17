@@ -416,6 +416,12 @@ listControl.load(function(records, operation, success) {
 		}]);
 		Ext.ComponentQuery.query('#projListPanel')[0].add(fullGridC1);
 		Ext.ComponentQuery.query('#projListPanel')[0].add(fullGridC2);
+		Ext.ComponentQuery.query('#projListPanel')[0].({
+			activate:{
+				fn:function(e){e.down("pane;").show();},
+				scope:this
+			}
+		});
 		
 		recommendStore.load(function(recommendRecords, operation, success) {
 			Ext.Array.forEach(recommendRecords,function(recommendRecord){
@@ -498,12 +504,20 @@ listControl.load(function(records, operation, success) {
 						}
 					});
 					Ext.ComponentQuery.query('#recommendPanel')[0].add(recommendTempPanel);
+					Ext.ComponentQuery.query('#recommendPanel')[0].on({
+						activate:{
+							fn:function(e){e.down("pane;").show();},
+							scope:this
+						}
+					});
 				}
 			});
+			
+			Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(0);
 		});
 		
 		//if(loginname=='admin'){Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);}
-		Ext.ComponentQuery.query('#recommendPanel')[0].items.items[0].collapse();
+		//Ext.ComponentQuery.query('#recommendPanel')[0].items.items[0].collapse();
 	});
 	
 	var viewport = Ext.create('Ext.Viewport', {
@@ -620,12 +634,7 @@ listControl.load(function(records, operation, success) {
 					titleCollapse: true,
 					activeOnTop: true
 				},
-				items:[],
-				listeners:{
-					activate:function(e){
-						e.down("panel").show();						
-					}
-				}
+				items:[]
 			}, {
 				xtype:'panel',
 				id:'projListPanel',
@@ -638,12 +647,7 @@ listControl.load(function(records, operation, success) {
 					titleCollapse: true,
 					activeOnTop: true
 				},
-				items:[],
-				listeners:{
-					activate:function(e){
-						e.down("panel").show();
-					}
-				}
+				items:[]
 			}, {
 				xtype:'panel',
 				id:'projPanel',
@@ -717,9 +721,6 @@ listControl.load(function(records, operation, success) {
 });
 
 
-	window.setInterval(function(){
-		projAllStoreC1.load();
-	},1200000);
 });
 
  

@@ -449,7 +449,7 @@ var generatePanelFn=function(e){
 			root: 'data'
 		}
 	});
-	RecentChangeStore.setProxy({
+	recentChangeStore.setProxy({
 		type: 'ajax',
 		url: '/ts/index.php/proj/detail_view?proj_id='+e.proj_id,
 		reader: {
@@ -459,5 +459,5 @@ var generatePanelFn=function(e){
 	});
 	fileListStore.load();
 	projDetailStore.load();
-	RecentChangeStore.load();
+	recentChangeStore.load();
 }

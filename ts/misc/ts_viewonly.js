@@ -49,10 +49,6 @@ Ext.onReady(function() {
 		  type: 'json',
 		  root: 'data'
 	  }
-	},
-	listener:{
-		datachanged:function(){
-		}
 	}
   });
   
@@ -419,7 +415,19 @@ listControl.load(function(records, operation, success) {
 		Ext.ComponentQuery.query('#projListPanel')[0].on({
 			activate:{
 				fn:function(e){
-					e.down("panel").expand();
+					if(e.down("panel").collapsed=false) {
+						projAllStore.load(function(){
+							projAllStore.filterBy(filterBy( function(record,id){
+								return record.get("category")=="固定收益类" ;
+							});
+						});
+					} else {
+						projAllStore.load(function(){
+							projAllStore.filterBy(filterBy( function(record,id){
+								return record.get("category")=="浮动收益类" ;
+							});
+						});
+					}
 				},
 				scope:this
 			}
@@ -476,7 +484,7 @@ listControl.load(function(records, operation, success) {
 							autoScroll :true
 						}],
 						listeners:{
-							expand:{
+							beforeexpand:{
 								fn:generatePanelFn,
 								scope:this
 							},
@@ -492,7 +500,11 @@ listControl.load(function(records, operation, success) {
 					Ext.ComponentQuery.query('#recommendPanel')[0].on({
 						activate:{
 							fn:function(e){
-								e.down("panel").expand();
+								if(e.down("panel").collapsed=false) {
+									generatePanelFn(e.down("panel"));
+								} else {
+									e.down("panel").expand();
+								}
 							},
 							scope:this
 						}
@@ -678,7 +690,7 @@ listControl.load(function(records, operation, success) {
 					autoScroll :true
 				}],
 				listeners:{
-					activate:{
+					beforeactivate:{
 						fn:generatePanelFn,
 						scope:this
 					},

@@ -284,7 +284,7 @@ var	filtersCfg = {
 };
 
 var	AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
-	store: projdetailStore,
+	store: projDetailStore,
 	border:1,
 	title:'额度信息',
 	region:'center',

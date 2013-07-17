@@ -418,7 +418,9 @@ listControl.load(function(records, operation, success) {
 		Ext.ComponentQuery.query('#projListPanel')[0].add(fullGridC2);
 		Ext.ComponentQuery.query('#projListPanel')[0].on({
 			activate:{
-				fn:function(e){e.down("panel").show();},
+				fn:function(e){
+					e.down("panel").expand();
+				},
 				scope:this
 			}
 		});
@@ -446,14 +448,6 @@ listControl.load(function(records, operation, success) {
 							bodyPadding: 5,
 							items: [{
 								icon:'/ts/misc/resources/icons/accept.gif',
-								text: '查看完整项目列表',
-								scale:'medium',
-								handler: function() {
-									this.up('panel').down('#projDetailPanel').removeAll(false);
-									Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
-								}
-							},{
-								icon:'/ts/misc/resources/icons/accept.gif',
 								text: '我要预约该项目',
 								scale:'medium',
 								handler: function() {
@@ -466,6 +460,7 @@ listControl.load(function(records, operation, success) {
 							xtype:'panel',
 							region:'center',
 							border:0,
+							autoScroll :true,
 							layout:{
 								type:'vbox',
 								align:'stretch'
@@ -481,18 +476,8 @@ listControl.load(function(records, operation, success) {
 							autoScroll :true
 						}],
 						listeners:{
-							show:{
-								fn:generatePanelFn,
-								scope:this
-							},
 							expand:{
 								fn:generatePanelFn,
-								scope:this
-							},
-							hide:{
-								fn:function(e){
-									e.down('panel#projDetailPanel').removeAll(false);
-								},
 								scope:this
 							},
 							collapse:{
@@ -506,7 +491,9 @@ listControl.load(function(records, operation, success) {
 					Ext.ComponentQuery.query('#recommendPanel')[0].add(recommendTempPanel);
 					Ext.ComponentQuery.query('#recommendPanel')[0].on({
 						activate:{
-							fn:function(e){e.down("panel").show();},
+							fn:function(e){
+								e.down("panel").expand();
+							},
 							scope:this
 						}
 					});

@@ -336,20 +336,7 @@ var	AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
 	{text:'现结费用',	 dataIndex:'imm_payment', filtable:true, style:	"text-align:center;",align:	'right',width:80,		
 		renderer: commissionFn
 	}
-	],
-	listener:{
-		added:function(e, c){
-			projdetailStore.setProxy({
-				type: 'ajax',
-				url: '/ts/index.php/proj/detail_view?proj_id='+e.proj_id,
-				reader: {
-					type: 'json',
-					root: 'data'
-				}
-			});
-			projdetailStore.load();
-		}
-	}
+	]
 });
 
 var	FileListGrid=Ext.create('Ext.grid.Panel',{
@@ -383,20 +370,7 @@ var	FileListGrid=Ext.create('Ext.grid.Panel',{
 		 }
 	},
 	{text:'文件上传日期',	  dataIndex:'create_ts',	  filtable:true, width:140,style: "text-align:center;",align: 'left',renderer:new Ext.util.Format.dateRenderer("Y-m-d")}
-	],
-	listener:{
-		added:function(e, c){
-			fileListStore.setProxy({
-				type: 'ajax',
-				url: '/ts/index.php/upload/get_list?proj_id='+e.proj_id,
-				reader:	{
-					type: 'json',
-					root: 'data'
-				}
-			});
-			fileListStore.load();
-		}
-	}
+	]
 });
 var	RecentChangeGrid=Ext.create('Ext.grid.Panel',{
 	store: recentChangeStore,
@@ -409,20 +383,7 @@ var	RecentChangeGrid=Ext.create('Ext.grid.Panel',{
 	columns:[
 	{text:'时间',			dataIndex:'msgdate',	  filtable:true, style:	"text-align:center;",align:	'left',width:100},
 	{text:'最新进展信息',		dataIndex:'message',	   filtable:true, style: "text-align:center;",align: 'right',width:800}
-	],
-	listener:{
-		added:function(e, c){
-			recentChangeStore.setProxy({
-				type: 'ajax',
-				url: '/ts/index.php/upload/get_list?proj_id='+e.proj_id,
-				reader:	{
-					type: 'json',
-					root: 'data'
-				}
-			});
-			fileListStore.load();
-		}
-	}
+	]
 });
 
 var recommendStore=Ext.create('Ext.data.ArrayStore', {
@@ -471,4 +432,29 @@ var generatePanelFn=function(e){
 		}]);
 	};
 	e.proj_info_tpl.overwrite(e.down('panel#projInfoPanel').body,foundRecords.getAt(0).data);
+	
+	fileListStore.setProxy({
+		type: 'ajax',
+		url: '/ts/index.php/upload/get_list?proj_id='+e.proj_id,
+		reader:	{
+			type: 'json',
+			root: 'data'
+		}
+	}).load();
+	projdetailStore.setProxy({
+		type: 'ajax',
+		url: '/ts/index.php/proj/detail_view?proj_id='+e.proj_id,
+		reader: {
+			type: 'json',
+			root: 'data'
+		}
+	}).load();
+	RecentChangeStore.setProxy({
+		type: 'ajax',
+		url: '/ts/index.php/proj/detail_view?proj_id='+e.proj_id,
+		reader: {
+			type: 'json',
+			root: 'data'
+		}
+	}).load();
 }

@@ -479,12 +479,8 @@ listControl.load(function(records, operation, success) {
 					Ext.ComponentQuery.query('#recommendPanel')[0].add(recommendTempPanel);
 				}
 			});
-			
-			Ext.ComponentQuery.query('#recommendBtn')[0].toggle();
+			Ext.ComponentQuery.query('#recommendPanel')[0].items.items[0].collapse();
 		});
-		
-		//if(loginname=='admin'){Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);}
-		//Ext.ComponentQuery.query('#recommendPanel')[0].items.items[0].collapse();
 	});
 	
 	var viewport = Ext.create('Ext.Viewport', {

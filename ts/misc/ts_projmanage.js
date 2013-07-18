@@ -66,23 +66,24 @@ Ext.onReady(function() {
 listControl.load(function(records, operation, success) {
 	var fullGridColumns=[
 	{
-		xtype: 'actioncolumn',
-		text:'编辑',
-		width:36,style: "text-align:center;",align: 'center',
-		sortable: false,
-		items: [{
-			icon: '/ts/misc/resources/icons/cog_edit.png',
-			tooltip: '编辑此条记录',
-			handler: function(grid, rowIndex, colIndex) {
-				//sampleStore.removeAt(rowIndex);      
-				var proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
-				window.open('/ts/index.php/proj/update?proj_id='+proj_id);
-			}
-		}]
-	},{
-		text:'项目编号', dataIndex:'proj_id', filterable:true, width:60,style: "text-align:center;",align: 'center',
+		text:'项目<br>编号', dataIndex:'proj_id', filterable:true, width:50,style: "text-align:center;",align: 'center',
 	}, {
 		text:'proj_detail_id', dataIndex:'proj_detail_id', filterable:true, width:100,hidden:true
+	}, {
+		text:'项目状态', dataIndex:'pdt_status', filterable:true, width:100,hidden:false,
+		renderer:function(value,metaData,record,rowIndex,colIndex,store,view) { 
+			if(value=="申请中"){
+				metaData.style='background:#003366;color:#000000'；
+				return value;
+			} else if(value=="上线通过"){
+				metaData.style='background:#FFFF99;color:#000000'
+				return "已上线";
+			} else if(value=="上线驳回"){
+				metaData.style='background:#DFDFDF;color:#606060;'；
+				return value;
+			} else {
+				return value;
+		}
 	}, {
 		text:'产品信息',columns:[
 		{
@@ -95,18 +96,19 @@ listControl.load(function(records, operation, success) {
 			}
 		}, {
 			xtype: 'actioncolumn',
-			width:60,style: "text-align:center;",align: 'center', 
+			text:'编辑',
+			width:36,style: "text-align:center;",align: 'center',
 			sortable: false,
 			items: [{
-				icon: '/ts/misc/resources/icons/search.png',
-				tooltip: '查看该项目的详细信息',
+				icon: '/ts/misc/resources/icons/cog_edit.png',
+				tooltip: '编辑此条记录',
 				handler: function(grid, rowIndex, colIndex) {
-					Ext.ComponentQuery.query('#projPanel')[0].proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
-					Ext.ComponentQuery.query('#projPanel')[0].setTitle(grid.getStore().getAt(rowIndex).get("issue")+" "+grid.getStore().getAt(rowIndex).get("name"))
-					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);
+					//sampleStore.removeAt(rowIndex);      
+					var proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
+					window.open('/ts/index.php/proj/update?proj_id='+proj_id);
 				}
-          }]
-        }, {
+			}]
+		}, {
 			text:'类别', dataIndex:'sub_category', filterable:true,sortable : true, width:150,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_category"),
 			renderer: toolTipFn
 		}, {

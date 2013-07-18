@@ -11,15 +11,15 @@ Ext.require([
 var gradeFn=function(value) { 
 	var res;
 	if(value=="五星级"){
-		res= '<span style="color:#29bded">★★★★★</span>'
+		res= '<span style="color:#003366">★★★★★</span>'
 	} else if (value=="四星级"){
-		res= '<span style="color:#29bded">★★★★</span>'
+		res= '<span style="color:#003366">★★★★</span>'
 	} else if (value=="三星级"){
-		res= '<span style="color:#29bded">★★★</span>'
+		res= '<span style="color:#003366">★★★</span>'
 	} else if (value=="二星级"){
-		res= '<span style="color:#29bded">★★</span>'
+		res= '<span style="color:#003366">★★</span>'
 	} else if (value=="一星级"){
-		res= '<span style="color:#29bded">★</span>'
+		res= '<span style="color:#003366">★</span>'
 	}
 	return res;
 };
@@ -160,6 +160,69 @@ var	fileListStore=Ext.create('Ext.data.JsonStore', {
 		}
 	}
 });
+var projDetailStore=Ext.create('Ext.data.JsonStore', {
+	fields: [
+	{name:'proj_id',type:'integer'},
+	{name:'proj_detail_id',type:'integer'},
+	{name:'sub_name',type:'string'},
+	{name:'month',type:'integer'},
+	{name:'total_share',type:'string'},
+	{name:'status',type:'string'},
+	{name:'amount',type:'integer'},
+	{name:'profit',type:'float'},
+	{name:'commission_b_tax',type:'float'},
+	{name:'commission_a_tax',type:'float'},
+	{name:'inner_commission',type:'float'},
+	{name:'outer_commission',type:'float'},
+	{name:'imm_payment',type:'float'},
+	{name:'found',type:'date'},
+	{name:'main_channel',type:'string'},
+	{name:'channel_company',type:'string'},
+	{name:'channel_contact',type:'string'},
+	{name:'billing_company',type:'string'}
+	],
+	proxy: {
+		type: 'ajax',
+		url: '/ts/index.php/proj/detail_view?proj_id='+params.proj_id,
+		reader: {
+			type: 'json',
+			root: 'data'
+		}
+	}
+});
+var projStore=Ext.create('Ext.data.JsonStore', {
+	fields: [
+	{name:'proj_id',type:'integer'},
+	{name:'category',type:'string'},
+	{name:'sub_category',type:'string'},
+	{name:'exclusive',type:'string'},
+	{name:'issue',type:'string'},
+	{name:'name',type:'string'},
+	{name:'flow_of_fund',type:'string'},
+	{name:'highlights',type:'string'},
+	{name:'scale',type:'float'},
+	{name:'cycle',type:'string'},
+	{name:'profit_property',type:'string'},
+	{name:'manager',type:'string'},
+	{name:'contract',type:'string'},
+	{name:'remark',type:'string'},
+	{name:'pay_account',type:'string'},
+	{name:'countdown',type:'string'},
+	{name:'exclusive',type:'string'},
+	{name:'grade',type:'string'},
+	{name:'manager_remark',type:'string'},
+	{name:'create_ts',type:'date',dateFormat:"Y-m-d H:i:s"},
+	{name:'pdt_status',type:'string'}
+	],
+	proxy: {
+		type: 'ajax',
+		url: '/ts/index.php/proj/proj_get?proj_id='+params.proj_id,
+		reader: {
+			type: 'json',
+			root: 'data'
+		}
+	}
+});
 var	projAllStore=Ext.create('Ext.data.JsonStore', {
  fields: [
 	{name:'proj_id'	,type:'integer'	},
@@ -192,7 +255,8 @@ var	projAllStore=Ext.create('Ext.data.JsonStore', {
 	{name:'outer_commission' ,type:'float' },
 	{name:'imm_payment'	,type:'float' },
 	{name:'found' ,type:'date' },
-	{name:'create_ts' ,type:'date',dateFormat:"Y-m-d H:i:s"	}
+	{name:'create_ts' ,type:'date',dateFormat:"Y-m-d H:i:s"	},
+	{name:'pdt_status',type:'string'}
 ],
  proxy:	{
 	type: 'ajax',

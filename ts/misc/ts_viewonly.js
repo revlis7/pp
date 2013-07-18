@@ -81,8 +81,9 @@ listControl.load(function(records, operation, success) {
 				icon: '/ts/misc/resources/icons/search.png',
 				tooltip: '查看该项目的详细信息',
 				handler: function(grid, rowIndex, colIndex) {
-					Ext.ComponentQuery.query('#projPanel')[0].proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
-					Ext.ComponentQuery.query('#projPanel')[0].setTitle(grid.getStore().getAt(rowIndex).get("issue")+" "+grid.getStore().getAt(rowIndex).get("name"))
+					e=Ext.ComponentQuery.query('#projPanel')[0];
+					e.proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
+					e.setTitle(grid.getStore().getAt(rowIndex).get("issue")+" "+grid.getStore().getAt(rowIndex).get("name"))
 					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);
 				}
           }]

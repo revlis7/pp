@@ -11,15 +11,15 @@ Ext.require([
 var gradeFn=function(value) { 
 	var res;
 	if(value=="五星级"){
-		res= '<span style="color:#29bded">★★★★★</span>'
+		res= '<span style="color:#003366">★★★★★</span>'
 	} else if (value=="四星级"){
-		res= '<span style="color:#29bded">★★★★</span>'
+		res= '<span style="color:#003366">★★★★</span>'
 	} else if (value=="三星级"){
-		res= '<span style="color:#29bded">★★★</span>'
+		res= '<span style="color:#003366">★★★</span>'
 	} else if (value=="二星级"){
-		res= '<span style="color:#29bded">★★</span>'
+		res= '<span style="color:#003366">★★</span>'
 	} else if (value=="一星级"){
-		res= '<span style="color:#29bded">★</span>'
+		res= '<span style="color:#003366">★</span>'
 	}
 	return res;
 };

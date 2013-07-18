@@ -417,13 +417,13 @@ listControl.load(function(records, operation, success) {
 				fn:function(e){
 					if(e.down("panel").collapsed == false) {
 						projAllStore.load(function(){
-							projAllStore.filterBy(filterBy( function(record,id){
+							projAllStore.filterBy(function(record,id){
 								return record.get("category")=="固定收益类" ;
 							});
 						});
 					} else {
 						projAllStore.load(function(){
-							projAllStore.filterBy(filterBy( function(record,id){
+							projAllStore.filterBy(function(record,id){
 								return record.get("category")=="浮动收益类" ;
 							});
 						});

@@ -745,23 +745,25 @@ Ext.onReady(function() {
 				cusGrade:gradeFn
 			}
 			]);
-			proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
+			
+			var firstRec=projStore.getAt(0);
+			proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,firstRec.data);
 			//proj_info_window.show();
+			if(firstRec.get("pdt_status")=="上线通过" || firstRec.get("pdt_status")=="申请中"){
+				Ext.getCmp('BtnPdtApply').hide();
+			} else {
+				Ext.getCmp('BtnPdtApply').show();
+			}
+			Ext.Ajax.request({
+		    	url: '/ts/index.php/proj/proj_operate_privilege',
+				success: function(response){
+					if (firstRec.get("pdt_status")=="申请中") {
+						Ext.getCmp('BtnPdtAccept').show();
+						Ext.getCmp('BtnPdtRefuse').show();
+					}
+			    }
+			});
 		});		
-		if(records[0].get("pdt_status")=="上线通过" || records[0].get("pdt_status")=="申请中"){
-			Ext.getCmp('BtnPdtApply').hide();
-		} else {
-			Ext.getCmp('BtnPdtApply').show();
-		}
-		Ext.Ajax.request({
-	    	url: '/ts/index.php/proj/proj_operate_privilege',
-			success: function(response){
-				if (records[0].get("pdt_status")=="申请中") {
-					Ext.getCmp('BtnPdtAccept').show();
-					Ext.getCmp('BtnPdtRefuse').show();
-				}
-		    }
-		});
 	});
 
 	fileListStore.load();

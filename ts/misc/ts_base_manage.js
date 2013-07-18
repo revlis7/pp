@@ -247,7 +247,7 @@ var	filtersCfg = {
 };
 
 var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
-	store: projdetailStore,
+	store: projDetailStore,
 	border:1,
 	title:'额度信息',
 	region:'south',
@@ -281,7 +281,7 @@ var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
 								submitEmptyText: false,
 								waitMsg: 'Saving Data...',
 								success: function(form, action) {
-									projdetailStore.removeAt(rowIndex);
+									projDetailStore.removeAt(rowIndex);
 								} ,
 								failure: function(form, action) {
 									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');

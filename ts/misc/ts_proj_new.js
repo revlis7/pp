@@ -64,7 +64,7 @@ Ext.onReady(function() {
 											root: 'data'
 									}
 								});
-								projdetailStore.setProxy({
+								projDetailStore.setProxy({
 									type: 'ajax',
 									url: '/ts/index.php/proj/detail_view?proj_id='+proj_id,
 									reader: {
@@ -82,7 +82,7 @@ Ext.onReady(function() {
 								});
 								fileListStore.load();
 								projStore.load(function(records, operation, success) {
-									projdetailStore.load(function(records, operation, success) {
+									projDetailStore.load(function(records, operation, success) {
 										var detailString="";
 										//ProjInfoForm.getForm().loadRecord(records[0]);
 										Ext.Array.forEach(records,function(record){
@@ -173,7 +173,7 @@ Ext.onReady(function() {
 							success: function(form, action) {
 								ProjWin.close();
 								projStore.load(function(records, operation, success) {
-									projdetailStore.load(function(records, operation, success) {
+									projDetailStore.load(function(records, operation, success) {
 										var detailString="";
 										//ProjInfoForm.getForm().loadRecord(records[0]);
 										Ext.Array.forEach(records,function(record){
@@ -504,7 +504,7 @@ Ext.onReady(function() {
 							waitMsg: 'Saving Data...',
 							success: function(form, action) {
 								AmountEditWin.hide();
-								projdetailStore.load();
+								projDetailStore.load();
 							}
 							//,
 							//failure: function(form, action) {

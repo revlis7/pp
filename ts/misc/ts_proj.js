@@ -317,7 +317,7 @@ Ext.onReady(function() {
 							waitMsg: 'Saving Data...',
 							success: function(form, action) {
 								AmountEditWin.hide();
-								projdetailStore.load();
+								projDetailStore.load();
 							}
 							//,
 							//failure: function(form, action) {
@@ -707,7 +707,7 @@ Ext.onReady(function() {
 		}]
 	});
 	projStore.load(function(records, operation, success) {
-		projdetailStore.load(function(records, operation, success) {
+		projDetailStore.load(function(records, operation, success) {
 			var detailString="";
 			//ProjInfoForm.getForm().loadRecord(records[0]);
 			Ext.Array.forEach(records,function(record){

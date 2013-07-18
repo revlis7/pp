@@ -480,7 +480,7 @@ listControl.load(function(records, operation, success) {
 				}
 			});
 			
-			Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(0);
+			Ext.ComponentQuery.query('#recommendBtn')[0].toggle();
 		});
 		
 		//if(loginname=='admin'){Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);}

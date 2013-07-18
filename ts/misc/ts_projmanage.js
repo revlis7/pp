@@ -83,6 +83,7 @@ listControl.load(function(records, operation, success) {
 				return value;
 			} else {
 				return value;
+			}
 		}
 	}, {
 		text:'产品信息',columns:[

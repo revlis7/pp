@@ -534,7 +534,6 @@ listControl.load(function(records, operation, success) {
 							});
 						});
 					}
-					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
 				}
 			},{
 				text:'个人信息：'+loginname,

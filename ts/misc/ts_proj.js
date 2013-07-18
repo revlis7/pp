@@ -3,7 +3,30 @@ Ext.onReady(function() {
 	
 	var params=Ext.Object.fromQueryString(location.search.substring(1));
 	var proj_info_tpl;
-	
+	fileListStore.setProxy({
+		type: 'ajax',
+		url: '/ts/index.php/upload/get_list?proj_id='+params.proj_id,
+		reader:	{
+			type: 'json',
+			root: 'data'
+		}
+	});
+	projDetailStore.setProxy({
+		type: 'ajax',
+		url: '/ts/index.php/proj/detail_view?proj_id='+params.proj_id,
+		reader: {
+			type: 'json',
+			root: 'data'
+		}
+	});
+	projStore.setProxy({
+		type: 'ajax',
+		url: '/ts/index.php/proj/proj_get?proj_id='+params.proj_id,
+		reader: {
+			type: 'json',
+			root: 'data'
+		}
+	});
 	var ProjWin=Ext.create("Ext.window.Window",{
 		resizeable:false,
 		closeAction:"hide",

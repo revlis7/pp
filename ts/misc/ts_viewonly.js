@@ -415,7 +415,7 @@ listControl.load(function(records, operation, success) {
 		Ext.ComponentQuery.query('#projListPanel')[0].on({
 			activate:{
 				fn:function(e){
-					if(e.down("panel").collapsed=false) {
+					if(e.down("panel").collapsed == false) {
 						projAllStore.load(function(){
 							projAllStore.filterBy(filterBy( function(record,id){
 								return record.get("category")=="固定收益类" ;
@@ -500,7 +500,7 @@ listControl.load(function(records, operation, success) {
 					Ext.ComponentQuery.query('#recommendPanel')[0].on({
 						activate:{
 							fn:function(e){
-								if(e.down("panel").collapsed=false) {
+								if(e.down("panel").collapsed == false) {
 									generatePanelFn(e.down("panel"));
 								} else {
 									e.down("panel").expand();

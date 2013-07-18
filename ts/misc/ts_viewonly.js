@@ -412,26 +412,6 @@ listControl.load(function(records, operation, success) {
 		}]);
 		Ext.ComponentQuery.query('#projListPanel')[0].add(fullGridC1);
 		Ext.ComponentQuery.query('#projListPanel')[0].add(fullGridC2);
-		Ext.ComponentQuery.query('#projListPanel')[0].on({
-			activate:{
-				fn:function(e){
-					if(e.down("panel").collapsed == false) {
-						projAllStore.load(function(){
-							projAllStore.filterBy(function(record,id){
-								return record.get("category")=="固定收益类" ;
-							});
-						});
-					} else {
-						projAllStore.load(function(){
-							projAllStore.filterBy(function(record,id){
-								return record.get("category")=="浮动收益类" ;
-							});
-						});
-					}
-				},
-				scope:this
-			}
-		});
 		
 		recommendStore.load(function(recommendRecords, operation, success) {
 			Ext.Array.forEach(recommendRecords,function(recommendRecord){
@@ -497,18 +477,6 @@ listControl.load(function(records, operation, success) {
 						}
 					});
 					Ext.ComponentQuery.query('#recommendPanel')[0].add(recommendTempPanel);
-					Ext.ComponentQuery.query('#recommendPanel')[0].on({
-						activate:{
-							fn:function(e){
-								if(e.down("panel").collapsed == false) {
-									generatePanelFn(e.down("panel"));
-								} else {
-									e.down("panel").expand();
-								}
-							},
-							scope:this
-						}
-					});
 				}
 			});
 			
@@ -547,7 +515,6 @@ listControl.load(function(records, operation, success) {
 				scale:'medium',
 				itemId:"recommendBtn",
 				handler:function(){
-					this.up('toolbar').down('#recommendBtn').show();
 					projAllStore.setProxy({
 						type: 'ajax',
 						url: '/ts/index.php/proj/view',
@@ -556,7 +523,80 @@ listControl.load(function(records, operation, success) {
 							root: 'data'
 						}
 					});
-					projAllStore.load();
+					projAllStore.load(function(){
+						var recP=Ext.ComponentQuery.query('#recommendPanel')[0];
+						if(recP.down("panel").collapsed == false) {
+							var e=recP.down("panel");
+							fileListStore.setProxy({
+								type: 'ajax',
+								url: '/ts/index.php/upload/get_list?proj_id='+e.proj_id,
+								reader:	{
+									type: 'json',
+									root: 'data'
+								}
+							});
+							projDetailStore.setProxy({
+								type: 'ajax',
+								url: '/ts/index.php/proj/detail_view?proj_id='+e.proj_id,
+								reader: {
+									type: 'json',
+									root: 'data'
+								}
+							});
+							recentChangeStore.setProxy({
+								type: 'ajax',
+								url: '/ts/index.php/proj/detail_view?proj_id='+e.proj_id,
+								reader: {
+									type: 'json',
+								root: 'data'
+								}
+							});
+							fileListStore.load();
+							projDetailStore.load();
+							recentChangeStore.load();
+							e.down('panel#projDetailPanel').add(RecentChangeGrid).show();
+							e.down('panel#projDetailPanel').add(AmountDetailsGrid).show();
+							e.down('panel#projDetailPanel').add(FileListGrid).show();
+							var	foundRecords = projAllStore.query('proj_id',e.proj_id);
+							if(foundRecords.getCount()>0){
+								var	detailString="";
+								foundRecords.each(function(record){
+									detailString+='<pre>'+record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+':	'+record.get("profit")+'%</pre>';
+								});
+								e.proj_info_tpl = Ext.create('Ext.XTemplate',[
+								'<table	style="border-collapse:collapse;"><tr><td style="padding:20px;border:1px;"><table style="border-collapse:collapse;">',
+								'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}, {exclusive}</pre></td></tr>',
+								'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
+								'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
+								<tr><td class="r_ex_td_pre"><b>项目评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
+								'<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
+								detailString, '</td></tr>',
+								'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
+								'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
+								'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
+								'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
+								'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
+								'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
+								'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
+								'</table></td></tr></table>',
+								{
+									cusDate:function(d){
+										return Ext.Date.format(d,'Y年m月d日');
+									}
+								},{
+									cusNum:function(n){
+										return (n<1)?(n*10000+"万"):(n+"亿")
+									}
+								},{
+									cusGrade:gradeFn
+								}]);
+							};
+							e.proj_info_tpl.overwrite(e.down('panel#projInfoPanel').body,foundRecords.getAt(0).data);
+						} else {
+							recP.down("panel").expand();
+						}
+					});
+						
 					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(0);
 				}
 			},{
@@ -565,7 +605,6 @@ listControl.load(function(records, operation, success) {
 				scale:'medium',
 				itemId:"ListBtn",
 				handler:function(){
-					this.up('toolbar').down('#recommendBtn').show();
 					projAllStore.setProxy({
 						type: 'ajax',
 						url: '/ts/index.php/proj/view',
@@ -574,7 +613,20 @@ listControl.load(function(records, operation, success) {
 							root: 'data'
 						}
 					});
-					projAllStore.load();
+					var e=Ext.ComponentQuery.query('#projListPanel')[0];
+					if(e.down("panel").collapsed == false) {
+						projAllStore.load(function(){
+							projAllStore.filterBy(function(record,id){
+								return record.get("category")=="固定收益类" ;
+							});
+						});
+					} else {
+						projAllStore.load(function(){
+							projAllStore.filterBy(function(record,id){
+								return record.get("category")=="浮动收益类" ;
+							});
+						});
+					}
 					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
 				}
 			},{
@@ -583,7 +635,6 @@ listControl.load(function(records, operation, success) {
 				scale:'medium',
 				itemId:"endProjListBtn",
 				handler:function(){
-					this.up('toolbar').down('#recommendBtn').hide();
 					projAllStore.setProxy({
 						type: 'ajax',
 						url: '/ts/index.php/proj/view?r=true&e=1',
@@ -592,7 +643,20 @@ listControl.load(function(records, operation, success) {
 							root: 'data'
 						}
 					});
-					projAllStore.load();
+					var e=Ext.ComponentQuery.query('#projListPanel')[0];
+					if(e.down("panel").collapsed == false) {
+						projAllStore.load(function(){
+							projAllStore.filterBy(function(record,id){
+								return record.get("category")=="固定收益类" ;
+							});
+						});
+					} else {
+						projAllStore.load(function(){
+							projAllStore.filterBy(function(record,id){
+								return record.get("category")=="浮动收益类" ;
+							});
+						});
+					}
 					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
 				}
 			},{

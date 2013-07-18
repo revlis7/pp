@@ -80,13 +80,13 @@ listControl.load(function(records, operation, success) {
 			}
 		}]
 	},{
-		text:'项目编号', dataIndex:'proj_id', filterable:true, width:100
+		text:'项目编号', dataIndex:'proj_id', filterable:true, width:60,style: "text-align:center;",align: 'center',
 	}, {
 		text:'proj_detail_id', dataIndex:'proj_detail_id', filterable:true, width:100,hidden:true
 	}, {
 		text:'产品信息',columns:[
 		{
-			text:'产品等级', dataIndex:'grade', filterable:true,sortable : true, width:94, hidden:records[0].get("grade"),renderer: gradeFn
+			text:'产品等级', dataIndex:'grade', filterable:true,sortable : true, width:84,style: "text-align:center;",align: 'center',hidden:records[0].get("grade"),renderer: gradeFn
 		}, {
 			text:'项目名称', dataIndex:'name', filterable:true,sortable : true, width:220,style: "text-align:center;",align: 'left', hidden:records[0].get("name"),
 			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
@@ -98,7 +98,7 @@ listControl.load(function(records, operation, success) {
 			width:60,style: "text-align:center;",align: 'center', 
 			sortable: false,
 			items: [{
-				icon: '/ts/misc/resources/icons/download.gif',
+				icon: '/ts/misc/resources/icons/search.png',
 				tooltip: '查看该项目的详细信息',
 				handler: function(grid, rowIndex, colIndex) {
 					Ext.ComponentQuery.query('#projPanel')[0].proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
@@ -432,8 +432,6 @@ listControl.load(function(records, operation, success) {
 		Ext.ComponentQuery.query('#projListPanel')[0].add(fullGridC1);
 		Ext.ComponentQuery.query('#projListPanel')[0].add(fullGridC2);
 		
-		//if(loginname=='admin'){Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);}
-		Ext.ComponentQuery.query('#recommendPanel')[0].items.items[0].collapse();
 	});
 	
 	var viewport = Ext.create('Ext.Viewport', {
@@ -448,7 +446,7 @@ listControl.load(function(records, operation, success) {
 			height: 40,
 			id:'topMenu',
 			border:0,
-			margin:'0 0 5 0',
+			margin:0,
 			items:[
 			{
 				xtype:'image',
@@ -469,16 +467,28 @@ listControl.load(function(records, operation, success) {
 				scale:'medium',
 				itemId:"ListBtn",
 				handler:function(){
-					this.up('toolbar').down('#recommendBtn').show();
 					projAllStore.setProxy({
 						type: 'ajax',
-						url: '/ts/index.php/proj/view?',
+						url: '/ts/index.php/proj/view',
 						reader:	{
 							type: 'json',
 							root: 'data'
 						}
 					});
-					projAllStore.load();
+					var e=Ext.ComponentQuery.query('#projListPanel')[0];
+					if(e.down("panel").collapsed == false) {
+						projAllStore.load(function(){
+							projAllStore.filterBy(function(record,id){
+								return record.get("category")=="固定收益类" ;
+							});
+						});
+					} else {
+						projAllStore.load(function(){
+							projAllStore.filterBy(function(record,id){
+								return record.get("category")=="浮动收益类" ;
+							});
+						});
+					}
 					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
 				}
 			},{
@@ -487,7 +497,6 @@ listControl.load(function(records, operation, success) {
 				scale:'medium',
 				itemId:"endProjListBtn",
 				handler:function(){
-					this.up('toolbar').down('#recommendBtn').hide();
 					projAllStore.setProxy({
 						type: 'ajax',
 						url: '/ts/index.php/proj/view?r=true&e=1',
@@ -496,7 +505,20 @@ listControl.load(function(records, operation, success) {
 							root: 'data'
 						}
 					});
-					projAllStore.load();
+					var e=Ext.ComponentQuery.query('#projListPanel')[0];
+					if(e.down("panel").collapsed == false) {
+						projAllStore.load(function(){
+							projAllStore.filterBy(function(record,id){
+								return record.get("category")=="固定收益类" ;
+							});
+						});
+					} else {
+						projAllStore.load(function(){
+							projAllStore.filterBy(function(record,id){
+								return record.get("category")=="浮动收益类" ;
+							});
+						});
+					}
 					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
 				}
 			},{
@@ -540,10 +562,6 @@ listControl.load(function(records, operation, success) {
 	});
 });
 
-
-	window.setInterval(function(){
-		projAllStoreC1.load();
-	},1200000);
 });
 
  

@@ -66,7 +66,7 @@ listControl.load(function(records, operation, success) {
 	}, {
 		text:'产品信息',columns:[
 		{
-			text:'产品等级', dataIndex:'grade', filterable:true,sortable : true, width:94, hidden:records[0].get("grade"),renderer: gradeFn
+			text:'产品等级', dataIndex:'grade', filterable:true,sortable : true, width:84,style: "text-align:center;",align: 'center', hidden:records[0].get("grade"),renderer: gradeFn
 		}, {
 			text:'项目名称', dataIndex:'name', filterable:true,sortable : true, width:220,style: "text-align:center;",align: 'left', hidden:records[0].get("name"),
 			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
@@ -78,7 +78,7 @@ listControl.load(function(records, operation, success) {
 			width:60,style: "text-align:center;",align: 'center', 
 			sortable: false,
 			items: [{
-				icon: '/ts/misc/resources/icons/download.gif',
+				icon: '/ts/misc/resources/icons/search.png',
 				tooltip: '查看该项目的详细信息',
 				handler: function(grid, rowIndex, colIndex) {
 					Ext.ComponentQuery.query('#projPanel')[0].proj_id=grid.getStore().getAt(rowIndex).get("proj_id");

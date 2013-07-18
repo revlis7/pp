@@ -183,7 +183,7 @@ var projDetailStore=Ext.create('Ext.data.JsonStore', {
 	],
 	proxy: {
 		type: 'ajax',
-		url: '/ts/index.php/proj/detail_view?proj_id='+params.proj_id,
+		url: '/ts/index.php/proj/detail_view?proj_id=',
 		reader: {
 			type: 'json',
 			root: 'data'
@@ -216,7 +216,7 @@ var projStore=Ext.create('Ext.data.JsonStore', {
 	],
 	proxy: {
 		type: 'ajax',
-		url: '/ts/index.php/proj/proj_get?proj_id='+params.proj_id,
+		url: '/ts/index.php/proj/proj_get?proj_id=',
 		reader: {
 			type: 'json',
 			root: 'data'

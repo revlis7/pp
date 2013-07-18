@@ -81,10 +81,10 @@ listControl.load(function(records, operation, success) {
 				icon: '/ts/misc/resources/icons/search.png',
 				tooltip: '查看该项目的详细信息',
 				handler: function(grid, rowIndex, colIndex) {
-					e=Ext.ComponentQuery.query('#projPanel')[0];
+					e=Ext.getCmp('projPanel');
 					e.proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
 					e.setTitle(grid.getStore().getAt(rowIndex).get("issue")+" "+grid.getStore().getAt(rowIndex).get("name"))
-					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(2);
+					Ext.getCmp('topInfo').getLayout().setActiveItem(2);
 				}
           }]
         }, {
@@ -411,8 +411,8 @@ listControl.load(function(records, operation, success) {
 				});
 			}
 		}]);
-		Ext.ComponentQuery.query('#projListPanel')[0].add(fullGridC1);
-		Ext.ComponentQuery.query('#projListPanel')[0].add(fullGridC2);
+		Ext.getCmp('projListPanel').add(fullGridC1);
+		Ext.getCmp('projListPanel').add(fullGridC2);
 		
 		recommendStore.load(function(recommendRecords, operation, success) {
 			Ext.Array.forEach(recommendRecords,function(recommendRecord){
@@ -477,10 +477,10 @@ listControl.load(function(records, operation, success) {
 							}
 						}
 					});
-					Ext.ComponentQuery.query('#recommendPanel')[0].add(recommendTempPanel);
+					Ext.getCmp('recommendPanel').add(recommendTempPanel);
 				}
 			});
-			Ext.ComponentQuery.query('#recommendPanel')[0].items.items[0].collapse();
+			Ext.getCmp('recommendPanel').items.items[0].collapse();
 		});
 	});
 	
@@ -521,7 +521,7 @@ listControl.load(function(records, operation, success) {
 						}
 					});
 					projAllStore.load(function(){
-						var recP=Ext.ComponentQuery.query('#recommendPanel')[0];
+						var recP=Ext.getCmp('recommendPanel');
 						if(recP.down("panel").collapsed == false) {
 							var e=recP.down("panel");
 							fileListStore.setProxy({
@@ -594,7 +594,7 @@ listControl.load(function(records, operation, success) {
 						}
 					});
 						
-					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(0);
+					Ext.getCmp('topInfo').getLayout().setActiveItem(0);
 				}
 			},{
 				text:'查看在售列表',
@@ -610,7 +610,7 @@ listControl.load(function(records, operation, success) {
 							root: 'data'
 						}
 					});
-					var e=Ext.ComponentQuery.query('#projListPanel')[0];
+					var e=Ext.getCmp('projListPanel');
 					if(e.down("panel").collapsed == false) {
 						projAllStore.load(function(){
 							projAllStore.filterBy(function(record,id){
@@ -624,7 +624,7 @@ listControl.load(function(records, operation, success) {
 							});
 						});
 					}
-					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
+					Ext.getCmp('topInfo').getLayout().setActiveItem(1);
 				}
 			},{
 				text:'查看近期结束项目',
@@ -640,7 +640,7 @@ listControl.load(function(records, operation, success) {
 							root: 'data'
 						}
 					});
-					var e=Ext.ComponentQuery.query('#projListPanel')[0];
+					var e=Ext.getCmp('projListPanel');
 					if(e.down("panel").collapsed == false) {
 						projAllStore.load(function(){
 							projAllStore.filterBy(function(record,id){
@@ -654,7 +654,7 @@ listControl.load(function(records, operation, success) {
 							});
 						});
 					}
-					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
+					Ext.getCmp('topInfo').getLayout().setActiveItem(1);
 				}
 			},{
 				text:'进入管理模式',

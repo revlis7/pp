@@ -429,9 +429,22 @@ listControl.load(function(records, operation, success) {
 				});
 			}
 		}]);
-		Ext.ComponentQuery.query('#projListPanel')[0].add(fullGridC1);
-		Ext.ComponentQuery.query('#projListPanel')[0].add(fullGridC2);
-		
+		var e=Ext.ComponentQuery.query('#projListPanel')[0];
+		e.add(fullGridC1);
+		e.add(fullGridC2);
+		if(e.down("panel").collapsed == false) {
+			projAllStore.load(function(){
+				projAllStore.filterBy(function(record,id){
+					return record.get("category")=="固定收益类" ;
+				});
+			});
+		} else {
+			projAllStore.load(function(){
+				projAllStore.filterBy(function(record,id){
+					return record.get("category")=="浮动收益类" ;
+				});
+			});
+		}
 	});
 	
 	var viewport = Ext.create('Ext.Viewport', {
@@ -489,7 +502,6 @@ listControl.load(function(records, operation, success) {
 							});
 						});
 					}
-					Ext.ComponentQuery.query('#topInfo')[0].getLayout().setActiveItem(1);
 				}
 			},{
 				text:'查看近期结束项目',

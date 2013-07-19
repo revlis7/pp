@@ -429,13 +429,6 @@ Ext.onReady(function() {
 						allowBlank: true
 					},{
 						xtype:'textareafield',
-						fieldLabel: '项目进度',
-						width:420,
-						height:80,
-						name:'countdown',
-						allowBlank: true
-					},{
-						xtype:'textareafield',
 						fieldLabel: '备注',
 						width:420,
 						height:80,

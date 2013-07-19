@@ -262,13 +262,6 @@ Ext.onReady(function() {
 						allowBlank: true
 					},{
 						xtype:'textareafield',
-						fieldLabel: '项目进度',
-						width:420,
-						height:80,
-						name:'countdown',
-						allowBlank: true
-					},{
-						xtype:'textareafield',
 						fieldLabel: '备注',
 						width:420,
 						height:80,
@@ -384,10 +377,9 @@ Ext.onReady(function() {
 				text:'一键结束该项目',
 				scale:'medium',
 				handler:function(){
-					var filename=grid.getStore().getAt(rowIndex).get("filename");
 					Ext.Msg.show({
-						title:'删除文件',
-						msg: '您是否确认要删除文件 '+filename+' ？',
+						title:'结束项目',
+						msg: '您是否确认要结束该项目？',
 						buttons: Ext.Msg.OKCANCEL,
 						icon: Ext.Msg.QUESTION,
 						fn:function(buttonId){

@@ -289,256 +289,6 @@ Ext.onReady(function() {
 			}]
 		}]
 	});
-	var AmountEditWin=Ext.create('Ext.window.Window',{
-		resizeable:false,
-		closeAction:"hide",
-		closable:false,
-		title:'额度信息编辑',
-		titleAlign:'center',
-		width:1006,
-		items:[
-		{
-			xtype:"form",
-			width:990,
-			margin:'0 0 0 2',
-			bodyPadding:5,
-			autoScroll :true,
-			//hidden:true,
-			//collapsible:true,
-			//collapseDirection : 'left',
-			//collapsed : true,
-			//title:'额度信息编辑',
-			trackResetOnLoad:true,
-			border:0,
-			waitTitle:"Pleas wait...",
-			layout:{
-				type:'hbox',
-				align: 'stretch',
-				defaultMargins: {top: 0, right: 5, bottom: 0, left: 5}
-			},
-			fieldDefaults:{
-				lableWidth:90,
-				width:240,
-				allowBlank: false,
-				labelAlign:'right'
-			},
-			dockedItems: [{
-				dock: 'bottom',
-				xtype: 'toolbar',
-				scale:'medium',
-				bodyPadding: 5,
-				items: [{xtype:'box',flex:1},{
-					icon:'/ts/misc/resources/icons/accept.gif',
-					text: '确认',
-					scale:'medium',
-					formBind: true, //only enabled once the form is valid
-					disabled: true,
-					handler: function() {
-						this.up('form').getForm().submit({
-							url: '/ts/index.php/proj/detail_create_submit',
-							submitEmptyText: false,
-							waitMsg: 'Saving Data...',
-							success: function(form, action) {
-								AmountEditWin.hide();
-								projDetailStore.load();
-							}
-							//,
-							//failure: function(form, action) {
-							//	Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
-							//}
-						});
-					}
-				},{
-					icon:'/ts/misc/resources/icons/cross.gif',
-					text: '取消',
-					scale:'medium',
-					handler: function(){
-						this.up('form').getForm().reset();
-						this.up('window').hide();
-					}
-				},{xtype:'box',flex:1}]
-			}],
-			items:[
-			{
-				xtype:'fieldset',
-				title: '====<b>基本信息</b>====',
-				border:0,
-				layout: {
-					type: 'vbox'
-				},
-				items:[{
-					xtype:'textfield',
-					fieldLabel: '子名称',
-					name:'sub_name',
-					width:320,
-					allowBlank: true
-				},{
-					xtype:'numberfield',
-					fieldLabel: '项目期限(月)*',
-					name:'month'
-				},{
-					xtype:'numberfield',
-					fieldLabel: '认购金额(万)*',
-					name:'amount'
-				},{
-					xtype:'numberfield',
-					fieldLabel: '项目收益(%)*',
-					name:'profit'
-				},{
-					xtype:'combo',
-					fieldLabel: '销售状态*',
-					name:'status',
-					queryMode : 'local',
-					store : chStatusList,
-					valueField: 'id',
-					displayField: 'text',
-					forceSelection:true
-				}, {
-					xtype:'combo',
-					fieldLabel: '份额*',
-					name:'total_share',
-					queryMode : 'local',
-					store : chTotalShareList,
-					valueField: 'id',
-					displayField: 'text',
-					forceSelection:true
-				}, {
-					xtype:'datefield',
-					fieldLabel: '成立日期',
-					name:'found',
-					width:300,
-					forceSelection:true,
-					allowBlank: true
-				}]
-			},{
-				xtype:'fieldset',
-				title: '====<b>佣金信息</b>====',
-				border:0,
-				layout: {
-					type: 'vbox',
-					defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
-				},
-				items:[{
-					xtype:'numberfield',
-					fieldLabel: '税前佣金(%)*',
-					name:'commission_b_tax',
-					decimalPrecision:3
-				},{
-					xtype:'numberfield',
-					fieldLabel: '税后佣金(%)*',
-					name:'commission_a_tax',
-					decimalPrecision:3
-				},{
-					xtype:'numberfield',
-					fieldLabel: '平台费用(%)*',
-					name:'inner_commission',
-					decimalPrecision:3
-				},{
-					xtype:'numberfield',
-					fieldLabel: '费用(%)*',
-					name:'outer_commission',
-					decimalPrecision:3
-				},{
-					xtype:'numberfield',
-					fieldLabel: '现结费用(%)*',
-					name:'imm_payment',
-					decimalPrecision:3
-				},{
-					xtype:'hiddenfield',
-					fieldLabel: 'proj_id',
-					name:'proj_id'
-				},{
-					xtype:'hiddenfield',
-					fieldLabel: 'proj_detail_id',
-					name:'proj_detail_id'
-				}]
-			},{
-				xtype:'fieldset',
-				title: '====<b>渠道信息</b>====',
-				border:0,	
-				layout: {
-					type: 'vbox',
-					defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
-				},
-				items:[{
-					xtype:'textfield',
-					fieldLabel: '主销渠道',
-					width:320,
-					name:'main_channel',
-					allowBlank: true
-				},{
-					xtype:'textfield',
-					fieldLabel: '渠道公司',
-					width:320,
-					name:'channel_company',
-					allowBlank: true
-				},{
-					xtype:'textfield',
-					fieldLabel: '渠道联系人',
-					width:320,
-					name:'channel_contact',
-					allowBlank: true
-				},{
-					xtype:'textfield',
-					fieldLabel: '走帐公司',
-					width:320,
-					name:'billing_company',
-					allowBlank: true
-				}]
-			}]
-		}]
-	});
-
-	var uploadWin=Ext.create("Ext.window.Window",{
-		title: '上传项目文件',
-		width: 550,
-		resizeable:false,
-		closeAction:"hide",
-		closable:true,
-		bodyPadding: 10,
-		items:[
-		{
-			xtype:"form",
-			bodyPadding:5,
-			trackResetOnLoad:true,
-			border:0,
-			waitTitle:"Pleas wait...",
-			layout:'fit',
-			items: [{
-				xtype:'hiddenfield',
-				name:'proj_id',
-				allowBlank:false
-			}, {
-				xtype: 'filefield',
-				name: 'file',
-				fieldLabel: '文件',
-				labelWidth: 50,
-				width:500,
-				msgTarget: 'side',
-				allowBlank: false,
-				anchor: '100%',
-				buttonText: '选择文件...'
-			}],
-			
-			buttons: [{
-				text: '上传',
-				handler: function() {
-					var form = this.up('form').getForm();
-					if(form.isValid()){
-						form.submit({
-							url: '/ts/index.php/upload/submit',
-							waitMsg: '正在上传文件...',
-							success: function(fp, o) {
-								Ext.Msg.alert('上传成功！', '您的文件 "' + o.result.file + '" 已成功上传。');
-								uploadWin.close();
-								fileListStore.load();
-							}
-						});
-					}
-				}
-			}]
-		}]
-	});
 
 	AmountEditWin.on({
 		hide: function(){
@@ -555,18 +305,11 @@ Ext.onReady(function() {
 			Ext.getBody().unmask();
 		}
 	});
-	
-	var projAcceptForm = Ext.create('Ext.form.Panel', {
-		bodyPadding: 5,
-    	width: 350,
-    	url: '/ts/index.php/proj/proj_accept_submit',
-    	hidden:true,
-    	items: [{
-    		fieldLabel: 'proj_id',
-        	name: 'proj_id',
-        	allowBlank: false
-    	}]
-    });
+	messageWin.on({
+		hide: function(){
+			Ext.getBody().unmask();
+		}
+	});
 	
 	var viewport = Ext.create('Ext.Viewport', {
 		layout: {
@@ -592,13 +335,26 @@ Ext.onReady(function() {
 				xtype:'tbtext',
 				text:'您可以：'
 			},{
-				text:'编辑项目信息',
+				text:'编辑项目',
 				scale:'medium',
 				icon: '/ts/misc/resources/icons/cog_edit.png',
 				handler:function(){
 					ProjWin.down('form').getForm().loadRecord(projStore.first());
 					Ext.getBody().mask();
 					ProjWin.show();
+				}
+			},{
+				icon: '/ts/misc/resources/icons/add.gif',
+				scale:'medium',
+				text:'新增项目消息' ,
+				handler:function(){
+					//todo
+					messageForm=messageWin.down('form');
+					messageForm.getForm().reset();
+					messageForm.down('hiddenfield[name="proj_id"]').setValue(params.proj_id);
+					messageForm.down('hiddenfield[name="message_id"]').setValue(-1);
+					Ext.getBody().mask();
+					messageWin.show();
 				}
 			},{
 				icon: '/ts/misc/resources/icons/add.gif',
@@ -625,63 +381,26 @@ Ext.onReady(function() {
 				}
 			},{
 				icon: '/ts/misc/resources/icons/upload.gif',
-				id:'BtnPdtApply',
-				text:'申请上线',
+				text:'一键结束该项目',
 				scale:'medium',
-				hidden:true,
 				handler:function(){
-					projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
-					projApplyForm.getForm.submit({
-						url:'/ts/index.php/proj/proj_apply_submit',
-						submitEmptyText: false,
-						waitMsg: '正在保存后台数据……',
-						success: function(form, action) {
-							Ext.getCmp('BtnPdtApply').hide();
-						} ,
-						failure: function(form, action) {
-							Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+					var filename=grid.getStore().getAt(rowIndex).get("filename");
+					Ext.Msg.show({
+						title:'删除文件',
+						msg: '您是否确认要删除文件 '+filename+' ？',
+						buttons: Ext.Msg.OKCANCEL,
+						icon: Ext.Msg.QUESTION,
+						fn:function(buttonId){
+							if(buttonId=='ok'){
+								Ext.Ajax.request({
+									url: '/ts/index.php/proj/proj_close_submit?proj_id='+params.proj_id,
+									success: function(response){
+										projDetailStore.load();
+									}
+								});
+							}
 						}
-					})
-				}
-			},{
-				icon: '/ts/misc/resources/icons/upload.gif',
-				id:'BtnPdtAccept',
-				text:'上线批准',
-				scale:'medium',
-				hidden:true,
-				handler:function(){
-					projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
-					projApplyForm.getForm.submit({
-						url:'/ts/index.php/proj/proj_accept_submit',
-						submitEmptyText: false,
-						waitMsg: '正在保存后台数据……',
-						success: function(form, action) {
-							Ext.getCmp('BtnPdtAccept').hide();
-						} ,
-						failure: function(form, action) {
-							Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
-						}
-					})
-				}
-			},{
-				icon: '/ts/misc/resources/icons/upload.gif',
-				id:'BtnPdtRefuse',
-				text:'上线驳回',
-				scale:'medium',
-				hidden:true,
-				handler:function(){
-					projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
-					projApplyForm.getForm.submit({
-						url:'/ts/index.php/proj/proj_refuse_submit',
-						submitEmptyText: false,
-						waitMsg: '正在保存后台数据……',
-						success: function(form, action) {
-							Ext.getCmp('BtnPdtRefuse').hide();
-						} ,
-						failure: function(form, action) {
-							Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
-						}
-					})
+					});
 				}
 			},{
 				xtype:'box',
@@ -710,7 +429,74 @@ Ext.onReady(function() {
 				width:480,
 				title:'项目信息',
 				html:'正在加载项目信息...',
-				autoScroll :true
+				autoScroll :true,
+				dockedItems:[{
+					dock: 'bottom',
+					xtype: 'toolbar',
+					bodyPadding: 5,
+					items: [{
+					icon: '/ts/misc/resources/icons/upload.gif',
+					id:'BtnPdtApply',
+					text:'申请上线',
+					scale:'medium',
+					hidden:true,
+					handler:function(){
+						projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+						projApplyForm.getForm.submit({
+							url:'/ts/index.php/proj/proj_apply_submit',
+							submitEmptyText: false,
+							waitMsg: '正在保存后台数据……',
+							success: function(form, action) {
+								Ext.getCmp('BtnPdtApply').hide();
+							} ,
+							failure: function(form, action) {
+								Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+							}
+						})
+					}
+				},{
+					icon: '/ts/misc/resources/icons/upload.gif',
+					id:'BtnPdtAccept',
+					text:'上线批准',
+					scale:'medium',
+					hidden:true,
+					handler:function(){
+						projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+						projApplyForm.getForm.submit({
+							url:'/ts/index.php/proj/proj_accept_submit',
+							submitEmptyText: false,
+							waitMsg: '正在保存后台数据……',
+							success: function(form, action) {
+								Ext.getCmp('BtnPdtAccept').hide();
+								Ext.getCmp('BtnPdtRefuse').hide();
+							} ,
+							failure: function(form, action) {
+								Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+							}
+						})
+					}
+				},{
+					icon: '/ts/misc/resources/icons/upload.gif',
+					id:'BtnPdtRefuse',
+					text:'上线驳回',
+					scale:'medium',
+					hidden:true,
+					handler:function(){
+						projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+						projApplyForm.getForm.submit({
+							url:'/ts/index.php/proj/proj_refuse_submit',
+							submitEmptyText: false,
+							waitMsg: '正在保存后台数据……',
+							success: function(form, action) {
+								Ext.getCmp('BtnPdtAccept').hide();
+								Ext.getCmp('BtnPdtRefuse').hide();
+							} ,
+							failure: function(form, action) {
+								Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+							}
+						})
+					}
+				}]
 			}, {
 				id:'projDetailPanel',
 				xtype:'panel',

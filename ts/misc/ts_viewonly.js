@@ -177,6 +177,67 @@ listControl.load(function(records, operation, success) {
 		}]
 	}];
 	
+	var	AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
+		store: projDetailStore,
+		border:1,
+		title:'额度信息',
+		region:'center',
+		minHeight:156,
+		flex:1,
+		emptyText:'暂无额度信息',
+		defaults:{
+			filtable:true,
+			style: "text-align:center;",
+			align: 'center'
+		},
+		columns:[
+		{text:'子名称',		 dataIndex:'sub_name', width:114, hidden:records[0].get("sub_name")},
+		{text:'项目期限',	 dataIndex:'month',	width:80, hidden:records[0].get("month"),renderer:function(value,metaData,record,colIndex,store,view) {return value+'个月';}},
+		{text:'认购金额',	 dataIndex:'amount', width:80, hidden:records[0].get("amount"),renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
+		{text:'项目收益',	 dataIndex:'profit', width:80, hidden:records[0].get("profit"),renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
+		{text:'销售状态',	 dataIndex:'status', width:80, hidden:records[0].get("status"),
+			renderer:function(value,metaData){
+				if(value=="在售"){
+					metaData.style='background:#CCFFCC;color:#000000'
+				} else if(value=="结束"){
+					metaData.style='background:#DFDFDF;color:#606060;'
+				} else {
+					metaData.style='background:#FFFF99;color:#000000'
+				}
+				return value;
+			}
+		},
+		{text:'份额',		 dataIndex:'total_share', width:60, hidden:records[0].get("total_share"),
+			renderer:function(value,metaData){
+				if(value=="OPEN"){
+					metaData.style='background:#CCFFCC;color:#000000'
+				} else if(value=="无"){
+					metaData.style='background:#DFDFDF;color:#606060;'
+				} else {
+					metaData.style='background:#FFFF99;color:#000000'
+				}
+				return value;
+			}
+		},
+		{text:'成立日期',	 dataIndex:'found',	width:88, hidden:records[0].get("found"),renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
+		{text:'税前佣金',	 dataIndex:'commission_b_tax', align: 'right',width:80, hidden:records[0].get("commission_b_tax"),		 
+			renderer: commissionFn
+		},
+		{text:'税后佣金',	 dataIndex:'commission_a_tax', align: 'right',width:80, hidden:records[0].get("commission_a_tax"),		 
+			renderer: commissionFn
+		},
+		{text:'平台费用',	 dataIndex:'inner_commission', align: 'right',width:80, hidden:records[0].get("inner_commission"),		 
+			renderer: commissionFn
+		},
+		{text:'费用',		 dataIndex:'outer_commission', align: 'right',width:80, hidden:records[0].get("outer_commission"),		 
+			renderer: commissionFn
+		},
+		{text:'现结费用',	 dataIndex:'imm_payment', align:	'right',width:80, hidden:records[0].get("imm_payment"),		
+			renderer: commissionFn
+		}
+		]
+	});
+
 	projAllStore.load(function(){
 		fullGridC1=Ext.create('searchPanel', {
 			store: projAllStore,
@@ -430,20 +491,6 @@ listControl.load(function(records, operation, success) {
 						proj_id:r.get("proj_id"),
 						title:"<b>"+r.get("issue")+" "+r.get("name")+"</b>, "+detailString,
 						proj_info_tpl:'',
-						dockedItems:[{
-							dock: 'top',
-							xtype: 'toolbar',
-							scale:'medium',
-							bodyPadding: 5,
-							items: [{
-								icon:'/ts/misc/resources/icons/accept.gif',
-								text: '我要预约该项目',
-								scale:'medium',
-								handler: function() {
-									Ext.Msg.alert("提示","该功能尚未开放！");
-								}
-							}]
-						}],
 						items:[{
 							itemId:'projDetailPanel',
 							xtype:'panel',
@@ -454,6 +501,20 @@ listControl.load(function(records, operation, success) {
 								type:'vbox',
 								align:'stretch'
 							},
+							dockedItems:[{
+								dock: 'top',
+								xtype: 'toolbar',
+								scale:'medium',
+								bodyPadding: 5,
+								items: [{
+									icon:'/ts/misc/resources/icons/accept.gif',
+									text: '我要预约该项目',
+									scale:'medium',
+									handler: function() {
+										Ext.Msg.alert("提示","该功能尚未开放！");
+									}
+								}]
+							}],
 							items:[]
 						},{
 							itemId:'projInfoPanel',
@@ -717,20 +778,6 @@ listControl.load(function(records, operation, success) {
 				proj_id:'',
 				title:'',
 				proj_info_tpl:'',
-				dockedItems:[{
-					dock: 'top',
-					xtype: 'toolbar',
-					scale:'medium',
-					bodyPadding: 5,
-					items: [{
-						icon:'/ts/misc/resources/icons/accept.gif',
-						text: '我要预约该项目',
-						scale:'medium',
-						handler: function() {
-							Ext.Msg.alert("提示","该功能尚未开放！");
-						}
-					}]
-				}],
 				items:[{
 					itemId:'projDetailPanel',
 					xtype:'panel',
@@ -740,6 +787,20 @@ listControl.load(function(records, operation, success) {
 						type:'vbox',
 						align:'stretch'
 					},
+					dockedItems:[{
+						dock: 'top',
+						xtype: 'toolbar',
+						scale:'medium',
+						bodyPadding: 5,
+						items: [{
+							icon:'/ts/misc/resources/icons/accept.gif',
+							text: '我要预约该项目',
+							scale:'medium',
+							handler: function() {
+								Ext.Msg.alert("提示","该功能尚未开放！");
+							}
+						}]
+					}],
 					items:[]
 				},{
 					itemId:'projInfoPanel',

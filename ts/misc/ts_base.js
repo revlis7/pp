@@ -11,15 +11,15 @@ Ext.require([
 var gradeFn=function(value) { 
 	var res;
 	if(value=="五星级"){
-		res= '<span style="color:#003366">★★★★★</span>'
+		res= '★★★★★'
 	} else if (value=="四星级"){
-		res= '<span style="color:#003366">★★★★</span>'
+		res= '★★★★'
 	} else if (value=="三星级"){
-		res= '<span style="color:#003366">★★★</span>'
+		res= '★★★'
 	} else if (value=="二星级"){
-		res= '<span style="color:#003366">★★</span>'
+		res= '★★'
 	} else if (value=="一星级"){
-		res= '<span style="color:#003366">★</span>'
+		res= '★'
 	}
 	return res;
 };
@@ -201,6 +201,7 @@ var recentChangeStore=Ext.create('Ext.data.JsonStore', {
 	fields: [
 	{name:'proj_id',type:'integer'},
 	{name:'msgdate',type:'date'},
+	{name:'msg_cat',type:'string'},
 	{name:'message',type:'string'},
 	{name:'last_update',type:'date'},
 	{name:'updater',type:'string'}
@@ -283,62 +284,6 @@ var	filtersCfg = {
 	]
 };
 
-var	AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
-	store: projDetailStore,
-	border:1,
-	title:'额度信息',
-	region:'center',
-	minHeight:156,
-	flex:1,
-	emptyText:'暂无额度信息',
-	columns:[
-	{text:'子名称',		 dataIndex:'sub_name', filtable:true, style: "text-align:center;",align: 'center',width:114},
-	{text:'项目期限',	 dataIndex:'month',	filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'个月';}},
-	{text:'认购金额',	 dataIndex:'amount', filtable:true,	style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
-	{text:'项目收益',	 dataIndex:'profit', filtable:true,	style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
-	{text:'销售状态',	 dataIndex:'status', filtable:true,	style: "text-align:center;",align: 'center',width:80,
-		renderer:function(value,metaData){
-			if(value=="在售"){
-				metaData.style='background:#CCFFCC;color:#000000'
-			} else if(value=="结束"){
-				metaData.style='background:#DFDFDF;color:#606060;'
-			} else {
-				metaData.style='background:#FFFF99;color:#000000'
-			}
-			return value;
-		}
-	},
-	{text:'份额',		 dataIndex:'total_share', filtable:true, style:	"text-align:center;",align:	'center',width:60,
-		renderer:function(value,metaData){
-			if(value=="OPEN"){
-				metaData.style='background:#CCFFCC;color:#000000'
-			} else if(value=="无"){
-				metaData.style='background:#DFDFDF;color:#606060;'
-			} else {
-				metaData.style='background:#FFFF99;color:#000000'
-			}
-			return value;
-		}
-	},
-	{text:'成立日期',	 dataIndex:'found',	filtable:true, style: "text-align:center;",align: 'center',width:88,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
-	{text:'税前佣金',	 dataIndex:'commission_b_tax', filtable:true, style: "text-align:center;",align: 'right',width:80,		 
-		renderer: commissionFn
-	},
-	{text:'税后佣金',	 dataIndex:'commission_a_tax', filtable:true, style: "text-align:center;",align: 'right',width:80,		 
-		renderer: commissionFn
-	},
-	{text:'平台费用',	 dataIndex:'inner_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,		 
-		renderer: commissionFn
-	},
-	{text:'费用',		 dataIndex:'outer_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,		 
-		renderer: commissionFn
-	},
-	{text:'现结费用',	 dataIndex:'imm_payment', filtable:true, style:	"text-align:center;",align:	'right',width:80,		
-		renderer: commissionFn
-	}
-	]
-});
-
 var	FileListGrid=Ext.create('Ext.grid.Panel',{
 	store: fileListStore,
 	border:1,
@@ -381,7 +326,8 @@ var	RecentChangeGrid=Ext.create('Ext.grid.Panel',{
 	region:'north',
 	flex:1,
 	columns:[
-	{text:'时间',			dataIndex:'msgdate',	  filtable:true, style:	"text-align:center;",align:	'left',width:100},
+	{text:'时间',			dataIndex:'msg_date',	  filtable:true, style:	"text-align:center;",align:	'left',width:100},
+	{text:'信息分类',			dataIndex:'msg_cat',	  filtable:true, style:	"text-align:center;",align:	'left',width:100},
 	{text:'最新进展信息',		dataIndex:'message',	   filtable:true, style: "text-align:center;",align: 'right',width:800}
 	]
 });
@@ -404,7 +350,7 @@ var generatePanelFn=function(e){
 			detailString+='<pre>'+record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+':	'+record.get("profit")+'%</pre>';
 		});
 		e.proj_info_tpl = Ext.create('Ext.XTemplate',[
-		'<table	style="border-collapse:collapse;"><tr><td style="padding:20px;border:1px;"><table style="border-collapse:collapse;">',
+		'<table	style="border-collapse:collapse;"><tr><td style="padding:15px;border:1px;"><table style="border-collapse:collapse;">',
 		'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}, {exclusive}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',

@@ -8,6 +8,7 @@ Ext.require([
  'Ext.state.*',
  'Ext.ux.grid.FiltersFeature',
 ]);
+var AmountDetailsGrid;
 var gradeFn=function(value) { 
 	var res;
 	if(value=="五星级"){

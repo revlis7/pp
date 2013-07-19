@@ -177,7 +177,7 @@ listControl.load(function(records, operation, success) {
 		}]
 	}];
 	
-	var	AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
+	AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
 		store: projDetailStore,
 		border:1,
 		title:'额度信息',
@@ -501,6 +501,15 @@ listControl.load(function(records, operation, success) {
 								type:'vbox',
 								align:'stretch'
 							},
+							items:[]
+						},{
+							itemId:'projInfoPanel',
+							xtype:'panel',
+							region:'west',
+							width:480,
+							title:'项目信息',
+							html:'正在加载项目信息...',
+							autoScroll :true,
 							dockedItems:[{
 								dock: 'top',
 								xtype: 'toolbar',
@@ -514,16 +523,7 @@ listControl.load(function(records, operation, success) {
 										Ext.Msg.alert("提示","该功能尚未开放！");
 									}
 								}]
-							}],
-							items:[]
-						},{
-							itemId:'projInfoPanel',
-							xtype:'panel',
-							region:'west',
-							width:480,
-							title:'项目信息',
-							html:'正在加载项目信息...',
-							autoScroll :true
+							}]
 						}],
 						listeners:{
 							beforeexpand:{
@@ -787,6 +787,15 @@ listControl.load(function(records, operation, success) {
 						type:'vbox',
 						align:'stretch'
 					},
+					items:[]
+				},{
+					itemId:'projInfoPanel',
+					xtype:'panel',
+					region:'west',
+					width:480,
+					title:'项目信息',
+					html:'正在加载项目信息...',
+					autoScroll :true,
 					dockedItems:[{
 						dock: 'top',
 						xtype: 'toolbar',
@@ -800,16 +809,7 @@ listControl.load(function(records, operation, success) {
 								Ext.Msg.alert("提示","该功能尚未开放！");
 							}
 						}]
-					}],
-					items:[]
-				},{
-					itemId:'projInfoPanel',
-					xtype:'panel',
-					region:'west',
-					width:480,
-					title:'项目信息',
-					html:'正在加载项目信息...',
-					autoScroll :true
+					}]
 				}],
 				listeners:{
 					beforeactivate:{

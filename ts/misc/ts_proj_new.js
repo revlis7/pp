@@ -575,67 +575,68 @@ Ext.onReady(function() {
 					xtype: 'toolbar',
 					bodyPadding: 5,
 					items: [{
-					icon: '/ts/misc/resources/icons/upload.gif',
-					id:'BtnPdtApply',
-					text:'申请上线',
-					scale:'medium',
-					hidden:true,
-					handler:function(){
-						projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
-						projApplyForm.getForm.submit({
-							url:'/ts/index.php/proj/proj_apply_submit',
-							submitEmptyText: false,
-							waitMsg: '正在保存后台数据……',
-							success: function(form, action) {
-								Ext.getCmp('BtnPdtApply').hide();
-							} ,
-							failure: function(form, action) {
-								Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
-							}
-						})
-					}
-				},{
-					icon: '/ts/misc/resources/icons/upload.gif',
-					id:'BtnPdtAccept',
-					text:'上线批准',
-					scale:'medium',
-					hidden:true,
-					handler:function(){
-						projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
-						projApplyForm.getForm.submit({
-							url:'/ts/index.php/proj/proj_accept_submit',
-							submitEmptyText: false,
-							waitMsg: '正在保存后台数据……',
-							success: function(form, action) {
-								Ext.getCmp('BtnPdtAccept').hide();
-								Ext.getCmp('BtnPdtRefuse').hide();
-							} ,
-							failure: function(form, action) {
-								Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
-							}
-						})
-					}
-				},{
-					icon: '/ts/misc/resources/icons/upload.gif',
-					id:'BtnPdtRefuse',
-					text:'上线驳回',
-					scale:'medium',
-					hidden:true,
-					handler:function(){
-						projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
-						projApplyForm.getForm.submit({
-							url:'/ts/index.php/proj/proj_refuse_submit',
-							submitEmptyText: false,
-							waitMsg: '正在保存后台数据……',
-							success: function(form, action) {
-								Ext.getCmp('BtnPdtAccept').hide();
-								Ext.getCmp('BtnPdtRefuse').hide();
-							} ,
-							failure: function(form, action) {
-								Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
-							}
-						})
-					}
+						icon: '/ts/misc/resources/icons/upload.gif',
+						id:'BtnPdtApply',
+						text:'申请上线',
+						scale:'medium',
+						hidden:true,
+						handler:function(){
+							projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+							projApplyForm.getForm.submit({
+								url:'/ts/index.php/proj/proj_apply_submit',
+								submitEmptyText: false,
+								waitMsg: '正在保存后台数据……',
+								success: function(form, action) {
+									Ext.getCmp('BtnPdtApply').hide();
+								} ,
+								failure: function(form, action) {
+									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+								}
+							})
+						}
+					},{
+						icon: '/ts/misc/resources/icons/upload.gif',
+						id:'BtnPdtAccept',
+						text:'上线批准',
+						scale:'medium',
+						hidden:true,
+						handler:function(){
+							projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+							projApplyForm.getForm.submit({
+								url:'/ts/index.php/proj/proj_accept_submit',
+								submitEmptyText: false,
+								waitMsg: '正在保存后台数据……',
+								success: function(form, action) {
+									Ext.getCmp('BtnPdtAccept').hide();
+									Ext.getCmp('BtnPdtRefuse').hide();
+								} ,
+								failure: function(form, action) {
+									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+								}
+							})
+						}
+					},{
+						icon: '/ts/misc/resources/icons/upload.gif',
+						id:'BtnPdtRefuse',
+						text:'上线驳回',
+						scale:'medium',
+						hidden:true,
+						handler:function(){
+							projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+							projApplyForm.getForm.submit({
+								url:'/ts/index.php/proj/proj_refuse_submit',
+								submitEmptyText: false,
+								waitMsg: '正在保存后台数据……',
+								success: function(form, action) {
+									Ext.getCmp('BtnPdtAccept').hide();
+									Ext.getCmp('BtnPdtRefuse').hide();
+								} ,
+								failure: function(form, action) {
+									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+								}
+							})
+						}
+					}]
 				}
 			}, {
 				id:'projDetailPanel',

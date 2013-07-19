@@ -35,9 +35,7 @@ var commissionFn=function(value,metaData) {
 		return 'N/A';
 	}
 }
-var chFixedList=Ext.create('Ext.data.ArrayStore', {
-	fields: ['id', 'text'],
-	data: [
+var chFixedList=[
 		['集合信托：上市公司股票质押类','集合信托：上市公司股票质押类'],
 		['集合信托：政府基建类','集合信托：政府基建类'],
 		['集合信托：房地产类','集合信托：房地产类'],
@@ -45,17 +43,13 @@ var chFixedList=Ext.create('Ext.data.ArrayStore', {
 		['私募基金','私募基金'],
 		['P2P理财','P2P理财'],
 		['其他','其他']
-	]
-});
-var chFloatingList=Ext.create('Ext.data.ArrayStore', {
-	fields: ['id', 'text'],
-	data: [
+	];
+var chFloatingList=[
 		['债券基金','债券基金'],
 		['证券基金','证券基金'],
 		['股权基金','股权基金'],
 		['其他','其他']
-	]
-});
+	];
 
 var chSubCategoryList = Ext.create('Ext.data.Store', {
 	fields: ['value', 'text'],

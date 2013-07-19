@@ -637,7 +637,7 @@ Ext.onReady(function() {
 							})
 						}
 					}]
-				}
+				}]
 			}, {
 				id:'projDetailPanel',
 				xtype:'panel',

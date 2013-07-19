@@ -208,7 +208,7 @@ class Proj extends Auth_Controller {
 
 		$proj = $this->Proj_model->get_proj($proj_id);
 		$proj_details = $this->Proj_model->get_all_detail($proj_id);
-		if(!$proj || empty($proj_detail)) {
+		if(!$proj || empty($proj_details)) {
 			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
 		}
 

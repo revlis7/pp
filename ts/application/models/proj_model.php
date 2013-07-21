@@ -8,16 +8,26 @@ class Proj_model extends CI_Model {
 		$this->CI =& get_instance();
 	}
 
-	function get_proj_message($proj_id) {
+	function get_proj_message_by_proj_id($proj_id) {
 		$proj = $this->get_proj($proj_id);
 		if(!$proj) {
 			return false;
 		}
-		//$this->db->select('id as proj_id, proj_detail.id as proj_detail_id, proj_detail.sub_name, proj_detail.found, proj_detail.total_share, proj_detail.status, proj_detail.amount, proj_detail.profit, proj_detail.commission_b_tax, proj_detail.commission_a_tax, proj_detail.inner_commission, proj_detail.outer_commission, proj_detail.imm_payment, proj_detail.month, proj_detail.main_channel, proj_detail.channel_company, proj_detail.channel_contact, proj_detail.billing_company');
 		$this->db->from('proj_message')->where('proj_id', $proj_id);
 		$this->db->order_by('id', 'asc');
 		$query = $this->db->get();
 		$result = $query->result();
+		return $result;
+	}
+
+	function get_proj_message_by_id($id) {
+		$this->db->from('proj_message')->where('id', $id);
+		$this->db->order_by('id', 'asc');
+		$query = $this->db->get();
+		$result = $query->row();
+		if(!$result) {
+			return false;
+		}
 		return $result;
 	}
 

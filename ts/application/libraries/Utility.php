@@ -27,6 +27,10 @@ class Utility {
 	function chk_realname($val) {
 		return preg_match('/^[\x{4e00}-\x{9fa5}A-Za-z0-9_]{2,64}$/u', $val);
 	}
+
+	function chk_mobile($val) {
+		return preg_match('/^(13|14|15|18)\d{9}$/', $val);
+	}
 	
 	function get_group_cfg() {
 		return $this->get('group_cfg');

@@ -399,7 +399,7 @@ class Proj extends Auth_Controller {
 		if(!$this->utility->chk_id($proj_id)) {
 			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
 		}
-		$data = $this->Proj_model->get_proj_message($proj_id);
+		$data = $this->Proj_model->get_proj_message_by_proj_id($proj_id);
 		if(!$data) {
 			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
 		}
@@ -441,6 +441,33 @@ class Proj extends Auth_Controller {
 
 		if(!$this->Proj_model->delete_proj_message($message_id)) {
 			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+		}
+		$this->json->output(array('success' => true));
+	}
+
+	function message_push_submit() {
+		$mobile     = $this->input->get('mobile');
+		$message_id = $this->input->get('message_id');
+
+		if(!$this->utility->chk_mobile($mobile)) {
+			$this->json->output(array('success' => false, 'm' => '输入的手机号错误'));
+		}
+
+		if(!$this->utility->chk_id($message_id)) {
+			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+		}
+
+		$data = $this->Proj_model->get_proj_message_by_id($message_id);
+		if(!$data) {
+			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+		}
+
+		$api = new apibus();
+		$sms = $api->load("sms");
+		$obj = $sms->send($mobile, $data->message, "UTF-8");
+
+		if($sms->isError($obj)) {
+			$this->json->output(array('success' => false, 'm' => '['.$obj->ApiBusError->errcode.']'.$obj->ApiBusError->errdesc));
 		}
 		$this->json->output(array('success' => true));
 	}

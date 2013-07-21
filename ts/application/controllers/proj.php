@@ -395,23 +395,54 @@ class Proj extends Auth_Controller {
 	}
 
 	function message_view() {
-		$proj_message= $this->Proj_model->get_proj_message(498);
-		var_dump($proj_message);
+		$proj_id = $this->input->get('proj_id');
+		if(!$this->utility->chk_id($proj_id)) {
+			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+		}
+		$data = $this->Proj_model->get_proj_message($proj_id);
+		if(!$data) {
+			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+		}
+		$this->json->output(array('success' => true, 'data' => $data));
 	}
 
 	function message_submit() {
-		$id = $this->Proj_model->create_proj_message(1, 'category', 'message', 'chiapei');
-		var_dump($id);
+		$message_id = $this->input->get('message_id');
+		$proj_id    = $this->input->get('proj_id');
+		$msg_cat    = $this->input->get('msg_cat');
+		$message    = $this->input->get('message');
+
+		//message_id为-1时，表示创建新的message记录
+		if($message_id == '-1') {
+			if(!$this->utility->chk_id($proj_id)) {
+				$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+			}
+			$message_id = $this->Proj_model->create_proj_message($proj_id, $msg_cat, $message, element('loginname', $this->session->userdata('user')));
+			if(!$message_id) {
+				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
+			}
+		} else {
+			if(!$this->utility->chk_id($message_id)) {
+				$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+			}
+			$message_id = $this->Proj_model->update_proj_message($message_id, $msg_cat, $message);
+			if(!$message_id) {
+				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
+			}
+		}
+		$this->json->output(array('success' => true, 'message_id' => $message_id));
 	}
 
-	function message_update() {
-		$id = $this->Proj_model->update_proj_message(1, 'new_cat', 'new_msg');
-		var_dump($id);
-	}
+	function message_delete_submit() {
+		$message_id = $this->input->get('message_id');
+		if(!$this->utility->chk_id($message_id)) {
+			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+		}
 
-	function message_delete() {
-		$result = $this->Proj_model->delete_proj_message(1);
-		var_dump($result);
+		if(!$this->Proj_model->delete_proj_message($message_id)) {
+			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+		}
+		$this->json->output(array('success' => true));
 	}
 
 	private function get_user_info($field) {

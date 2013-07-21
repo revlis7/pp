@@ -22,6 +22,10 @@ class Proj_model extends CI_Model {
 	}
 
 	function create_proj_message($proj_id, $msg_cat = '', $message = '', $creator = '') {
+		$proj = $this->get_proj($proj_id);
+		if(!$proj) {
+			return false;
+		}
 		$proj_message = array(
 			'proj_id' => $proj_id,
 			'msg_cat' => $msg_cat,

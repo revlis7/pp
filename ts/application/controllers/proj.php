@@ -393,7 +393,27 @@ class Proj extends Auth_Controller {
 		$data = $this->User_model->get_operation_history();
 		$this->json->output(array('success' => true, 'data' => $data));
 	}
-	
+
+	function message_view() {
+		$proj_message= $this->Proj_model->get_proj_message(498);
+		var_dump($proj_message);
+	}
+
+	function message_submit() {
+		$id = $this->Proj_model->create_proj_message(1, 'category', 'message', 'chiapei');
+		var_dump($id);
+	}
+
+	function message_update() {
+		$id = $this->Proj_model->update_proj_message(1, 'new_cat', 'new_msg');
+		var_dump($id);
+	}
+
+	function message_delete() {
+		$result = $this->Proj_model->delete_proj_message(1);
+		var_dump($result);
+	}
+
 	private function get_user_info($field) {
 		$info = element($field, $this->session->userdata('user'));
 		if($info === false) {

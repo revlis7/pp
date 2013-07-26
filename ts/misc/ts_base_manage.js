@@ -597,13 +597,6 @@ var RecentChangeGrid=Ext.create('Ext.grid.Panel',{
 	]
 });
 
-var recommendStore=Ext.create('Ext.data.ArrayStore', {
-	fields: ['proj_id'],
-	data: [
-	  ['504'],
-	  ['499']
-	]
-});
 var generatePanelFn=function(e){
 	e.down('panel#projDetailPanel').add(RecentChangeGrid).show();
 	e.down('panel#projDetailPanel').add(AmountDetailsGrid).show();

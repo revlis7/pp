@@ -407,10 +407,10 @@ class Proj extends Auth_Controller {
 	}
 
 	function message_submit() {
-		$message_id = $this->input->get('message_id');
-		$proj_id    = $this->input->get('proj_id');
-		$msg_cat    = $this->input->get('msg_cat');
-		$message    = $this->input->get('message');
+		$message_id = $this->input->post('message_id');
+		$proj_id    = $this->input->post('proj_id');
+		$msg_cat    = $this->input->post('msg_cat');
+		$message    = $this->input->post('message');
 
 		//message_id为-1时，表示创建新的message记录
 		if($message_id == '-1') {
@@ -434,7 +434,7 @@ class Proj extends Auth_Controller {
 	}
 
 	function message_delete_submit() {
-		$message_id = $this->input->get('message_id');
+		$message_id = $this->input->post('message_id');
 		if(!$this->utility->chk_id($message_id)) {
 			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
 		}

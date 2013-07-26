@@ -263,7 +263,7 @@ var	projAllStore=Ext.create('Ext.data.JsonStore', {
  });
 var recentChangeStore=Ext.create('Ext.data.JsonStore', {
 	fields: [
-	{name:'message_id',type:'integer'},
+	{name:'id',type:'integer'},
 	{name:'proj_id',type:'integer'},
 	{name:'msg_date',type:'date'},
 	{name:'msg_cat',type:'string'},
@@ -971,7 +971,7 @@ var messageWin=Ext.create("Ext.window.Window",{
 			allowBlank:false
 		}, {
 			xtype:'hiddenfield',
-			name:'message_id',
+			name:'id',
 			allowBlank:false
 		}, {
 			xtype:'fieldcontainer',

@@ -407,39 +407,39 @@ class Proj extends Auth_Controller {
 	}
 
 	function message_submit() {
-		$message_id = $this->input->post('message_id');
+		$id = $this->input->post('id');
 		$proj_id    = $this->input->post('proj_id');
 		$msg_cat    = $this->input->post('msg_cat');
 		$message    = $this->input->post('message');
 
-		//message_id为-1时，表示创建新的message记录
-		if($message_id == '-1') {
+		//id为-1时，表示创建新的message记录
+		if($id == '-1') {
 			if(!$this->utility->chk_id($proj_id)) {
 				$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
 			}
-			$message_id = $this->Proj_model->create_proj_message($proj_id, $msg_cat, $message, element('loginname', $this->session->userdata('user')));
-			if(!$message_id) {
+			$id = $this->Proj_model->create_proj_message($proj_id, $msg_cat, $message, element('loginname', $this->session->userdata('user')));
+			if(!$id) {
 				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 			}
 		} else {
-			if(!$this->utility->chk_id($message_id)) {
+			if(!$this->utility->chk_id($id)) {
 				$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
 			}
-			$message_id = $this->Proj_model->update_proj_message($message_id, $msg_cat, $message);
-			if(!$message_id) {
+			$id = $this->Proj_model->update_proj_message($id, $msg_cat, $message);
+			if(!$id) {
 				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 			}
 		}
-		$this->json->output(array('success' => true, 'message_id' => $message_id));
+		$this->json->output(array('success' => true, 'id' => $id));
 	}
 
 	function message_delete_submit() {
-		$message_id = $this->input->post('message_id');
-		if(!$this->utility->chk_id($message_id)) {
+		$id = $this->input->post('id');
+		if(!$this->utility->chk_id($id)) {
 			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
 		}
 
-		if(!$this->Proj_model->delete_proj_message($message_id)) {
+		if(!$this->Proj_model->delete_proj_message($id)) {
 			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
 		}
 		$this->json->output(array('success' => true));
@@ -447,17 +447,17 @@ class Proj extends Auth_Controller {
 
 	function message_push_submit() {
 		$mobile     = $this->input->get('mobile');
-		$message_id = $this->input->get('message_id');
+		$id = $this->input->get('id');
 
 		if(!$this->utility->chk_mobile($mobile)) {
 			$this->json->output(array('success' => false, 'm' => '输入的手机号错误'));
 		}
 
-		if(!$this->utility->chk_id($message_id)) {
+		if(!$this->utility->chk_id($id)) {
 			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
 		}
 
-		$data = $this->Proj_model->get_proj_message_by_id($message_id);
+		$data = $this->Proj_model->get_proj_message_by_id($id);
 		if(!$data) {
 			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
 		}

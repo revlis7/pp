@@ -14,7 +14,7 @@ class Proj_model extends CI_Model {
 			return false;
 		}
 		$this->db->from('proj_message')->where('proj_id', $proj_id);
-		$this->db->order_by('id', 'asc');
+		$this->db->order_by('message_id', 'asc');
 		$query = $this->db->get();
 		$result = $query->result();
 		return $result;
@@ -22,7 +22,7 @@ class Proj_model extends CI_Model {
 
 	function get_proj_message_by_id($id) {
 		$this->db->from('proj_message')->where('id', $id);
-		$this->db->order_by('id', 'asc');
+		$this->db->order_by('message_id', 'asc');
 		$query = $this->db->get();
 		$result = $query->row();
 		if(!$result) {
@@ -57,7 +57,7 @@ class Proj_model extends CI_Model {
 			'message' => $message,
 			'update_ts' => date('Y-m-d H:i:s'),
 		);
-		$this->db->where('id', $id);
+		$this->db->where('message_id', $id);
 		$this->db->update('proj_message', $proj_message);
 		if($this->db->affected_rows() !== 1) {
 			return false;
@@ -66,7 +66,7 @@ class Proj_model extends CI_Model {
 	}
 
 	function delete_proj_message($id) {
-		$this->db->from('proj_message')->where('message_sid', $id);
+		$this->db->from('proj_message')->where('id', $id);
 		$this->db->delete();
 		
 		if($this->db->affected_rows() !== 1) {

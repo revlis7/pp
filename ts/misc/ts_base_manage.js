@@ -592,9 +592,8 @@ var RecentChangeGrid=Ext.create('Ext.grid.Panel',{
 			}
 		}]
 	},
-	{text:'时间',         dataIndex:'msg_time',    width:100,  hidden:true},
-	{text:'信息分类',     dataIndex:'msg_cat',     width:100,  hidden:true},
-	{text:'修改信息',     dataIndex:'messages',    align: 'right', width:780,  hidden:true}
+	{text:'时间',         dataIndex:'msg_time',    width:100},
+	{text:'修改信息',     dataIndex:'message',    width:780}
 	]
 });
 

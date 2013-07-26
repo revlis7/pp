@@ -578,5 +578,6 @@ Ext.onReady(function() {
 	});
 
 	fileListStore.load();
+	projDetailStore.load();
 	
 });

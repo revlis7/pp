@@ -578,6 +578,6 @@ Ext.onReady(function() {
 	});
 
 	fileListStore.load();
-	projDetailStore.load();
+	recentChangeStore.load();
 	
 });

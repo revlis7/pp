@@ -922,6 +922,42 @@ var messageWin=Ext.create("Ext.window.Window",{
 	closeAction:"hide",
 	closable:true,
 	bodyPadding: 10,
+	dockedItems: [{
+		dock: 'bottom',
+		xtype: 'toolbar',
+		scale:'medium',
+		bodyPadding: 5,
+		items: [{xtype:'box',flex:1},{
+			icon:'/ts/misc/resources/icons/accept.gif',
+			text: '确认',
+			scale:'medium',
+			formBind: true, //only enabled once the form is valid
+			disabled: true,
+			handler: function() {
+				this.up('form').getForm().submit({
+					url: '/ts/index.php/proj/message_submit',
+					submitEmptyText: false,
+					waitMsg: 'Saving Data...',
+					success: function(form, action) {
+						messageWin.hide();
+						recentChangeStore.load();
+					}
+					//,
+					//failure: function(form, action) {
+					//  Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+					//}
+				});
+			}
+		},{
+			icon:'/ts/misc/resources/icons/cross.gif',
+			text: '取消',
+			scale:'medium',
+			handler: function(){
+				this.up('form').getForm().reset();
+				this.up('window').hide();
+			}
+		},{xtype:'box',flex:1}]
+	}],
 	items:[
 	{
 		xtype:"form",
@@ -950,44 +986,7 @@ var messageWin=Ext.create("Ext.window.Window",{
 			width:380,
 			name:'message',
 			allowBlank: false
-		}],
-
-		dockedItems: [{
-			dock: 'bottom',
-			xtype: 'toolbar',
-			scale:'medium',
-			bodyPadding: 5,
-			items: [{xtype:'box',flex:1},{
-				icon:'/ts/misc/resources/icons/accept.gif',
-				text: '确认',
-				scale:'medium',
-				formBind: true, //only enabled once the form is valid
-				disabled: true,
-				handler: function() {
-					this.up('form').getForm().submit({
-						url: '/ts/index.php/proj/message_submit',
-						submitEmptyText: false,
-						waitMsg: 'Saving Data...',
-						success: function(form, action) {
-							messageWin.hide();
-							recentChangeStore.load();
-						}
-						//,
-						//failure: function(form, action) {
-						//  Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
-						//}
-					});
-				}
-			},{
-				icon:'/ts/misc/resources/icons/cross.gif',
-				text: '取消',
-				scale:'medium',
-				handler: function(){
-					this.up('form').getForm().reset();
-					this.up('window').hide();
-				}
-			},{xtype:'box',flex:1}]
-		}],
+		}]
 	}]
 });
 var projApplyForm = Ext.create('Ext.form.Panel', {

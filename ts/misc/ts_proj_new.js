@@ -564,7 +564,7 @@ Ext.onReady(function() {
 				html:'正在加载项目信息...',
 				autoScroll :true,
 				dockedItems:[{
-					dock: 'bottom',
+					dock: 'top',
 					xtype: 'toolbar',
 					bodyPadding: 5,
 					items: [{

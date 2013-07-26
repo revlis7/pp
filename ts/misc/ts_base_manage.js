@@ -1011,6 +1011,7 @@ var projApplyForm = Ext.create('Ext.form.Panel', {
    	width: 350,
    	hidden:true,
    	items: [{
+   		xtype:'textfield',
    		fieldLabel: 'proj_id',
        	name: 'proj_id',
        	allowBlank: false

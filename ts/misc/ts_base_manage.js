@@ -932,7 +932,7 @@ var messageWin=Ext.create("Ext.window.Window",{
 			scale:'medium',
 			formBind: true, //only enabled once the form is valid
 			handler: function() {
-				this.up('form').getForm().submit({
+				this.up('window').down('form').getForm().submit({
 					url: '/ts/index.php/proj/message_submit',
 					submitEmptyText: false,
 					waitMsg: 'Saving Data...',

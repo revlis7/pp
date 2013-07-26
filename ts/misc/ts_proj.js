@@ -463,7 +463,7 @@ Ext.onReady(function() {
 						hidden:true,
 						handler:function(){
 							projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
-							projApplyForm.getForm.submit({
+							projApplyForm.getForm().submit({
 								url:'/ts/index.php/proj/proj_accept_submit',
 								submitEmptyText: false,
 								waitMsg: '正在保存后台数据……',
@@ -484,7 +484,7 @@ Ext.onReady(function() {
 						hidden:true,
 						handler:function(){
 							projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
-							projApplyForm.getForm.submit({
+							projApplyForm.getForm().submit({
 								url:'/ts/index.php/proj/proj_refuse_submit',
 								submitEmptyText: false,
 								waitMsg: '正在保存后台数据……',

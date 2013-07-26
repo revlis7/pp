@@ -921,7 +921,6 @@ var messageWin=Ext.create("Ext.window.Window",{
 	resizeable:false,
 	closeAction:"hide",
 	closable:true,
-	bodyPadding: 10,
 	dockedItems: [{
 		dock: 'bottom',
 		xtype: 'toolbar',
@@ -978,16 +977,32 @@ var messageWin=Ext.create("Ext.window.Window",{
 			name:'id',
 			allowBlank:false
 		}, {
-			xtype:'textfield',
+			xtype:'fieldcontainer',
 			fieldLabel: '信息分类',
-			width:120,
-			name:'msg_cat',
-			allowBlank: false
+			defaultType: 'radiofield',
+			defaults: {
+				flex: 1
+			},
+			items:[{
+				name:'msg_cat',
+				boxLabel:'包含产品内部信息',
+				inputValue:'内部消息'
+			},{
+				name:'msg_cat',
+				boxLabel:'包含产品渠道信息',
+				inputValue:'渠道消息'
+			},{
+				name:'msg_cat',
+				boxLabel:'产品公开信息',
+				inputValue:'公开信息'
+			}]
 		}, {
-			xtype:'textfield',
+			xtype:'textareafield',
 			fieldLabel: '最新进展信息',
-			width:380,
+			width:500,
 			name:'message',
+			enforceMaxLength:true,
+			maxLength:140,
 			allowBlank: false
 		}]
 	}]

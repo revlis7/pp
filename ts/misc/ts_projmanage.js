@@ -73,7 +73,7 @@ listControl.load(function(records, operation, success) {
 		text:'项目状态', dataIndex:'pdt_status', filterable:true, width:68,style: "text-align:center;",align: 'center',hidden:false,
 		renderer:function(value,metaData,record,rowIndex,colIndex,store,view) { 
 			if(value=="申请中"){
-				metaData.style='background:#003366;color:#000000;';
+				metaData.style='background:#003366;color:#ffffff;';
 				return value;
 			} else if(value=="上线通过"){
 				metaData.style='background:#CCFFCC;color:#000000;';

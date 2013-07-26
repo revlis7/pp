@@ -66,7 +66,7 @@ class Proj_model extends CI_Model {
 	}
 
 	function delete_proj_message($id) {
-		$this->db->from('proj_message')->where('message_sid', $id);
+		$this->db->from('proj_message')->where('id', $id);
 		$this->db->delete();
 		
 		if($this->db->affected_rows() !== 1) {

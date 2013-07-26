@@ -236,7 +236,7 @@ class Proj extends Auth_Controller {
 		// 	$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
 		// }
 
-		$proj_id = $this->input->get('proj_id');
+		$proj_id = $this->input->post('proj_id');
 
 		if(!$this->utility->chk_id($proj_id)) {
 			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
@@ -260,7 +260,7 @@ class Proj extends Auth_Controller {
 			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
 		}
 
-		$proj_id = $this->input->get('proj_id');
+		$proj_id = $this->input->post('proj_id');
 
 		if(!$this->utility->chk_id($proj_id)) {
 			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
@@ -277,7 +277,7 @@ class Proj extends Auth_Controller {
 			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
 		}
 
-		$proj_id = $this->input->get('proj_id');
+		$proj_id = $this->input->post('proj_id');
 
 		if(!$this->utility->chk_id($proj_id)) {
 			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));

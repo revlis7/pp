@@ -368,6 +368,7 @@ Ext.onReady(function() {
 				text:'上传项目文件',
 				scale:'medium',
 				handler:function(){
+					AmountEditWin.down('form').getForm().reset();
 					uploadWin.down('hiddenfield[name="proj_id"]').setValue(params.proj_id);
 					Ext.getBody().mask();
 					uploadWin.show();

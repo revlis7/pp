@@ -931,7 +931,6 @@ var messageWin=Ext.create("Ext.window.Window",{
 			text: '确认',
 			scale:'medium',
 			formBind: true, //only enabled once the form is valid
-			disabled: true,
 			handler: function() {
 				this.up('form').getForm().submit({
 					url: '/ts/index.php/proj/message_submit',
@@ -952,7 +951,6 @@ var messageWin=Ext.create("Ext.window.Window",{
 			text: '取消',
 			scale:'medium',
 			handler: function(){
-				this.up('form').getForm().reset();
 				this.up('window').hide();
 			}
 		},{xtype:'box',flex:1}]
@@ -980,6 +978,7 @@ var messageWin=Ext.create("Ext.window.Window",{
 			xtype:'fieldcontainer',
 			fieldLabel: '信息分类',
 			defaultType: 'radiofield',
+			labelAlign:'right',
 			defaults: {
 				flex: 1
 			},
@@ -1001,6 +1000,7 @@ var messageWin=Ext.create("Ext.window.Window",{
 			fieldLabel: '最新进展信息',
 			width:500,
 			name:'message',
+			labelAlign:'right',
 			enforceMaxLength:true,
 			maxLength:140,
 			allowBlank: false

@@ -508,7 +508,7 @@ Ext.onReady(function() {
 					messageForm=messageWin.down('form');
 					messageForm.getForm().reset();
 					messageForm.down('hiddenfield[name="proj_id"]').setValue(params.proj_id);
-					messageForm.down('hiddenfield[name="id"]').setValue(-1);
+					messageForm.down('hiddenfield[name="message_id"]').setValue(-1);
 					Ext.getBody().mask();
 					messageWin.show();
 				}

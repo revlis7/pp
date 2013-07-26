@@ -965,7 +965,10 @@ var messageWin=Ext.create("Ext.window.Window",{
 		trackResetOnLoad:true,
 		border:0,
 		waitTitle:"Pleas wait...",
-		layout:'fit',
+		layout:{
+			type: 'vbox',
+			defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
+		},
 		items: [{
 			xtype:'hiddenfield',
 			name:'proj_id',

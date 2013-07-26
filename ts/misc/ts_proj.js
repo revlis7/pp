@@ -27,6 +27,14 @@ Ext.onReady(function() {
 			root: 'data'
 		}
 	});
+	recentChangeStore.setProxy({
+		type: 'ajax',
+		url: '/ts/index.php/proj/message_view?proj_id='+params.proj_id,
+		reader: {
+			type: 'json',
+			root: 'data'
+		}
+	});
 	var ProjWin=Ext.create("Ext.window.Window",{
 		resizeable:false,
 		closeAction:"hide",

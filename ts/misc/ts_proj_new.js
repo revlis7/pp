@@ -80,6 +80,14 @@ Ext.onReady(function() {
 											root: 'data'
 									}
 								});
+								recentChangeStore.setProxy({
+									type: 'ajax',
+									url: '/ts/index.php/proj/message_view?proj_id='+params.proj_id,
+									reader: {
+										type: 'json',
+										root: 'data'
+									}
+								});
 								fileListStore.load();
 								projStore.load(function(records, operation, success) {
 									projDetailStore.load(function(records, operation, success) {

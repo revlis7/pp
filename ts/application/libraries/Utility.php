@@ -149,8 +149,41 @@ class Utility {
 			return $d;
 		}
 	}
+    
+    function noticemail($to, $subject, $content) {
+        $mail_config['from'] = 'firstshin_notice@163.com';
+        $mail_config['smtp_host'] = 'smtp.163.com';
+        $mail_config['smtp_username'] = 'firstshin_notice@163.com';
+        $mail_config['smtp_password'] = 'qc1ttpkq';
+        $mail_config['to'] = $to;
+        $mail_config['subject'] = $subject;
+        $mail_config['content'] = $content;
+        
+        $mail = new SaeMail();
+        
+        $mail->setOpt($mail_config);
+        
+        $mail->send();
+    }
 
-	function page_title() {
+    function noticemail2($to, $subject, $content) {
+        $mail_config['from'] = 'firstshin_notice@163.com';
+        $mail_config['smtp_host'] = 'smtp.163.com';
+        $mail_config['smtp_username'] = 'firstshin_notice@163.com';
+        $mail_config['smtp_password'] = 'qc1ttpkq';
+        $mail_config['to'] = $to;
+        $mail_config['subject'] = $subject;
+        $mail_config['content'] = $content;
+        $mail_config['content_type'] = 'HTML';
+        
+        $mail = new SaeMail();
+        
+        $mail->setOpt($mail_config);
+        
+        $mail->send();
+    }
+
+    function page_title() {
 		$module = $this->CI->uri->segment(1);
 		$action = $this->CI->uri->segment(2);
 		switch($module) {

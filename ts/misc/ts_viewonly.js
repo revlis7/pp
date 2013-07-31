@@ -69,16 +69,13 @@ listControl.load(function(records, operation, success) {
 			text:'产品等级', dataIndex:'grade', filterable:true,sortable : true, width:84,style: "text-align:center;",align: 'center', hidden:records[0].get("grade"),renderer: gradeFn
 		}, {
 			text:'项目名称', dataIndex:'name', filterable:true,sortable : true, width:220,style: "text-align:center;",align: 'left', hidden:records[0].get("name"),
-			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
-				metaData.tdAttr = 'data-qtip="'+value+'"'; 
-				return '<b>'+value+'</b>';
-			}
+			renderer: toolTipFn
 		}, {
 			xtype: 'actioncolumn',
 			width:60,style: "text-align:center;",align: 'center', 
 			sortable: false,
 			items: [{
-				icon: '/ts/misc/resources/icons/search.png',
+				icon: '/ts/misc/resources/icons/magnifying_glass_16.png',
 				tooltip: '查看该项目的详细信息',
 				handler: function(grid, rowIndex, colIndex) {
 					e=Ext.getCmp('projPanel');
@@ -168,10 +165,10 @@ listControl.load(function(records, operation, success) {
 			text:'渠道公司',dataIndex:'channel_company',filterable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("channel_company")
 		}, {
 			text:'添加时间',dataIndex:'create_ts',filterable:true,sortable : true, width:80, style: "text-align:center;",align: 'center',renderer:new Ext.util.Format.dateRenderer("Y-m-d")
-		}, {
+		}, /*{
 			text:'打款进度', dataIndex:'countdown', filterable:true,sortable : true, minWidth:200,hidden:records[0].get("countdown"),
 			renderer: toolTipFn
-		}, {
+		},*/ {
 			text:'备注', dataIndex:'remark', filterable:true,sortable : true, minWidth:200,hidden:records[0].get("remark"),
 			renderer: toolTipFn
 		}]
@@ -191,11 +188,11 @@ listControl.load(function(records, operation, success) {
 			align: 'center'
 		},
 		columns:[
-		{text:'子名称',		 dataIndex:'sub_name', width:114, hidden:records[0].get("sub_name")},
-		{text:'项目期限',	 dataIndex:'month',	width:80, hidden:records[0].get("month"),renderer:function(value,metaData,record,colIndex,store,view) {return value+'个月';}},
-		{text:'认购金额',	 dataIndex:'amount', width:80, hidden:records[0].get("amount"),renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
-		{text:'项目收益',	 dataIndex:'profit', width:80, hidden:records[0].get("profit"),renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
-		{text:'销售状态',	 dataIndex:'status', width:80, hidden:records[0].get("status"),
+		{text:'子名称',		 dataIndex:'sub_name', width:114,filtable:true,style: "text-align:center;",align: 'center', hidden:records[0].get("sub_name")},
+		{text:'项目期限',	 dataIndex:'month',	width:80,filtable:true,style: "text-align:center;",align: 'center', hidden:records[0].get("month"),renderer:function(value,metaData,record,colIndex,store,view) {return value+'个月';}},
+		{text:'认购金额',	 dataIndex:'amount', width:80,filtable:true,style: "text-align:center;",align: 'center', hidden:records[0].get("amount"),renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
+		{text:'项目收益',	 dataIndex:'profit', width:80,filtable:true,style: "text-align:center;",align: 'center', hidden:records[0].get("profit"),renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
+		{text:'销售状态',	 dataIndex:'status', width:80,filtable:true,style: "text-align:center;",align: 'center', hidden:records[0].get("status"),
 			renderer:function(value,metaData){
 				if(value=="在售"){
 					metaData.style='background:#CCFFCC;color:#000000'
@@ -207,7 +204,7 @@ listControl.load(function(records, operation, success) {
 				return value;
 			}
 		},
-		{text:'份额',		 dataIndex:'total_share', width:60, hidden:records[0].get("total_share"),
+		{text:'份额',		 dataIndex:'total_share', width:60,filtable:true,style: "text-align:center;",align: 'center', hidden:records[0].get("total_share"),
 			renderer:function(value,metaData){
 				if(value=="OPEN"){
 					metaData.style='background:#CCFFCC;color:#000000'
@@ -219,20 +216,20 @@ listControl.load(function(records, operation, success) {
 				return value;
 			}
 		},
-		{text:'成立日期',	 dataIndex:'found',	width:88, hidden:records[0].get("found"),renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
-		{text:'税前佣金',	 dataIndex:'commission_b_tax', align: 'right',width:80, hidden:records[0].get("commission_b_tax"),		 
+		{text:'成立日期',	 dataIndex:'found',	width:88,filtable:true,style: "text-align:center;",align: 'center', hidden:records[0].get("found"),renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
+		{text:'税前佣金',	 dataIndex:'commission_b_tax', filtable:true,style: "text-align:center;",align: 'center',width:80, hidden:records[0].get("commission_b_tax"),		 
 			renderer: commissionFn
 		},
-		{text:'税后佣金',	 dataIndex:'commission_a_tax', align: 'right',width:80, hidden:records[0].get("commission_a_tax"),		 
+		{text:'税后佣金',	 dataIndex:'commission_a_tax', filtable:true,style: "text-align:center;",align: 'center',width:80, hidden:records[0].get("commission_a_tax"),		 
 			renderer: commissionFn
 		},
-		{text:'平台费用',	 dataIndex:'inner_commission', align: 'right',width:80, hidden:records[0].get("inner_commission"),		 
+		{text:'平台费用',	 dataIndex:'inner_commission', filtable:true,style: "text-align:center;",align: 'center',width:80, hidden:records[0].get("inner_commission"),		 
 			renderer: commissionFn
 		},
-		{text:'费用',		 dataIndex:'outer_commission', align: 'right',width:80, hidden:records[0].get("outer_commission"),		 
+		{text:'费用',		 dataIndex:'outer_commission', filtable:true,style: "text-align:center;",align: 'center',width:80, hidden:records[0].get("outer_commission"),		 
 			renderer: commissionFn
 		},
-		{text:'现结费用',	 dataIndex:'imm_payment', align:	'right',width:80, hidden:records[0].get("imm_payment"),		
+		{text:'现结费用',	 dataIndex:'imm_payment', filtable:true,style: "text-align:center;",align: 'center',width:80, hidden:records[0].get("imm_payment"),		
 			renderer: commissionFn
 		}
 		]
@@ -409,7 +406,7 @@ listControl.load(function(records, operation, success) {
 		},'-',{
 			text:'全部显示',
 			scale:'medium',
-			icon:'/ts/misc/resources/icons/grid.png',
+			icon:'/ts/misc/resources/icons/article_16.png',
 			handler:function(){
 				fullGridC1.filters.clearFilters();
 				projAllStore.load();
@@ -462,7 +459,7 @@ listControl.load(function(records, operation, success) {
 		},'-',{
 			text:'全部显示',
 			scale:'medium',
-			icon:'/ts/misc/resources/icons/grid.png',
+			icon:'/ts/misc/resources/icons/article_16.png',
 			handler:function(){
 				fullGridC1.filters.clearFilters();
 				projAllStore.load(function(){
@@ -485,11 +482,12 @@ listControl.load(function(records, operation, success) {
 					});
 					var r=foundRecords.getAt(0);
 					var recommendTempPanel=Ext.create('Ext.panel.Panel',{
-						margin:10,
+						margin:'10 10 0 10',
 						border:0,
 						layout:'border',
 						proj_id:r.get("proj_id"),
-						title:"<b>"+r.get("issue")+" "+r.get("name")+"</b>, "+detailString,
+                        title:"推荐项目：<span style='font-size:14px;font-weight:bold;font-family:微软雅黑,黑体,sans-serif'>"+r.get("issue")+" "+r.get("name")+"</span>, "+detailString,
+                        titleAlign:'center',
 						proj_info_tpl:'',
 						items:[{
 							itemId:'projDetailPanel',
@@ -506,7 +504,7 @@ listControl.load(function(records, operation, success) {
 							itemId:'projInfoPanel',
 							xtype:'panel',
 							region:'west',
-							width:480,
+							width:586,
 							title:'项目信息',
 							html:'正在加载项目信息...',
 							autoScroll :true,
@@ -516,7 +514,7 @@ listControl.load(function(records, operation, success) {
 								scale:'medium',
 								bodyPadding: 5,
 								items: [{
-									icon:'/ts/misc/resources/icons/accept.gif',
+									icon:'/ts/misc/resources/icons/pen_alt_stroke_24.png',
 									text: '我要预约该项目',
 									scale:'medium',
 									handler: function() {
@@ -569,7 +567,7 @@ listControl.load(function(records, operation, success) {
 				flex:1
 			},{
 				text:'查看推荐项目',
-				icon:'/ts/misc/resources/icons/plugin.gif',
+				icon:'/ts/misc/resources/icons/document_recommend_24.png',
 				scale:'medium',
 				itemId:"recommendBtn",
 				handler:function(){
@@ -603,7 +601,7 @@ listControl.load(function(records, operation, success) {
 							});
 							recentChangeStore.setProxy({
 								type: 'ajax',
-								url: '/ts/index.php/proj/detail_view?proj_id='+e.proj_id,
+								url: '/ts/index.php/proj/message_view?proj_id='+e.proj_id,
 								reader: {
 									type: 'json',
 								root: 'data'
@@ -632,7 +630,7 @@ listControl.load(function(records, operation, success) {
 								'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
 								'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
 								'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
-								'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
+								//'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
 								'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
 								'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
 								'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
@@ -659,7 +657,7 @@ listControl.load(function(records, operation, success) {
 				}
 			},{
 				text:'查看在售列表',
-				icon:'/ts/misc/resources/icons/plugin.gif',
+				icon:'/ts/misc/resources/icons/document_alt_stroke_24.png',
 				scale:'medium',
 				itemId:"ListBtn",
 				handler:function(){
@@ -689,7 +687,7 @@ listControl.load(function(records, operation, success) {
 				}
 			},{
 				text:'查看近期结束项目',
-				icon:'/ts/misc/resources/icons/plugin.gif',
+				icon:'/ts/misc/resources/icons/document_alt_fill_24.png',
 				scale:'medium',
 				itemId:"endProjListBtn",
 				handler:function(){
@@ -719,19 +717,19 @@ listControl.load(function(records, operation, success) {
 				}
 			},{
 				text:'进入管理模式',
-				icon:'/ts/misc/resources/icons/plugin.gif',
+				icon:'/ts/misc/resources/icons/wrench_24.png',
 				scale:'medium',
 				hidden:records[0].get("manage_button"),
 				handler:function(){window.location.href='/ts/index.php/proj/manage';}
 			},{
 				text:'个人信息：'+loginname,
-				icon:'/ts/misc/resources/icons/user.png',
+				icon:'/ts/misc/resources/icons/user_24.png',
 				scale:'medium',
 				handler:function(){window.location.href='/ts/index.php/user/info';}
 			},{
 				text:'退出',
 				scale:'medium',
-				icon:'/ts/misc/resources/icons/cross.gif',
+				icon:'/ts/misc/resources/icons/curved_arrow_24.png',
 				handler:function(){window.location.href='/ts/index.php/logout';}
 			}]
 		}, {
@@ -792,7 +790,7 @@ listControl.load(function(records, operation, success) {
 					itemId:'projInfoPanel',
 					xtype:'panel',
 					region:'west',
-					width:480,
+					width:586,
 					title:'项目信息',
 					html:'正在加载项目信息...',
 					autoScroll :true,
@@ -802,7 +800,7 @@ listControl.load(function(records, operation, success) {
 						scale:'medium',
 						bodyPadding: 5,
 						items: [{
-							icon:'/ts/misc/resources/icons/accept.gif',
+							icon:'/ts/misc/resources/icons/pen_alt_stroke_24.png',
 							text: '我要预约该项目',
 							scale:'medium',
 							handler: function() {

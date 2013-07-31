@@ -1,6 +1,7 @@
 Ext.onReady(function() {
   Ext.QuickTips.init();
-
+  var params = Ext.Object.fromQueryString(location.search.substring(1));
+  
   var viewport = Ext.create('Ext.Viewport', {
     layout: 'border',
     items: [{
@@ -9,7 +10,7 @@ Ext.onReady(function() {
         height:20,
         items:[{xtype:'box',flex:1},{
           xtype:'box',
-          html:'上海玉尔投资发展有限公司 - 版权所有 - 2012-2013'
+          html:'上海玉尔投资发展有限公司 - 版权所有 - 2012-2013年'
         },{xtype:'box',flex:1}]
     },{
       xtype:'panel', 
@@ -29,9 +30,10 @@ Ext.onReady(function() {
         border:0,
         items:[{
           xtype:'panel',
+          border:0,
           height:600,
           width:800,
-          html:'<a href="http://www.firstshin.com/?page_id=61"><img src="/ts/misc/resources/fp_20130301.jpg"></img></a>'
+          html:'<a href="http://www.firstshin.com/?page_id=454"><img src="/ts/misc/resources/fp_20130726.jpg"></img></a>'
         },{
           xtype:'form',
           border:2,
@@ -78,7 +80,15 @@ Ext.onReady(function() {
                   submitEmptyText: false,
                   waitMsg: '正在登录...',
                   success: function(form, action) {
-                    window.location.href='/ts/index.php/proj';
+                    if(typeof(params)!="undefined"){
+                      if(typeof(params.redurl)!="undefined"){
+                        window.location.href=params.redurl;
+                      } else {
+                        window.location.href='/ts/index.php/proj';
+                      }
+                    } else {
+                      window.location.href='/ts/index.php/proj';
+                    }
                   },
                   failure: function(form, action) {
                     Ext.Msg.alert('alert', '用户名或密码错误，请检查您的输入！');

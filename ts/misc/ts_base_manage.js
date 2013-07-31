@@ -11,15 +11,15 @@ Ext.require([
 var gradeFn=function(value) { 
 	var res;
 	if(value=="五星级"){
-		res= '<span style="color:#003366">★★★★★</span>'
+		res= '<span style="color:#245288">★★★★★</span>'
 	} else if (value=="四星级"){
-		res= '<span style="color:#003366">★★★★</span>'
+		res= '<span style="color:#245288">★★★★</span>'
 	} else if (value=="三星级"){
-		res= '<span style="color:#003366">★★★</span>'
+		res= '<span style="color:#245288">★★★</span>'
 	} else if (value=="二星级"){
-		res= '<span style="color:#003366">★★</span>'
+		res= '<span style="color:#245288">★★</span>'
 	} else if (value=="一星级"){
-		res= '<span style="color:#003366">★</span>'
+		res= '<span style="color:#245288">★</span>'
 	}
 	return res;
 };
@@ -132,6 +132,7 @@ var chManagerList=Ext.create('Ext.data.ArrayStore', {
 	  ['申玉玺','申玉玺'],
 	  ['孟祥春','孟祥春'],
 	  ['王璐','王璐'],
+	  ['王琪','王琪'],
 	  ['翟晓凤','翟晓凤']
 	]
 });
@@ -143,7 +144,7 @@ var	fileListStore=Ext.create('Ext.data.JsonStore', {
 	{name:'filename'	,type:'string' },
 	{name:'filesize'	,type:'integer'	},
 	{name:'editor'	,type:'string' },
-	{name:'create_ts'	,type:'date' },
+	{name:'create_ts'	,type:'date' }
 	],
 	proxy: {
 		type: 'ajax',
@@ -265,7 +266,7 @@ var recentChangeStore=Ext.create('Ext.data.JsonStore', {
 	fields: [
 	{name:'id',type:'integer'},
 	{name:'proj_id',type:'integer'},
-	{name:'msg_date',type:'date'},
+	{name:'create_ts',type:'date'},
 	{name:'msg_cat',type:'string'},
 	{name:'message',type:'string'},
 	{name:'last_update',type:'date'},
@@ -331,7 +332,21 @@ var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
 	minHeight:156,
 	flex:1,
 	emptyText:'暂无额度信息',
-	columns:[{
+	columns:[ {
+		xtype: 'actioncolumn',
+		width:40,style: "text-align:center;",align: 'center',
+		sortable: false,
+		items: [{
+			icon: '/ts/misc/resources/icons/cog_16.png',
+			tooltip: '编辑此条记录',
+			handler: function(grid, rowIndex, colIndex) {
+				//sampleStore.removeAt(rowIndex);
+				AmountEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
+				Ext.getBody().mask();
+				AmountEditWin.show();
+			}
+		}]
+	},{
 		xtype: 'actioncolumn',
 		//text:'删除',
 		width:40,
@@ -339,7 +354,7 @@ var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
 		align: 'center',
 		sortable: false,
 		items: [{
-			icon: '/ts/misc/resources/icons/cross.gif',
+			icon: '/ts/misc/resources/icons/minus_16.png',
 			tooltip: '删除此条记录',
 			handler: function(grid, rowIndex, colIndex) {
 				var amount=grid.getStore().getAt(rowIndex).get("amount");
@@ -369,20 +384,6 @@ var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
 						}
 					}
 				});
-			}
-		}]
-	}, {
-		xtype: 'actioncolumn',
-		width:40,style: "text-align:center;",align: 'center',
-		sortable: false,
-		items: [{
-			icon: '/ts/misc/resources/icons/cog_edit.png',
-			tooltip: '编辑此条记录',
-			handler: function(grid, rowIndex, colIndex) {
-				//sampleStore.removeAt(rowIndex);
-				AmountEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
-				Ext.getBody().mask();
-				AmountEditWin.show();
 			}
 		}]
 	},
@@ -451,7 +452,19 @@ var FileListGrid=Ext.create('Ext.grid.Panel',{
 		width:40,style: "text-align:center;",align: 'center',
 		sortable: false,
 		items: [{
-			icon: '/ts/misc/resources/icons/cross.gif',
+			icon: '/ts/misc/resources/icons/download_16.png',
+			tooltip: '下载该文件',
+			handler: function(grid, rowIndex, colIndex) {
+				var filename=grid.getStore().getAt(rowIndex).get("filename");
+				window.open('/ts/index.php/upload/get?file='+filename);
+			}
+		}]
+	},{
+		xtype: 'actioncolumn',
+		width:40,style: "text-align:center;",align: 'center',
+		sortable: false,
+		items: [{
+			icon: '/ts/misc/resources/icons/minus_16.png',
 			tooltip: '删除该文件',
 			handler: function(grid, rowIndex, colIndex) {
 				var filename=grid.getStore().getAt(rowIndex).get("filename");
@@ -471,18 +484,6 @@ var FileListGrid=Ext.create('Ext.grid.Panel',{
 						}
 					}
 				});
-			}
-		}]
-	},{
-		xtype: 'actioncolumn',
-		width:40,style: "text-align:center;",align: 'center',
-		sortable: false,
-		items: [{
-			icon: '/ts/misc/resources/icons/download.gif',
-			tooltip: '下载该文件',
-			handler: function(grid, rowIndex, colIndex) {
-				var filename=grid.getStore().getAt(rowIndex).get("filename");
-				window.open('/ts/index.php/upload/get?file='+filename);
 			}
 		}]
 	},
@@ -514,7 +515,21 @@ var RecentChangeGrid=Ext.create('Ext.grid.Panel',{
 		width:40,style: "text-align:center;",align: 'center',
 		sortable: false,
 		items: [{
-			icon: '/ts/misc/resources/icons/cross.gif',
+			icon: '/ts/misc/resources/icons/cog_16.png',
+			tooltip: '修改这条消息',
+			handler: function(grid, rowIndex, colIndex) {
+				//sampleStore.removeAt(rowIndex);
+				messageWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
+				Ext.getBody().mask();
+				messageWin.show();
+			}
+		}]
+	},{
+		xtype: 'actioncolumn',
+		width:40,style: "text-align:center;",align: 'center',
+		sortable: false,
+		items: [{
+			icon: '/ts/misc/resources/icons/minus_16.png',
 			tooltip: '删除这条消息',
 			handler: function(grid, rowIndex, colIndex) {
 				var message=grid.getStore().getAt(rowIndex).get("message");
@@ -548,21 +563,7 @@ var RecentChangeGrid=Ext.create('Ext.grid.Panel',{
 		width:40,style: "text-align:center;",align: 'center',
 		sortable: false,
 		items: [{
-			icon: '/ts/misc/resources/icons/download.gif',
-			tooltip: '修改这条消息',
-			handler: function(grid, rowIndex, colIndex) {
-				//sampleStore.removeAt(rowIndex);
-				messageWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
-				Ext.getBody().mask();
-				messageWin.show();
-			}
-		}]
-	},{
-		xtype: 'actioncolumn',
-		width:40,style: "text-align:center;",align: 'center',
-		sortable: false,
-		items: [{
-			icon: '/ts/misc/resources/icons/download.gif',
+			icon: '/ts/misc/resources/icons/rss_alt_24.png',
 			tooltip: '短信推送！',
 			handler: function(grid, rowIndex, colIndex) {
 				var message=grid.getStore().getAt(rowIndex).get("message");
@@ -592,8 +593,9 @@ var RecentChangeGrid=Ext.create('Ext.grid.Panel',{
 			}
 		}]
 	},
-	{text:'时间',         dataIndex:'msg_time',    width:100},
-	{text:'修改信息',     dataIndex:'message',    width:780}
+	{text:'时间',         dataIndex:'create_ts',    style:	"text-align:center;",align:	'center',width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
+	{text:'信息分类',			dataIndex:'msg_cat',	  filtable:true, style:	"text-align:center;",align:	'center',width:100},
+	{text:'修改信息',     dataIndex:'message',    style:	"text-align:center;",align:	'left',width:780}
 	]
 });
 
@@ -618,7 +620,7 @@ var generatePanelFn=function(e){
 		'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
+		//'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
@@ -689,9 +691,10 @@ var AmountEditWin=Ext.create('Ext.window.Window',{
 			dock: 'bottom',
 			xtype: 'toolbar',
 			scale:'medium',
+            border:0,
 			bodyPadding: 5,
 			items: [{xtype:'box',flex:1},{
-				icon:'/ts/misc/resources/icons/accept.gif',
+				icon:'/ts/misc/resources/icons/check_24.png',
 				text: '确认',
 				scale:'medium',
 				formBind: true, //only enabled once the form is valid
@@ -712,7 +715,7 @@ var AmountEditWin=Ext.create('Ext.window.Window',{
 					});
 				}
 			},{
-				icon:'/ts/misc/resources/icons/cross.gif',
+				icon:'/ts/misc/resources/icons/x_24.png',
 				text: '取消',
 				scale:'medium',
 				handler: function(){
@@ -917,9 +920,10 @@ var messageWin=Ext.create("Ext.window.Window",{
 		dock: 'bottom',
 		xtype: 'toolbar',
 		scale:'medium',
+        border:0,
 		bodyPadding: 5,
 		items: [{xtype:'box',flex:1},{
-			icon:'/ts/misc/resources/icons/accept.gif',
+			icon:'/ts/misc/resources/icons/check_24.png',
 			text: '确认',
 			scale:'medium',
 			formBind: true, //only enabled once the form is valid
@@ -939,7 +943,7 @@ var messageWin=Ext.create("Ext.window.Window",{
 				});
 			}
 		},{
-			icon:'/ts/misc/resources/icons/cross.gif',
+			icon:'/ts/misc/resources/icons/x_24.png',
 			text: '取消',
 			scale:'medium',
 			handler: function(){
@@ -967,14 +971,12 @@ var messageWin=Ext.create("Ext.window.Window",{
 			name:'id',
 			allowBlank:false
 		}, {
-			xtype:'fieldcontainer',
+			xtype: 'radiogroup',
 			fieldLabel: '信息分类',
-			defaultType: 'radiofield',
-			labelAlign:'right',
-			defaults: {
-				flex: 1
-			},
-			items:[{
+            columns: 1,
+            allowBlank:false,
+			// Arrange radio buttons into two columns, distributed vertically
+			items: [{
 				name:'msg_cat',
 				boxLabel:'包含产品内部信息',
 				inputValue:'内部消息'

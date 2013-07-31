@@ -37,7 +37,7 @@ Ext.onReady(function() {
 						xtype:'box',
 						flex:1
 				},{
-					icon:'/ts/misc/resources/icons/grid.png',
+					icon:'/ts/misc/resources/icons/check_24.png',
 					text: '确定',
 					id:'ok_create',
 					hidden:false,
@@ -82,7 +82,7 @@ Ext.onReady(function() {
 								});
 								recentChangeStore.setProxy({
 									type: 'ajax',
-									url: '/ts/index.php/proj/message_view?proj_id='+params.proj_id,
+									url: '/ts/index.php/proj/message_view?proj_id='+proj_id,
 									reader: {
 										type: 'json',
 										root: 'data'
@@ -155,7 +155,7 @@ Ext.onReady(function() {
 						});
 					}
 				},{
-					icon:'/ts/misc/resources/icons/grid.png',
+					icon:'/ts/misc/resources/icons/check_24.png',
 					text: '确定',
 					id:'ok_edit',
 					hidden:true,
@@ -236,7 +236,7 @@ Ext.onReady(function() {
 						});
 					}
 				},{
-					icon:'/ts/misc/resources/icons/cross.gif',
+					icon:'/ts/misc/resources/icons/x_24.png',
 					text: '取消',
 					id:'cancel_create',
 					scale: 'medium',
@@ -245,7 +245,7 @@ Ext.onReady(function() {
 						Ext.util.History.back();
 					}
 				},{
-					icon:'/ts/misc/resources/icons/cross.gif',
+					icon:'/ts/misc/resources/icons/x_24.png',
 					text: '取消',
 					id:'cancel_edit',
 					scale: 'medium',
@@ -501,45 +501,45 @@ Ext.onReady(function() {
 			},{
 				text:'编辑项目',
 				scale:'medium',
-				icon: '/ts/misc/resources/icons/cog_edit.png',
+				icon: '/ts/misc/resources/icons/cog_24.png',
 				handler:function(){
 					ProjWin.down('form').getForm().loadRecord(projStore.first());
 					Ext.getBody().mask();
 					ProjWin.show();
 				}
 			},{
-				icon: '/ts/misc/resources/icons/add.gif',
+				icon: '/ts/misc/resources/icons/message_add.png',
 				scale:'medium',
 				text:'新增项目消息' ,
 				handler:function(){
 					//todo
 					messageForm=messageWin.down('form');
 					messageForm.getForm().reset();
-					messageForm.down('hiddenfield[name="proj_id"]').setValue(params.proj_id);
+					messageForm.down('hiddenfield[name="proj_id"]').setValue(proj_id);
 					messageForm.down('hiddenfield[name="id"]').setValue(-1);
 					Ext.getBody().mask();
 					messageWin.show();
 				}
 			},{
-				icon: '/ts/misc/resources/icons/add.gif',
+				icon: '/ts/misc/resources/icons/article_add.png',
 				scale:'medium',
 				text:'新增额度信息' ,
 				handler:function(){
 					//todo
 					AmountEditForm=AmountEditWin.down('form');
-					AmountEditForm.getForm().reset();
-					AmountEditForm.down('hiddenfield[name="proj_id"]').setValue(params.proj_id);
+					//AmountEditForm.getForm().reset();
+					AmountEditForm.down('hiddenfield[name="proj_id"]').setValue(proj_id);
 					AmountEditForm.down('hiddenfield[name="proj_detail_id"]').setValue(-1);
 					AmountEditForm.down('numberfield[name="amount"]').setValue(null);
 					Ext.getBody().mask();
 					AmountEditWin.show();
 				}
 			},{
-				icon: '/ts/misc/resources/icons/upload.gif',
+				icon: '/ts/misc/resources/icons/arrow_up_24.png',
 				text:'上传项目文件',
 				scale:'medium',
 				handler:function(){
-					uploadWin.down('hiddenfield[name="proj_id"]').setValue(params.proj_id);
+					uploadWin.down('hiddenfield[name="proj_id"]').setValue(proj_id);
 					Ext.getBody().mask();
 					uploadWin.show();
 				}
@@ -548,12 +548,12 @@ Ext.onReady(function() {
 				flex:1
 			},{
 				text:'返回项目管理列表',
-				icon:'/ts/misc/resources/icons/plugin.gif',
+				icon:'/ts/misc/resources/icons/curved_arrow_24.png',
 				scale:'medium',
 				handler:function(){window.location.href='/ts/index.php/proj/manage';}
 			},{
 				text:'关闭窗口',
-				icon:'/ts/misc/resources/icons/cross.gif',
+				icon:'/ts/misc/resources/icons/x_24.png',
 				scale:'medium',
 				handler:function(){window.close();}
 			}]
@@ -567,7 +567,7 @@ Ext.onReady(function() {
 				id:'projInfoPanel',
 				xtype:'panel',
 				region:'west',
-				width:480,
+				width:586,
 				title:'项目信息',
 				html:'正在加载项目信息...',
 				autoScroll :true,
@@ -596,7 +596,7 @@ Ext.onReady(function() {
 							})
 						}
 					},{
-						icon: '/ts/misc/resources/icons/upload.gif',
+						icon: '/ts/misc/resources/icons/check_24.png',
 						id:'BtnPdtAccept',
 						text:'上线批准',
 						scale:'medium',
@@ -617,7 +617,7 @@ Ext.onReady(function() {
 							})
 						}
 					},{
-						icon: '/ts/misc/resources/icons/upload.gif',
+						icon: '/ts/misc/resources/icons/denied_24.png',
 						id:'BtnPdtRefuse',
 						text:'上线驳回',
 						scale:'medium',

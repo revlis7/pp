@@ -67,7 +67,7 @@ Ext.onReady(function() {
 				xtype: 'toolbar',
 				bodyPadding: 5,
 				items: [{
-					icon:'/ts/misc/resources/icons/grid.png',
+					icon:'/ts/misc/resources/icons/check_24.png',
 					text: '确定',
 					scale: 'medium',
 					formBind: true, //only enabled once the form is valid
@@ -91,7 +91,7 @@ Ext.onReady(function() {
 						});
 					}
 				},{
-					icon:'/ts/misc/resources/icons/cross.gif',
+					icon:'/ts/misc/resources/icons/x_24.png',
 					text: '取消',
 						scale: 'medium',
 					handler: function(){
@@ -338,14 +338,14 @@ Ext.onReady(function() {
 			},{
 				text:'编辑项目',
 				scale:'medium',
-				icon: '/ts/misc/resources/icons/cog_edit.png',
+				icon: '/ts/misc/resources/icons/cog_24.png',
 				handler:function(){
 					ProjWin.down('form').getForm().loadRecord(projStore.first());
 					Ext.getBody().mask();
 					ProjWin.show();
 				}
 			},{
-				icon: '/ts/misc/resources/icons/add.gif',
+				icon: '/ts/misc/resources/icons/message_add.png',
 				scale:'medium',
 				text:'新增项目消息' ,
 				handler:function(){
@@ -358,7 +358,7 @@ Ext.onReady(function() {
 					messageWin.show();
 				}
 			},{
-				icon: '/ts/misc/resources/icons/add.gif',
+				icon: '/ts/misc/resources/icons/article_add.png',
 				scale:'medium',
 				text:'新增额度信息' ,
 				handler:function(){
@@ -372,7 +372,7 @@ Ext.onReady(function() {
 					AmountEditWin.show();
 				}
 			},{
-				icon: '/ts/misc/resources/icons/upload.gif',
+				icon: '/ts/misc/resources/icons/arrow_up_24.png',
 				text:'上传项目文件',
 				scale:'medium',
 				handler:function(){
@@ -382,7 +382,7 @@ Ext.onReady(function() {
 					uploadWin.show();
 				}
 			},{
-				icon: '/ts/misc/resources/icons/upload.gif',
+				icon: '/ts/misc/resources/icons/multi_end_24.png',
 				text:'一键结束该项目',
 				scale:'medium',
 				handler:function(){
@@ -408,12 +408,12 @@ Ext.onReady(function() {
 				flex:1
 			},{
 				text:'返回项目管理列表',
-				icon:'/ts/misc/resources/icons/plugin.gif',
+				icon:'/ts/misc/resources/icons/curved_arrow_24.png',
 				scale:'medium',
 				handler:function(){window.location.href='/ts/index.php/proj/manage';}
 			},{
 				text:'关闭窗口',
-				icon:'/ts/misc/resources/icons/cross.gif',
+				icon:'/ts/misc/resources/icons/x_24.png',
 				scale:'medium',
 				handler:function(){window.close();}
 			}]
@@ -427,7 +427,7 @@ Ext.onReady(function() {
 				id:'projInfoPanel',
 				xtype:'panel',
 				region:'west',
-				width:480,
+				width:586,
 				title:'项目信息',
 				html:'正在加载项目信息...',
 				autoScroll :true,
@@ -456,7 +456,7 @@ Ext.onReady(function() {
 							})
 						}
 					},{
-						icon: '/ts/misc/resources/icons/upload.gif',
+						icon: '/ts/misc/resources/icons/check_24.png',
 						id:'BtnPdtAccept',
 						text:'上线批准',
 						scale:'medium',
@@ -477,7 +477,7 @@ Ext.onReady(function() {
 							})
 						}
 					},{
-						icon: '/ts/misc/resources/icons/upload.gif',
+						icon: '/ts/misc/resources/icons/denied_24.png',
 						id:'BtnPdtRefuse',
 						text:'上线驳回',
 						scale:'medium',
@@ -535,7 +535,7 @@ Ext.onReady(function() {
 			'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
 			'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
 			'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
-			'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
+			//'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
 			'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
 			'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
 			'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',

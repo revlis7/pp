@@ -83,6 +83,12 @@ class Proj_model extends CI_Model {
 		return $proj->manager;
 	}
 	
+    function get_proj_string($proj_id) {
+        //$proj = $this->get_proj($proj_id);
+        //$proj_str = $proj->category.$proj->sub_category;
+        
+    }
+    
 	function create_proj($category = '', $sub_category = '', $issue = '', $name = '', 
 		$flow_of_fund = '', $highlights = '', $scale = '', $cycle = '', $profit_property = '', 
 		$manager = '', $contract = '', $remark = '', $pay_account = '', $countdown = '', 

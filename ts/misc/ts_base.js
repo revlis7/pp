@@ -12,15 +12,15 @@ var AmountDetailsGrid;
 var gradeFn=function(value) { 
 	var res;
 	if(value=="五星级"){
-		res= '★★★★★'
+    	res= '<span style="color:#245288">★★★★★</span>'
 	} else if (value=="四星级"){
-		res= '★★★★'
+		res= '<span style="color:#245288">★★★★</span>'
 	} else if (value=="三星级"){
-		res= '★★★'
+		res= '<span style="color:#245288">★★★</span>'
 	} else if (value=="二星级"){
-		res= '★★'
+		res= '<span style="color:#245288">★★</span>'
 	} else if (value=="一星级"){
-		res= '★'
+		res= '<span style="color:#245288">★</span>'
 	}
 	return res;
 };
@@ -133,6 +133,7 @@ var chManagerList=Ext.create('Ext.data.ArrayStore', {
 	  ['申玉玺','申玉玺'],
 	  ['孟祥春','孟祥春'],
 	  ['王璐','王璐'],
+	  ['王琪','王琪'],
 	  ['翟晓凤','翟晓凤']
 	]
 });
@@ -144,7 +145,7 @@ var	fileListStore=Ext.create('Ext.data.JsonStore', {
 	{name:'filename'	,type:'string' },
 	{name:'filesize'	,type:'integer'	},
 	{name:'editor'	,type:'string' },
-	{name:'create_ts'	,type:'date' },
+	{name:'create_ts'	,type:'date' }
 	],
 	proxy: {
 		type: 'ajax',
@@ -201,7 +202,7 @@ var	projAllStore=Ext.create('Ext.data.JsonStore', {
 var recentChangeStore=Ext.create('Ext.data.JsonStore', {
 	fields: [
 	{name:'proj_id',type:'integer'},
-	{name:'msgdate',type:'date'},
+	{name:'create_ts',type:'date'},
 	{name:'msg_cat',type:'string'},
 	{name:'message',type:'string'},
 	{name:'last_update',type:'date'},
@@ -294,24 +295,24 @@ var	FileListGrid=Ext.create('Ext.grid.Panel',{
 	region:'south',
 	flex:1,
 	columns:[
+	
+	{text:'文件名',		 dataIndex:'filename',		filtable:true, style: "text-align:center;",align: 'left',width:642},
 	{
 		xtype: 'actioncolumn',
 		width:40,style:	"text-align:center;",align:	'center',
 		sortable: false,
 		items: [{
-			icon: '/ts/misc/resources/icons/download.gif',
+			icon: '/ts/misc/resources/icons/download_16.png',
 			tooltip: '下载该文件',
 			handler: function(grid,	rowIndex, colIndex)	{
 				var	filename=grid.getStore().getAt(rowIndex).get("filename");
 				window.open('/ts/index.php/upload/get?file='+filename);
 			}
 		}]
-	},
-	{text:'文件名',		 dataIndex:'filename',		filtable:true, style: "text-align:center;",align: 'left',width:642},
-	{text:'文件大小',		dataIndex:'filesize',	   filtable:true, style: "text-align:center;",align: 'right',width:120,
+	},{text:'文件大小',		dataIndex:'filesize',	   filtable:true, style: "text-align:center;",align: 'right',width:120,
 		 renderer:function(value,metaData,record,colIndex,store,view) {
-			 if(value>=1048676)	{var v=value/1048576;return	v.toFixed(2)+'MB';}
-			 else if(value>=1024) {var v=value/1024;return v.toFixed(2)+'KB';}
+			 if(value>=1048676)	{var v=value/1048576;return	v.toFixed(1)+' MB';}
+			 else if(value>=1024) {var v=value/1024;return v.toFixed(1)+' KB';}
 			 else return value;
 		 }
 	},
@@ -327,17 +328,20 @@ var	RecentChangeGrid=Ext.create('Ext.grid.Panel',{
 	region:'north',
 	flex:1,
 	columns:[
-	{text:'时间',			dataIndex:'msg_date',	  filtable:true, style:	"text-align:center;",align:	'left',width:100},
-	{text:'信息分类',			dataIndex:'msg_cat',	  filtable:true, style:	"text-align:center;",align:	'left',width:100},
-	{text:'最新进展信息',		dataIndex:'message',	   filtable:true, style: "text-align:center;",align: 'right',width:800}
+	{text:'时间',			dataIndex:'create_ts',	  filtable:true, style:	"text-align:center;",align:	'center',width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
+	{text:'信息分类',			dataIndex:'msg_cat',	  filtable:true, style:	"text-align:center;",align:	'center',width:100},
+	{text:'最新进展信息',		dataIndex:'message',	   filtable:true, style: "text-align:center;",align: 'left',width:760}
 	]
 });
 
 var recommendStore=Ext.create('Ext.data.ArrayStore', {
 	fields: ['proj_id'],
 	data: [
-	  ['504'],
-	  ['499']
+	  ['1142'],
+	  ['1166'],
+	  ['1145'],
+      ['1149'],
+      ['170']
 	]
 });
 var generatePanelFn=function(e){
@@ -361,10 +365,9 @@ var generatePanelFn=function(e){
 		'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
+		//'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
 		'</table></td></tr></table>',
 		{
 			cusDate:function(d){
@@ -398,7 +401,7 @@ var generatePanelFn=function(e){
 	});
 	recentChangeStore.setProxy({
 		type: 'ajax',
-		url: '/ts/index.php/proj/detail_view?proj_id='+e.proj_id,
+		url: '/ts/index.php/proj/message_view?proj_id='+e.proj_id,
 		reader: {
 			type: 'json',
 			root: 'data'

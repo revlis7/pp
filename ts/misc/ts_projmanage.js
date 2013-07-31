@@ -91,17 +91,14 @@ listControl.load(function(records, operation, success) {
 			text:'产品等级', dataIndex:'grade', filterable:true,sortable : true, width:84,style: "text-align:center;",align: 'center',hidden:records[0].get("grade"),renderer: gradeFn
 		}, {
 			text:'项目名称', dataIndex:'name', filterable:true,sortable : true, width:220,style: "text-align:center;",align: 'left', hidden:records[0].get("name"),
-			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
-				metaData.tdAttr = 'data-qtip="'+value+'"'; 
-				return '<b>'+value+'</b>';
-			}
+			renderer: toolTipFn
 		}, {
 			xtype: 'actioncolumn',
 			text:'编辑',
 			width:60,style: "text-align:center;",align: 'center',
 			sortable: false,
 			items: [{
-				icon: '/ts/misc/resources/icons/cog_edit.png',
+				icon: '/ts/misc/resources/icons/cog_16.png',
 				tooltip: '编辑此条记录',
 				handler: function(grid, rowIndex, colIndex) {
 					//sampleStore.removeAt(rowIndex);      
@@ -190,10 +187,10 @@ listControl.load(function(records, operation, success) {
 			text:'渠道公司',dataIndex:'channel_company',filterable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("channel_company")
 		}, {
 			text:'添加时间',dataIndex:'create_ts',filterable:true,sortable : true, width:80, style: "text-align:center;",align: 'center',renderer:new Ext.util.Format.dateRenderer("Y-m-d")
-		}, {
+		}, /*{
 			text:'打款进度', dataIndex:'countdown', filterable:true,sortable : true, minWidth:200,hidden:records[0].get("countdown"),
 			renderer: toolTipFn
-		}, {
+		}, */{
 			text:'备注', dataIndex:'remark', filterable:true,sortable : true, minWidth:200,hidden:records[0].get("remark"),
 			renderer: toolTipFn
 		}]
@@ -370,7 +367,7 @@ listControl.load(function(records, operation, success) {
 		},'-',{
 			text:'全部显示',
 			scale:'medium',
-			icon:'/ts/misc/resources/icons/grid.png',
+			icon:'/ts/misc/resources/icons/article_16.png',
 			handler:function(){
 				fullGridC1.filters.clearFilters();
 				projAllStore.load();
@@ -423,7 +420,7 @@ listControl.load(function(records, operation, success) {
 		},'-',{
 			text:'全部显示',
 			scale:'medium',
-			icon:'/ts/misc/resources/icons/grid.png',
+			icon:'/ts/misc/resources/icons/article_16.png',
 			handler:function(){
 				fullGridC1.filters.clearFilters();
 				projAllStore.load();
@@ -473,13 +470,13 @@ listControl.load(function(records, operation, success) {
 				xtype:'box',
 				flex:1
 			},{
-				icon: '/ts/misc/resources/icons/add.gif',
+				icon: '/ts/misc/resources/icons/document_add_24.png',
 				text: '新增项目',
 				scale:'medium',
 				handler: function () {window.location.href='/ts/index.php/proj/create';} 
 			},{
 				text:'查看在售列表',
-				icon:'/ts/misc/resources/icons/plugin.gif',
+				icon:'/ts/misc/resources/icons/document_alt_stroke_24.png',
 				scale:'medium',
 				itemId:"ListBtn",
 				handler:function(){
@@ -508,7 +505,7 @@ listControl.load(function(records, operation, success) {
 				}
 			},{
 				text:'查看近期结束项目',
-				icon:'/ts/misc/resources/icons/plugin.gif',
+				icon:'/ts/misc/resources/icons/document_alt_fill_24.png',
 				scale:'medium',
 				itemId:"endProjListBtn",
 				handler:function(){
@@ -537,13 +534,13 @@ listControl.load(function(records, operation, success) {
 				}
 			},{
 				text:'个人信息：'+loginname,
-				icon:'/ts/misc/resources/icons/user.png',
+				icon:'/ts/misc/resources/icons/user_24.png',
 				scale:'medium',
 				handler:function(){window.location.href='/ts/index.php/user/info';}
 			},{
 				text:'离开管理员模式',
 				scale:'medium',
-				icon:'/ts/misc/resources/icons/cross.gif',
+				icon:'/ts/misc/resources/icons/curved_arrow_24.png',
 				handler:function(){window.location.href='/ts/index.php/proj';}
 			}]
 		}, {

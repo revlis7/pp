@@ -18,7 +18,7 @@ class Auth_Controller extends CI_Controller {
 	function login_verify() {
 		if($this->login->is_login() !== true) {
 			if($this->utility->is_ajax_request()) {
-				$this->json->output(array('r' => 'error', 'm' => '您已经自动登出，请重新登录', 'd' => array('redurl' => '/')));
+				$this->json->output(array('success' => false, 'm' => '您已经自动登出，请重新登录', 'd' => array('redurl' => '/')));
 			}
 			if(current_url() != base_url()) {
 				redirect(site_url('auth?redurl='.urlencode(current_url().$this->build_request(true))), 'refresh');

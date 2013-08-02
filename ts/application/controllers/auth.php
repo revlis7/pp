@@ -23,7 +23,7 @@ class Auth extends Auth_Controller {
 		
 		
 		if(!$this->utility->chk_loginname($loginname)) {
-			$this->json->output(array('r' => 'error', 'm' => '用户名不符合规范（用户名长3～24字符，由大小写字母、数字和下划线组成）'));
+			$this->json->output(array('success' => false, 'm' => '用户名不符合规范（用户名长3～24字符，由大小写字母、数字和下划线组成）'));
 		}
 		
 		/*

@@ -173,4 +173,12 @@ class User_model extends CI_Model {
 		}
 		return true;
 	}
+
+	function get_action_access_users($action) {
+		$this->db->select('loginname');
+		$this->db->from('user_action_access');
+		$this->db->where('action', $action);
+		$query = $this->db->get();
+		return $query->result();
+	}
 }

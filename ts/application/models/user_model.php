@@ -172,16 +172,19 @@ class User_model extends CI_Model {
 		return true;
 	}
 
-	function has_action_access($loginname) {
+	function has_action_access($loginname, $action = null) {
 		$this->db->from('user_action_access');
 		$this->db->where('loginname', $loginname);
-		$this->db->where('action', $this->router->fetch_class().'/'.$this->router->fetch_method());
+		if($action === null) {
+			$action = $this->router->fetch_class().'/'.$this->router->fetch_method();
+		}
+		$this->db->where('action', $action);
 		if($this->db->count_all_results() !== 1) {
 			return false;
 		}
 		return true;
 	}
-    
+
 	function get_action_access_users($action) {
 		$this->db->select('loginname');
 		$this->db->from('user_action_access');

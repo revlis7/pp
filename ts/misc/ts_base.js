@@ -1,4 +1,4 @@
-﻿Ext.Loader.setConfig({enabled: true});
+﻿Ext.Loader.setConfig({enabled: true,disableCaching:false});
 Ext.Loader.setPath('Ext.ux', '/ts/misc/ux');
 
 Ext.require([
@@ -34,6 +34,13 @@ var commissionFn=function(value,metaData) {
 	} else {
 		metaData.style='color:#8E8E8E';
 		return 'N/A';
+	}
+}
+var baseLoadAff=function(records, operation, success){
+	if(success==false){
+    	Ext.Msg.alert('错误', '会话超时，请重新登录！',function(btn, text){
+    		window.location.href='/ts/index.php/auth';
+    	});
 	}
 }
 var chFixedList=Ext.create('Ext.data.ArrayStore', {
@@ -154,7 +161,13 @@ var	fileListStore=Ext.create('Ext.data.JsonStore', {
 			type: 'json',
 			root: 'data'
 		}
-	}
+	},
+    listeners:{
+        load:{
+            fn:baseLoadAff,
+            scope:this
+        }
+    }
 });
 var	projAllStore=Ext.create('Ext.data.JsonStore', {
  fields: [
@@ -197,7 +210,13 @@ var	projAllStore=Ext.create('Ext.data.JsonStore', {
 			type: 'json',
 			root: 'data'
 		}
-	}
+	},
+    listeners:{
+        load:{
+            fn:baseLoadAff,
+            scope:this
+        }
+    }
 });
 var recentChangeStore=Ext.create('Ext.data.JsonStore', {
 	fields: [
@@ -215,7 +234,13 @@ var recentChangeStore=Ext.create('Ext.data.JsonStore', {
 			type: 'json',
 			root: 'data'
 		}
-	}
+	},
+    listeners:{
+        load:{
+            fn:baseLoadAff,
+            scope:this
+        }
+    }
 });
 var projDetailStore=Ext.create('Ext.data.JsonStore', {
 	fields: [
@@ -241,7 +266,13 @@ var projDetailStore=Ext.create('Ext.data.JsonStore', {
 			type: 'json',
 			root: 'data'
 		}
-	}
+	},
+    listeners:{
+        load:{
+            fn:baseLoadAff,
+            scope:this
+        }
+    }
 });
 var	filtersCfg = {
 	ftype: 'filters',
@@ -337,14 +368,10 @@ var	RecentChangeGrid=Ext.create('Ext.grid.Panel',{
 var recommendStore=Ext.create('Ext.data.ArrayStore', {
 	fields: ['proj_id'],
 	data: [
-	  ['1142'],
-	  ['1166'],
-	  ['1145'],
-      ['1149'],
-      ['170']
+	  ['1166']
 	]
 });
-var generatePanelFn=function(e){
+function generatePanelFn(e){
 	e.down('panel#projDetailPanel').add(RecentChangeGrid).show();
 	e.down('panel#projDetailPanel').add(AmountDetailsGrid).show();
 	e.down('panel#projDetailPanel').add(FileListGrid).show();
@@ -355,7 +382,7 @@ var generatePanelFn=function(e){
 			detailString+='<pre>'+record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+':	'+record.get("profit")+'%</pre>';
 		});
 		e.proj_info_tpl = Ext.create('Ext.XTemplate',[
-		'<table	style="border-collapse:collapse;"><tr><td style="padding:15px;border:1px;"><table style="border-collapse:collapse;">',
+		'<table	style="border-collapse:collapse;"><tr><td style="padding:15px;border:1px;"><b>项目基本信息：</b><br /><br /><table style="border-collapse:collapse;">',
 		'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}, {exclusive}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
@@ -368,7 +395,10 @@ var generatePanelFn=function(e){
 		//'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
-		'</table></td></tr></table>',
+        '</table></td></tr><tr><td style="padding:15px;border:1px;"><b>项目补充信息：</b><br /><br /><table style="border-collapse:collapse;">',
+        '<tr><td class="r_ex_td_pre"><b>项目添加时间</b></td><td class="r_ex_td_main"><pre>{create_ts:this.cusDate}</pre></td></tr>',
+        '<tr><td class="r_ex_td_pre"><b>项目经理</b></td><td class="r_ex_td_main"><pre>{manager}</pre></td></tr>',
+        '</td></tr></table></td></tr></table>',
 		{
 			cusDate:function(d){
 				return Ext.Date.format(d,'Y年m月d日');
@@ -382,6 +412,12 @@ var generatePanelFn=function(e){
 		}]);
 	};
 	e.proj_info_tpl.overwrite(e.down('panel#projInfoPanel').body,foundRecords.getAt(0).data);
+    
+    //var headTitleTpl = Ext.create('Ext.XTemplate',['{issue} {name}']);
+                                  
+    //headTitleTpl.overwrite(Ext.getCmp('headerTitle').body,foundRecords.getAt(0).data);
+    
+    Ext.getCmp('headerTitle').el.dom.innerHTML='<span class="app-header2">'+foundRecords.getAt(0).data.issue+' '+foundRecords.getAt(0).data.name+'</span>';
 	
 	fileListStore.setProxy({
 		type: 'ajax',
@@ -410,4 +446,9 @@ var generatePanelFn=function(e){
 	fileListStore.load();
 	projDetailStore.load();
 	recentChangeStore.load();
+}
+
+var cellClick=function(grid,td,cellIndex,record,tr,rowIndex){
+	var proj_id = record.get("proj_id");
+    window.open('/ts/index.php/proj?proj_id='+proj_id);
 }

@@ -31,6 +31,10 @@ class Utility {
 	function chk_mobile($val) {
 		return preg_match('/^(13|14|15|18)\d{9}$/', $val);
 	}
+    
+    function chk_email($val) {
+        return preg_match('/^[_.0-9a-z-]+@([0-9a-z][0-9a-z-]+.)+[a-z]{2,3}$/', $val);
+    }
 	
 	function get_group_cfg() {
 		return $this->get('group_cfg');
@@ -72,7 +76,14 @@ class Utility {
 		}
 		return true;
 	}
-	
+
+    function is_ch() {
+		if($this->title2group(element('title', $this->CI->session->userdata('user'))) !== 'staff') {
+			return false;
+		}
+		return true;
+	}
+
 	function access_fields_filter($group, $data) {
 		$_data = $data;
 		$_cfg = $this->get_forbidden_fields($group);
@@ -166,20 +177,22 @@ class Utility {
         $mail->send();
     }
 
-    function noticemail2($to, $subject, $content) {
+    function noticemail_html($to, $subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj) {
         $mail_config['from'] = 'firstshin_notice@163.com';
         $mail_config['smtp_host'] = 'smtp.163.com';
         $mail_config['smtp_username'] = 'firstshin_notice@163.com';
         $mail_config['smtp_password'] = 'qc1ttpkq';
         $mail_config['to'] = $to;
         $mail_config['subject'] = $subject;
-        $mail_config['content'] = $content;
         $mail_config['content_type'] = 'HTML';
         
+        $mail_config['content'] = '<html><body><table><tr><td style="background-color:#DFDFDF;width:486px;"><span style="color:#404040;font-weight:bold;font-size:20px;font-family:微软雅黑;黑体;sans-serif;">&nbsp;'. $mail_content_title.'</span></td>';
+        $mail_config['content'] .= '<td><a href="http://rainbowbridge.sinaapp.com/ts/"><img style="width:240px; height:38px" src="http://rainbowbridge.sinaapp.com/ts/misc/resources/firstshin.jpg"></img></a></td></tr>';
+        $mail_config['content'] .= '<tr><td colspan=2 style="font-size:12px;padding:10px;">'.$mail_content_mainstr.'</td></tr>';
+        $mail_config['content'] .= '<tr><td colspan=2 style="font-size:12px;background-color:#DFDFDF;text-align:center;color:#606060;height:48px;">'.$mail_content_buttomstr.'如有任何问题请<a href="mailto:xpfinance@163.com">及时联系</a>。</td></tr></table></body></html>';
+        
         $mail = new SaeMail();
-        
         $mail->setOpt($mail_config);
-        
         $mail->send();
     }
 

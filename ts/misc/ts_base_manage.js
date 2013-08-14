@@ -1,4 +1,4 @@
-﻿Ext.Loader.setConfig({enabled: true});
+﻿Ext.Loader.setConfig({enabled: true,disableCaching:false});
 Ext.Loader.setPath('Ext.ux', '/ts/misc/ux');
 
 Ext.require([
@@ -563,13 +563,13 @@ var RecentChangeGrid=Ext.create('Ext.grid.Panel',{
 		width:40,style: "text-align:center;",align: 'center',
 		sortable: false,
 		items: [{
-			icon: '/ts/misc/resources/icons/rss_alt_24.png',
-			tooltip: '短信推送！',
+			icon: '/ts/misc/resources/icons/mail_16.png',
+			tooltip: '邮件推送！',
 			handler: function(grid, rowIndex, colIndex) {
 				var message=grid.getStore().getAt(rowIndex).get("message");
 				Ext.Msg.show({
 					title:'推送消息',
-					msg: '请确认将短信推送此消息: '+message,
+					msg: '请确认将邮件推送此消息: '+message+'<br /><br />操作指引：推送范围以消息类型区分：内部消息仅推送至产品经理，渠道信息将推送至产品经理和渠道人员，公开信息推送至所有彩虹桥的用户',
 					buttons: Ext.Msg.OKCANCEL,
 					icon: Ext.Msg.QUESTION,
 					fn:function(buttonId){
@@ -578,6 +578,40 @@ var RecentChangeGrid=Ext.create('Ext.grid.Panel',{
 							messageForm.loadRecord(grid.getStore().getAt(rowIndex));
 							messageForm.submit({
 								url: '/ts/index.php/proj/message_push_submit',
+								submitEmptyText: false,
+								waitMsg: 'Saving Data...',
+								success: function(form, action) {
+									Ext.Msg.alert('消息', '消息推送成功！');
+								} ,
+								failure: function(form, action) {
+									Ext.Msg.alert('错误', '推送失败。如有问题请联系管理员。');
+								}
+							});
+						}
+					}
+				});
+			}
+		}]
+	},{
+		xtype: 'actioncolumn',
+		width:40,style: "text-align:center;",align: 'center',
+		sortable: false,
+		items: [{
+			icon: '/ts/misc/resources/icons/iphone_16.png',
+			tooltip: '短信推送！',
+			handler: function(grid, rowIndex, colIndex) {
+				var message=grid.getStore().getAt(rowIndex).get("message");
+				Ext.Msg.show({
+					title:'推送消息',
+					msg: '请确认将短信推送此消息: '+message+'<br /><br />操作指引：推送范围以消息类型区分：内部消息仅推送至产品经理，渠道信息将推送至产品经理和渠道人员，公开信息推送至所有彩虹桥的用户',
+					buttons: Ext.Msg.OKCANCEL,
+					icon: Ext.Msg.QUESTION,
+					fn:function(buttonId){
+						if(buttonId=='ok'){
+							messageForm=messageWin.down('form').getForm();
+							messageForm.loadRecord(grid.getStore().getAt(rowIndex));
+							messageForm.submit({
+								url: '/ts/index.php/proj/message_sms_push_submit',
 								submitEmptyText: false,
 								waitMsg: 'Saving Data...',
 								success: function(form, action) {
@@ -623,8 +657,12 @@ var generatePanelFn=function(e){
 		//'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
+        '</table></td></tr><tr><td style="padding:15px;border:1px;"><b>项目补充信息：</b><br /><br /><table style="border-collapse:collapse;">',
+		'<tr><td class="r_ex_td_pre"><b>添加时间</b></td><td class="r_ex_td_main"><pre>{create_ts:this.cusDate}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
-		'</table></td></tr></table>',
+        '<tr><td class="r_ex_td_pre"><b>销售类别</b></td><td class="r_ex_td_main"><pre>{exclusive}</pre></td></tr>',
+	    '<tr><td class="r_ex_td_pre"><b>项目经理</b></td><td class="r_ex_td_main"><pre>{manager}</pre></td></tr>',
+	    '</td></tr></table></td></tr></table>',
 		{
 			cusDate:function(d){
 				return Ext.Date.format(d,'Y年m月d日');
@@ -638,6 +676,7 @@ var generatePanelFn=function(e){
 		}]);
 	};
 	e.proj_info_tpl.overwrite(e.down('panel#projInfoPanel').body,foundRecords.getAt(0).data);
+    Ext.getCmp('headerTitle').el.dom.innerHTML='<span class="app-header2">'+foundRecords.getAt(0).data.issue+' '+foundRecords.getAt(0).data.name+'</span>';
 	fileListStore.setProxy({
 		type: 'ajax',
 		url: '/ts/index.php/upload/get_list?proj_id='+e.proj_id,
@@ -660,13 +699,28 @@ var AmountEditWin=Ext.create('Ext.window.Window',{
 	closable:false,
 	title:'额度信息编辑',
 	titleAlign:'center',
-	width:1006,
+	layout:{
+		type:'vbox',
+		//defaultMargins: {top: 0, right: 5, bottom: 0, left: 5},
+        align:'stretch'
+	},
+	width:1020,
 	items:[
 	{
+        xtype:'box',
+	    style: {
+    	    color: '#666666',
+        	backgroundColor:'#ffffff'
+    	},
+        html:'<br />&nbsp;&nbsp;操作指引：标记*号的是必填项。<ul>'
+        +'<li>下列字段不会被渠道及外部用户所见：税前佣金，税后佣金，主销渠道，渠道公司，渠道联系人，走账公司。</li>'
+        +'<li>下列字段不会被外部用户所见：平台费用。</li>'
+        +'<li>下列字段不会被客户级用户所见：费用，现结费用</li></ul><hr />'    
+    },{
 		xtype:"form",
 		width:990,
-		margin:'0 0 0 2',
-		bodyPadding:5,
+		//margin:'10 0 0 0',
+        //padding:'10 0 0 0',
 		autoScroll :true,
 		//hidden:true,
 		//collapsible:true,
@@ -852,7 +906,7 @@ var AmountEditWin=Ext.create('Ext.window.Window',{
 				allowBlank: true
 			}]
 		}]
-	}]
+    }]
 });
 
 var uploadWin=Ext.create("Ext.window.Window",{
@@ -973,6 +1027,7 @@ var messageWin=Ext.create("Ext.window.Window",{
 		}, {
 			xtype: 'radiogroup',
 			fieldLabel: '信息分类',
+			labelAlign:'right',
             columns: 1,
             allowBlank:false,
 			// Arrange radio buttons into two columns, distributed vertically

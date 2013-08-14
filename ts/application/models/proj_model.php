@@ -14,7 +14,7 @@ class Proj_model extends CI_Model {
 			return false;
 		}
 		$this->db->from('proj_message')->where('proj_id', $proj_id);
-		$this->db->order_by('id', 'asc');
+		$this->db->order_by('create_ts', 'desc');
 		$query = $this->db->get();
 		$result = $query->result();
 		return $result;
@@ -22,7 +22,7 @@ class Proj_model extends CI_Model {
 
 	function get_proj_message_by_id($id) {
 		$this->db->from('proj_message')->where('id', $id);
-		$this->db->order_by('id', 'asc');
+		$this->db->order_by('create_ts', 'desc');
 		$query = $this->db->get();
 		$result = $query->row();
 		if(!$result) {
@@ -357,6 +357,17 @@ class Proj_model extends CI_Model {
 		}
 		return $result;
 	}
+    
+    function get_proj_brief_string($proj,$manager) {
+        $proj_str = '<p>'.$proj->profit_property.'收益项目，融资规模'.$proj->scale.'亿，按'.$proj->cycle.'分配。<br />项目评级：';
+        $proj_str .= $proj->grade.'<br />资金投向：'.$proj->flow_of_fund.'<br />项目亮点：'.mb_substr($proj->highlights,0,30).'......</p>';
+        if($manager == 'm'){
+        	$proj_str .= '<p><a href="http://rainbowbridge.sinaapp.com/ts/index.php/proj/update?proj_id='.$proj->id.'">详情请点击这里查看</a>。</p>';
+        } else {
+            $proj_str .= '<p><a href="http://rainbowbridge.sinaapp.com/ts/index.php/proj?proj_id='.$proj->id.'">详情请点击这里查看</a>。</p>';
+        }
+        return $proj_str;
+    }
 	
 	function get_all_proj() {
 		$this->db->from('proj');

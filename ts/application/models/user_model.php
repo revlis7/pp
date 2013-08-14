@@ -35,8 +35,14 @@ class User_model extends CI_Model {
 		return $query->row();
 	}
 	
-	function get_all() {
-		$this->db->select('loginname, title, realname, branch, tel, qq, email');
+	function get_by_name($name) {
+		$this->db->from('user')->where('realname', $name);
+		$query = $this->db->get();
+		return $query->row();
+	}
+
+    function get_all() {
+		$this->db->select('loginname, title, realname, branch, tel, qq, email, mobile');
 		$this->db->from('user');
 		$this->db->order_by('id', 'asc');
 		$query = $this->db->get();
@@ -53,7 +59,7 @@ class User_model extends CI_Model {
 		return true;
 	}
 	
-	function update($loginname, $title, $realname, $branch, $tel, $qq, $email) {
+	function update($loginname, $title, $realname, $branch, $tel, $qq, $mobile, $email) {
 		$user = array(
 			'title' => $title,
 			'realname' => $realname,
@@ -61,6 +67,7 @@ class User_model extends CI_Model {
 			'tel' => $tel,
 			'qq' => $qq,
 			'email' => $email,
+			'mobile' => $mobile,
 		);
 		$this->db->where('loginname', $loginname);
 		$this->db->update('user', $user);
@@ -70,7 +77,7 @@ class User_model extends CI_Model {
 		return true;
 	}
 	
-	function create($loginname, $password, $title, $realname = '', $branch = '', $tel = '', $qq = '', $email = '', $status = 'normal') {
+	function create($loginname, $password, $title, $realname = '', $branch = '', $tel = '', $qq = '', $mobile = '', $email = '',$status = 'normal') {
 		$data = array(
 			'loginname' => $loginname,
 			'password'  => $this->encrypt->sha1($password),
@@ -80,6 +87,7 @@ class User_model extends CI_Model {
 			'tel'       => $tel,
 			'qq'        => $qq,
 			'email'     => $email,
+			'mobile'    => $mobile,
 			'status'    => $status,
 		);
 		$query = $this->db->insert('user', $data);
@@ -173,7 +181,7 @@ class User_model extends CI_Model {
 		}
 		return true;
 	}
-
+    
 	function get_action_access_users($action) {
 		$this->db->select('loginname');
 		$this->db->from('user_action_access');

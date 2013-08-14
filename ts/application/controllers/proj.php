@@ -8,23 +8,15 @@ class Proj extends Auth_Controller {
 	function index() {
 		$this->template->load('default', 'proj/view');
 	}
-	
-	function test(){
-		$proj_id = 1167;
-		$manager_detail = $this->User_model->get_by_name($this->Proj_model->get_proj_manager($proj_id));
-		
-		$proj = $this->Proj_model->get_proj($proj_id);
-		
-		$mail_content = '<html><body><table><tr><td style="background-color:#DFDFDF;width:486px;"><span style="color:#404040;font-weight:bold;font-size:20px;font-family:微软雅黑;黑体;sans-serif;">&nbsp;上 线 通 过</span></td>';
-		$mail_content .= '<td><a href="http://rainbowbridge.sinaapp.com/ts/"><img style="width:240px; height:38px" src="http://rainbowbridge.sinaapp.com/ts/misc/resources/firstshin.jpg"></img></a></td></tr>';
-		$mail_content .= '<tr><td colspan=2 style="font-size:12px;padding:10px;"><p>	以下项目的上线申请已通过：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p><p>';
-		$mail_content .= $proj->profit_property.'收益项目，融资规模'.$proj->scale.'亿，按'.$proj->cycle.'分配。<br />项目评级：'.$proj->grade.'<br />资金投向：'.$proj->flow_of_fund.'<br />项目亮点：'.mb_substr($proj->highlights,0,30).'......</p>';
-		$mail_content .= '<p><a href="http://rainbowbridge.sinaapp.com/ts/index.php/proj/update?proj_id='.$proj_id.'">详情请点击这里查看</a>。</p>';
-		$mail_content .= '</td></tr><tr><td colspan=2 style="font-size:12px;background-color:#DFDFDF;text-align:center;color:#606060;height:48px;">您收到这封邮件，是因为您是该项目的产品经理。如有任何问题请<a href="mailto:xpfinance@163.com">及时联系</a>。</td></tr></table></body></html>';
-		
-		$this->utility->noticemail2($manager_detail->email,'YW01_彩虹桥_项目上线申请已通过_项目编号'.$proj_id,$mail_content);
-	}
-	
+    
+    function test(){
+        $mailusers = $this->User_model->get_action_access_users('proj/proj_accept_submit');
+        foreach($mailusers as $mailusername) {
+        	$mailuser = $this->User_model->get($mailusername->loginname);
+        	echo($mailuser->email);
+        }
+    }
+    
 	function manage() {
 		if(!$this->has_privilege()) {
 			redirect(site_url(), 'refresh');
@@ -261,25 +253,20 @@ class Proj extends Auth_Controller {
 		if(!$this->Proj_model->update_pdt_status($proj_id, '申请中', element('loginname', $this->session->userdata('user')))) {
 			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
 		}
-		$proj = $this->Proj_model->get_proj($proj_id);
-		
-		$mail_content = '<html><body><table><tr><td style="background-color:#DFDFDF;width:486px;"><span style="color:#404040;font-weight:bold;font-size:20px;font-family:微软雅黑;黑体;sans-serif;">&nbsp;上 线 申 请</span></td>';
-		$mail_content .= '<td><a href="http://rainbowbridge.sinaapp.com/ts/"><img style="width:240px; height:38px" src="http://rainbowbridge.sinaapp.com/ts/misc/resources/firstshin.jpg"></img></a></td></tr>';
-		$mail_content .= '<tr><td colspan=2 style="font-size:12px;padding:10px;"><p>	以下项目正申请上线：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p><p>';
-		$mail_content .= $proj->profit_property.'收益项目，融资规模'.$proj->scale.'亿，按'.$proj->cycle.'分配。<br />项目评级：'.$proj->grade.'<br />资金投向：'.$proj->flow_of_fund.'<br />项目亮点：'.mb_substr($proj->highlights,0,30).'......</p>';
-		$mail_content .= '<p><a href="http://rainbowbridge.sinaapp.com/ts/index.php/proj/update?proj_id='.$proj_id.'">详情请点击这里查看</a>。</p>';
-		$mail_content .= '</td></tr><tr><td colspan=2 style="font-size:12px;background-color:#DFDFDF;text-align:center;color:#606060;height:48px;">您收到这封邮件，是因为您是"彩虹桥"的项目审批管理员。如有任何问题请<a href="mailto:xpfinance@163.com">及时联系</a>。</td></tr></table></body></html>';
-		
-		$this->utility->noticemail2('mxcfinance@163.com','YW01_彩虹桥_项目上线申请_项目编号'.$proj_id,$mail_content);
-		$this->utility->noticemail2('yuxifinance@163.com','YW01_彩虹桥_项目上线申请_项目编号'.$proj_id,$mail_content);
+        $proj = $this->Proj_model->get_proj($proj_id);
+        $mailusers = $this->User_model->get_action_access_users('proj/proj_accept_submit');
+        
+        $mail_content_title = '上 线 申 请';	
+        $mail_content_mainstr = '<p>以下项目正申请上线：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m');
+        $mail_content_buttomstr = '您收到这封邮件，是因为您是"彩虹桥"的项目审批管理员。';
+        $mail_subject = 'YW01_彩虹桥_项目上线申请: '.$proj->issue.' '.$proj->name;
+        
+        foreach($mailusers as $mailusername) {
+            $mailuser = $this->User_model->get($mailusername->loginname);
+        	$this->utility->noticemail_html( $mailuser->email, $mail_subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj);
+        }
 
-		$this->json->output(array('success' => true));
-	}
-
-	function get_action_access_users() {
-		$action = 'proj/proj_operate_privilege';
-		$user_list = $this->User_model->get_action_access_users($action);
-		$this->json->output(array('success' => true, 'data' => $user_list));
+        $this->json->output(array('success' => true));
 	}
 
 	function proj_operate_privilege() {
@@ -303,21 +290,18 @@ class Proj extends Auth_Controller {
 		if(!$this->Proj_model->update_pdt_status($proj_id, '上线通过', element('loginname', $this->session->userdata('user')))) {
 			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
 		}
-		
-		$manager_detail = $this->User_model->get_by_name($this->Proj_model->get_proj_manager($proj_id));
-		
-		$proj = $this->Proj_model->get_proj($proj_id);
-		
-		$mail_content = '<html><body><table><tr><td style="background-color:#DFDFDF;width:486px;"><span style="color:#404040;font-weight:bold;font-size:20px;font-family:微软雅黑;黑体;sans-serif;">&nbsp;上 线 通 过</span></td>';
-		$mail_content .= '<td><a href="http://rainbowbridge.sinaapp.com/ts/"><img style="width:240px; height:38px" src="http://rainbowbridge.sinaapp.com/ts/misc/resources/firstshin.jpg"></img></a></td></tr>';
-		$mail_content .= '<tr><td colspan=2 style="font-size:12px;padding:10px;"><p>	以下项目的上线申请已通过：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p><p>';
-		$mail_content .= $proj->profit_property.'收益项目，融资规模'.$proj->scale.'亿，按'.$proj->cycle.'分配。<br />项目评级：'.$proj->grade.'<br />资金投向：'.$proj->flow_of_fund.'<br />项目亮点：'.mb_substr($proj->highlights,0,30).'......</p>';
-		$mail_content .= '<p><a href="http://rainbowbridge.sinaapp.com/ts/index.php/proj/update?proj_id='.$proj_id.'">详情请点击这里查看</a>。</p>';
-		$mail_content .= '</td></tr><tr><td colspan=2 style="font-size:12px;background-color:#DFDFDF;text-align:center;color:#606060;height:48px;">您收到这封邮件，是因为您是该项目的产品经理。如有任何问题请<a href="mailto:xpfinance@163.com">及时联系</a>。</td></tr></table></body></html>';
-		
-		$this->utility->noticemail2($manager_detail->email,'YW01_彩虹桥_项目上线申请已通过_项目编号'.$proj_id,$mail_content);
-			
-		//$this->Proj_model->create_proj_message($proj_id,'公开消息','【'.$proj_content->issue.' '.$proj_content->name.'】已上线！',$manager_detail->loginname);
+        
+        $proj = $this->Proj_model->get_proj($proj_id);
+        $manager_detail = $this->User_model->get_by_name($this->Proj_model->get_proj_manager($proj_id));
+        
+        $mail_content_title = '上 线 通 过';	
+        $mail_content_mainstr = '<p>以下项目的上线申请已通过：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m');
+        $mail_content_buttomstr = '您收到这封邮件，是因为您是该项目的产品经理。';
+        $mail_subject = 'YW01_彩虹桥_项目上线申请已通过: '.$proj->issue.' '.$proj->name;
+        
+       	$this->utility->noticemail_html($manager_detail->email, $mail_subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj);
+
+        //$this->Proj_model->create_proj_message($proj_id,'公开消息','【'.$proj_content->issue.' '.$proj_content->name.'】已上线！',$manager_detail->loginname);
 		$this->json->output(array('success' => true));
 	}
 
@@ -335,18 +319,16 @@ class Proj extends Auth_Controller {
 		if(!$this->Proj_model->update_pdt_status($proj_id, '上线驳回', element('loginname', $this->session->userdata('user')))) {
 			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
 		}
-		$manager_detail = $this->User_model->get_by_name($this->Proj_model->get_proj_manager($proj_id));
-		
-		$proj = $this->Proj_model->get_proj($proj_id);
-		
-		$mail_content = '<html><body><table><tr><td style="background-color:#DFDFDF;width:486px;"><span style="color:#FF0000;font-weight:bold;font-size:20px;font-family:微软雅黑;黑体;sans-serif;">&nbsp;上 线 未 批 准</span></td>';
-		$mail_content .= '<td><a href="http://rainbowbridge.sinaapp.com/ts/"><img style="width:240px; height:38px" src="http://rainbowbridge.sinaapp.com/ts/misc/resources/firstshin.jpg"></img></a></td></tr>';
-		$mail_content .= '<tr><td colspan=2 style="font-size:12px;padding:10px;"><p>	以下项目的上线申请已被拒绝：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p><p>';
-		$mail_content .= $proj->profit_property.'收益项目，融资规模'.$proj->scale.'亿，按'.$proj->cycle.'分配。<br />项目评级：'.$proj->grade.'<br />资金投向：'.$proj->flow_of_fund.'<br />项目亮点：'.mb_substr($proj->highlights,0,30).'......</p>';
-		$mail_content .= '<p><a href="http://rainbowbridge.sinaapp.com/ts/index.php/proj/update?proj_id='.$proj_id.'">详情请点击这里查看</a>。</p>';
-		$mail_content .= '</td></tr><tr><td colspan=2 style="font-size:12px;background-color:#DFDFDF;text-align:center;color:#606060;height:48px;">您收到这封邮件，是因为您是该项目的产品经理。如有任何问题请<a href="mailto:xpfinance@163.com">及时联系</a>。</td></tr></table></body></html>';
-		
-		$this->utility->noticemail2($manager_detail->email,'YW01_彩虹桥_项目上线申请被拒绝_项目编号'.$proj_id,$mail_content);
+        $proj = $this->Proj_model->get_proj($proj_id);
+        $manager_detail = $this->User_model->get_by_name($this->Proj_model->get_proj_manager($proj_id));
+        
+        $mail_content_title = '上 线 未 批 准';	
+        $mail_content_mainstr = '<p style="color:#FF0000">以下项目的上线申请已被拒绝：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m');
+        $mail_content_buttomstr = '您收到这封邮件，是因为您是该项目的产品经理。';
+        $mail_subject = 'YW01_彩虹桥_项目上线申请被拒绝: '.$proj->issue.' '.$proj->name;
+        
+       	$this->utility->noticemail_html($manager_detail->email, $mail_subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj);
+        
 		$this->json->output(array('success' => true));
 	}
 
@@ -461,9 +443,9 @@ class Proj extends Auth_Controller {
 			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
 		}
 		$data = $this->Proj_model->get_proj_message_by_proj_id($proj_id);
-		//if(!$data) {
-		//	$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
-		//}
+        //if(!$data) {
+        //	$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+        //}
 		$this->json->output(array('success' => true, 'data' => $data));
 	}
 
@@ -507,31 +489,96 @@ class Proj extends Auth_Controller {
 	}
 
 	function message_push_submit() {
-		$mobile     = $this->input->get('mobile');
-		$id = $this->input->get('id');
-
-		if(!$this->utility->chk_mobile($mobile)) {
-			$this->json->output(array('success' => false, 'm' => '输入的手机号错误'));
-		}
-
+		$id = $this->input->post('id');
 		if(!$this->utility->chk_id($id)) {
 			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
 		}
 
-		$data = $this->Proj_model->get_proj_message_by_id($id);
-		if(!$data) {
+        $message = $this->Proj_model->get_proj_message_by_id($id);
+		if(!$message) {
 			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
 		}
+        $proj = $this->Proj_model->get_proj($message->proj_id);
+        
+        $mail_content_title = '项 目 消 息';	
+        $mail_content_mainstr = '<p><span style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</span> 最新消息：</p>';
+        $mail_content_mainstr .= '<p><table style="border:1px solid #909090;width:710px;"><tr><td style="text-size:14px;">'.$message->message.'</td></tr></table></p>';
+        $mail_content_mainstr .= '<p>项目简介如下：</p>'.$this->Proj_model->get_proj_brief_string($proj,'c');
+        $mail_content_buttomstr = '您收到这封邮件，是因为您是彩虹桥系统的用户。如有敏感信息，请注意相关材料的保密。<br />';
+        $mail_subject = 'YW99_彩虹桥_项目最新消息: '.$proj->issue.' '.$proj->name;
+        
+        $allusers = $this->User_model->get_all();
+        
+        $sendlist = '';
+        
+        if ( $message->msg_cat == '内部消息') {
+            foreach($allusers as $auser) {
+                if ( (title2group($auser->title) == 'administrator' || title2group($auser->title) == 'product_manager') && $this->utility->chk_email($auser->email) ){
+                    $sendlist .= $auser->email.',';
+                }
+            }
+        } else if ( $message->msg_cat == '渠道消息' ) {
+            foreach($allusers as $auser) {
+                if ( (title2group($auser->title) == 'administrator' || title2group($auser->title) == 'product_manager' || title2group($auser->title) == 'staff') && $this->utility->chk_email($auser->email) ){
+                    $sendlist .= $auser->email.',';
+                }
+            }
+        } else {
+            foreach($allusers as $auser) {
+                if ( $this->utility->chk_email($auser->email) ){
+                	$sendlist .= $auser->email.',';
+                }
+            }
+        }
+
+        $this->utility->noticemail_html($sendlist, $mail_subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj);
+        
+        $this->json->output(array('success' => true));
+	}
+    
+    function message_sms_push_submit() {
+        $id = $this->input->post('id');
+		if(!$this->utility->chk_id($id)) {
+			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+		}
+        
+        $message = $this->Proj_model->get_proj_message_by_id($id);
+        if(!$message) {
+			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+		}
+        
+        $proj = $this->Proj_model->get_proj($message->proj_id);
+        
+        $sendmessage = '彩虹桥项目消息【'.$proj->issue.' '.$proj->name.'】'.$message->message;
 
 		$api = new apibus();
 		$sms = $api->load("sms");
-		$obj = $sms->send($mobile, $data->message, "UTF-8");
-
-		if($sms->isError($obj)) {
-			$this->json->output(array('success' => false, 'm' => '['.$obj->ApiBusError->errcode.']'.$obj->ApiBusError->errdesc));
-		}
+        
+        $allusers = $this->User_model->get_all();
+        
+        if ( $message->msg_cat == '内部消息') {
+            foreach($allusers as $auser) {
+                if ( (title2group($auser->title) == 'administrator' || title2group($auser->title) == 'product_manager') && $this->utility->chk_mobile($auser->mobile) ){
+                    $sms->send($auser->mobile, $sendmessage, "UTF-8");
+                }
+            }
+        } else if ( $message->msg_cat == '渠道消息' ) {
+            foreach($allusers as $auser) {
+                if ( (title2group($auser->title) == 'administrator' || title2group($auser->title) == 'product_manager' || title2group($auser->title) == 'staff') && $this->utility->chk_mobile($auser->mobile) ){
+                    $sms->send($auser->mobile, $sendmessage, "UTF-8");
+                }
+            }
+        } else {
+            foreach($allusers as $auser) {
+                if ( $this->utility->chk_mobile($auser->mobile) ){
+                	$sms->send($auser->mobile, $sendmessage, "UTF-8");
+                }
+            }
+        }
+        
 		$this->json->output(array('success' => true));
-	}
+        
+    }
 
 	private function get_user_info($field) {
 		$info = element($field, $this->session->userdata('user'));

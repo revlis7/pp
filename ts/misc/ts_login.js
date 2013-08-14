@@ -33,7 +33,7 @@ Ext.onReady(function() {
           border:0,
           height:600,
           width:800,
-          html:'<a href="http://www.firstshin.com/?page_id=454"><img src="/ts/misc/resources/fp_20130726.jpg"></img></a>'
+          html:'<a href="http://www.firstshin.com/?page_id=479"><img src="/ts/misc/resources/fp_20130809.jpg"></img></a>'
         },{
           xtype:'form',
           border:2,

@@ -1,5 +1,6 @@
 Ext.onReady(function() {
   Ext.QuickTips.init();
+  var params=Ext.Object.fromQueryString(location.search.substring(1));
   var accPanel,fullGridC1,fullGridC2;
   var loginname = Ext.util.Cookies.get("loginname");
   var listControl=Ext.create('Ext.data.JsonStore', {
@@ -78,10 +79,12 @@ listControl.load(function(records, operation, success) {
 				icon: '/ts/misc/resources/icons/magnifying_glass_16.png',
 				tooltip: '查看该项目的详细信息',
 				handler: function(grid, rowIndex, colIndex) {
-					e=Ext.getCmp('projPanel');
-					e.proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
-					e.setTitle(grid.getStore().getAt(rowIndex).get("issue")+" "+grid.getStore().getAt(rowIndex).get("name"))
-					Ext.getCmp('topInfo').getLayout().setActiveItem(2);
+					//e=Ext.getCmp('projPanel');
+					//e.proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
+					//e.setTitle(grid.getStore().getAt(rowIndex).get("issue")+" "+grid.getStore().getAt(rowIndex).get("name"))
+					//Ext.getCmp('topInfo').getLayout().setActiveItem(2);
+                    var proj_id=grid.getStore().getAt(rowIndex).get("proj_id");
+					window.open('/ts/index.php/proj?proj_id='+proj_id);
 				}
           }]
         }, {
@@ -469,6 +472,8 @@ listControl.load(function(records, operation, success) {
 				});
 			}
 		}]);
+        fullGridC1.on({celldblclick:cellClick});
+        fullGridC1.on({celldblclick:cellClick});
 		Ext.getCmp('projListPanel').add(fullGridC1);
 		Ext.getCmp('projListPanel').add(fullGridC2);
 		
@@ -525,7 +530,7 @@ listControl.load(function(records, operation, success) {
 						}],
 						listeners:{
 							beforeexpand:{
-								fn:generatePanelFn,
+                                fn:function(e){generatePanelFn(e);},
 								scope:this
 							},
 							collapse:{
@@ -539,7 +544,22 @@ listControl.load(function(records, operation, success) {
 					Ext.getCmp('recommendPanel').add(recommendTempPanel);
 				}
 			});
-			Ext.getCmp('recommendPanel').items.items[0].collapse();
+    		if(params.proj_id>0) {
+				e=Ext.getCmp('projPanel');
+				e.proj_id=params.proj_id;
+				//e.setTitle(grid.getStore().getAt(rowIndex).get("issue")+" "+grid.getStore().getAt(rowIndex).get("name"))
+				Ext.getCmp('topInfo').getLayout().setActiveItem(2);
+            } else {
+                Ext.getCmp('headerTitle').el.dom.innerHTML='<span class="app-header2">推荐项目列表</span>';
+				//Ext.getCmp('recommendPanel').items.items[0].collapse();
+                var e=Ext.getCmp('recommendPanel');
+				if(e.down("panel").collapsed == false) {
+					generatePanelFn(e.down('panel'));
+				} else {
+                    Ext.getCmp('recommendPanel').items.items[0].show();
+				}
+				Ext.getCmp('topInfo').getLayout().setActiveItem(0);
+            }
 		});
 	});
 	
@@ -556,12 +576,17 @@ listControl.load(function(records, operation, success) {
 			id:'topMenu',
 			border:0,
 			margin:0,
+            enableOverflow:true,
 			items:[
 			{
 				xtype:'image',
 				src:'/ts/misc/resources/firstshin.jpg',
 				width:240,
 				height:38
+			},{
+				xtype:'box',
+                id:'headerTitle',
+                html:'<span class="app-header2">&nbsp;</span>'
 			},{
 				xtype:'box',
 				flex:1
@@ -571,6 +596,7 @@ listControl.load(function(records, operation, success) {
 				scale:'medium',
 				itemId:"recommendBtn",
 				handler:function(){
+                    Ext.getCmp('headerTitle').el.dom.innerHTML='<span class="app-header2">推荐项目列表</span>';
 					projAllStore.setProxy({
 						type: 'ajax',
 						url: '/ts/index.php/proj/view',
@@ -583,71 +609,7 @@ listControl.load(function(records, operation, success) {
 						var recP=Ext.getCmp('recommendPanel');
 						if(recP.down("panel").collapsed == false) {
 							var e=recP.down("panel");
-							fileListStore.setProxy({
-								type: 'ajax',
-								url: '/ts/index.php/upload/get_list?proj_id='+e.proj_id,
-								reader:	{
-									type: 'json',
-									root: 'data'
-								}
-							});
-							projDetailStore.setProxy({
-								type: 'ajax',
-								url: '/ts/index.php/proj/detail_view?proj_id='+e.proj_id,
-								reader: {
-									type: 'json',
-									root: 'data'
-								}
-							});
-							recentChangeStore.setProxy({
-								type: 'ajax',
-								url: '/ts/index.php/proj/message_view?proj_id='+e.proj_id,
-								reader: {
-									type: 'json',
-								root: 'data'
-								}
-							});
-							fileListStore.load();
-							projDetailStore.load();
-							recentChangeStore.load();
-							e.down('panel#projDetailPanel').add(RecentChangeGrid).show();
-							e.down('panel#projDetailPanel').add(AmountDetailsGrid).show();
-							e.down('panel#projDetailPanel').add(FileListGrid).show();
-							var	foundRecords = projAllStore.query('proj_id',e.proj_id);
-							if(foundRecords.getCount()>0){
-								var	detailString="";
-								foundRecords.each(function(record){
-									detailString+='<pre>'+record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+':	'+record.get("profit")+'%</pre>';
-								});
-								e.proj_info_tpl = Ext.create('Ext.XTemplate',[
-								'<table	style="border-collapse:collapse;"><tr><td style="padding:20px;border:1px;"><table style="border-collapse:collapse;">',
-								'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}, {exclusive}</pre></td></tr>',
-								'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
-								'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
-								'<tr><td class="r_ex_td_pre"><b>项目评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
-								'<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
-								detailString, '</td></tr>',
-								'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
-								'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
-								'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
-								//'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
-								'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
-								'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
-								'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
-								'</table></td></tr></table>',
-								{
-									cusDate:function(d){
-										return Ext.Date.format(d,'Y年m月d日');
-									}
-								},{
-									cusNum:function(n){
-										return (n<1)?(n*10000+"万"):(n+"亿")
-									}
-								},{
-									cusGrade:gradeFn
-								}]);
-							};
-							e.proj_info_tpl.overwrite(e.down('panel#projInfoPanel').body,foundRecords.getAt(0).data);
+                            generatePanelFn(e);
 						} else {
 							recP.down("panel").expand();
 						}
@@ -661,6 +623,7 @@ listControl.load(function(records, operation, success) {
 				scale:'medium',
 				itemId:"ListBtn",
 				handler:function(){
+                    Ext.getCmp('headerTitle').el.dom.innerHTML='<span class="app-header2">在售项目列表</span>';
 					projAllStore.setProxy({
 						type: 'ajax',
 						url: '/ts/index.php/proj/view',
@@ -691,6 +654,7 @@ listControl.load(function(records, operation, success) {
 				scale:'medium',
 				itemId:"endProjListBtn",
 				handler:function(){
+                    Ext.getCmp('headerTitle').el.dom.innerHTML='<span class="app-header2">近期结束项目列表</span>';
 					projAllStore.setProxy({
 						type: 'ajax',
 						url: '/ts/index.php/proj/view?r=true&e=1',
@@ -780,6 +744,7 @@ listControl.load(function(records, operation, success) {
 					itemId:'projDetailPanel',
 					xtype:'panel',
 					region:'center',
+                    autoScroll : true,
 					border:0,
 					layout:{
 						type:'vbox',
@@ -811,7 +776,7 @@ listControl.load(function(records, operation, success) {
 				}],
 				listeners:{
 					beforeactivate:{
-						fn:generatePanelFn,
+                        fn:function(e){generatePanelFn(e)},
 						scope:this
 					},
 					deactivate:{

@@ -98,7 +98,7 @@ Ext.onReady(function() {
 										});
 										proj_info_tpl=Ext.create('Ext.XTemplate',[
     									'<table style="border-collapse:collapse;">{pdt_status:this.cusPdtStatus()}<tr><td style="padding:20px;border:1px;"><table style="border-collapse:collapse;">',
-										'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}, {exclusive}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}</pre></td></tr>',
 										'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
 										'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
 										'<tr><td class="r_ex_td_pre"><b>项目评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
@@ -110,8 +110,12 @@ Ext.onReady(function() {
 										'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
 										'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
 										'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
-										'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
-										'</table></td></tr></table>',
+            '</table></td></tr><tr><td style="padding:15px;border:1px;"><b>项目补充信息：</b><br /><br /><table style="border-collapse:collapse;">',
+			'<tr><td class="r_ex_td_pre"><b>添加时间</b></td><td class="r_ex_td_main"><pre>{create_ts:this.cusDate}</pre></td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
+            '<tr><td class="r_ex_td_pre"><b>销售类别</b></td><td class="r_ex_td_main"><pre>{exclusive}</pre></td></tr>',
+	        '<tr><td class="r_ex_td_pre"><b>项目经理</b></td><td class="r_ex_td_main"><pre>{manager}</pre></td></tr>',
+	        '</td></tr></table></td></tr></table>',
 										{
 											cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
 										},{
@@ -130,6 +134,7 @@ Ext.onReady(function() {
 										]);
 										var firstRec=projStore.getAt(0);
 										proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,firstRec.data);
+                                        Ext.getCmp('headerTitle').el.dom.innerHTML='<span class="app-header2">'+firstRec.data.issue+' '+firstRec.data.name+'</span>';
 										//proj_info_window.show();
 										if(firstRec.get("pdt_status")=="上线通过" || firstRec.get("pdt_status")=="申请中"){
 											Ext.getCmp('BtnPdtApply').hide();
@@ -178,7 +183,7 @@ Ext.onReady(function() {
 										});
 										proj_info_tpl=Ext.create('Ext.XTemplate',[
         								'<table style="border-collapse:collapse;">{pdt_status:this.cusPdtStatus()}<tr><td style="padding:15px;border:1px;"><table style="border-collapse:collapse;">',
-										'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}, {exclusive}</pre></td></tr>',
+										'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}</pre></td></tr>',
 										'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
 										'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
 										'<tr><td class="r_ex_td_pre"><b>项目评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
@@ -190,8 +195,12 @@ Ext.onReady(function() {
 										'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
 										'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
 										'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
-										'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
-										'</table></td></tr></table>',
+            '</table></td></tr><tr><td style="padding:15px;border:1px;"><b>项目补充信息：</b><br /><br /><table style="border-collapse:collapse;">',
+			'<tr><td class="r_ex_td_pre"><b>添加时间</b></td><td class="r_ex_td_main"><pre>{create_ts:this.cusDate}</pre></td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
+            '<tr><td class="r_ex_td_pre"><b>销售类别</b></td><td class="r_ex_td_main"><pre>{exclusive}</pre></td></tr>',
+	        '<tr><td class="r_ex_td_pre"><b>项目经理</b></td><td class="r_ex_td_main"><pre>{manager}</pre></td></tr>',
+	        '</td></tr></table></td></tr></table>',
 										{
 											cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
 										},{
@@ -210,6 +219,7 @@ Ext.onReady(function() {
 										]);
 										var firstRec=projStore.getAt(0);
 										proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,firstRec.data);
+                                        Ext.getCmp('headerTitle').el.dom.innerHTML='<span class="app-header2">'+firstRec.data.issue+' '+firstRec.data.name+'</span>';
 										//proj_info_window.show();
 										if(firstRec.get("pdt_status")=="上线通过" || firstRec.get("pdt_status")=="申请中"){
 												Ext.getCmp('BtnPdtApply').hide();
@@ -486,6 +496,7 @@ Ext.onReady(function() {
 			height:50,
 			border:0,
 			region:'north',
+            enableOverflow:true,
 			items:[
 			{
 				xtype:'image',
@@ -494,19 +505,14 @@ Ext.onReady(function() {
 				height:38
 			},{
 				xtype:'box',
+                id:'headerTitle',
+                html:'<span class="app-header2">&nbsp;</span>'
+			},{
+				xtype:'box',
 				html:'<span class="app-header2">项目编辑</span>'
 			},{
 				xtype:'tbtext',
 				text:'您可以：'
-			},{
-				text:'编辑项目',
-				scale:'medium',
-				icon: '/ts/misc/resources/icons/cog_24.png',
-				handler:function(){
-					ProjWin.down('form').getForm().loadRecord(projStore.first());
-					Ext.getBody().mask();
-					ProjWin.show();
-				}
 			},{
 				icon: '/ts/misc/resources/icons/message_add.png',
 				scale:'medium',
@@ -576,13 +582,22 @@ Ext.onReady(function() {
 					xtype: 'toolbar',
 					bodyPadding: 5,
 					items: [{
+						text:'编辑项目',
+						scale:'medium',
+						icon: '/ts/misc/resources/icons/cog_24.png',
+						handler:function(){
+							ProjWin.down('form').getForm().loadRecord(projStore.first());
+							Ext.getBody().mask();
+							ProjWin.show();
+						}
+					},{
 						icon: '/ts/misc/resources/icons/upload.gif',
 						id:'BtnPdtApply',
 						text:'申请上线',
 						scale:'medium',
 						hidden:true,
 						handler:function(){
-							projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+							projApplyForm.down('textfield[name="proj_id"]').setValue(proj_id);
 							projApplyForm.getForm.submit({
 								url:'/ts/index.php/proj/proj_apply_submit',
 								submitEmptyText: false,
@@ -602,7 +617,7 @@ Ext.onReady(function() {
 						scale:'medium',
 						hidden:true,
 						handler:function(){
-							projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+							projApplyForm.down('textfield[name="proj_id"]').setValue(proj_id);
 							projApplyForm.getForm.submit({
 								url:'/ts/index.php/proj/proj_accept_submit',
 								submitEmptyText: false,
@@ -623,7 +638,7 @@ Ext.onReady(function() {
 						scale:'medium',
 						hidden:true,
 						handler:function(){
-							projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+							projApplyForm.down('textfield[name="proj_id"]').setValue(proj_id);
 							projApplyForm.getForm.submit({
 								url:'/ts/index.php/proj/proj_refuse_submit',
 								submitEmptyText: false,
@@ -645,6 +660,7 @@ Ext.onReady(function() {
 				width:800,
 				region:'center',
 				border:0,
+                autoScroll :true,
 				layout:{
 					type:'vbox',
 					align:'stretch'

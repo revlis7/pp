@@ -36,7 +36,7 @@ Ext.onReady(function() {
       width:30,
       sortable: false,
       items: [{
-        icon: '/ts/misc/resources/icons/cog_edit.png',
+        icon: '/ts/misc/resources/icons/cog_16.png',
         tooltip: '编辑用户信息',
         handler: function(grid, rowIndex, colIndex) {
           UserEditWin.setTitle("编辑用户信息："+grid.getStore().getAt(rowIndex).get("loginname"));
@@ -49,7 +49,7 @@ Ext.onReady(function() {
       width:30,
       sortable: false,
       items: [{
-        icon: '/ts/misc/resources/icons/delete.gif',
+        icon: '/ts/misc/resources/icons/denied_24.png',
         tooltip: '禁用用户',
         handler: function(grid, rowIndex, colIndex) {
           UserEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
@@ -72,7 +72,7 @@ Ext.onReady(function() {
       width:30,
       sortable: false,
       items: [{
-        icon: '/ts/misc/resources/icons/cross.gif',
+        icon: '/ts/misc/resources/icons/minus_16.png',
         tooltip: '删除用户',
         handler: function(grid, rowIndex, colIndex) {
         	UserEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
@@ -103,6 +103,8 @@ Ext.onReady(function() {
     	text:'联系电话',dataIndex:'tel', width:150
     },{
     	text:'QQ',dataIndex:'qq', width:150
+    },{
+    	text:'手机',dataIndex:'mobile', width:150
     },{
     	text:'邮箱',dataIndex:'email', width:150
     }]
@@ -220,6 +222,11 @@ Ext.onReady(function() {
         allowBlank: false
       },{
         xtype:'textfield',
+        fieldLabel: '手机',
+        name:'mobile',
+        allowBlank: false
+      },{
+        xtype:'textfield',
         fieldLabel: 'Email',
         name:'email',
         allowBlank: false
@@ -299,8 +306,7 @@ Ext.onReady(function() {
         store : chTitleList,
         valueField: 'id',
         displayField: 'text',
-        forceSelection:true,
-        allowBlank: false
+        forceSelection:true
       },{
         xtype:'combo',
         fieldLabel: '分支机构',
@@ -309,23 +315,23 @@ Ext.onReady(function() {
         store : chBranchList,
         valueField: 'id',
         displayField: 'text',
-        forceSelection:true,
-        allowBlank: false
+        forceSelection:true
       },{
         xtype:'textfield',
         fieldLabel: '联系电话',
-        name:'tel',
-        allowBlank: false
+        name:'tel'
       },{
         xtype:'textfield',
         fieldLabel: 'QQ',
-        name:'qq',
-        allowBlank: false
+        name:'qq'
+      },{
+        xtype:'textfield',
+        fieldLabel: '手机',
+        name:'mobile'
       },{
         xtype:'textfield',
         fieldLabel: 'Email',
-        name:'email',
-        allowBlank: false
+        name:'email'
       }]
     }]
   });

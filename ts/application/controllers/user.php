@@ -66,6 +66,7 @@ class User extends Auth_Controller {
 		$branch    = $this->input->post('branch', true);
 		$tel       = $this->input->post('tel', true);
 		$qq        = $this->input->post('qq', true);
+		$mobile    = $this->input->post('mobile', true);
 		$email     = $this->input->post('email', true);
 		
 		if(!$this->utility->is_admin()) {
@@ -94,7 +95,7 @@ class User extends Auth_Controller {
 			$this->json->output(array('success' => false, 'm' => '用户名已存在'));
 		}
 		
-		if(!$this->User_model->create($loginname, $password, $title, $realname, $branch, $tel, $qq, $email)) {
+		if(!$this->User_model->create($loginname, $password, $title, $realname, $branch, $tel, $qq, $mobile, $email)) {
 			$this->json->output(array('success' => false, 'm' => '添加用户失败'));
 		}
 		
@@ -186,6 +187,7 @@ class User extends Auth_Controller {
 		$branch = $this->input->post('branch', true);
 		$tel = $this->input->post('tel', true);
 		$qq = $this->input->post('qq', true);
+		$mobile = $this->input->post('mobile', true);
 		$email = $this->input->post('email', true);
 		
 		if(!$this->utility->is_admin()) {
@@ -196,7 +198,7 @@ class User extends Auth_Controller {
 			$this->json->output(array('success' => false, 'm' => '请正确输入用户账号'));
 		}
 		
-		if($this->User_model->update($loginname, $title, $realname, $branch, $tel, $qq, $email) !== true) {
+		if($this->User_model->update($loginname, $title, $realname, $branch, $tel, $qq, $mobile, $email) !== true) {
 			$this->json->output(array('success' => false, 'errors' => array('password' => '用户更新操作失败')));
 		}
 		$this->json->output(array('success' => true));

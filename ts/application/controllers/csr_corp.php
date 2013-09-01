@@ -10,7 +10,11 @@ class Csr_corp extends Auth_Controller {
 	}
 
 	function view() {
-		$data = $this->Csr_corp_model->get_all()->result();
+		if($this->is_csr_admin()) {
+			$data = $this->Csr_corp_model->get_all()->result();
+		} else {
+			$data = $this->Csr_corp_model->get_by_owner($this->get_user_info('realname'))->result();
+		}
 		$this->json->output(array('success' => true, 'data' => $data));
 	}
 
@@ -21,7 +25,11 @@ class Csr_corp extends Auth_Controller {
 			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
 		}
 
+		// only admin and owner can see the data
 		$data = $this->Csr_corp_model->get_by_id($csr_corp_id)->row();
+		if(!$this->is_csr_admin() && !$this->is_owner($this->get_user_info('realname'), $data)) {
+			$data = array();
+		}
 		$this->json->output(array('success' => true, 'data' => $data));
 	}
 
@@ -82,24 +90,56 @@ class Csr_corp extends Auth_Controller {
 			'csr_corp_FSC_solution' => $this->input->post('csr_corp_FSC_solution', true),
 		);
 
+		$csr_corp_id = $csr_corp['csr_corp_id'];
+		unset($csr_corp['csr_corp_id']);
 		$editor = element('loginname', $this->session->userdata('user'));
 
 		// create new record when id equals -1
-		if($csr_corp['csr_corp_id'] == '-1') {
-			unset($csr_corp['csr_corp_id']);
+		if($csr_corp_id == '-1') {
 			$csr_corp['csr_corp_creator'] = $editor;
 			$csr_corp['csr_corp_editor']  = $editor;
 			$csr_corp_id = $this->Csr_corp_model->save($csr_corp);
 		} else {
-			if(!$this->utility->chk_id($csr_corp['csr_corp_id'])) {
+			if(!$this->utility->chk_id($csr_corp_id)) {
 				$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
 			}
 			$csr_corp['csr_corp_editor']  = $editor;
-			$ret = $this->Csr_corp_model->update($csr_corp);
+			// only admin and owner can update the data
+			$data = $this->Csr_corp_model->get_by_id($csr_corp_id)->row();
+			if(!$this->is_csr_admin() && !$this->is_owner($this->get_user_info('realname'), $data)) {
+				$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+			}
+
+			$ret = $this->Csr_corp_model->update($csr_corp_id, $csr_corp);
 			if(!$ret) {
 				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
 			}
 		}
 		$this->json->output(array('success' => true, 'csr_corp_id' => $csr_corp_id));
+	}
+
+	private function get_user_info($field) {
+		$info = element($field, $this->session->userdata('user'));
+		if($info === false) {
+			return false;
+		}
+		return $info;
+	}
+
+	private function is_csr_admin() {
+		if(!$this->User_model->has_action_access(element('loginname', $this->session->userdata('user')), 'csr_corp/save')) {
+			return false;
+		}
+		return true;
+	}
+
+	private function is_owner($realname, $csr_corp) {
+		if(empty($realname)) {
+			return false;
+		}
+		if($csr_corp->csr_corp_FSC_channel == $realname || $csr_corp->csr_corp_FSC_pdt == $realname) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>彩虹桥 - 玉尔财富</title>
+<link rel="stylesheet" type="text/css" href="http://pp-beta.chiapei.me/ts/misc/resources/css/ext-all-gray.css" />
+<link rel="stylesheet" type="text/css" href="http://pp-beta.chiapei.me/ts/misc/ux/grid/css/GridFilters.css" />
+<link rel="stylesheet" type="text/css" href="http://pp-beta.chiapei.me/ts/misc/ux/grid/css/RangeMenu.css" />
+<script type="text/javascript" src="http://pp-beta.chiapei.me/ts/misc/ext-all.js"></script>
+<script>
+Ext.onReady(function() {
+  var viewport = Ext.create('Ext.Viewport', {
+    layout: 'border',
+    items: [{
+        xtype:'toolbar',
+        region:'south',
+        height:20,
+        items:[{xtype:'box',flex:1},{
+          xtype:'box',
+          html:'上海玉尔投资发展有限公司 - 版权所有 - 2012-2013年'
+        },{xtype:'box',flex:1}]
+    },{
+      xtype:'panel', 
+      //margin:'0 20 20 20',
+      border:0,
+      region:'center',
+      layout:{
+        type:'hbox',
+        align:'middle'
+      },
+      items: [{
+        xtype:'box',flex:1
+      },{
+        xtype:'panel',
+        region:'east',
+        layout:'hbox',
+        border:0,
+        items:[{
+        	xtype:'button',
+        	text:'我要查看产品',
+        	handler:(){
+        		window.location.href='/ts/index.php/proj';
+        	}
+        },{
+        	xtype:'button',
+        	text:'我要管理客户',
+        	handler:(){
+        		window.location.href='/ts/index.php/csr_corp';
+        	}
+        }]
+      },{
+        xtype:'box',
+        flex:1
+      }]
+    }]
+  });
+});
+</script>
+</head>
+<body>
+</body>
+</html>

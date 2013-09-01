@@ -84,10 +84,10 @@ Ext.onReady(function() {
                       if(typeof(params.redurl)!="undefined"){
                         window.location.href=params.redurl;
                       } else {
-                        window.location.href='/ts/index.php/proj';
+                        window.location.href='/ts/misc/redirect.html';
                       }
                     } else {
-                      window.location.href='/ts/index.php/proj';
+                      window.location.href='/ts/misc/redirect.html';
                     }
                   },
                   failure: function(form, action) {

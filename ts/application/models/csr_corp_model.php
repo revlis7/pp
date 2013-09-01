@@ -3,12 +3,8 @@ class Csr_corp_model extends CI_Model {
 
 	const TABLE_NAME = 'csr_corp';
 
-	private $CI;
-
 	function __construct() {
 		parent::__construct();
-		
-		$this->CI =& get_instance();
 	}
 
 	function get_all() {
@@ -24,8 +20,8 @@ class Csr_corp_model extends CI_Model {
 	// add new record
 	function save($csr_corp) {
 		$ts = date('Y-m-d H:i:s');
-		$csr_corp['csr_channel_create_ts'] = $ts;
-		$csr_corp['csr_channel_update_ts'] = $ts;
+		$csr_corp['csr_corp_create_ts'] = $ts;
+		$csr_corp['csr_corp_update_ts'] = $ts;
 		$this->db->insert(self::TABLE_NAME, $csr_corp);
 		return $this->db->insert_id();
 	}
@@ -33,7 +29,7 @@ class Csr_corp_model extends CI_Model {
 	// update record by id
 	function update($csr_corp_id, $csr_corp) {
 		$ts = date('Y-m-d H:i:s');
-		$csr_corp['csr_channel_update_ts'] = $ts;
+		$csr_corp['csr_corp_update_ts'] = $ts;
 		$this->db->where('csr_corp_id', $csr_corp_id);
 		$this->db->update(self::TABLE_NAME, $csr_corp);
 	}

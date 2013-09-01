@@ -239,7 +239,7 @@ var csrCorpEditWin=Ext.create('Ext.window.Window',{
 						waitMsg: 'Saving Data...',
 						success: function(form, action) {
 							csrCorpEditWin.hide();
-							projDetailStore.load();
+							csrCorpStore.load();
 						}
 						//,
 						//failure: function(form, action) {
@@ -451,7 +451,7 @@ var csrChannelEditWin=Ext.create('Ext.window.Window',{
 						waitMsg: 'Saving Data...',
 						success: function(form, action) {
 							csrChannelEditWin.hide();
-							projDetailStore.load();
+							csrChannelStore.load();
 						}
 						//,
 						//failure: function(form, action) {
@@ -599,7 +599,7 @@ var csrPersonEditWin=Ext.create('Ext.window.Window',{
 						waitMsg: 'Saving Data...',
 						success: function(form, action) {
 							csrPersonEditWin.hide();
-							projDetailStore.load();
+							csrPersonStore.load();
 						}
 						//,
 						//failure: function(form, action) {

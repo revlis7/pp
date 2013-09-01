@@ -20,6 +20,7 @@ class Csr_corp extends Auth_Controller {
 		if(!$this->utility->chk_id($csr_corp_id)) {
 			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
 		}
+
 		$data = $this->Csr_corp_model->get_by_id($csr_corp_id)->row();
 		$this->json->output(array('success' => true, 'data' => $data));
 	}
@@ -79,19 +80,21 @@ class Csr_corp extends Auth_Controller {
 			'csr_corp_FSC_follow_status' => $this->input->post('csr_corp_FSC_follow_status', true),
 			'csr_corp_FSC_opp_and_prob' => $this->input->post('csr_corp_FSC_opp_and_prob', true),
 			'csr_corp_FSC_solution' => $this->input->post('csr_corp_FSC_solution', true),
-			'csr_corp_creator' => $this->input->post('csr_corp_creator', true),
-			'csr_corp_create_ts' => $this->input->post('csr_corp_create_ts', true),
-			'csr_corp_editor' => $this->input->post('csr_corp_editor', true),
-			'csr_corp_update_ts' => $this->input->post('csr_corp_update_ts', true),
 		);
 
+		$editor = element('loginname', $this->session->userdata('user'));
+
+		// create new record when id equals -1
 		if($csr_corp['csr_corp_id'] == '-1') {
 			unset($csr_corp['csr_corp_id']);
+			$csr_corp['csr_corp_creator'] = $editor;
+			$csr_corp['csr_corp_editor']  = $editor;
 			$csr_corp_id = $this->Csr_corp_model->save($csr_corp);
 		} else {
 			if(!$this->utility->chk_id($csr_corp['csr_corp_id'])) {
 				$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
 			}
+			$csr_corp['csr_corp_editor']  = $editor;
 			$ret = $this->Csr_corp_model->update($csr_corp);
 			if(!$ret) {
 				$this->json->output(array('success' => false, 'm' => '添加数据失败'));

@@ -913,4 +913,8 @@ var viewport = Ext.create('Ext.Viewport', {
 	}]
 });
 
+csrCorpStore.load();
+csrChannelStore.load();
+csrPersonStore.load();
+
 });

@@ -12,6 +12,12 @@ class Csr_person_model extends CI_Model {
 		return $this->db->get(self::TABLE_NAME);
 	}
 
+	function get_by_owner($realname) {
+		$this->db->where('csr_person_FSC_channel', $realname);
+		$this->db->order_by('csr_person_id','asc');
+		return $this->db->get(self::TABLE_NAME);
+	}
+
 	function get_by_id($csr_person_id) {
 		$this->db->where('csr_person_id', $csr_person_id);
 		return $this->db->get(self::TABLE_NAME);
@@ -32,5 +38,6 @@ class Csr_person_model extends CI_Model {
 		$csr_person['csr_person_update_ts'] = $ts;
 		$this->db->where('csr_person_id', $csr_person_id);
 		$this->db->update(self::TABLE_NAME, $csr_person);
+		return true;
 	}
 }

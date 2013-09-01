@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Csr extends Auth_Controller {
+class Csr_corp extends Auth_Controller {
 	function __construct() {
 		parent::__construct();
 	}
@@ -9,12 +9,12 @@ class Csr extends Auth_Controller {
 		echo 'show template';
 	}
 
-	function corp_view() {
+	function view() {
 		$data = $this->Csr_corp_model->get_all()->result();
 		$this->json->output(array('success' => true, 'data' => $data));
 	}
 
-	function corp_get() {
+	function get() {
 		$csr_corp_id = $this->input->get('csr_corp_id', true);
 
 		if(!$this->utility->chk_id($csr_corp_id)) {
@@ -24,7 +24,7 @@ class Csr extends Auth_Controller {
 		$this->json->output(array('success' => true, 'data' => $data));
 	}
 
-	function corp_save() {
+	function save() {
 		$csr_corp = array(
 			'csr_corp_id' => $this->input->post('csr_corp_id', true),
 			'csr_corp_cat' => $this->input->post('csr_corp_cat', true),

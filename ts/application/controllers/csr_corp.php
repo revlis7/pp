@@ -6,7 +6,7 @@ class Csr_corp extends Auth_Controller {
 	}
 
 	function index() {
-		echo 'show template';
+		$this->template->load('default', 'csr/view');
 	}
 
 	function view() {

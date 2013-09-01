@@ -14,7 +14,7 @@
     font-weight: 200;
     padding: 8px 15px;
     text-shadow: 0 1px 0 #fff;
-    font-family:Î¢ÈíÑÅºÚ,ºÚÌå,sans-serif;
+    font-family: å¾®è½¯é›…é»‘,é»‘ä½“,sans-serif;
 }
 .app-header2 {
     color: #294F6F;
@@ -22,7 +22,7 @@
     font-weight: 200;
     padding: 8px 15px;
     text-shadow: 0 1px 0 #fff;
-    font-family:Î¢ÈíÑÅºÚ,ºÚÌå,sans-serif;
+    font-family: å¾®è½¯é›…é»‘,é»‘ä½“,sans-serif;
 }
   .style_row_proj0 tr{background-color:#FFFFFF !important;cursor: pointer;color: #2f4b52}
   .style_row_proj1 tr{background-color:#F9EEF2 !important;cursor: pointer;color: #2f4b52}

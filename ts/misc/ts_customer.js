@@ -55,7 +55,7 @@ var csrCorpEditWin=Ext.create('Ext.window.Window',{
 				disabled: true,
 				handler: function() {
 					this.up('form').getForm().submit({
-						url: '/ts/index.php/proj/detail_create_submit',
+						url: '/ts/index.php/csr_corp/save',
 						submitEmptyText: false,
 						waitMsg: 'Saving Data...',
 						success: function(form, action) {
@@ -267,7 +267,7 @@ var csrChannelEditWin=Ext.create('Ext.window.Window',{
 				disabled: true,
 				handler: function() {
 					this.up('form').getForm().submit({
-						url: '/ts/index.php/proj/detail_create_submit',
+						url: '/ts/index.php/csr_channel/save',
 						submitEmptyText: false,
 						waitMsg: 'Saving Data...',
 						success: function(form, action) {
@@ -415,7 +415,7 @@ var csrPersonEditWin=Ext.create('Ext.window.Window',{
 				disabled: true,
 				handler: function() {
 					this.up('form').getForm().submit({
-						url: '/ts/index.php/proj/detail_create_submit',
+						url: '/ts/index.php/csr_person/save',
 						submitEmptyText: false,
 						waitMsg: 'Saving Data...',
 						success: function(form, action) {

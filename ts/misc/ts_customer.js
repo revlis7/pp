@@ -7,6 +7,21 @@ var corp_list = Ext.create('searchPanel', {
 	title: '公司客户',
 	margin:10,
 	columns: [
+		{
+			xtype: 'actioncolumn',
+			width:40,style: "text-align:center;",align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/cog_16.png',
+				tooltip: '编辑此条记录',
+				handler: function(grid, rowIndex, colIndex) {
+					//sampleStore.removeAt(rowIndex);
+					csrCorpEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
+					Ext.getBody().mask();
+					csrCorpEditWin.show();
+				}
+			}]
+		},
 		{dataIndex:'csr_corp_cat'             ,text:'客户类别'},
 		{dataIndex:'csr_corp_cat_reason'      ,text:'客户类别评判理由'},
 		{dataIndex:'csr_corp_name'            ,text:'公司名称'},
@@ -73,6 +88,21 @@ var channel_list = Ext.create('searchPanel', {
 	title: '渠道客户',
 	margin:10,
 	columns: [
+		{
+			xtype: 'actioncolumn',
+			width:40,style: "text-align:center;",align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/cog_16.png',
+				tooltip: '编辑此条记录',
+				handler: function(grid, rowIndex, colIndex) {
+					//sampleStore.removeAt(rowIndex);
+					csrChannelEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
+					Ext.getBody().mask();
+					csrChannelEditWin.show();
+				}
+			}]
+		},
 		{dataIndex:'csr_channel_cat',text:'客户类别'},
 		{dataIndex:'csr_channel_cat_reason',text:'客户类别评判理由：'},
 		{dataIndex:'csr_channel_name',text:'姓名'},
@@ -117,6 +147,21 @@ var person_list = Ext.create('searchPanel', {
 	title: '个人客户',
 	margin:10,
 	columns: [
+		{
+			xtype: 'actioncolumn',
+			width:40,style: "text-align:center;",align: 'center',
+			sortable: false,
+			items: [{
+				icon: '/ts/misc/resources/icons/cog_16.png',
+				tooltip: '编辑此条记录',
+				handler: function(grid, rowIndex, colIndex) {
+					//sampleStore.removeAt(rowIndex);
+					csrPersonEditWin.down('form').getForm().loadRecord(grid.getStore().getAt(rowIndex));
+					Ext.getBody().mask();
+					csrPersonEditWin.show();
+				}
+			}]
+		},
 		{dataIndex:'csr_person_cat',text:'客户类别'},
 		{dataIndex:'csr_person_cat_reason',text:'客户类别评判理由'},
 		{dataIndex:'csr_person_name',text:'姓名'},

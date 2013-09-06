@@ -255,7 +255,7 @@ class Proj extends Auth_Controller {
 		if(!$this->Proj_model->update_pdt_status($proj_id, '申请中', element('loginname', $this->session->userdata('user')))) {
 			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
 		}
-        $proj = $this->Proj_model->get_proj($proj_id);
+/*        $proj = $this->Proj_model->get_proj($proj_id);
         $director_detail = $this->User_model->get_by_name($this->Proj_model->get_proj_director($proj_id));
         
         $mail_content_title = '上 线 申 请';	
@@ -264,7 +264,7 @@ class Proj extends Auth_Controller {
         $mail_subject = 'YW01_彩虹桥_项目上线申请: '.$proj->issue.' '.$proj->name;
         
         $this->utility->noticemail_html($director_detail->email, $mail_subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj);
-
+*/
         $this->json->output(array('success' => true));
 	}
 
@@ -290,24 +290,24 @@ class Proj extends Auth_Controller {
         
         if($proj->exclusive !== '通道类'){
         
-	        $mail_content_title = '上 线 申 请';	
-	        $mail_content_mainstr = '<p>以下项目正申请上线：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m');
-	        $mail_content_buttomstr = '您收到这封邮件，是因为您是"彩虹桥"的项目审批管理员。';
-	        $mail_subject = 'YW01_彩虹桥_项目上线申请: '.$proj->issue.' '.$proj->name;
+//	        $mail_content_title = '上 线 申 请';	
+//	        $mail_content_mainstr = '<p>以下项目正申请上线：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m');
+//	        $mail_content_buttomstr = '您收到这封邮件，是因为您是"彩虹桥"的项目审批管理员。';
+//	        $mail_subject = 'YW01_彩虹桥_项目上线申请: '.$proj->issue.' '.$proj->name;
         } else {
             $this->User_model->create_access_history($proj_id,1);
             
-	        $mail_content_title = '上 线 申 请';	
-            $mail_content_mainstr = '<p>以下项目正申请上线：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m').'<p><b>请注意由于该项目的销售性质，需要所有审批员都通过才能上线！</b></p>';
-	        $mail_content_buttomstr = '您收到这封邮件，是因为您是"彩虹桥"的项目审批管理员。';
-	        $mail_subject = 'YW01_彩虹桥_项目上线申请: '.$proj->issue.' '.$proj->name;
+//	        $mail_content_title = '上 线 申 请';	
+//          $mail_content_mainstr = '<p>以下项目正申请上线：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m').'<p><b>请注意由于该项目的销售性质，需要所有审批员都通过才能上线！</b></p>';
+//	        $mail_content_buttomstr = '您收到这封邮件，是因为您是"彩虹桥"的项目审批管理员。';
+//	        $mail_subject = 'YW01_彩虹桥_项目上线申请: '.$proj->issue.' '.$proj->name;
         }
         
-        $mailusers = $this->User_model->get_action_access_users('proj/proj_accept_submit');
-        foreach($mailusers as $mailusername) {
-            $mailuser = $this->User_model->get($mailusername->loginname);
-        	$this->utility->noticemail_html( $mailuser->email, $mail_subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj);
-        }
+//        $mailusers = $this->User_model->get_action_access_users('proj/proj_accept_submit');
+//        foreach($mailusers as $mailusername) {
+//            $mailuser = $this->User_model->get($mailusername->loginname);
+//        	$this->utility->noticemail_html( $mailuser->email, $mail_subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj);
+//        }
 
         $this->json->output(array('success' => true));
 	}
@@ -345,7 +345,7 @@ class Proj extends Auth_Controller {
 		if(!$this->Proj_model->update_pdt_status($proj_id, '上线通过', element('loginname', $this->session->userdata('user')))) {
 			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
 		}
-        $manager_detail = $this->User_model->get_by_name($this->Proj_model->get_proj_manager($proj_id));
+/*        $manager_detail = $this->User_model->get_by_name($this->Proj_model->get_proj_manager($proj_id));
         $director_detail = $this->User_model->get_by_name($this->Proj_model->get_proj_director($proj_id));
         
         $mail_content_title = '上 线 通 过';	
@@ -357,7 +357,7 @@ class Proj extends Auth_Controller {
        	$this->utility->noticemail_html($director_detail->email, $mail_subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj);
 
         //$this->Proj_model->create_proj_message($proj_id,'公开消息','【'.$proj_content->issue.' '.$proj_content->name.'】已上线！',$manager_detail->loginname);
-		$this->json->output(array('success' => true, 'data' => '项目已上线'));
+*/		$this->json->output(array('success' => true, 'data' => '项目已上线'));
 	}
 
 	function proj_refuse_submit() {

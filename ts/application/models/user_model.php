@@ -264,6 +264,7 @@ class User_model extends CI_Model {
             $data = array(
                 'operate_rel' => $operate_rel,
                 'action_access_id' => $max_action_access_id,
+                'mod_id' => $proj_id,
                 'loginname' => $row->loginname,
                 'create_ts' => date('Y-m-d H:i:s'),
                 'update_ts' => date('Y-m-d H:i:s'),

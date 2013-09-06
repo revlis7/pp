@@ -10,11 +10,7 @@ class Proj extends Auth_Controller {
 	}
     
     function test(){
-        if($this->User_model->is_accessed(1)){
-            $this->json->output(array('success' => true));
-        } else {
-            $this->json->output(array('success' => false));
-        }
+    	echo $this->User_model->get_access_value(element('loginname', $this->session->userdata('user')),'proj/proj_accept_submit');
     }
     
 	function manage() {

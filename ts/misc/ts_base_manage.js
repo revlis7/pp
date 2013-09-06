@@ -129,11 +129,20 @@ var chProfitPropertyList=Ext.create('Ext.data.ArrayStore', {
 var chManagerList=Ext.create('Ext.data.ArrayStore', {
 	fields: ['id', 'text'],
 	data: [
+	  ['王璐','王璐'],
+	  ['李汶洁','李汶洁']
+	]
+});
+var chProjDirectorList=Ext.create('Ext.data.ArrayStore', {
+	fields: ['id', 'text'],
+	data: [
 	  ['申玉玺','申玉玺'],
 	  ['孟祥春','孟祥春'],
-	  ['王璐','王璐'],
 	  ['王琪','王琪'],
-	  ['翟晓凤','翟晓凤']
+	  ['王栋生','王栋生'],
+	  ['翟晓凤','翟晓凤'],
+	  ['陈彪','陈彪'],
+	  ['沈志远','沈志远']
 	]
 });
 
@@ -198,6 +207,7 @@ var projStore=Ext.create('Ext.data.JsonStore', {
 	{name:'scale',type:'float'},
 	{name:'cycle',type:'string'},
 	{name:'profit_property',type:'string'},
+	{name:'proj_director',type:'string'},
 	{name:'manager',type:'string'},
 	{name:'contract',type:'string'},
 	{name:'remark',type:'string'},
@@ -239,6 +249,7 @@ var	projAllStore=Ext.create('Ext.data.JsonStore', {
 	{name:'amount' ,type:'integer'},
 	{name:'profit_property'	,type:'string' },
 	{name:'profit' ,type:'float' },
+	{name:'proj_director',type:'string'},
 	{name:'manager'	,type:'string' },
 	{name:'contract' ,type:'string'	},
 	{name:'remark' ,type:'string' },
@@ -281,6 +292,17 @@ var recentChangeStore=Ext.create('Ext.data.JsonStore', {
 		}
 	}
 });
+var recommendStore=Ext.create('Ext.data.JsonStore', {
+	fields: ['proj_id'],
+	proxy: {
+		type: 'ajax',
+		url: '/ts/index.php/proj/proj_promote_view',
+		reader: {
+			type: 'json',
+			root: 'data'
+		}
+	}
+});
 var	filtersCfg = {
 	ftype: 'filters',
 	autoReload: true, //don't reload automatically
@@ -305,6 +327,7 @@ var	filtersCfg = {
 		{type:'numeric',dataIndex:'amount' },
 		{type:'list' ,dataIndex:'profit_property' ,store: chProfitPropertyList},
 		{type:'numeric',dataIndex:'profit' },
+		{type:'string' ,dataIndex:'proj_director' ,store: chProjDirectorList},
 		{type:'list' ,dataIndex:'manager' ,store: chManagerList},
 		{type:'string' ,dataIndex:'remark' },
 		{type:'string' ,dataIndex:'pay_account'	},
@@ -645,7 +668,7 @@ var generatePanelFn=function(e){
 		});
 		e.proj_info_tpl = Ext.create('Ext.XTemplate',[
 		'<table	style="border-collapse:collapse;"><tr><td style="padding:15px;border:1px;"><table style="border-collapse:collapse;">',
-		'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}, {exclusive}</pre></td></tr>',
+		'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>项目评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
@@ -661,6 +684,7 @@ var generatePanelFn=function(e){
 		'<tr><td class="r_ex_td_pre"><b>添加时间</b></td><td class="r_ex_td_main"><pre>{create_ts:this.cusDate}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
         '<tr><td class="r_ex_td_pre"><b>销售类别</b></td><td class="r_ex_td_main"><pre>{exclusive}</pre></td></tr>',
+	    '<tr><td class="r_ex_td_pre"><b>项目董事</b></td><td class="r_ex_td_main"><pre>{proj_director}</pre></td></tr>',
 	    '<tr><td class="r_ex_td_pre"><b>项目经理</b></td><td class="r_ex_td_main"><pre>{manager}</pre></td></tr>',
 	    '</td></tr></table></td></tr></table>',
 		{
@@ -676,7 +700,7 @@ var generatePanelFn=function(e){
 		}]);
 	};
 	e.proj_info_tpl.overwrite(e.down('panel#projInfoPanel').body,foundRecords.getAt(0).data);
-    Ext.getCmp('headerTitle').el.dom.innerHTML='<span class="app-header2">'+foundRecords.getAt(0).data.issue+' '+foundRecords.getAt(0).data.name+'</span>';
+    Ext.getCmp('headerTitle').setText('<span class="app-header2">'+foundRecords.getAt(0).data.issue+' '+foundRecords.getAt(0).data.name+'</span>');
 	fileListStore.setProxy({
 		type: 'ajax',
 		url: '/ts/index.php/upload/get_list?proj_id='+e.proj_id,

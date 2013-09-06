@@ -209,10 +209,10 @@ class User_model extends CI_Model {
     }
     
     function update_access_history($action_access_id, $value, $loginname){
-        $this->db->set('value', $value);
+        $data = array('value' => $value);
         $this->db->where('loginname',$loginname);
         $this->db->where('action_access_id',$action_access_id);
-        $this->db->update('user_action_access_history');
+        $this->db->update('user_action_access_history', $data);
         
 		if($this->db->affected_rows() !== 1) {
 			return false;
@@ -228,7 +228,7 @@ class User_model extends CI_Model {
         $this->db->where('action',$action);
         $this->db->where('loginname',$loginname);
         $query = $this->db->get();
-        return $query->result()->value;
+        return $query->row()->value;
     }
            
     function is_all_accessed($action_access_id, $value) {

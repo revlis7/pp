@@ -335,7 +335,7 @@ class Proj extends Auth_Controller {
 
         if($proj->exclusive !== '通道类'){ 	
             if(!$this->User_model->is_accessed($proj->action_access_id,$value, element('loginname', $this->session->userdata('user')))){
-        	   	$this->User_model->update_access_history($proj_id);
+        	   	$this->User_model->update_access_history($proj_id, $value, element('loginname', $this->session->userdata('user')));
             }
             if(!$this->User_model->is_all_accessed($proj->action_access_id,$value, element('loginname', $this->session->userdata('user')))){
                 $this->json->output(array('success' => true, 'data' => '批准申请已提交'));

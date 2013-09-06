@@ -289,13 +289,13 @@ class Proj extends Auth_Controller {
         $proj = $this->Proj_model->get_proj($proj_id);
         
         if($proj->exclusive !== '通道类'){
+            $this->User_model->create_access_history($proj_id,1);
         
 //	        $mail_content_title = '上 线 申 请';	
 //	        $mail_content_mainstr = '<p>以下项目正申请上线：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m');
 //	        $mail_content_buttomstr = '您收到这封邮件，是因为您是"彩虹桥"的项目审批管理员。';
 //	        $mail_subject = 'YW01_彩虹桥_项目上线申请: '.$proj->issue.' '.$proj->name;
         } else {
-            $this->User_model->create_access_history($proj_id,1);
             
 //	        $mail_content_title = '上 线 申 请';	
 //          $mail_content_mainstr = '<p>以下项目正申请上线：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m').'<p><b>请注意由于该项目的销售性质，需要所有审批员都通过才能上线！</b></p>';
@@ -332,7 +332,7 @@ class Proj extends Auth_Controller {
 
         $proj = $this->Proj_model->get_proj($proj_id);
         $value = $this->User_model->get_access_value(element('loginname', $this->session->userdata('user')));
-        
+
         if($proj->exclusive !== '通道类'){ 	
             if(!$this->User_model->is_accessed($proj->action_access_id,$value, element('loginname', $this->session->userdata('user')))){
         	   	$this->User_model->update_access_history($proj_id);

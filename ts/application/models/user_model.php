@@ -255,7 +255,8 @@ class User_model extends CI_Model {
         $query = $this->db->query('select max(action_access_id) as max_action_access_id from user_action_access_history');
         $max_action_access_id = $query->row()->max_action_access_id+1;
         
-        $this->db->distinct('loginname');
+        $this->db->distinct('');
+        $this->db->select('loginname');
         $this->db->from('user_action_access');
         $this->db->where('operate_rel',$operate_rel);
         $query=$this->db->get();

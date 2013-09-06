@@ -83,6 +83,14 @@ class Proj_model extends CI_Model {
 		return $proj->manager;
 	}
 	
+	function get_proj_director($proj_id) {
+		$proj = $this->get_proj($proj_id);
+		if(!$proj) {
+			return false;
+		}
+		return $proj->proj_director;
+	}
+
     function get_proj_string($proj_id) {
         //$proj = $this->get_proj($proj_id);
         //$proj_str = $proj->category.$proj->sub_category;
@@ -91,8 +99,8 @@ class Proj_model extends CI_Model {
     
 	function create_proj($category = '', $sub_category = '', $issue = '', $name = '', 
 		$flow_of_fund = '', $highlights = '', $scale = '', $cycle = '', $profit_property = '', 
-		$manager = '', $contract = '', $remark = '', $pay_account = '', $countdown = '', 
-		$exclusive = '', $grade = '', $manager_remark = '', $creator = '') {
+        $proj_director = '', $manager = '', $contract = '', $remark = '', $pay_account = '', 
+        $countdown = '', $exclusive = '', $grade = '', $manager_remark = '', $creator = '') {
 		$proj = array(
 			'category' => $category,
 			'sub_category' => $sub_category,
@@ -103,6 +111,7 @@ class Proj_model extends CI_Model {
 			'scale' => $scale,
 			'cycle' => $cycle,
 			'profit_property' => $profit_property,
+			'proj_director' => $proj_director,
 			'manager' => $manager,
 			'contract' => $contract,
 			'remark' => $remark,
@@ -124,7 +133,7 @@ class Proj_model extends CI_Model {
 	}
 	
 	function update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, 
-		$highlights, $scale, $cycle, $profit_property, $manager, $contract, $remark, 
+		$highlights, $scale, $cycle, $profit_property, $proj_director, $manager, $contract, $remark, 
 		$pay_account, $countdown, $exclusive, $grade, $manager_remark, $editor) {
 		// 查询旧记录，插入历史表
 		if(!$this->archive_proj($proj_id, $editor)) {
@@ -141,6 +150,7 @@ class Proj_model extends CI_Model {
 			'scale' => $scale,
 			'cycle' => $cycle,
 			'profit_property' => $profit_property,
+			'proj_director' => $proj_director,
 			'manager' => $manager,
 			'contract' => $contract,
 			'remark' => $remark,
@@ -190,6 +200,7 @@ class Proj_model extends CI_Model {
 			'scale' => $old_proj->scale,
 			'cycle' => $old_proj->cycle,
 			'profit_property' => $old_proj->profit_property,
+			'proj_director' => $old_proj->proj_director,
 			'manager' => $old_proj->manager,
 			'contract' => $old_proj->contract,
 			'remark' => $old_proj->remark,
@@ -360,7 +371,7 @@ class Proj_model extends CI_Model {
     
     function get_proj_brief_string($proj,$manager) {
         $proj_str = '<p>'.$proj->profit_property.'收益项目，融资规模'.$proj->scale.'亿，按'.$proj->cycle.'分配。<br />项目评级：';
-        $proj_str .= $proj->grade.'<br />资金投向：'.$proj->flow_of_fund.'<br />项目亮点：'.mb_substr($proj->highlights,0,30).'......</p>';
+        $proj_str .= $proj->grade.'<br />资金投向：'.$proj->flow_of_fund.'<br />项目亮点：'.mb_substr($proj->highlights,0,50).'......</p>';
         if($manager == 'm'){
         	$proj_str .= '<p><a href="http://rainbowbridge.sinaapp.com/ts/index.php/proj/update?proj_id='.$proj->id.'">详情请点击这里查看</a>。</p>';
         } else {
@@ -392,7 +403,7 @@ class Proj_model extends CI_Model {
 	function get_all_proj_detail($category_id, $ending_status, $recently = false, $mode = '', $manager = null) {
 		$raw_sql  = 'SELECT proj.id AS proj_id, proj.category, proj.sub_category, ';
 		$raw_sql .= 'proj.issue, proj.name, proj.flow_of_fund, proj.highlights, ';
-		$raw_sql .= 'proj.scale, proj.cycle, proj.profit_property, proj.manager, ';
+		$raw_sql .= 'proj.scale, proj.cycle, proj.profit_property, proj.proj_director, proj.manager, ';
 		$raw_sql .= 'proj.contract, proj.remark, proj.pay_account, proj.countdown, ';
 		$raw_sql .= 'proj.pdt_status, proj.exclusive, proj.grade, proj.manager_remark, ';
 		$raw_sql .= 'proj_detail.id as proj_detail_id, proj_detail.sub_name, ';
@@ -438,8 +449,47 @@ class Proj_model extends CI_Model {
 		$query = $this->db->query($raw_sql, array($manager));
 		return $query->result();
 	}
+    
+    function get_promote_proj() {
+		$this->db->from('promote_proj');
+		$query = $this->db->get();
+		return $query->result();
+    }
+    
+    function enter_promote($proj_id = '') {
+        $promote_proj = array(
+            'proj_id'      => $proj_id,
+        );
+        $this->db->from('promote_proj');
+        $this->db->where('proj_id', $proj_id);
+		$query = $this->db->get();
+        
+        if($query->num_rows()>0){
+        	$q = $this->db->delete('promote_proj', $promote_proj);
+			if($this->db->affected_rows() !== 1) {
+				return false;
+			}
+        } else {
+        	$q = $this->db->insert('promote_proj', $promote_proj);
+			if($this->db->affected_rows() !== 1) {
+				return false;
+			}
+        }
+		return true;
+    }
+    
+    /*
+    function close_promote($proj_id = '') {
+        $this->db->from('promote_proj')->where('proj_id', $proj_id);
+        $this->db->delete();
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return true;
+    }
+    */
 
-	function create_company($company_name = '', $type = '', $remark = '', $creator = '') {
+    function create_company($company_name = '', $type = '', $remark = '', $creator = '') {
 		$company = array(
 			'company_name' => $company_name,
 			'type'         => $type,

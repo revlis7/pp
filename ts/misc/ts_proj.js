@@ -41,7 +41,7 @@ Ext.onReady(function() {
 		closable:false,
 		title:'编辑项目',
 		titleAlign : "center",
-		width:940,
+		width:980,
 		items:[
 		{
 			xtype:"form",
@@ -60,13 +60,13 @@ Ext.onReady(function() {
 				allowBlank: false
 			},
 			dockedItems: [{
-				xtype:'box',
-				flex:1
-			},{
 				dock: 'bottom',
 				xtype: 'toolbar',
 				bodyPadding: 5,
 				items: [{
+					xtype:'box',
+					flex:1
+				},{
 					icon:'/ts/misc/resources/icons/check_24.png',
 					text: '确定',
 					scale: 'medium',
@@ -78,11 +78,7 @@ Ext.onReady(function() {
 						submitEmptyText: false,
 						waitMsg: 'Saving Data...',
 						success: function(form, action) {
-							ProjWin.close();
-							projStore.load(function(records, operation, success) {
-						//		ProjInfoForm.getForm().loadRecord(records[0]);
-							proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,projStore.getAt(0).data);
-							});
+                            window.location.reload(）;
 						} 
 						//,
 						//failure: function(form, action) {
@@ -202,18 +198,26 @@ Ext.onReady(function() {
 					},{
 						xtype:'textfield',
 						fieldLabel: '资金投向*',
-						width:420,
+						width:520,
 						name:'flow_of_fund'
 					},{
 						xtype:'textareafield',
 						fieldLabel: '项目亮点*',
-						width:420,
-						height:100,
+						width:520,
+						height:160,
 						name:'highlights'
 					}, {
 						xtype:'combo',
+						fieldLabel: '产品董事*',
+						name:'proj_director',
+						queryMode : 'local',
+						store : chProjDirectorList,
+						valueField: 'id',
+						displayField: 'text',
+						forceSelection:true
+					}, {
+						xtype:'combo',
 						fieldLabel: '产品经理*',
-						width:220,
 						name:'manager',
 						queryMode : 'local',
 						store : chManagerList,
@@ -223,7 +227,6 @@ Ext.onReady(function() {
 					}, {
 						xtype:'combo',
 						fieldLabel: '产品等级*',
-						width:220,
 						name:'grade',
 						queryMode : 'local',
 						store : chGradeList,
@@ -234,7 +237,6 @@ Ext.onReady(function() {
 						xtype:'combo',
 						fieldLabel: '销售类别*',
 						name:'exclusive',
-						width:220,
 						queryMode : 'local',
 						store : chExclusiveList,
 						valueField: 'id',
@@ -259,26 +261,26 @@ Ext.onReady(function() {
 					{
 						xtype:'textareafield',
 						fieldLabel: '合同情况',
-						width:420,
+						width:360,
 						name:'contract',
 						allowBlank: true
 					},{
 						xtype:'textareafield',
 						fieldLabel: '打款账户',
-						width:420,
+						width:360,
 						name:'pay_account',
 						allowBlank: true
 					},{
 						xtype:'textareafield',
 						fieldLabel: '备注',
-						width:420,
+						width:360,
 						height:80,
 						name:'remark',
 						allowBlank: true
 					},{
 						xtype:'textareafield',
 						fieldLabel: '产品经理备注',
-						width:420,
+						width:360,
 						height:80,
 						name:'manager_remark',
 						allowBlank: true
@@ -331,12 +333,12 @@ Ext.onReady(function() {
 				width:240,
 				height:38
 			},{
-				xtype:'box',
+				xtype:'tbtext',
                 id:'headerTitle',
-                html:'<span class="app-header2">&nbsp;</span>'
+                text:'<span class="app-header2">&nbsp;</span>'
 			},{
-				xtype:'box',
-				html:'<span class="app-header2">项目编辑</span>'
+				xtype:'tbtext',
+				text:'<span class="app-header2">项目编辑</span>'
 			},{
 				xtype:'tbtext',
 				text:'您可以：'
@@ -432,6 +434,28 @@ Ext.onReady(function() {
 								waitMsg: '正在保存后台数据……',
 								success: function(form, action) {
 									Ext.getCmp('BtnPdtApply').hide();
+                                    window.location.reload(）;
+								} ,
+								failure: function(form, action) {
+									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+								}
+							})
+						}
+					},{
+						icon: '/ts/misc/resources/icons/upload.gif',
+						id:'BtnPdtApply2',
+						text:'董事批准',
+						scale:'medium',
+						hidden:true,
+						handler:function(){
+							projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+							projApplyForm.getForm().submit({
+								url:'/ts/index.php/proj/proj_apply_submit2',
+								submitEmptyText: false,
+								waitMsg: '正在保存后台数据……',
+								success: function(form, action) {
+									Ext.getCmp('BtnPdtApply2').hide();
+                                    window.location.reload(）;
 								} ,
 								failure: function(form, action) {
 									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
@@ -453,6 +477,7 @@ Ext.onReady(function() {
 								success: function(form, action) {
 									Ext.getCmp('BtnPdtAccept').hide();
 									Ext.getCmp('BtnPdtRefuse').hide();
+                                    window.location.reload(）;
 								} ,
 								failure: function(form, action) {
 									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
@@ -474,6 +499,51 @@ Ext.onReady(function() {
 								success: function(form, action) {
 									Ext.getCmp('BtnPdtAccept').hide();
 									Ext.getCmp('BtnPdtRefuse').hide();
+                                    window.location.reload(）;
+								} ,
+								failure: function(form, action) {
+									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+								}
+							})
+						}
+					},{
+						icon: '/ts/misc/resources/icons/check_24.png',
+						id:'BtnPdtEnterPromote',
+						text:'设为推荐项目',
+						scale:'medium',
+						hidden:true,
+						handler:function(){
+							projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+							projApplyForm.getForm().submit({
+								url:'/ts/index.php/proj/proj_promote_enter',
+								submitEmptyText: false,
+								waitMsg: '正在保存后台数据……',
+								success: function(form, action) {
+									Ext.getCmp('BtnPdtEnterPromote').hide();
+									Ext.getCmp('BtnPdtClosePromote').show();
+                                    window.location.reload(）;
+								} ,
+								failure: function(form, action) {
+									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+								}
+							})
+						}
+					},{
+						icon: '/ts/misc/resources/icons/denied_24.png',
+						id:'BtnPdtClosePromote',
+						text:'取消推荐项目',
+						scale:'medium',
+						hidden:true,
+						handler:function(){
+							projApplyForm.down('textfield[name="proj_id"]').setValue(params.proj_id);
+							projApplyForm.getForm().submit({
+								url:'/ts/index.php/proj/proj_promote_enter',
+								submitEmptyText: false,
+								waitMsg: '正在保存后台数据……',
+								success: function(form, action) {
+									Ext.getCmp('BtnPdtEnterPromote').show();
+									Ext.getCmp('BtnPdtClosePromote').hide();
+                                    window.location.reload(）;
 								} ,
 								failure: function(form, action) {
 									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
@@ -524,6 +594,55 @@ Ext.onReady(function() {
 		}]
 	});
 	projStore.load(function(records, operation, success) {
+        var t_i=0;
+		Ext.Ajax.request({
+		   	url: '/ts/index.php/proj/proj_operate_privilege?action=proj%2Fproj_promote_enter',
+			success: function(response){
+                if (response.responseText.indexOf('true')>0 ) {
+//					if (firstRec.get("pdt_status")=="申请中" && response.responseText.indexOf('true')>0 ) {
+//					Ext.getCmp('BtnPdtAccept').show();
+//				}
+	           		recommendStore.load(function(records, operation, success) {
+						Ext.Array.forEach(records,function(record){
+							if(record.get("proj_id")==params.proj_id){
+								Ext.getCmp('headerTitle').setText('<span class="app-header2">推荐项目： '+firstRec.data.issue+' '+firstRec.data.name+'</span>');
+								Ext.getCmp('BtnPdtEnterPromote').hide();
+								Ext.getCmp('BtnPdtClosePromote').show();
+								t_i+=1;
+							}
+						})
+						if(t_i==0) {
+							Ext.getCmp('headerTitle').setText('<span class="app-header2">'+firstRec.data.issue+' '+firstRec.data.name+'</span>');
+							Ext.getCmp('BtnPdtEnterPromote').show();
+							Ext.getCmp('BtnPdtClosePromote').hide();
+						}
+				    });
+   	            }
+		    }
+		});
+
+        if(firstRec.get("pdt_status")=="初始"){
+			Ext.getCmp('BtnPdtApply').show();
+		}
+        if(firstRec.get("pdt_status")=="申请中"){
+			Ext.getCmp('BtnPdtApply2').show();
+		}
+        Ext.Ajax.request({
+		   	url: '/ts/index.php/proj/proj_operate_privilege?action=proj%2Fproj_accept_submit',
+			success: function(response){
+				if (firstRec.get("pdt_status")=="董事通过" && response.responseText.indexOf('true')>0 ) {
+					Ext.getCmp('BtnPdtAccept').show();
+				}
+		    }
+		});
+		Ext.Ajax.request({
+		   	url: '/ts/index.php/proj/proj_operate_privilege?action=proj%2Fproj_refuse_submit',
+			success: function(response){
+				if (firstRec.get("pdt_status")=="董事通过" && response.responseText.indexOf('true')>0 ) {
+					Ext.getCmp('BtnPdtRefuse').show();
+				}
+		    }
+		});
 		projDetailStore.load(function(records, operation, success) {
 			var detailString="";
 			//ProjInfoForm.getForm().loadRecord(records[0]);
@@ -548,6 +667,7 @@ Ext.onReady(function() {
 			'<tr><td class="r_ex_td_pre"><b>添加时间</b></td><td class="r_ex_td_main"><pre>{create_ts:this.cusDate}</pre></td></tr>',
 			'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
             '<tr><td class="r_ex_td_pre"><b>销售类别</b></td><td class="r_ex_td_main"><pre>{exclusive}</pre></td></tr>',
+		    '<tr><td class="r_ex_td_pre"><b>项目董事</b></td><td class="r_ex_td_main"><pre>{proj_director}</pre></td></tr>',
 	        '<tr><td class="r_ex_td_pre"><b>项目经理</b></td><td class="r_ex_td_main"><pre>{manager}</pre></td></tr>',
 	        '</td></tr></table></td></tr></table>',
 			{
@@ -569,22 +689,8 @@ Ext.onReady(function() {
 			
 			var firstRec=projStore.getAt(0);
 			proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,firstRec.data);
-		    Ext.getCmp('headerTitle').el.dom.innerHTML='<span class="app-header2">'+firstRec.data.issue+' '+firstRec.data.name+'</span>';
-			//proj_info_window.show();
-			if(firstRec.get("pdt_status")=="上线通过" || firstRec.get("pdt_status")=="申请中"){
-				Ext.getCmp('BtnPdtApply').hide();
-			} else {
-				Ext.getCmp('BtnPdtApply').show();
-			}
-			Ext.Ajax.request({
-		    	url: '/ts/index.php/proj/proj_operate_privilege',
-				success: function(response){
-					if (firstRec.get("pdt_status")=="申请中") {
-						Ext.getCmp('BtnPdtAccept').show();
-						Ext.getCmp('BtnPdtRefuse').show();
-					}
-			    }
-			});
+            
+            
 		});		
 	});
 

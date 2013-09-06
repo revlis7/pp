@@ -192,4 +192,91 @@ class User_model extends CI_Model {
 		$query = $this->db->get();
 		return $query->result();
 	}
+
+    function is_accessed($action_access_id, $value, $loginname){
+        $this->db->from('user_action_access_history');
+        $this->db->where('loginname', $loginname);
+        $this->db->where('action_access_id', $action_access_id);
+        $this->db->where('value', $value);
+        
+        $query = $this->db->get();
+
+		if($query->num_rows() == 0) {
+			return false;
+        }
+        return true;
+
+    }
+    
+    function update_access_history($action_access_id, $value, $loginname){
+        $this->db->set('value', $value);
+        $this->db->where('loginname',$loginname);
+        $this->db->where('action_access_id',$action_access_id);
+        $this->db->update('user_action_access_history');
+        
+		if($this->db->affected_rows() !== 1) {
+			return false;
+		}
+		return true;
+    }
+    
+    function get_access_value($loginname, $action = null) {
+        if($action === null) {
+			$action = $this->router->fetch_class().'/'.$this->router->fetch_method();
+		}
+        $this->db->from('user_action_access');
+        $this->db->where('action',$action);
+        $this->db->where('loginname',$loginname);
+        $query = $this->db->get();
+        return $query->result()->value;
+    }
+           
+    function is_all_accessed($action_access_id, $value) {
+       
+        $this->db->from('user_action_access_history');
+        $this->db->where('action_access_id', $action_access_id);
+        $this->db->where('value', $value);
+        $query = $this->db->get();
+        $access_rows = $query->num_rows();
+        
+        $this->db->from('user_action_access_history');
+        $this->db->where('action_access_id', $action_access_id);
+        $query = $this->db->get();
+        $all_rows = $query->num_rows();
+        
+        if($access_rows == $all_rows) {
+            return true;
+        }
+        return false;
+        
+    }
+    
+    function create_access_history($proj_id, $operate_rel) {
+        $query = $this->db->query('select max(action_access_id) as max_action_access_id from user_action_access_history');
+        $max_action_access_id = $query->max_action_access_id+1;
+        
+        $this->db->distinct('loginname');
+        $this->db->from('user_action_access');
+        $this->db->where('operate_rel',$operate_rel);
+        $query=$this->db->get();
+        
+        foreach ($query->result() as $row) {
+            $data = array(
+                'operate_rel' => $operate_rel,
+                'action_access_id' => $max_action_access_id,
+                'loginname' => $row->loginname,
+                'create_ts' => date('Y-m-d H:i:s'),
+                'update_ts' => date('Y-m-d H:i:s'),
+                'value' => 0
+            );
+            $this->db->insert('user_action_access_history',$data);
+        }
+
+    	$data = array(
+            'action_access_id' => $max_action_access_id
+        );
+        $this->db->where('id', $proj_id);
+        $this->db->update('proj', $data);
+
+    }
 }

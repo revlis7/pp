@@ -77,6 +77,13 @@ class Utility {
 		return true;
 	}
 
+	function is_director() {
+		if($this->title2group(element('title', $this->CI->session->userdata('user'))) !== 'proj_director') {
+			return false;
+		}
+		return true;
+	}
+
     function is_ch() {
 		if($this->title2group(element('title', $this->CI->session->userdata('user'))) !== 'staff') {
 			return false;
@@ -195,7 +202,7 @@ class Utility {
         $mail->setOpt($mail_config);
         $mail->send();
     }
-
+    
     function page_title() {
 		$module = $this->CI->uri->segment(1);
 		$action = $this->CI->uri->segment(2);

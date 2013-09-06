@@ -26,6 +26,7 @@ Ext.onReady(function() {
 	  {name:'amount'           ,type:'boolean' },
 	  {name:'profit_property'  ,type:'boolean' },
 	  {name:'profit'           ,type:'boolean' },
+	  {name:'proj_director'    ,type:'boolean' },
 	  {name:'manager'          ,type:'boolean' },
 	  {name:'contract'         ,type:'boolean' },
 	  {name:'remark'           ,type:'boolean' },
@@ -63,6 +64,291 @@ Ext.onReady(function() {
 	co.animate({from:{y:co.y-300},to:{y:co.y+88},easeing:'backOut',duration:500})
   };
   
+	var ProjWin=Ext.create("Ext.window.Window",{
+		resizeable:false,
+		closeAction:"hide",
+		closable:false,
+		title:'编辑项目信息',
+		titleAlign:'center',
+		width:940,
+		items:[
+		{
+			xtype:"form",
+			bodyPadding:5,
+			trackResetOnLoad:true,
+			border:0,
+			waitTitle:"Pleas wait...",
+			layout:{
+				type:'vbox',
+				defaultMargins: {top: 5, right: 5, bottom: 5, left: 5}
+			},
+			fieldDefaults:{
+				lableWidth:90,
+				width:240,
+				labelAlign:'right',
+				allowBlank: false
+			},
+			dockedItems: [{
+				dock: 'bottom',
+				xtype: 'toolbar',
+				bodyPadding: 5,
+				items: [{
+						xtype:'box',
+						flex:1
+				},{
+					icon:'/ts/misc/resources/icons/check_24.png',
+					text: '确定',
+					id:'ok_create',
+					hidden:false,
+					scale: 'medium',
+					formBind: true, //only enabled once the form is valid
+					disabled: true,
+					handler: function() {
+                        window.opener=null;
+						var subWin = window.open();
+						this.up('form').getForm().submit({
+							url: '/ts/index.php/proj/proj_create_submit',
+							submitEmptyText: false,
+							waitMsg: 'Saving Data...',
+							success: function(form, action) {
+                                proj_id=action.result.proj_id;
+                                ProjWin.close();
+                                subWin.location='http://rainbowbridge.sinaapp.com/ts/index.php/proj/update?proj_id='+proj_id;
+							},
+							failure: function(form, action) {
+                                ProjWin.close();
+                                subWin.close();
+								Ext.Msg.alert('alert', '保存失败。如有问题请联系管理员。');
+                                
+							}
+						});
+					}
+				},{
+					icon:'/ts/misc/resources/icons/x_24.png',
+					text: '取消',
+					id:'cancel_edit',
+					scale: 'medium',
+					handler: function(){
+						this.up('window').close();
+					}
+				},{
+						xtype:'box',
+						flex:1
+				}]
+			}],
+			items:[
+			{
+				xtype:'panel',
+				region:'east',
+				border:0,
+				layout: {
+					type: 'hbox',
+					defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
+				},
+				items:[
+				{
+					xtype:'fieldset',
+					title: '====<b>项目基本信息</b>====',
+					border:0,
+					//collapsible: true,
+					defaults: {
+						labelWidth: 89,
+						anchor: '100%',
+						layout: {
+							type: 'vbox'
+						}
+					},
+					items:[{xtype:'box',height:10,border:0},
+					{
+						xtype:'hiddenfield',
+						fieldLabel: 'proj_id',
+						name:'proj_id'
+					},
+					{
+						xtype:'fieldcontainer',
+						layout:'hbox',
+						flex:1,
+						width:420,
+						region:'north',
+						labelAlign:'right',
+						fieldLabel: '项目类别*',
+						items:[
+						{//主类别
+							 xtype:'combo',
+							 emptyText:"主类别...",
+							 width:140,
+							 name:'category',
+							 store : chCategoryList,
+							 queryMode : 'local',
+							 forceSelection:true,
+							 triggerAction: 'all',
+							 valueField: 'id',   //value值字段
+							 displayField: 'text',  //显示文本字段
+							 listeners: { // 监听选择事件
+									 select: function() {
+											chSubCategoryList.removeAll();
+											if (this.getValue() == '固定收益类') {
+												 chSubCategoryList.loadData(chFixedList,true);
+											} else if (this.getValue() == '浮动收益类') {
+												 chSubCategoryList.loadData(chFloatingList,true);
+											}
+									 }
+							 }
+						},
+						{//子类别
+							 xtype:'combo',
+							 emptyText:"子类别...",
+							 width:170,
+							 name:'sub_category',
+							 store : chSubCategoryList,
+							 queryMode: 'local',
+							 triggerAction: 'all',
+							 valueField: 'value',
+							 displayField: 'text',
+							 forceSelection:true,
+							 listeners: {
+									 select: function() {
+//	                       alert(comboBuild.getValue() + '-' + comboRoom.getValue());
+											}
+							 }
+						}]
+					},{
+						xtype:'textfield',
+						fieldLabel: '发行方*',
+						name:'issue',
+						width:320
+					},{
+						xtype:'textfield',
+						fieldLabel: '项目名称*',
+						name:'name',
+						width:400
+					},{
+						xtype:'numberfield',
+						fieldLabel: '融资规模(亿)*',
+						name:'scale'
+					},{
+						xtype:'combo',
+						fieldLabel: '分配周期*',
+						name:'cycle',
+						queryMode : 'local',
+						store : chCycleList,
+						valueField: 'id',
+						displayField: 'text',
+						forceSelection:true
+					},{
+						xtype:'combo',
+						fieldLabel: '项目收益属性*',
+						name:'profit_property',
+						queryMode : 'local',
+						store : chProfitPropertyList,
+						valueField: 'id',
+						displayField: 'text',
+						forceSelection:true
+					},{
+						xtype:'textfield',
+						fieldLabel: '资金投向*',
+						width:420,
+						name:'flow_of_fund'
+					},{
+						xtype:'textareafield',
+						fieldLabel: '项目亮点*',
+						width:420,
+						height:100,
+						name:'highlights'
+					}, {
+						xtype:'combo',
+						fieldLabel: '产品董事*',
+						width:220,
+						name:'proj_director',
+						queryMode : 'local',
+						store : chProjDirectorList,
+						valueField: 'id',
+						displayField: 'text',
+						forceSelection:true
+					}, {
+						xtype:'combo',
+						fieldLabel: '产品经理*',
+						width:220,
+						name:'manager',
+						queryMode : 'local',
+						store : chManagerList,
+						valueField: 'id',
+						displayField: 'text',
+						forceSelection:true
+					}, {
+						xtype:'combo',
+						fieldLabel: '产品等级*',
+						width:220,
+						name:'grade',
+						queryMode : 'local',
+						store : chGradeList,
+						valueField: 'id',
+						displayField: 'text',
+						forceSelection:true
+					},{
+						xtype:'combo',
+						fieldLabel: '销售类别*',
+						name:'exclusive',
+						width:220,
+						queryMode : 'local',
+						store : chExclusiveList,
+						valueField: 'id',
+						displayField: 'text',
+						forceSelection:true
+					}]
+				},{
+					xtype:'fieldset',
+					title: '====<b>项目其他信息</b>====',
+					border:0,
+					//collapsible: true,
+					defaults: {
+						labelWidth: 89,
+						anchor: '100%',
+						labelAlign: 'top',
+						layout: {
+							type: 'hbox',
+							defaultMargins: {top: 0, right: 5, bottom: 0, left: 0}
+						}
+					},
+					items:[{xtype:'box',height:5,border:0},
+					{
+						xtype:'textareafield',
+						fieldLabel: '合同情况',
+						width:420,
+						name:'contract',
+						allowBlank: true
+					},{
+						xtype:'textareafield',
+						fieldLabel: '打款账户',
+						width:420,
+						name:'pay_account',
+						allowBlank: true
+					},{
+						xtype:'textareafield',
+						fieldLabel: '备注',
+						width:420,
+						height:80,
+						name:'remark',
+						allowBlank: true
+					},{
+						xtype:'textareafield',
+						fieldLabel: '产品经理备注',
+						width:420,
+						height:80,
+						name:'manager_remark',
+						allowBlank: true
+					 }]
+				}]
+			},{xtype:'box',html:'<span style="color:#666666">注：标记*号的是必填项。下列字段不会被渠道及外部用户所见：销售类别，产品经理备注。</span>'}]
+		}]
+	});
+
+	ProjWin.on({
+		hide: function(){
+			Ext.getBody().unmask();
+		}
+	});
+
 listControl.load(function(records, operation, success) {
 	var fullGridColumns=[
 	{
@@ -182,6 +468,8 @@ listControl.load(function(records, operation, success) {
 	}, {
 		text:'附加信息',columns:[
 		{
+			text:'产品董事', dataIndex:'proj_director', filterable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("proj_director")
+		}, {
 			text:'产品经理', dataIndex:'manager', filterable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("manager")
 		}, {
 			text:'渠道公司',dataIndex:'channel_company',filterable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("channel_company")
@@ -473,7 +761,11 @@ listControl.load(function(records, operation, success) {
 				icon: '/ts/misc/resources/icons/document_add_24.png',
 				text: '新增项目',
 				scale:'medium',
-				handler: function () {window.location.href='/ts/index.php/proj/create';} 
+				handler: function() {
+                    ProjWin.down('hiddenfield[name="proj_id"]').setValue(-1);
+                    Ext.getBody().mask();
+                    ProjWin.show();
+                } 
 			},{
 				text:'查看在售列表',
 				icon:'/ts/misc/resources/icons/document_alt_stroke_24.png',
@@ -532,11 +824,6 @@ listControl.load(function(records, operation, success) {
 						});
 					}
 				}
-			},{
-				text:'个人信息：'+loginname,
-				icon:'/ts/misc/resources/icons/user_24.png',
-				scale:'medium',
-				handler:function(){window.location.href='/ts/index.php/user/info';}
 			},{
 				text:'离开管理员模式',
 				scale:'medium',

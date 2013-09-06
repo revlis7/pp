@@ -78,7 +78,7 @@ Ext.onReady(function() {
 						submitEmptyText: false,
 						waitMsg: 'Saving Data...',
 						success: function(form, action) {
-                            window.location.reload(）;
+                            window.location.reload();
 						} 
 						//,
 						//failure: function(form, action) {
@@ -434,7 +434,7 @@ Ext.onReady(function() {
 								waitMsg: '正在保存后台数据……',
 								success: function(form, action) {
 									Ext.getCmp('BtnPdtApply').hide();
-                                    window.location.reload(）;
+                                    window.location.reload();
 								} ,
 								failure: function(form, action) {
 									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
@@ -455,8 +455,8 @@ Ext.onReady(function() {
 								waitMsg: '正在保存后台数据……',
 								success: function(form, action) {
 									Ext.getCmp('BtnPdtApply2').hide();
-                                    window.location.reload(）;
-								} ,
+                                    window.location.reload();
+                                },
 								failure: function(form, action) {
 									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
 								}
@@ -477,7 +477,7 @@ Ext.onReady(function() {
 								success: function(form, action) {
 									Ext.getCmp('BtnPdtAccept').hide();
 									Ext.getCmp('BtnPdtRefuse').hide();
-                                    window.location.reload(）;
+                                    window.location.reload();
 								} ,
 								failure: function(form, action) {
 									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
@@ -499,7 +499,7 @@ Ext.onReady(function() {
 								success: function(form, action) {
 									Ext.getCmp('BtnPdtAccept').hide();
 									Ext.getCmp('BtnPdtRefuse').hide();
-                                    window.location.reload(）;
+                                    window.location.reload();
 								} ,
 								failure: function(form, action) {
 									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
@@ -521,7 +521,7 @@ Ext.onReady(function() {
 								success: function(form, action) {
 									Ext.getCmp('BtnPdtEnterPromote').hide();
 									Ext.getCmp('BtnPdtClosePromote').show();
-                                    window.location.reload(）;
+                                    window.location.reload();
 								} ,
 								failure: function(form, action) {
 									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
@@ -543,7 +543,7 @@ Ext.onReady(function() {
 								success: function(form, action) {
 									Ext.getCmp('BtnPdtEnterPromote').show();
 									Ext.getCmp('BtnPdtClosePromote').hide();
-                                    window.location.reload(）;
+                                    window.location.reload();
 								} ,
 								failure: function(form, action) {
 									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
@@ -620,6 +620,8 @@ Ext.onReady(function() {
    	            }
 		    }
 		});
+        
+        var firstRec=projStore.getAt(0);
 
         if(firstRec.get("pdt_status")=="初始"){
 			Ext.getCmp('BtnPdtApply').show();

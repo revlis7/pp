@@ -12,7 +12,7 @@ Ext.require([
 ]);
 
   var strUserList=Ext.create('Ext.data.ArrayStore', {
-    fields: ['loginname', 'realname','title','branch','tel','qq','mobile','email'],
+    fields: ['loginname', 'realname','title','branch','tel','qq','mobile','email','status'],
     proxy: {
       type: 'ajax',
       //url: '/etc/proj_sample_data.json',

@@ -1,4 +1,4 @@
-﻿Ext.Loader.setConfig({enabled: true,disableCaching:false});
+Ext.Loader.setConfig({enabled: true,disableCaching:false});
 Ext.Loader.setPath('Ext.ux', '/ts/misc/ux');
 
 Ext.require([
@@ -10,15 +10,15 @@ Ext.require([
 ]);
 var gradeFn=function(value) { 
 	var res;
-	if(value=="五星级"){
+	if(value=="5"){
 		res= '<span style="color:#245288">★★★★★</span>'
-	} else if (value=="四星级"){
+	} else if (value=="4"){
 		res= '<span style="color:#245288">★★★★</span>'
-	} else if (value=="三星级"){
+	} else if (value=="3"){
 		res= '<span style="color:#245288">★★★</span>'
-	} else if (value=="二星级"){
+	} else if (value=="2"){
 		res= '<span style="color:#245288">★★</span>'
-	} else if (value=="一星级"){
+	} else if (value=="1"){
 		res= '<span style="color:#245288">★</span>'
 	}
 	return res;
@@ -41,6 +41,7 @@ var chFixedList=[
 		['集合信托：房地产类','集合信托：房地产类'],
 		['集合信托：其他类','集合信托：其他类'],
 		['私募基金','私募基金'],
+		['资产管理计划','资产管理计划'],
 		['P2P理财','P2P理财'],
 		['其他','其他']
 	];
@@ -87,11 +88,11 @@ var chExclusiveList=Ext.create('Ext.data.ArrayStore', {
 var chGradeList=Ext.create('Ext.data.ArrayStore', {
 	fields: ['id', 'text'],
 	data: [
-	  ['五星级','五星级'],
-	  ['四星级','四星级'],
-	  ['三星级','三星级'],
-	  ['二星级','二星级'],
-	  ['一星级','一星级']
+	  ['5','五星级'],
+	  ['4','四星级'],
+	  ['3','三星级'],
+	  ['2','二星级'],
+	  ['1','一星级']
 	]
 });
 
@@ -130,7 +131,8 @@ var chManagerList=Ext.create('Ext.data.ArrayStore', {
 	fields: ['id', 'text'],
 	data: [
 	  ['王璐','王璐'],
-	  ['李汶洁','李汶洁']
+	  ['李汶洁','李汶洁'],
+	  ['黄水丽','黄水丽']
 	]
 });
 var chProjDirectorList=Ext.create('Ext.data.ArrayStore', {
@@ -183,7 +185,8 @@ var projDetailStore=Ext.create('Ext.data.JsonStore', {
 	{name:'main_channel',type:'string'},
 	{name:'channel_company',type:'string'},
 	{name:'channel_contact',type:'string'},
-	{name:'billing_company',type:'string'}
+	{name:'billing_company',type:'string'},
+        {name:'commission_partner',type:'float'}
 	],
 	proxy: {
 		type: 'ajax',
@@ -262,11 +265,12 @@ var	projAllStore=Ext.create('Ext.data.JsonStore', {
 	{name:'imm_payment'	,type:'float' },
 	{name:'found' ,type:'date' },
 	{name:'create_ts' ,type:'date',dateFormat:"Y-m-d H:i:s"	},
-	{name:'pdt_status',type:'string'}
+	{name:'pdt_status',type:'string'},
+     {name:'commission_partner',type:'float'}
 ],
  proxy:	{
 	type: 'ajax',
-	url: '/ts/index.php/proj/view',
+	url: '/ts/index.php/proj/view?adv=1',
 	reader:	{
 	 type: 'json',
 	 root: 'data'
@@ -343,7 +347,8 @@ var	filtersCfg = {
 		{type:'string' ,dataIndex:'channel_contact'	},
 		{type:'string' ,dataIndex:'billing_company'	},
 		{type:'string' ,dataIndex:'manager_remark' },
-		{type:'date' ,dataIndex:'create_ts'	}
+		{type:'date' ,dataIndex:'create_ts'	},
+        {type:'numeric',dataIndex:'commission_partner'}
 	]
 };
 
@@ -411,9 +416,9 @@ var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
 		}]
 	},
 	{text:'子名称',		 dataIndex:'sub_name', filtable:true, style: "text-align:center;",align: 'center',width:80},
-	{text:'项目期限',	 dataIndex:'month', filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'个月';}},
+	{text:'产品期限',	 dataIndex:'month', filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'个月';}},
 	{text:'认购金额',	 dataIndex:'amount', filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value+'万';}},
-	{text:'项目收益',	 dataIndex:'profit', filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
+	{text:'产品收益',	 dataIndex:'profit', filtable:true, style: "text-align:center;",align: 'center',width:80,renderer:function(value,metaData,record,colIndex,store,view) {return value.toFixed(3)+'%';}},
 	{text:'销售状态',	 dataIndex:'status', filtable:true, style: "text-align:center;",align: 'center',width:80,
 		renderer:function(value,metaData){
 			if(value=="在售"){
@@ -448,10 +453,10 @@ var AmountDetailsGrid=Ext.create('Ext.grid.Panel',{
 	{text:'平台费用',	 dataIndex:'inner_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,       
 		renderer: commissionFn
 	},
-	{text:'费用',		 dataIndex:'outer_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,       
+	{text:'合伙人费用',		 dataIndex:'commission_partner', filtable:true, style: "text-align:center;",align: 'right',width:80,       
 		renderer: commissionFn
 	},
-	{text:'现结费用',	 dataIndex:'imm_payment', filtable:true, style: "text-align:center;",align: 'right',width:80,       
+	{text:'费用',		 dataIndex:'outer_commission', filtable:true, style: "text-align:center;",align: 'right',width:80,       
 		renderer: commissionFn
 	},
 	{text:'主销渠道',	 dataIndex:'main_channel', filtable:true, style: "text-align:center;",align: 'center',width:90},
@@ -478,8 +483,8 @@ var FileListGrid=Ext.create('Ext.grid.Panel',{
 			icon: '/ts/misc/resources/icons/download_16.png',
 			tooltip: '下载该文件',
 			handler: function(grid, rowIndex, colIndex) {
-				var filename=grid.getStore().getAt(rowIndex).get("filename");
-				window.open('/ts/index.php/upload/get?file='+filename);
+				var fileid=grid.getStore().getAt(rowIndex).get("id");
+				window.open('/ts/index.php/upload/get?fileid='+fileid);
 			}
 		}]
 	},{
@@ -491,6 +496,7 @@ var FileListGrid=Ext.create('Ext.grid.Panel',{
 			tooltip: '删除该文件',
 			handler: function(grid, rowIndex, colIndex) {
 				var filename=grid.getStore().getAt(rowIndex).get("filename");
+				var fileid=grid.getStore().getAt(rowIndex).get("id");
 				Ext.Msg.show({
 					title:'删除文件',
 					msg: '您是否确认要删除文件 '+filename+' ？',
@@ -499,7 +505,7 @@ var FileListGrid=Ext.create('Ext.grid.Panel',{
 					fn:function(buttonId){
 						if(buttonId=='ok'){
 							Ext.Ajax.request({
-								url: '/ts/index.php/upload/delete?file='+filename,
+								url: '/ts/index.php/upload/delete?fileid='+fileid,
 								success: function(response){
 									fileListStore.load();
 								}
@@ -669,23 +675,23 @@ var generatePanelFn=function(e){
 		e.proj_info_tpl = Ext.create('Ext.XTemplate',[
 		'<table	style="border-collapse:collapse;"><tr><td style="padding:15px;border:1px;"><table style="border-collapse:collapse;">',
 		'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
+		'<tr><td class="r_ex_td_pre"><b>产品名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
+		'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>产品，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
+		'<tr><td class="r_ex_td_pre"><b>产品评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
 		detailString, '</td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
+		'<tr><td class="r_ex_td_pre"><b>产品亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
-		//'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
+		//'<tr><td class="r_ex_td_pre"><b>产品进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
-        '</table></td></tr><tr><td style="padding:15px;border:1px;"><b>项目补充信息：</b><br /><br /><table style="border-collapse:collapse;">',
+        '</table></td></tr><tr><td style="padding:15px;border:1px;"><b>产品补充信息：</b><br /><br /><table style="border-collapse:collapse;">',
 		'<tr><td class="r_ex_td_pre"><b>添加时间</b></td><td class="r_ex_td_main"><pre>{create_ts:this.cusDate}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
+		'<tr><td class="r_ex_td_pre"><b>产品经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
         '<tr><td class="r_ex_td_pre"><b>销售类别</b></td><td class="r_ex_td_main"><pre>{exclusive}</pre></td></tr>',
-	    '<tr><td class="r_ex_td_pre"><b>项目董事</b></td><td class="r_ex_td_main"><pre>{proj_director}</pre></td></tr>',
-	    '<tr><td class="r_ex_td_pre"><b>项目经理</b></td><td class="r_ex_td_main"><pre>{manager}</pre></td></tr>',
+	    '<tr><td class="r_ex_td_pre"><b>产品董事</b></td><td class="r_ex_td_main"><pre>{proj_director}</pre></td></tr>',
+	    '<tr><td class="r_ex_td_pre"><b>产品经理</b></td><td class="r_ex_td_main"><pre>{manager}</pre></td></tr>',
 	    '</td></tr></table></td></tr></table>',
 		{
 			cusDate:function(d){
@@ -818,7 +824,7 @@ var AmountEditWin=Ext.create('Ext.window.Window',{
 				allowBlank: true
 			},{
 				xtype:'numberfield',
-				fieldLabel: '项目期限(月)*',
+				fieldLabel: '产品期限(月)*',
 				name:'month'
 			},{
 				xtype:'numberfield',
@@ -826,7 +832,7 @@ var AmountEditWin=Ext.create('Ext.window.Window',{
 				name:'amount'
 			},{
 				xtype:'numberfield',
-				fieldLabel: '项目收益(%)*',
+				fieldLabel: '产品收益(%)*',
 				name:'profit'
 			},{
 				xtype:'combo',
@@ -879,13 +885,13 @@ var AmountEditWin=Ext.create('Ext.window.Window',{
 				decimalPrecision:3
 			},{
 				xtype:'numberfield',
-				fieldLabel: '费用(%)*',
-				name:'outer_commission',
+				fieldLabel: '合伙人费用(%)*',
+				name:'commission_partner',
 				decimalPrecision:3
 			},{
 				xtype:'numberfield',
-				fieldLabel: '现结费用(%)*',
-				name:'imm_payment',
+				fieldLabel: '费用(%)*',
+				name:'outer_commission',
 				decimalPrecision:3
 			},{
 				xtype:'hiddenfield',
@@ -934,7 +940,7 @@ var AmountEditWin=Ext.create('Ext.window.Window',{
 });
 
 var uploadWin=Ext.create("Ext.window.Window",{
-	title: '上传项目文件',
+	title: '上传产品文件',
 	width: 550,
 	resizeable:false,
 	closeAction:"hide",
@@ -989,7 +995,7 @@ var uploadWin=Ext.create("Ext.window.Window",{
 });
 
 var messageWin=Ext.create("Ext.window.Window",{
-	title: '项目消息',
+	title: '产品消息',
 	width: 550,
 	resizeable:false,
 	closeAction:"hide",
@@ -1090,4 +1096,33 @@ var projApplyForm = Ext.create('Ext.form.Panel', {
        	name: 'proj_id',
        	allowBlank: false
    	}]
+});
+var controlTreeStore = Ext.create('Ext.data.TreeStore', {
+    proxy:{
+        type:'ajax',
+        url:'/ts/index.php/api/get_control_tree',
+        reader:{
+            type:'json'
+        }
+    }
+});
+
+var controlTree=Ext.create('Ext.tree.Panel', {
+    title: '功能选择',
+    width:200,
+    store: controlTreeStore,
+    collapsible:true,
+    rootVisible: false,
+    collapseDirection:'left',
+    region:'west'
+
+});
+
+controlTree.on("itemclick",function(view,record,item,index,e){
+    //alert("点击的节点ID是："+record.raw.id+",文字是："+record.raw.text);
+    if(record.isLeaf()==true){
+    	window.location.href="/ts/index.php/"+record.get("id");
+    } else {
+        record.collapse();
+    }
 });

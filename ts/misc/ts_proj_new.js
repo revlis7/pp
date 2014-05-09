@@ -134,7 +134,7 @@ Ext.onReady(function() {
 										]);
 										var firstRec=projStore.getAt(0);
 										proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,firstRec.data);
-                                        Ext.getCmp('headerTitle').el.dom.innerHTML='<span class="app-header2">'+firstRec.data.issue+' '+firstRec.data.name+'</span>';
+                                        Ext.getCmp('headerTitle').setText('<span class="app-header2">'+firstRec.data.issue+' '+firstRec.data.name+'</span>');
 										//proj_info_window.show();
 										if(firstRec.get("pdt_status")=="上线通过" || firstRec.get("pdt_status")=="申请中"){
 											Ext.getCmp('BtnPdtApply').hide();
@@ -219,7 +219,7 @@ Ext.onReady(function() {
 										]);
 										var firstRec=projStore.getAt(0);
 										proj_info_tpl.overwrite(Ext.getCmp('projInfoPanel').body,firstRec.data);
-                                        Ext.getCmp('headerTitle').el.dom.innerHTML='<span class="app-header2">'+firstRec.data.issue+' '+firstRec.data.name+'</span>';
+                                        Ext.getCmp('headerTitle').setText('<span class="app-header2">'+firstRec.data.issue+' '+firstRec.data.name+'</span>');
 										//proj_info_window.show();
 										if(firstRec.get("pdt_status")=="上线通过" || firstRec.get("pdt_status")=="申请中"){
 												Ext.getCmp('BtnPdtApply').hide();
@@ -504,12 +504,12 @@ Ext.onReady(function() {
 				width:240,
 				height:38
 			},{
-				xtype:'box',
+				xtype:'tbtext',
                 id:'headerTitle',
-                html:'<span class="app-header2">&nbsp;</span>'
+                text:'<span class="app-header2">&nbsp;</span>'
 			},{
-				xtype:'box',
-				html:'<span class="app-header2">项目编辑</span>'
+				xtype:'tbtext',
+				text:'<span class="app-header2">项目编辑</span>'
 			},{
 				xtype:'tbtext',
 				text:'您可以：'
@@ -598,7 +598,7 @@ Ext.onReady(function() {
 						hidden:true,
 						handler:function(){
 							projApplyForm.down('textfield[name="proj_id"]').setValue(proj_id);
-							projApplyForm.getForm.submit({
+							projApplyForm.getForm().submit({
 								url:'/ts/index.php/proj/proj_apply_submit',
 								submitEmptyText: false,
 								waitMsg: '正在保存后台数据……',
@@ -618,7 +618,7 @@ Ext.onReady(function() {
 						hidden:true,
 						handler:function(){
 							projApplyForm.down('textfield[name="proj_id"]').setValue(proj_id);
-							projApplyForm.getForm.submit({
+							projApplyForm.getForm().submit({
 								url:'/ts/index.php/proj/proj_accept_submit',
 								submitEmptyText: false,
 								waitMsg: '正在保存后台数据……',
@@ -639,7 +639,7 @@ Ext.onReady(function() {
 						hidden:true,
 						handler:function(){
 							projApplyForm.down('textfield[name="proj_id"]').setValue(proj_id);
-							projApplyForm.getForm.submit({
+							projApplyForm.getForm().submit({
 								url:'/ts/index.php/proj/proj_refuse_submit',
 								submitEmptyText: false,
 								waitMsg: '正在保存后台数据……',

@@ -96,6 +96,8 @@ Ext.onReady(function() {
     },{
     	text:'真实姓名',dataIndex:'realname', width:100
     },{
+    	text:'状态',dataIndex:'status', width:100
+    },{
     	text:'职位',dataIndex:'title', width:100
     },{
     	text:'分支机构',dataIndex:'branch', width:150

@@ -8,13 +8,19 @@ class Proj extends Auth_Controller {
 	function index() {
 		$this->template->load('default', 'proj/view');
 	}
-    
+    /*
     function test(){
-    	echo $this->User_model->get_access_value(element('loginname', $this->session->userdata('user')),'proj/proj_accept_submit');
+        //$proj_id = $this->input->get('proj_id', true);
+        
+        //for($i=0;$i<1500;$i++){
+        $data=$this->Proj_model->get_proj_message_by_proj_id(1200, 'outer');
+        
+        $this->json->output(array('success' => true, 'data' => $data));
+        //}
     }
-    
+    */
 	function manage() {
-		if(!$this->has_privilege()) {
+		if(!$this->has_update_privilege()) {
 			redirect(site_url(), 'refresh');
 		}
 		$this->template->load('default', 'proj/manage');
@@ -28,13 +34,15 @@ class Proj extends Auth_Controller {
     //}
 	
 	function update() {
-		if(!$this->has_privilege()) {
+		if(!$this->has_update_privilege()) {
 			redirect(site_url(), 'refresh');
 		}
 		
 		$proj_id = $this->input->get('proj_id', true);
-		
-		if($this->utility->is_pm() && $this->Proj_model->get_proj_manager($proj_id) !== $this->get_user_info('realname')) {
+        if( !$this->utility->is_admin() &&
+           !(($this->utility->is_pm()||$this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_manager($proj_id) == $this->get_user_info('realname') ) &&
+           !(($this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_director($proj_id) == $this->get_user_info('realname') )
+          ) {
 			redirect(site_url('proj/manage'), 'refresh');
 		}
 		$this->template->load('default', 'proj/update');
@@ -45,41 +53,55 @@ class Proj extends Auth_Controller {
 		$category_id   = $this->input->get('c');
 		$ending_status = $this->input->get('e');
 		$recently      = $this->input->get('r') ? true : false;
+		$advance_sel      = $this->input->get('adv') ? true : false;
 		$mode = '';
 		if($this->utility->is_admin()) {
 			$mode = 'admin';
-		} else if($this->utility->is_pm()) {
+		} else if($this->utility->is_pm() || $this->utility->is_director() || $this->utility->is_director_2()) {
 			$mode = 'manager';
 		}
 
 		$category_id   = $category_id >= 1 ? $category_id : -1;
 		$ending_status = $ending_status >= 1 ? $ending_status : -1;
-
-		$data = $this->Proj_model->get_all_proj_detail($category_id, $ending_status, $recently, $mode, $this->get_user_info('realname'));
-
+		$advance_sel   = $advance_sel >= 1 ? $advance_sel : -1;
+        
+        if($advance_sel<0){
+        	$data = $this->Proj_model->get_all_proj($category_id, $ending_status, $recently, $mode, $this->get_user_info('realname'));
+        } else {
+	        $data = $this->Proj_model->get_all_proj_detail($category_id, $ending_status, $recently, $mode, $this->get_user_info('realname'));
+        }
 		//viewonly模式过滤部分字段
 		if(!in_array($mode, array('admin', 'manager'))) {
 			foreach($data as $_t) {
 				unset($_t->main_channel, $_t->channel_company, $_t->channel_contact, $_t->billing_company, $_t->manager_remark);
 			}
 		}
-
 		//根据用户组过滤可见信息
 		$group = $this->utility->get_user_group();
 		foreach($data as $_t) {
 			$this->utility->access_fields_filter($group, $_t);
 		}
 
-		//对于项目经理组，不属于登录用户自己创建的记录需要过滤部分字段
-		if($this->utility->is_pm()) {
+		//对于项目经理和项目董事组，不属于登录用户自己创建的记录需要过滤部分字段
+		if($this->utility->is_pm() || $this->utility->is_director()) {
 			$n = count($data);
 			for($i = 0; $i < $n; $i++) {
-				if($data[$i]->manager != $this->get_user_info('realname')) {
+				if($data[$i]->manager != $this->get_user_info('realname') && $data[$i]->proj_director != $this->get_user_info('realname')) {
 					$this->utility->manager_view_filter($data[$i]);
 				}
 			}
 		}
-
+        /*
+		if($this->utility->is_director() || $this->utility->is_director_2()) {
+			$n = count($data);
+			for($i = 0; $i < $n; $i++) {
+				if($data[$i]->proj_director != $this->get_user_info('realname')) {
+					$this->utility->manager_view_filter_2($data[$i]);
+				}
+			}
+		}
+		*/
+        //CSV输出
 		$format = $this->input->get('format', true);
 		if($format == 'csv') {
 			$this->load->helper('csv');
@@ -107,15 +129,28 @@ class Proj extends Auth_Controller {
 		foreach($data as $_t) {
 			$this->utility->access_fields_filter($group, $_t);
 		}
+        
+        $proj=$this->Proj_model->get_proj($proj_id);
 
 		//对于项目经理组，不属于登录用户自己创建的记录需要过滤部分字段
-		if($this->utility->is_pm() && $this->Proj_model->get_proj_manager($proj_id) !== $this->get_user_info('realname')) {
+		if($this->utility->is_pm() || $this->utility->is_director() || $this->utility->is_director_2()) {
 			$n = count($data);
-			for($i = 0; $i < $n; $i++) {
-				$this->utility->manager_view_filter($data[$i]);
+			if($proj->manager != $this->get_user_info('realname') && $proj->proj_director != $this->get_user_info('realname')) {
+				for($i = 0; $i < $n; $i++) {
+					$this->utility->manager_view_filter($data[$i]);
+				}
 			}
 		}
-		
+        /*
+		if($this->utility->is_director() || $this->utility->is_director_2()) {
+			$n = count($data);
+			for($i = 0; $i < $n; $i++) {
+				if($data[$i]->proj_director != $this->get_user_info('realname')) {
+					$this->utility->manager_view_filter_2($data[$i]);
+				}
+			}
+		}
+		*/
 		$this->json->output(array('success' => true, 'data' => $data));
 	}
 
@@ -131,8 +166,8 @@ class Proj extends Auth_Controller {
 	}
 
 	function proj_create_submit() {
-		if(!$this->has_privilege()) {
-			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		if(!$this->has_create_privilege()) {
+			$this->json->output(array('success' => false, 'errors' => array('您没有使用该功能的权限')));
 		}
 		$category = $this->input->post('category', true);
 		$sub_category = $this->input->post('sub_category', true);
@@ -155,7 +190,7 @@ class Proj extends Auth_Controller {
 
 		$proj_id = $this->Proj_model->create_proj($category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $proj_director, $manager, $contract, $remark, $pay_account, $countdown, $exclusive, $grade, $manager_remark, element('loginname', $this->session->userdata('user')));
 		if($proj_id === false) {
-			$this->json->output(array('success' => false, 'm' => '添加数据失败'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '添加数据失败')));
 		}
 
 		//记录用户操作历史
@@ -165,8 +200,8 @@ class Proj extends Auth_Controller {
 	}
 
 	function proj_update_submit() {
-		if(!$this->has_privilege()) {
-			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		if(!$this->has_update_privilege()) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您没有使用该功能的权限')));
 		}
 		
 		$proj_id = $this->input->post('proj_id', true) === false ? '' : $this->input->post('proj_id', true);
@@ -189,12 +224,15 @@ class Proj extends Auth_Controller {
 		$grade = $this->input->post('grade', true);
 		$manager_remark = $this->input->post('manager_remark', true);
 		
-		if($this->utility->is_pm() && $this->Proj_model->get_proj_manager($proj_id) !== $this->get_user_info('realname')) {
-			$this->json->output(array('success' => false, 'm' => '您不能对他人的记录进行操作'));
+		if( !$this->utility->is_admin() &&
+           !(($this->utility->is_pm()||$this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_manager($proj_id) == $this->get_user_info('realname') ) &&
+           !(($this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_director($proj_id) == $this->get_user_info('realname') )
+          ) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您不能对他人的记录进行操作')));
 		}
 		
 		if(!$this->utility->chk_id($proj_id)) {
-			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
 		}
 
 		//获取需要记录历史操作的旧值
@@ -205,7 +243,7 @@ class Proj extends Auth_Controller {
 		
 		$proj_id = $this->Proj_model->update_proj($proj_id, $category, $sub_category, $issue, $name, $flow_of_fund, $highlights, $scale, $cycle, $profit_property, $proj_director, $manager, $contract, $remark, $pay_account, $countdown, $exclusive, $grade, $manager_remark, element('loginname', $this->session->userdata('user')));
 		if($proj_id === false) {
-			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '修改数据失败')));
 		}
 		$this->json->output(array('success' => true, 'proj_id' => $proj_id));
 	}
@@ -214,124 +252,143 @@ class Proj extends Auth_Controller {
 		$proj_id = $this->input->get('proj_id');
 
 		if(!$this->utility->chk_id($proj_id)) {
-			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
 		}
 
 		$proj = $this->Proj_model->get_proj($proj_id);
+		if( !$this->utility->is_admin() &&
+           !(($this->utility->is_pm()||$this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_manager($proj_id) == $this->get_user_info('realname') ) &&
+           !(($this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_director($proj_id) == $this->get_user_info('realname') )
+          ) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您不能对他人的记录进行操作')));
+		}
 		$proj_details = $this->Proj_model->get_all_detail($proj_id);
 		if(!$proj || empty($proj_details)) {
-			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '未找到符合的数据记录')));
 		}
 
 		foreach($proj_details as $proj_detail) {
 			$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'将['.$proj->issue.']的项目：['.$proj->name.']，额度为['.$proj_detail->amount.']万，由［'.$proj_detail->status.'］状态修改为［结束］');
 		}
-
+        
 		if(!$this->Proj_model->close_proj($proj_id)) {
-			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '修改数据失败')));
 		}
+        $this->Proj_model->proj_profit_modify($proj_id);
+        if($this->Proj_model->is_promoted($proj_id)) {
+           	$this->Proj_model->enter_promote($proj_id);
+        }
 		$this->json->output(array('success' => true));
 	}
 
 	function proj_apply_submit() {
-		if(!$this->has_privilege()) {
-			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		if(!$this->has_update_privilege()) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您没有使用该功能的权限')));
 		}
-		
-		// if(!$this->User_model->has_action_access(element('loginname', $this->session->userdata('user')))) {
-		// 	$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
-		// }
-
 		$proj_id = $this->input->post('proj_id');
 
+        $proj = $this->Proj_model->get_proj($proj_id);
+		// if(!$this->User_model->has_action_access(element('loginname', $this->session->userdata('user')))) {
+		// 	$this->json->output(array('success' => false, 'errors' => array('name' => '您没有使用该功能的权限')));
+		// }
+        if(!$this->utility->is_admin()){
+        	if(!($proj->proj_director == element('realname', $this->session->userdata('user'))) && !($proj->manager == element('realname', $this->session->userdata('user')))) {
+        	    $this->json->output(array('success' => false, 'errors' => array('name' => '您不能对他人的项目进行操作')));
+        	}
+        }
+
 		if(!$this->utility->chk_id($proj_id)) {
-			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
 		}
 
 		if(!$this->Proj_model->update_pdt_status($proj_id, '申请中', element('loginname', $this->session->userdata('user')))) {
-			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '修改数据失败')));
 		}
-/*        $proj = $this->Proj_model->get_proj($proj_id);
+        
         $director_detail = $this->User_model->get_by_name($this->Proj_model->get_proj_director($proj_id));
         
         $mail_content_title = '上 线 申 请';	
-        $mail_content_mainstr = '<p>以下项目正申请上线：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m');
-        $mail_content_buttomstr = '您收到这封邮件，是因为您是该项目的项目董事。';
-        $mail_subject = 'YW01_彩虹桥_项目上线申请: '.$proj->issue.' '.$proj->name;
+        $mail_content_mainstr = '<p>以下产品正申请上线：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m');
+        $mail_content_buttomstr = '您收到这封邮件，是因为您是该产品的产品董事。';
+        $mail_subject = 'YW01_彩虹桥_产品上线申请: '.$proj->issue.' '.$proj->name;
         
         $this->utility->noticemail_html($director_detail->email, $mail_subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj);
-*/
+
         $this->json->output(array('success' => true));
 	}
 
 	function proj_apply_submit2() {
-		if(!$this->has_privilege()) {
-			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		if(!$this->has_update_privilege()) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您没有使用该功能的权限')));
 		}
 		
-		// if(!$this->User_model->has_action_access(element('loginname', $this->session->userdata('user')))) {
-		// 	$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
-		// }
-
 		$proj_id = $this->input->post('proj_id');
+        $proj = $this->Proj_model->get_proj($proj_id);
+		// if(!$this->User_model->has_action_access(element('loginname', $this->session->userdata('user')))) {
+		// 	$this->json->output(array('success' => false, 'errors' => array('name' => '您没有使用该功能的权限')));
+		// }
+        if(!$this->utility->is_admin()){
+        	if(! ($proj->proj_director == element('realname', $this->session->userdata('user'))) ) {
+        	    $this->json->output(array('success' => false, 'errors' => array('name' => '您不是该项目的项目董事')));
+        	}
+        }
 
 		if(!$this->utility->chk_id($proj_id)) {
-			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
 		}
 
 		if(!$this->Proj_model->update_pdt_status($proj_id, '董事通过', element('loginname', $this->session->userdata('user')))) {
-			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
+            $this->json->output(array('success' => false, 'errors' => array('name' => '修改数据失败')));
 		}
-        $proj = $this->Proj_model->get_proj($proj_id);
         
-        if($proj->exclusive !== '通道类'){
-            $this->User_model->create_access_history($proj_id,1);
+	    $mail_content_title = '上 线 申 请';	
+        $mail_content_buttomstr = '您收到这封邮件，是因为您是"彩虹桥"的产品审批管理员。';
+        $mail_subject = 'YW01_彩虹桥_产品上线申请: '.$proj->issue.' '.$proj->name;
+        if($proj->exclusive == '通道类'){
         
-//	        $mail_content_title = '上 线 申 请';	
-//	        $mail_content_mainstr = '<p>以下项目正申请上线：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m');
-//	        $mail_content_buttomstr = '您收到这封邮件，是因为您是"彩虹桥"的项目审批管理员。';
-//	        $mail_subject = 'YW01_彩虹桥_项目上线申请: '.$proj->issue.' '.$proj->name;
+	        $mail_content_mainstr = '<p>以下产品正申请上线：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m');
         } else {
+            $this->User_model->create_access_history($proj_id,1);
             
-//	        $mail_content_title = '上 线 申 请';	
-//          $mail_content_mainstr = '<p>以下项目正申请上线：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m').'<p><b>请注意由于该项目的销售性质，需要所有审批员都通过才能上线！</b></p>';
-//	        $mail_content_buttomstr = '您收到这封邮件，是因为您是"彩虹桥"的项目审批管理员。';
-//	        $mail_subject = 'YW01_彩虹桥_项目上线申请: '.$proj->issue.' '.$proj->name;
+            $mail_content_mainstr = '<p>以下产品正申请上线：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m').'<p><b>请注意由于该产品的销售性质，需要所有审批员都通过才能上线！</b></p>';
         }
         
-//        $mailusers = $this->User_model->get_action_access_users('proj/proj_accept_submit');
-//        foreach($mailusers as $mailusername) {
-//            $mailuser = $this->User_model->get($mailusername->loginname);
-//        	$this->utility->noticemail_html( $mailuser->email, $mail_subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj);
-//        }
+        $mailusers = $this->User_model->get_action_access_users('proj/proj_accept_submit');
+        foreach($mailusers as $mailusername) {
+            $mailuser = $this->User_model->get($mailusername->loginname);
+        	$this->utility->noticemail_html( $mailuser->email, $mail_subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj);
+        }
 
         $this->json->output(array('success' => true));
 	}
 	function proj_operate_privilege() {
 		$action = $this->input->get('action');
 		if(!$this->User_model->has_action_access(element('loginname', $this->session->userdata('user')), $action)) {
-			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您没有使用该功能的权限')));
 		}
 		$this->json->output(array('success' => true));
 	}
 
     function proj_accept_submit() {
 		if(!$this->User_model->has_action_access(element('loginname', $this->session->userdata('user')))) {
-			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您没有使用该功能的权限')));
 		}
 
 		$proj_id = $this->input->post('proj_id');
 
 		if(!$this->utility->chk_id($proj_id)) {
-			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
 		}
 
         $proj = $this->Proj_model->get_proj($proj_id);
         $value = $this->User_model->get_access_value(element('loginname', $this->session->userdata('user')));
-
+        
         if($proj->exclusive !== '通道类'){ 	
             if(!$this->User_model->is_accessed($proj->action_access_id,$value, element('loginname', $this->session->userdata('user')))){
         	   	$this->User_model->update_access_history($proj->action_access_id, $value, element('loginname', $this->session->userdata('user')));
+                if(!$this->Proj_model->is_promoted($proj_id)) {
+                	$this->Proj_model->enter_promote($proj_id);
+                }
             }
             if(!$this->User_model->is_all_accessed($proj->action_access_id,$value, element('loginname', $this->session->userdata('user')))){
                 $this->json->output(array('success' => true, 'data' => '批准申请已提交'));
@@ -339,32 +396,32 @@ class Proj extends Auth_Controller {
         }
         
 		if(!$this->Proj_model->update_pdt_status($proj_id, '上线通过', element('loginname', $this->session->userdata('user')))) {
-			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '修改数据失败')));
 		}
-/*        $manager_detail = $this->User_model->get_by_name($this->Proj_model->get_proj_manager($proj_id));
+        $manager_detail = $this->User_model->get_by_name($this->Proj_model->get_proj_manager($proj_id));
         $director_detail = $this->User_model->get_by_name($this->Proj_model->get_proj_director($proj_id));
         
         $mail_content_title = '上 线 通 过';	
-        $mail_content_mainstr = '<p>以下项目的上线申请已通过：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m');
-        $mail_content_buttomstr = '您收到这封邮件，是因为您是该项目的产品经理。';
+        $mail_content_mainstr = '<p>以下产品的上线申请已通过：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m');
+        $mail_content_buttomstr = '您收到这封邮件，是因为您是该产品的产品董事或经理。';
         $mail_subject = 'YW01_彩虹桥_项目上线申请已通过: '.$proj->issue.' '.$proj->name;
         
        	$this->utility->noticemail_html($manager_detail->email, $mail_subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj);
        	$this->utility->noticemail_html($director_detail->email, $mail_subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj);
 
         //$this->Proj_model->create_proj_message($proj_id,'公开消息','【'.$proj_content->issue.' '.$proj_content->name.'】已上线！',$manager_detail->loginname);
-*/		$this->json->output(array('success' => true, 'data' => '项目已上线'));
+		$this->json->output(array('success' => true, 'data' => '项目已上线'));
 	}
 
 	function proj_refuse_submit() {
 		if(!$this->User_model->has_action_access(element('loginname', $this->session->userdata('user')))) {
-			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您没有使用该功能的权限')));
 		}
 
 		$proj_id = $this->input->post('proj_id');
 
 		if(!$this->utility->chk_id($proj_id)) {
-			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
 		}
 
         $proj = $this->Proj_model->get_proj($proj_id);
@@ -376,15 +433,15 @@ class Proj extends Auth_Controller {
         }
 
         if(!$this->Proj_model->update_pdt_status($proj_id, '上线通过', element('loginname', $this->session->userdata('user')))) {
-			$this->json->output(array('success' => false, 'm' => '修改数据失败'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '修改数据失败')));
 		}
         
         $manager_detail = $this->User_model->get_by_name($this->Proj_model->get_proj_manager($proj_id));
         $director_detail = $this->User_model->get_by_name($this->Proj_model->get_proj_director($proj_id));
         
         $mail_content_title = '上 线 未 批 准';	
-        $mail_content_mainstr = '<p style="color:#FF0000">以下项目的上线申请已被拒绝：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m');
-        $mail_content_buttomstr = '您收到这封邮件，是因为您是该项目的产品经理。';
+        $mail_content_mainstr = '<p style="color:#FF0000">以下产品的上线申请已被拒绝：</p><p style="font-weight:bold;">'.$proj->issue.' '.$proj->name.'</p>'.$this->Proj_model->get_proj_brief_string($proj,'m');
+        $mail_content_buttomstr = '您收到这封邮件，是因为您是该产品的产品董事或经理。';
         $mail_subject = 'YW01_彩虹桥_项目上线申请被拒绝: '.$proj->issue.' '.$proj->name;
         
        	$this->utility->noticemail_html($manager_detail->email, $mail_subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj);
@@ -394,8 +451,8 @@ class Proj extends Auth_Controller {
 	}
 
 	function detail_create_submit() {
-		if(!$this->has_privilege()) {
-			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		if(!$this->has_update_privilege()) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您没有使用该功能的权限')));
 		}
 		$proj_id = $this->input->post('proj_id', true) === false ? '' : $this->input->post('proj_id', true);
 		$proj_detail_id = $this->input->post('proj_detail_id', true) === false ? '' : $this->input->post('proj_detail_id', true);
@@ -415,81 +472,97 @@ class Proj extends Auth_Controller {
 		$channel_company = $this->input->post('channel_company', true);
 		$channel_contact = $this->input->post('channel_contact', true);
 		$billing_company = $this->input->post('billing_company', true);
+		$commission_partner = $this->input->post('commission_partner', true);
 
-		if($this->utility->is_pm() && $this->Proj_model->get_proj_manager($proj_id) !== $this->get_user_info('realname')) {
-			$this->json->output(array('success' => false, 'm' => '您不能对他人的记录进行操作'));
+		if( !$this->utility->is_admin() &&
+           !(($this->utility->is_pm()||$this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_manager($proj_id) == $this->get_user_info('realname') ) &&
+           !(($this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_director($proj_id) == $this->get_user_info('realname') )
+          ) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您不能对他人的记录进行操作')));
 		}
 
 		//detail_id为-1时，表示创建新的detail记录
 		if($proj_detail_id != '-1') {
 			if(!$this->utility->chk_id($proj_detail_id)) {
-				$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+				$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
 			}
 			//获取需要记录历史操作的旧值
 			$proj = $this->Proj_model->get_proj($proj_id);
 			$proj_detail = $this->Proj_model->get_detail($proj_detail_id);
 			if(!$proj || empty($proj_detail)) {
-				$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+				$this->json->output(array('success' => false, 'errors' => array('name' => '未找到符合的数据记录')));
 			}
 
-			$proj_detail_id = $this->Proj_model->update_detail($proj_detail_id, $sub_name, $found, $total_share, $status, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $main_channel, $channel_company, $channel_contact, $billing_company, element('loginname', $this->session->userdata('user')));
+			$proj_detail_id = $this->Proj_model->update_detail($proj_detail_id, $sub_name, $found, $total_share, $status, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $main_channel, $channel_company, $channel_contact, $billing_company, element('loginname', $this->session->userdata('user')),$commission_partner);
 			if($proj_detail_id === false) {
-				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
+				$this->json->output(array('success' => false, 'errors' => array('name' => '添加数据失败')));
 			}
 			//比较新旧值，记录操作历史
 			if($status != $proj_detail->status) {
 				$this->User_model->operation_history(element('loginname', $this->session->userdata('user')), $this->get_user_info('realname').'将['.$proj->issue.']的项目：['.$proj->name.']，额度为['.$proj_detail->amount.']万，由［'.$proj_detail->status.'］状态修改为［'.$status.'］');
 			}
 		} else {
-			$proj_detail_id = $this->Proj_model->create_detail($proj_id, $sub_name, $found, $total_share, $status, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $main_channel, $channel_company, $channel_contact, $billing_company, element('loginname', $this->session->userdata('user')));
+			$proj_detail_id = $this->Proj_model->create_detail($proj_id, $sub_name, $found, $total_share, $status, $amount, $profit, $commission_b_tax, $commission_a_tax, $inner_commission, $outer_commission, $imm_payment, $month, $main_channel, $channel_company, $channel_contact, $billing_company, element('loginname', $this->session->userdata('user')),$commission_partner);
 			if($proj_detail_id === false) {
-				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
+				$this->json->output(array('success' => false, 'errors' => array('name' => '添加数据失败')));
 			}
 		}
+        
+        $this->Proj_model->proj_profit_modify($proj_id);
 
 		$this->json->output(array('success' => true, 'proj_detail_id' => $proj_detail_id));
 	}
 	
 	function proj_delete_submit() {
-		if(!$this->has_privilege()) {
-			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		if(!$this->has_create_privilege()) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您没有使用该功能的权限')));
 		}
 		
 		$proj_id = $this->input->post('proj_id', true) === false ? '' : $this->input->post('proj_id', true);
 		
 		if(!$this->utility->chk_id($proj_id)) {
-			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
 		}
 		
-		if($this->utility->is_pm() && $this->Proj_model->get_proj_manager($proj_id) !== $this->get_user_info('realname')) {
-			$this->json->output(array('success' => false, 'm' => '您不能对他人的记录进行操作'));
+		if( !$this->utility->is_admin() &&
+           !(($this->utility->is_pm()||$this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_manager($proj_id) == $this->get_user_info('realname') ) &&
+           !(($this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_director($proj_id) == $this->get_user_info('realname') )
+          ) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您不能对他人的记录进行操作')));
 		}
 		
 		if(!$this->Proj_model->delete_proj($proj_id)) {
-			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '未找到符合的数据记录')));
 		}
 		$this->json->output(array('success' => true));
 	}
 	
 	function detail_delete_submit() {
-		if(!$this->has_privilege()) {
-			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+		if(!$this->has_update_privilege()) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您没有使用该功能的权限')));
 		}
 		
 		$proj_detail_id = $this->input->post('proj_detail_id', true) === false ? '' : $this->input->post('proj_detail_id', true);
 		
 		if(!$this->utility->chk_id($proj_detail_id)) {
-			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
 		}
 		
 		$proj_detail = $this->Proj_model->get_detail($proj_detail_id);
-		if($this->utility->is_pm() && $this->Proj_model->get_proj_manager($proj_detail->proj_id) !== $this->get_user_info('realname')) {
-			$this->json->output(array('success' => false, 'm' => '您不能对他人的记录进行操作'));
+        
+		if( !$this->utility->is_admin() &&
+           !(($this->utility->is_pm()||$this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_manager($proj_id) == $this->get_user_info('realname') ) &&
+           !(($this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_director($proj_id) == $this->get_user_info('realname') )
+          ) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您不能对他人的记录进行操作')));
 		}
 		
 		if(!$this->Proj_model->delete_detail($proj_detail_id)) {
-			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '未找到符合的数据记录')));
 		}
+        
+        $this->Proj_model->proj_profit_modify($proj_detail->proj_id);
+        
 		$this->json->output(array('success' => true));
 	}
 
@@ -501,11 +574,19 @@ class Proj extends Auth_Controller {
 	function message_view() {
 		$proj_id = $this->input->get('proj_id');
 		if(!$this->utility->chk_id($proj_id)) {
-			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
 		}
-		$data = $this->Proj_model->get_proj_message_by_proj_id($proj_id);
+        if( $this->utility->is_admin() || ($this->utility->is_pm() && $this->Proj_model->get_proj_manager($proj_id) == $this->get_user_info('realname')) ||
+           ($this->utility->is_director() && $this->Proj_model->get_proj_director($proj_id) == $this->get_user_info('realname')) ) {
+            $mode='admin';
+        } else if ($this->utility->is_pm() || $this->utility->is_director() || $this->utility->is_ch() ){
+            $mode='staff';
+        } else {
+            $mode='outer';
+        }
+		$data = $this->Proj_model->get_proj_message_by_proj_id($proj_id,$mode);
         //if(!$data) {
-        //	$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+        //	$this->json->output(array('success' => false, 'errors' => array('name' => '未找到符合的数据记录')));
         //}
 		$this->json->output(array('success' => true, 'data' => $data));
 	}
@@ -516,22 +597,29 @@ class Proj extends Auth_Controller {
 		$msg_cat    = $this->input->post('msg_cat');
 		$message    = $this->input->post('message');
 
+		if( !$this->utility->is_admin() &&
+           !(($this->utility->is_pm()||$this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_manager($proj_id) == $this->get_user_info('realname') ) &&
+           !(($this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_director($proj_id) == $this->get_user_info('realname') )
+          ) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您不能对他人的记录进行操作')));
+		}
+		
 		//id为-1时，表示创建新的message记录
 		if($id == '-1') {
 			if(!$this->utility->chk_id($proj_id)) {
-				$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+				$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
 			}
 			$id = $this->Proj_model->create_proj_message($proj_id, $msg_cat, $message, element('loginname', $this->session->userdata('user')));
 			if(!$id) {
-				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
+				$this->json->output(array('success' => false, 'errors' => array('name' => '添加数据失败')));
 			}
 		} else {
 			if(!$this->utility->chk_id($id)) {
-				$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+				$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
 			}
 			$id = $this->Proj_model->update_proj_message($id, $msg_cat, $message);
 			if(!$id) {
-				$this->json->output(array('success' => false, 'm' => '添加数据失败'));
+				$this->json->output(array('success' => false, 'errors' => array('name' => '添加数据失败')));
 			}
 		}
 		$this->json->output(array('success' => true, 'id' => $id));
@@ -540,11 +628,22 @@ class Proj extends Auth_Controller {
 	function message_delete_submit() {
 		$id = $this->input->post('id');
 		if(!$this->utility->chk_id($id)) {
-			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
+		}
+        
+        $message=$this->Proj_model->get_proj_message_by_id($id);
+		if(!$message) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '未找到符合的数据记录')));
+		}
+		if( !$this->utility->is_admin() &&
+           !(($this->utility->is_pm()||$this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_manager($proj_id) == $this->get_user_info('realname') ) &&
+           !(($this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_director($proj_id) == $this->get_user_info('realname') )
+          ) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您不能对他人的记录进行操作')));
 		}
 
 		if(!$this->Proj_model->delete_proj_message($id)) {
-			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '未找到符合的数据记录')));
 		}
 		$this->json->output(array('success' => true));
 	}
@@ -552,12 +651,18 @@ class Proj extends Auth_Controller {
 	function message_push_submit() {
 		$id = $this->input->post('id');
 		if(!$this->utility->chk_id($id)) {
-			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
 		}
 
         $message = $this->Proj_model->get_proj_message_by_id($id);
 		if(!$message) {
-			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '未找到符合的数据记录')));
+		}
+		if( !$this->utility->is_admin() &&
+           !(($this->utility->is_pm()||$this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_manager($proj_id) == $this->get_user_info('realname') ) &&
+           !(($this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_director($proj_id) == $this->get_user_info('realname') )
+          ) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您不能对他人的记录进行操作')));
 		}
         $proj = $this->Proj_model->get_proj($message->proj_id);
         
@@ -600,12 +705,18 @@ class Proj extends Auth_Controller {
     function message_sms_push_submit() {
         $id = $this->input->post('id');
 		if(!$this->utility->chk_id($id)) {
-			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
 		}
         
         $message = $this->Proj_model->get_proj_message_by_id($id);
-        if(!$message) {
-			$this->json->output(array('success' => false, 'm' => '未找到符合的数据记录'));
+		if(!$message) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '未找到符合的数据记录')));
+		}
+		if( !$this->utility->is_admin() &&
+           !(($this->utility->is_pm()||$this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_manager($proj_id) == $this->get_user_info('realname') ) &&
+           !(($this->utility->is_director()||$this->utility->is_director_2()) && $this->Proj_model->get_proj_director($proj_id) == $this->get_user_info('realname') )
+          ) {
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您不能对他人的记录进行操作')));
 		}
         
         $proj = $this->Proj_model->get_proj($message->proj_id);
@@ -649,23 +760,23 @@ class Proj extends Auth_Controller {
     function proj_promote_enter() {
         $proj_id = $this->input->post('proj_id');
 		if(!$this->utility->chk_id($proj_id)) {
-			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
 		}
         //$proj = $this->Proj_model->get_proj($proj_id);
         //if ($proj->manager == $this->get_user_info('realname') || $this->utility->is_admin() ) {
         //    if (!$this->Proj_model->enter_promote($proj_id)){
-        //        $this->json->output(array('success' => false, 'm' => '修改数据错误'));
+        //        $this->json->output(array('success' => false, 'errors' => array('name' => '修改数据错误')));
         //    }
         //} else {
-        //    $this->json->output(array('success' => false, 'm' => '您没有权限执行该操作'));
+        //    $this->json->output(array('success' => false, 'errors' => array('name' => '您没有权限执行该操作')));
         //}
         
 		if(!$this->User_model->has_action_access(element('loginname', $this->session->userdata('user')))) {
-			$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '您没有使用该功能的权限')));
 
         }
         if (!$this->Proj_model->enter_promote($proj_id)){
-            $this->json->output(array('success' => false, 'm' => '修改数据错误'));
+            $this->json->output(array('success' => false, 'errors' => array('name' => '修改数据错误')));
         }
         
         $this->json->output(array('success' => true));
@@ -674,22 +785,22 @@ class Proj extends Auth_Controller {
     /*function proj_promote_close() {
         $proj_id = $this->input->post('proj_id');
 		if(!$this->utility->chk_id($proj_id)) {
-			$this->json->output(array('success' => false, 'm' => '输入的记录编号错误'));
+			$this->json->output(array('success' => false, 'errors' => array('name' => '输入的记录编号错误')));
 		}
         //$proj = $this->Proj_model->get_proj($proj_id);
         //if ($proj->manager == $this->get_user_info('realname') || $this->utility->is_admin() ) {
         //    if(!$this->Proj_model->close_promote($proj_id)){
-        //        $this->json->output(array('success' => false, 'm' => '修改数据错误'));
+        //        $this->json->output(array('success' => false, 'errors' => array('name' => '修改数据错误')));
         //    }
         //} else {
-        //    $this->json->output(array('success' => false, 'm' => '您没有权限执行该操作'));
+        //    $this->json->output(array('success' => false, 'errors' => array('name' => '您没有权限执行该操作')));
         //}
         if(!$this->User_model->has_action_access(element('loginname', $this->session->userdata('user')))) {
-        	$this->json->output(array('success' => false, 'm' => '您没有使用该功能的权限'));
+        	$this->json->output(array('success' => false, 'errors' => array('name' => '您没有使用该功能的权限')));
 
         }
         if (!$this->Proj_model->enter_promote($proj_id)){
-            $this->json->output(array('success' => false, 'm' => '修改数据错误'));
+            $this->json->output(array('success' => false, 'errors' => array('name' => '修改数据错误')));
         }
         $this->json->output(array('success' => true));
     }*/
@@ -702,8 +813,14 @@ class Proj extends Auth_Controller {
 		return $info;
 	}
 	
-	private function has_privilege() {
-		if(!$this->utility->is_admin() && !$this->utility->is_pm() && !$this->utility->is_is_director()) {
+	private function has_update_privilege() {
+		if( !$this->utility->is_admin() && !$this->utility->is_pm() && !$this->utility->is_director() && !$this->utility->is_director_2() ) {
+			return false;
+		}
+		return true;
+	}
+	private function has_create_privilege() {
+		if( !$this->utility->is_admin() && !$this->utility->is_pm() && !$this->utility->is_director() ) {
 			return false;
 		}
 		return true;

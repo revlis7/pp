@@ -1,4 +1,4 @@
-﻿Ext.Loader.setConfig({enabled: true,disableCaching:false});
+Ext.Loader.setConfig({enabled: true,disableCaching:false});
 Ext.Loader.setPath('Ext.ux', '/ts/misc/ux');
 
 Ext.require([
@@ -11,15 +11,15 @@ Ext.require([
 var AmountDetailsGrid;
 var gradeFn=function(value) { 
 	var res;
-	if(value=="五星级"){
+	if(value=="5"){
     	res= '<span style="color:#245288">★★★★★</span>'
-	} else if (value=="四星级"){
+	} else if (value=="4"){
 		res= '<span style="color:#245288">★★★★</span>'
-	} else if (value=="三星级"){
+	} else if (value=="3"){
 		res= '<span style="color:#245288">★★★</span>'
-	} else if (value=="二星级"){
+	} else if (value=="2"){
 		res= '<span style="color:#245288">★★</span>'
-	} else if (value=="一星级"){
+	} else if (value=="1"){
 		res= '<span style="color:#245288">★</span>'
 	}
 	return res;
@@ -37,11 +37,11 @@ var commissionFn=function(value,metaData) {
 	}
 }
 var baseLoadAff=function(records, operation, success){
-	if(success==false){
-    	Ext.Msg.alert('错误', '会话超时，请重新登录！',function(btn, text){
-    		window.location.href='/ts/index.php/auth';
-    	});
-	}
+	//if(success==false){
+    //	Ext.Msg.alert('错误', '会话超时，请重新登录！',function(btn, text){
+    //		window.location.href='/ts/index.php/auth';
+    //	});
+	//}
 }
 var chFixedList=Ext.create('Ext.data.ArrayStore', {
 	fields: ['id', 'text'],
@@ -51,6 +51,7 @@ var chFixedList=Ext.create('Ext.data.ArrayStore', {
 		['集合信托：房地产类','集合信托：房地产类'],
 		['集合信托：其他类','集合信托：其他类'],
 		['私募基金','私募基金'],
+		['资产管理计划','资产管理计划'],
 		['P2P理财','P2P理财'],
 		['其他','其他']
 	]
@@ -95,11 +96,11 @@ var chExclusiveList=Ext.create('Ext.data.ArrayStore', {
 var chGradeList=Ext.create('Ext.data.ArrayStore', {
 	fields: ['id', 'text'],
 	data: [
-	  ['五星级','五星级'],
-	  ['四星级','四星级'],
-	  ['三星级','三星级'],
-	  ['二星级','二星级'],
-	  ['一星级','一星级']
+	  ['5','五星级'],
+	  ['4','四星级'],
+	  ['3','三星级'],
+	  ['2','二星级'],
+	  ['1','一星级']
 	]
 });
 
@@ -138,7 +139,8 @@ var chManagerList=Ext.create('Ext.data.ArrayStore', {
 	fields: ['id', 'text'],
 	data: [
 	  ['王璐','王璐'],
-	  ['李汶洁','李汶洁']
+	  ['李汶洁','李汶洁'],
+	  ['黄水丽','黄水丽']
 	]
 });
 var chProjDirectorList=Ext.create('Ext.data.ArrayStore', {
@@ -161,7 +163,7 @@ var	fileListStore=Ext.create('Ext.data.JsonStore', {
 	{name:'filename'	,type:'string' },
 	{name:'filesize'	,type:'integer'	},
 	{name:'editor'	,type:'string' },
-	{name:'create_ts'	,type:'date' }
+	{name:'create_ts'	,type:'date',dateFormat:"Y-m-d H:i:s" }
 	],
 	proxy: {
 		type: 'ajax',
@@ -181,36 +183,22 @@ var	fileListStore=Ext.create('Ext.data.JsonStore', {
 var	projAllStore=Ext.create('Ext.data.JsonStore', {
  fields: [
 	{name:'proj_id'	,type:'integer'	},
-	{name:'proj_detail_id' ,type:'integer' },
-	{name:'total_share'	,type:'string' },
-	{name:'status' ,type:'string' },
-	{name:'exclusive' ,type:'string' },
 	{name:'grade' ,type:'string' },
 	{name:'category' ,type:'string'	},
 	{name:'sub_category' ,type:'string'	},
 	{name:'issue' ,type:'string' },
 	{name:'name' ,type:'string'	},
 	{name:'sub_name' ,type:'string'	},
-	{name:'flow_of_fund' ,type:'string'	},
-	{name:'highlights' ,type:'string' },
-	{name:'month' ,type:'integer'},
-	{name:'scale' ,type:'float'	},
-	{name:'cycle' ,type:'string' },
-	{name:'amount' ,type:'integer'},
-	{name:'profit_property'	,type:'string' },
-	{name:'profit' ,type:'float' },
 	{name:'proj_director' ,type:'string'	},
 	{name:'manager'	,type:'string' },
-	{name:'contract' ,type:'string'	},
-	{name:'remark' ,type:'string' },
-	{name:'pay_account'	,type:'string' },
-	{name:'countdown' ,type:'string' },
-	{name:'commission_b_tax' ,type:'float' },
-	{name:'commission_a_tax' ,type:'float' },
-	{name:'inner_commission' ,type:'float' },
-	{name:'outer_commission' ,type:'float' },
-	{name:'imm_payment'	,type:'float' },
-	{name:'found' ,type:'date' },
+	{name:'min_month',type:'integer'},
+	{name:'max_month',type:'integer'},
+	{name:'min_profit',type:'float'},
+	{name:'max_profit',type:'float'},
+	{name:'min_amount',type:'integer'},
+	{name:'profit_string',type:'string'},
+	{name:'is_end',type:'integer'},
+	{name:'flow_of_fund',type:'string'},
 	{name:'create_ts' ,type:'date',dateFormat:"Y-m-d H:i:s"	}
 ],
 	proxy:	{
@@ -228,13 +216,63 @@ var	projAllStore=Ext.create('Ext.data.JsonStore', {
         }
     }
 });
+var	projAllAdvStore=Ext.create('Ext.data.JsonStore', {
+ fields: [
+	{name:'proj_id'	,type:'integer'	},
+	{name:'proj_detail_id' ,type:'integer' },
+	{name:'total_share'	,type:'string' },
+	{name:'flow_of_fund'	,type:'string' },
+	{name:'status' ,type:'string' },
+	{name:'exclusive' ,type:'string' },
+	{name:'grade' ,type:'string' },
+	{name:'category' ,type:'string'	},
+	{name:'sub_category' ,type:'string'	},
+	{name:'issue' ,type:'string' },
+	{name:'name' ,type:'string'	},
+	{name:'sub_name' ,type:'string'	},
+	{name:'month' ,type:'integer'},
+	{name:'scale' ,type:'float'	},
+	{name:'cycle' ,type:'string' },
+	{name:'amount' ,type:'integer'},
+	{name:'profit_property'	,type:'string' },
+	{name:'profit' ,type:'float' },
+	{name:'proj_director' ,type:'string'	},
+	{name:'manager'	,type:'string' },
+	{name:'contract' ,type:'string'	},
+	{name:'remark' ,type:'string' },
+	{name:'pay_account'	,type:'string' },
+	{name:'countdown' ,type:'string' },
+	{name:'commission_b_tax' ,type:'float' },
+	{name:'commission_a_tax' ,type:'float' },
+	{name:'inner_commission' ,type:'float' },
+	{name:'outer_commission' ,type:'float' },
+	{name:'imm_payment'	,type:'float' },
+	{name:'found' ,type:'date',dateFormat:"Y-m-d H:i:s" },
+	{name:'create_ts' ,type:'date',dateFormat:"Y-m-d H:i:s"	},
+     {name:'commission_partner', type:'float'}
+],
+	proxy:	{
+		type: 'ajax',
+		url: '/ts/index.php/proj/view?adv=1',
+		reader:	{
+			type: 'json',
+			root: 'data'
+		}
+	},
+    listeners:{
+        load:{
+            fn:baseLoadAff,
+            scope:this
+        }
+    }
+});
 var recentChangeStore=Ext.create('Ext.data.JsonStore', {
 	fields: [
 	{name:'proj_id',type:'integer'},
-	{name:'create_ts',type:'date'},
+	{name:'create_ts',type:'date',dateFormat:"Y-m-d H:i:s"},
 	{name:'msg_cat',type:'string'},
 	{name:'message',type:'string'},
-	{name:'last_update',type:'date'},
+	{name:'last_update',type:'date',dateFormat:"Y-m-d H:i:s"},
 	{name:'updater',type:'string'}
 	],
 	proxy: {
@@ -267,7 +305,8 @@ var projDetailStore=Ext.create('Ext.data.JsonStore', {
 	{name:'inner_commission',type:'float'},
 	{name:'outer_commission',type:'float'},
 	{name:'imm_payment',type:'float'},
-	{name:'found',type:'date'}
+	{name:'found',type:'date',dateFormat:"Y-m-d H:i:s"},
+        {name:'commission_partner',type:'float'}
 	],
 	proxy: {
 		type: 'ajax',
@@ -305,6 +344,13 @@ var projStore=Ext.create('Ext.data.JsonStore', {
 	{name:'exclusive',type:'string'},
 	{name:'grade',type:'string'},
 	{name:'proj_director',type:'string'},
+	{name:'min_month',type:'integer'},
+	{name:'max_month',type:'integer'},
+	{name:'min_profit',type:'float'},
+	{name:'max_profit',type:'float'},
+	{name:'min_amount',type:'integer'},
+	{name:'profit_string',type:'string'},
+	{name:'is_end',type:'integer'},
 	{name:'create_ts',type:'date',dateFormat:"Y-m-d H:i:s"}
 	],
 	proxy: {
@@ -356,21 +402,22 @@ var	filtersCfg = {
 		{type:'string' ,dataIndex:'billing_company'	},
 		{type:'string' ,dataIndex:'manager_remark' },
 		{type:'list' ,dataIndex:'proj_director' },
-		{type:'date' ,dataIndex:'create_ts'	}
+		{type:'date' ,dataIndex:'create_ts'	},
+        {type:'numeric',dataIndex:'commission_partner'}
 	]
 };
 
 var	FileListGrid=Ext.create('Ext.grid.Panel',{
 	store: fileListStore,
-	border:1,
-	title:'文件列表',
+	//border:0,
+	//title:'文件列表',
 	emptyText:'暂无文件信息',
 	minHeight:156,
 	region:'south',
 	flex:1,
 	columns:[
 	
-	{text:'文件名',		 dataIndex:'filename',		filtable:true, style: "text-align:center;",align: 'left',width:642},
+	{text:'文件名',		 dataIndex:'filename',		filtable:true, style: "text-align:center;",align: 'left',width:522},
 	{
 		xtype: 'actioncolumn',
 		width:40,style:	"text-align:center;",align:	'center',
@@ -379,8 +426,8 @@ var	FileListGrid=Ext.create('Ext.grid.Panel',{
 			icon: '/ts/misc/resources/icons/download_16.png',
 			tooltip: '下载该文件',
 			handler: function(grid,	rowIndex, colIndex)	{
-				var	filename=grid.getStore().getAt(rowIndex).get("filename");
-				window.open('/ts/index.php/upload/get?file='+filename);
+				var	fileid=grid.getStore().getAt(rowIndex).get("id");
+				window.open('/ts/index.php/upload/get?fileid='+fileid);
 			}
 		}]
 	},{text:'文件大小',		dataIndex:'filesize',	   filtable:true, style: "text-align:center;",align: 'right',width:120,
@@ -390,21 +437,21 @@ var	FileListGrid=Ext.create('Ext.grid.Panel',{
 			 else return value;
 		 }
 	},
-	{text:'文件上传日期',	  dataIndex:'create_ts',	  filtable:true, width:140,style: "text-align:center;",align: 'left',renderer:new Ext.util.Format.dateRenderer("Y-m-d")}
+	{text:'文件上传日期',	  dataIndex:'create_ts',	  filtable:true, width:130,style: "text-align:center;",align: 'center',renderer:new Ext.util.Format.dateRenderer("Y-m-d")}
 	]
 });
 var	RecentChangeGrid=Ext.create('Ext.grid.Panel',{
 	store: recentChangeStore,
-	border:1,
-	title:'最新进展',
+	//border:0,
+	//title:'最新进展',
 	emptyText:'暂无信息',
 	minHeight:156,
 	region:'north',
 	flex:1,
 	columns:[
-	{text:'时间',			dataIndex:'create_ts',	  filtable:true, style:	"text-align:center;",align:	'center',width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
 	{text:'信息分类',			dataIndex:'msg_cat',	  filtable:true, style:	"text-align:center;",align:	'center',width:100},
-	{text:'最新进展信息',		dataIndex:'message',	   filtable:true, style: "text-align:center;",align: 'left',width:760}
+	{text:'时间',			dataIndex:'create_ts',	  filtable:true, style:	"text-align:center;",align:	'center',width:100,renderer:new Ext.util.Format.dateRenderer("Y-m-d")},
+	{text:'最新进展信息',		dataIndex:'message',	   filtable:true, style: "text-align:center;",align: 'left',width:600}
 	]
 });
 
@@ -466,23 +513,23 @@ projStore.load(function(records, operation, success) {
 			detailString+='<pre>'+record.get("sub_name")+record.get("month")+"个月, "+(record.get("amount")<10000?(record.get("amount")+"万"):(record.get("amount")/10000+"亿"))+': '+record.get("profit")+'%</pre>';
 		});
 	e.proj_info_tpl = Ext.create('Ext.XTemplate',[
-		'<table	style="border-collapse:collapse;"><tr><td style="padding:15px;border:1px;"><b>项目基本信息：</b><br /><br /><table style="border-collapse:collapse;">',
+		'<table	style="border-collapse:collapse;"><tr><td style="padding:15px;border:1px;"><b>产品基本信息：</b><br /><br /><table style="border-collapse:collapse;">',
 		'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
+		'<tr><td class="r_ex_td_pre"><b>产品名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
+		'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>产品，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
+		'<tr><td class="r_ex_td_pre"><b>产品评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
 		detailString, '</td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
-		'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
+		'<tr><td class="r_ex_td_pre"><b>产品亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
-		//'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
+		//'<tr><td class="r_ex_td_pre"><b>产品进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
 		'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
-        '</table></td></tr><tr><td style="padding:15px;border:1px;"><b>项目补充信息：</b><br /><br /><table style="border-collapse:collapse;">',
-        '<tr><td class="r_ex_td_pre"><b>项目添加时间</b></td><td class="r_ex_td_main"><pre>{create_ts:this.cusDate}</pre></td></tr>',
-        '<tr><td class="r_ex_td_pre"><b>项目董事</b></td><td class="r_ex_td_main"><pre>{proj_director}</pre></td></tr>',
-        '<tr><td class="r_ex_td_pre"><b>项目经理</b></td><td class="r_ex_td_main"><pre>{manager}</pre></td></tr>',
+        '</table></td></tr><tr><td style="padding:15px;border:1px;"><b>产品补充信息：</b><br /><br /><table style="border-collapse:collapse;">',
+        '<tr><td class="r_ex_td_pre"><b>产品添加时间</b></td><td class="r_ex_td_main"><pre>{create_ts:this.cusDate}</pre></td></tr>',
+        '<tr><td class="r_ex_td_pre"><b>产品董事</b></td><td class="r_ex_td_main"><pre>{proj_director}</pre></td></tr>',
+        '<tr><td class="r_ex_td_pre"><b>产品经理</b></td><td class="r_ex_td_main"><pre>{manager}</pre></td></tr>',
         '</td></tr></table></td></tr></table>',
 		{
 			cusDate:function(d){
@@ -499,8 +546,9 @@ projStore.load(function(records, operation, success) {
     //var headTitleTpl = Ext.create('Ext.XTemplate',['{issue} {name}']);
                                   
     //headTitleTpl.overwrite(Ext.getCmp('headerTitle').body,foundRecords.getAt(0).data);
-    
-    Ext.getCmp('headerTitle').setText('<span class="app-header2">'+records[0].data.issue+' '+records[0].data.name+'</span>');
+    if(Ext.getCmp('headerTitle').getEl().dom.innerText.indexOf('推荐产品')<0){
+    	Ext.getCmp('headerTitle').setText('<span class="app-header2">'+records[0].data.issue+' '+records[0].data.name+'</span>');
+    }
 	});
     
 });
@@ -511,3 +559,33 @@ var cellClick=function(grid,td,cellIndex,record,tr,rowIndex){
 	var proj_id = record.get("proj_id");
     window.open('/ts/index.php/proj?proj_id='+proj_id);
 }
+
+var controlTreeStore = Ext.create('Ext.data.TreeStore', {
+    proxy:{
+        type:'ajax',
+        url:'/ts/index.php/api/get_control_tree',
+        reader:{
+            type:'json'
+        }
+    }
+});
+
+var controlTree=Ext.create('Ext.tree.Panel', {
+    title: '功能选择',
+    width:200,
+    store: controlTreeStore,
+    collapsible:true,
+    rootVisible: false,
+    collapseDirection:'left',
+    region:'west'
+
+});
+
+controlTree.on("itemclick",function(view,record,item,index,e){
+    //alert("点击的节点ID是："+record.raw.id+",文字是："+record.raw.text);
+    if(record.isLeaf()==true){
+    	window.location.href="/ts/index.php/"+record.get("id");
+    } else {
+        record.collapse();
+    }
+});

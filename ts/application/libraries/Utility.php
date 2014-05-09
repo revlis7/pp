@@ -40,7 +40,23 @@ class Utility {
 		return $this->get('group_cfg');
 	}
 	
-	function chk_group($val) {
+	function get_menu_group_cfg() {
+		return $this->get('menu_group_cfg');
+	}
+
+	function get_library_group_cfg() {
+		return $this->get('library_group_cfg');
+	}
+
+	function get_board_group_cfg() {
+		return $this->get('board_group_cfg');
+	}
+
+	function get_order_group_cfg() {
+		return $this->get('order_group_cfg');
+	}
+
+    function chk_group($val) {
 		$_cfg = $this->get_group_cfg();
 		$_group_cfg = array_keys($_cfg);
 		if(!in_array($val, $_group_cfg)) {
@@ -53,7 +69,23 @@ class Utility {
 		return $this->title2group(element('title', $this->CI->session->userdata('user')));
 	}
 	
-	function title2group($title) {
+	function get_menu_group() {
+		return $this->title2menu(element('title', $this->CI->session->userdata('user')));
+	}
+	
+	function get_library_group() {
+		return $this->title2library(element('title', $this->CI->session->userdata('user')));
+	}
+
+    function get_board_group() {
+		return $this->title2board(element('title', $this->CI->session->userdata('user')));
+	}
+
+    function get_order_group() {
+		return $this->title2order(element('title', $this->CI->session->userdata('user')));
+	}
+
+    function title2group($title) {
 		$_cfg = $this->get_group_cfg();
 		foreach($_cfg as $group => $title_array) {
 			if(in_array($title, $title_array)) {
@@ -63,7 +95,47 @@ class Utility {
 		return null;
 	}
 	
-	function is_admin() {
+	function title2menu($title) {
+		$_cfg = $this->get_menu_group_cfg();
+		foreach($_cfg as $group => $title_array) {
+			if(in_array($title, $title_array)) {
+				return $group;
+			}
+		}
+		return null;
+	}
+
+	function title2library($title) {
+		$_cfg = $this->get_library_group_cfg();
+		foreach($_cfg as $group => $title_array) {
+			if(in_array($title, $title_array)) {
+				return $group;
+			}
+		}
+		return null;
+	}
+
+	function title2board($title) {
+		$_cfg = $this->get_board_group_cfg();
+		foreach($_cfg as $group => $title_array) {
+			if(in_array($title, $title_array)) {
+				return $group;
+			}
+		}
+		return null;
+	}
+    function title2order($title) {
+		$_cfg = $this->get_order_group_cfg();
+		foreach($_cfg as $group => $title_array) {
+			if(in_array($title, $title_array)) {
+				return $group;
+			}
+		}
+		return null;
+	}
+        
+
+    function is_admin() {
 		if($this->title2group(element('title', $this->CI->session->userdata('user'))) !== 'administrator') {
 			return false;
 		}
@@ -78,12 +150,21 @@ class Utility {
 	}
 
 	function is_director() {
-		if($this->title2group(element('title', $this->CI->session->userdata('user'))) !== 'proj_director') {
+		if($this->title2group(element('title', $this->CI->session->userdata('user'))) !== 'proj_director' 
+           && $this->title2group(element('title', $this->CI->session->userdata('user'))) !== 'proj_director_d') {
 			return false;
 		}
 		return true;
 	}
 
+	function is_director_2() {
+		if($this->title2group(element('title', $this->CI->session->userdata('user'))) !== 'proj_director_b' 
+           && $this->title2group(element('title', $this->CI->session->userdata('user'))) !== 'proj_director_c') {
+			return false;
+		}
+		return true;
+	}
+    
     function is_ch() {
 		if($this->title2group(element('title', $this->CI->session->userdata('user'))) !== 'staff') {
 			return false;
@@ -91,7 +172,34 @@ class Utility {
 		return true;
 	}
 
-	function access_fields_filter($group, $data) {
+    function is_board_admin() {
+		if($this->title2board(element('title', $this->CI->session->userdata('user'))) !== 'admin') {
+			return false;
+		}
+		return true;
+	}
+
+    function is_board_manage() {
+		if($this->title2board(element('title', $this->CI->session->userdata('user'))) !== 'manage') {
+			return false;
+		}
+		return true;
+	}
+
+    function is_library_admin() {
+		if($this->title2library(element('title', $this->CI->session->userdata('user'))) !== 'admin') {
+			return false;
+		}
+		return true;
+	}
+
+    function is_library_manage() {
+		if($this->title2library(element('title', $this->CI->session->userdata('user'))) !== 'manage') {
+			return false;
+		}
+		return true;
+	}
+    function access_fields_filter($group, $data) {
 		$_data = $data;
 		$_cfg = $this->get_forbidden_fields($group);
 		foreach($_cfg as $field) {
@@ -106,13 +214,60 @@ class Utility {
 		$_cfg = $this->get('access_fields_cfg');
 		
 		if(!isset($_cfg[$group])) {
-			return array('manage_button', 'proj_id', 'proj_detail_id');
+			return array();
 		}
 		return $_cfg[$group];
 	}
 	
-	function manager_view_filter($proj_detail) {
+	function get_forbidden_fields_csr($group) {
+		$_cfg = $this->get('access_fields_cfg_csr');
+		
+		if(!isset($_cfg[$group])) {
+			return array();
+		}
+		return $_cfg[$group];
+	}
+
+	function get_forbidden_fields_library($group) {
+		$_cfg = $this->get('library_items_cfg');
+		
+		if(!isset($_cfg[$group])) {
+			return array();
+		}
+		return $_cfg[$group];
+	}
+
+    function get_forbidden_fields_board($group) {
+		$_cfg = $this->get('board_items_cfg');
+		
+		if(!isset($_cfg[$group])) {
+			return array();
+		}
+		return $_cfg[$group];
+	}
+
+    function get_accept_fields_order($group) {
+		$_cfg = $this->get('order_items_cfg');
+		
+		if(!isset($_cfg[$group])) {
+			return array();
+		}
+		return $_cfg[$group];
+	}
+
+    function get_forbidden_menu_fields($group) {
+		$_cfg = $this->get('menu_items_cfg');
+		
+		if(!isset($_cfg[$group])) {
+			return array('manage_button', 'proj_id', 'proj_detail_id');
+		}
+		return $_cfg[$group];
+	}
+
+    function manager_view_filter($proj_detail) {
 		$fields = array(
+			'commission_b_tax',
+			'commission_a_tax',
 			'main_channel',
 			'channel_company',
 			'channel_contact',
@@ -127,7 +282,50 @@ class Utility {
 		return true;
 	}
 	
-	function is_ajax_request() {
+    function manager_view_filter_2($proj_detail) {
+		$fields = array(
+			'commission_b_tax',
+			'commission_a_tax',
+			'inner_commission',
+			'main_channel',
+			'channel_company',
+			'channel_contact',
+			'billing_company',
+			'manager_remark',
+		);
+		foreach($fields as $field) {
+			if(isset($proj_detail->$field)) {
+				$proj_detail->$field = '';
+			}
+		}
+		return true;
+	}
+
+    function csr_person_view_filter($csr_person) {
+		$fields = array(
+			'csr_person_mobile',
+		);
+		foreach($fields as $field) {
+			if(isset($csr_person->$field)) {
+				$csr_person->$field = '***';
+			}
+		}
+		return true;
+	}
+	
+    function csr_channel_view_filter($csr_person) {
+		$fields = array(
+			'csr_channel_mobile',
+		);
+		foreach($fields as $field) {
+			if(isset($csr_person->$field)) {
+				$csr_person->$field = '***';
+			}
+		}
+		return true;
+	}
+
+    function is_ajax_request() {
 		if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
 			return true;
 		}
@@ -184,7 +382,7 @@ class Utility {
         $mail->send();
     }
 
-    function noticemail_html($to, $subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj) {
+    function noticemail_html($to, $subject, $mail_content_title, $mail_content_mainstr, $mail_content_buttomstr, $proj='') {
         $mail_config['from'] = 'firstshin_notice@163.com';
         $mail_config['smtp_host'] = 'smtp.163.com';
         $mail_config['smtp_username'] = 'firstshin_notice@163.com';
@@ -194,9 +392,9 @@ class Utility {
         $mail_config['content_type'] = 'HTML';
         
         $mail_config['content'] = '<html><body><table><tr><td style="background-color:#DFDFDF;width:486px;"><span style="color:#404040;font-weight:bold;font-size:20px;font-family:微软雅黑;黑体;sans-serif;">&nbsp;'. $mail_content_title.'</span></td>';
-        $mail_config['content'] .= '<td><a href="http://rainbowbridge.sinaapp.com/ts/"><img style="width:240px; height:38px" src="http://rainbowbridge.sinaapp.com/ts/misc/resources/firstshin.jpg"></img></a></td></tr>';
+        $mail_config['content'] .= '<td><a href="http://rainbowbridge.sinaapp.com/ts/"><img width=240 height=38 style="width:240px; height:38px" src="http://rainbowbridge.sinaapp.com/ts/misc/resources/firstshin.jpg"></img></a></td></tr>';
         $mail_config['content'] .= '<tr><td colspan=2 style="font-size:12px;padding:10px;">'.$mail_content_mainstr.'</td></tr>';
-        $mail_config['content'] .= '<tr><td colspan=2 style="font-size:12px;background-color:#DFDFDF;text-align:center;color:#606060;height:48px;">'.$mail_content_buttomstr.'如有任何问题请<a href="mailto:xpfinance@163.com">及时联系</a>。</td></tr></table></body></html>';
+        $mail_config['content'] .= '<tr><td colspan=2 style="font-size:12px;background-color:#DFDFDF;text-align:center;color:#606060;height:48px;">'.$mail_content_buttomstr.'如有任何问题请<a href="mailto:xp@firstshin.com">及时联系</a>。</td></tr></table></body></html>';
         
         $mail = new SaeMail();
         $mail->setOpt($mail_config);

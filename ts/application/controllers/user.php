@@ -23,8 +23,28 @@ class User extends Auth_Controller {
 		$data = $this->User_model->get_all();
 		$this->json->output(array('success' => true, 'data' => $data));
 	}
-	
-	function info() {
+    function view_reporters(){
+        $access_mode = $this->input->get('access_mode',true);
+        
+        if($this->User_model->has_action_access(element('loginname', $this->session->userdata('user')),$access_mode)){
+            $data = $this->User_model->get_by_users('');
+        } else {
+	        $data = $this->User_model->get_by_users($this->User_model->get_all_reporters());
+        }
+        //$data=$this->User_model->get_all_reporters();
+        $this->json->output(array('success' => true, 'data' => $data));
+    }
+
+    function view_attending_reporters(){
+        //$access_mode = $this->input->get('access_mode',true);
+        //echo(var_dump($this->User_model->get_all_reporters()));
+        
+        $data = $this->User_model->get_by_users($this->User_model->get_all_reporters());
+        //$data=$this->User_model->get_all_reporters();
+        $this->json->output(array('success' => true, 'data' => $data));
+    }
+
+    function info() {
 		$this->template->load('default', 'user/info');
 	}
 	

@@ -43,7 +43,8 @@ Ext.onReady(function() {
 	  {name:'channel_contact'  ,type:'boolean' },
 	  {name:'billing_company'  ,type:'boolean' },
 	  {name:'manager_remark'   ,type:'boolean' },
-	  {name:'create_ts'  ,type:'boolean' }
+	  {name:'create_ts'  ,type:'boolean' },
+        {name:'commission_partner',type:'boolean'}
 	],
 	proxy: {
 	  type: 'ajax',
@@ -68,7 +69,7 @@ Ext.onReady(function() {
 		resizeable:false,
 		closeAction:"hide",
 		closable:false,
-		title:'编辑项目信息',
+		title:'编辑产品信息',
 		titleAlign:'center',
 		width:940,
 		items:[
@@ -148,7 +149,7 @@ Ext.onReady(function() {
 				items:[
 				{
 					xtype:'fieldset',
-					title: '====<b>项目基本信息</b>====',
+					title: '====<b>产品基本信息</b>====',
 					border:0,
 					//collapsible: true,
 					defaults: {
@@ -171,7 +172,7 @@ Ext.onReady(function() {
 						width:420,
 						region:'north',
 						labelAlign:'right',
-						fieldLabel: '项目类别*',
+						fieldLabel: '产品类别*',
 						items:[
 						{//主类别
 							 xtype:'combo',
@@ -219,7 +220,7 @@ Ext.onReady(function() {
 						width:320
 					},{
 						xtype:'textfield',
-						fieldLabel: '项目名称*',
+						fieldLabel: '产品名称*',
 						name:'name',
 						width:400
 					},{
@@ -237,7 +238,7 @@ Ext.onReady(function() {
 						forceSelection:true
 					},{
 						xtype:'combo',
-						fieldLabel: '项目收益属性*',
+						fieldLabel: '产品收益属性*',
 						name:'profit_property',
 						queryMode : 'local',
 						store : chProfitPropertyList,
@@ -251,7 +252,7 @@ Ext.onReady(function() {
 						name:'flow_of_fund'
 					},{
 						xtype:'textareafield',
-						fieldLabel: '项目亮点*',
+						fieldLabel: '产品亮点*',
 						width:420,
 						height:100,
 						name:'highlights'
@@ -298,7 +299,7 @@ Ext.onReady(function() {
 					}]
 				},{
 					xtype:'fieldset',
-					title: '====<b>项目其他信息</b>====',
+					title: '====<b>产品其他信息</b>====',
 					border:0,
 					//collapsible: true,
 					defaults: {
@@ -352,11 +353,11 @@ Ext.onReady(function() {
 listControl.load(function(records, operation, success) {
 	var fullGridColumns=[
 	{
-		text:'项目<br>编号', dataIndex:'proj_id', filterable:true, width:50,style: "text-align:center;",align: 'center',
+		text:'产品<br>编号', dataIndex:'proj_id', filterable:true, width:60,style: "text-align:center;",align: 'center'
 	}, {
 		text:'proj_detail_id', dataIndex:'proj_detail_id', filterable:true, width:100,hidden:true
 	}, {
-		text:'项目状态', dataIndex:'pdt_status', filterable:true, width:68,style: "text-align:center;",align: 'center',hidden:false,
+		text:'产品状态', dataIndex:'pdt_status', filterable:true, width:68,style: "text-align:center;",align: 'center',hidden:false,
 		renderer:function(value,metaData,record,rowIndex,colIndex,store,view) { 
 			if(value=="申请中"){
 				metaData.style='background:#003366;color:#ffffff;';
@@ -374,10 +375,18 @@ listControl.load(function(records, operation, success) {
 	}, {
 		text:'产品信息',columns:[
 		{
-			text:'产品等级', dataIndex:'grade', filterable:true,sortable : true, width:84,style: "text-align:center;",align: 'center',hidden:records[0].get("grade"),renderer: gradeFn
+			text:'产品等级', dataIndex:'grade', filterable:true,sortable : true, width:94,style: "text-align:center;",align: 'center',hidden:records[0].get("grade"),renderer: gradeFn
 		}, {
-			text:'项目名称', dataIndex:'name', filterable:true,sortable : true, width:220,style: "text-align:center;",align: 'left', hidden:records[0].get("name"),
+			text:'类别', dataIndex:'sub_category', filterable:true,sortable : true, width:180,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_category")
+		}, {
+			text:'发行方', dataIndex:'issue', filterable:true,sortable : true, width:86,style: "text-align:center;",align: 'center', hidden:records[0].get("issue"),
 			renderer: toolTipFn
+		}, {
+			text:'产品名称', dataIndex:'name', filterable:true,sortable : true, width:220,style: "text-align:center;",align: 'left', hidden:records[0].get("name"),
+			renderer:function(value,metaData,record,rowIndex,colIndex,store,view) { 
+            		metaData.tdAttr = 'data-qtip="'+value+'"'; 
+					return '<b>'+value+'</b>';
+            }
 		}, {
 			xtype: 'actioncolumn',
 			text:'编辑',
@@ -392,20 +401,11 @@ listControl.load(function(records, operation, success) {
 					window.open('/ts/index.php/proj/update?proj_id='+proj_id);
 				}
 			}]
-		}, {
-			text:'类别', dataIndex:'sub_category', filterable:true,sortable : true, width:150,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_category"),
-			renderer: toolTipFn
-		}, {
-			text:'发行方', dataIndex:'issue', filterable:true,sortable : true, width:86,style: "text-align:center;",align: 'center', hidden:records[0].get("issue"),
-			renderer: toolTipFn
 		}]
 	}, {
 		text:'认购信息',columns:[
 		{
-			text:'子类', dataIndex:'sub_name', filterable:true,sortable : true, width:100,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_name"),
-			renderer: toolTipFn
-		}, {
-			text:'销售状态', dataIndex:'status', filterable:true,sortable : true, width:60,style: "text-align:center;",align: 'center', hidden:records[0].get("status"), 
+			text:'销售状态', dataIndex:'status', filterable:true,sortable : true, width:72,style: "text-align:center;",align: 'center', hidden:records[0].get("status"), 
 			renderer:function(value,metaData){
 				if(value=="在售"){
 					metaData.style='background:#CCFFCC;color:#000000'
@@ -419,21 +419,7 @@ listControl.load(function(records, operation, success) {
 				return value;
 			}
 		}, {
-			text:'认购金额', dataIndex:'amount', filterable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("amount"),
-			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
-				if(value>=10000){ return value/10000+'亿'; } 
-				if(value<10000){ return value+'万'; } 
-			}
-		}, {
-			text:'期限', dataIndex:'month', filterable:true,sortable : true, width:50,style: "text-align:center;",align: 'center', hidden:records[0].get("month"),
-			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
-				return value+'月';
-			}
-		}, {
-			text:'收益', dataIndex:'profit', filterable:true,sortable : true, width:50, style: "text-align:center;",align: 'center',hidden:records[0].get("profit"),
-			renderer: commissionFn
-		}, {
-			text:'份额', dataIndex:'total_share', filterable:true,sortable : true, width:50,style: "text-align:center;",align: 'center',hidden:records[0].get("total_share"), 
+			text:'份额', dataIndex:'total_share', filterable:true,sortable : true, width:72,style: "text-align:center;",align: 'center',hidden:records[0].get("total_share"), 
 			renderer:function(value,metaData){
 				if(value=="OPEN"){
 					metaData.style='background:#CCFFCC;color:#000000'
@@ -446,40 +432,57 @@ listControl.load(function(records, operation, success) {
 				}
 				return value;
 			}
+		}, {
+			text:'子类', dataIndex:'sub_name', filterable:true,sortable : true, width:84,style: "text-align:center;",align: 'left', hidden:records[0].get("sub_name"),
+			renderer: toolTipFn
+		}, {
+			text:'认购金额', dataIndex:'amount', filterable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("amount"),
+			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
+				if(value>=10000){ return value/10000+'亿'; } 
+				if(value<10000){ return value+'万'; } 
+			}
+		}, {
+			text:'期限', dataIndex:'month', filterable:true,sortable : true, width:72,style: "text-align:center;",align: 'center', hidden:records[0].get("month"),
+			renderer: function(value,metaData,record,rowIndex,colIndex,store,view) { 
+				return value+'月';
+			}
+		}, {
+			text:'收益', dataIndex:'profit', filterable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("profit"),
+			renderer: commissionFn
 		}]
 	}, {
 		text:'佣金信息',columns:[
 		{
-			text:'税前佣金', dataIndex:'commission_b_tax', filterable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("commission_b_tax"),
+			text:'税前佣金', dataIndex:'commission_b_tax', filterable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("commission_b_tax"),
 			renderer: commissionFn
 		}, {
-			text:'税后佣金', dataIndex:'commission_a_tax', filterable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("commission_a_tax"),
+			text:'税后佣金', dataIndex:'commission_a_tax', filterable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("commission_a_tax"),
 			renderer: commissionFn
 		}, {
-			text:'平台费用', dataIndex:'inner_commission', filterable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("inner_commission"),
+			text:'平台费用', dataIndex:'inner_commission', filterable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("inner_commission"),
 			renderer: commissionFn
 		}, {
-			text:'费用', dataIndex:'outer_commission', filterable:true,sortable : true, width:50, style: "text-align:center;",align: 'center',hidden:records[0].get("outer_commission"),
+			text:'费用', dataIndex:'outer_commission', filterable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("outer_commission"),
 			renderer: commissionFn
 		}, {
-			text:'现结费用', dataIndex:'imm_payment', filterable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("imm_payment"),
+			text:'现结费用', dataIndex:'imm_payment', filterable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("imm_payment"),
 			renderer: commissionFn
 		}]
 	}, {
 		text:'附加信息',columns:[
 		{
-			text:'产品董事', dataIndex:'proj_director', filterable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("proj_director")
+			text:'产品董事', dataIndex:'proj_director', filterable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("proj_director")
 		}, {
-			text:'产品经理', dataIndex:'manager', filterable:true,sortable : true, width:60, style: "text-align:center;",align: 'center',hidden:records[0].get("manager")
+			text:'产品经理', dataIndex:'manager', filterable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("manager")
 		}, {
 			text:'渠道公司',dataIndex:'channel_company',filterable:true,sortable : true, width:72, style: "text-align:center;",align: 'center',hidden:records[0].get("channel_company")
 		}, {
-			text:'添加时间',dataIndex:'create_ts',filterable:true,sortable : true, width:80, style: "text-align:center;",align: 'center',renderer:new Ext.util.Format.dateRenderer("Y-m-d")
+			text:'添加时间',dataIndex:'create_ts',filterable:true,sortable : true, width:116, style: "text-align:center;",align: 'center',renderer:new Ext.util.Format.dateRenderer("Y-m-d")
 		}, /*{
 			text:'打款进度', dataIndex:'countdown', filterable:true,sortable : true, minWidth:200,hidden:records[0].get("countdown"),
 			renderer: toolTipFn
 		}, */{
-			text:'备注', dataIndex:'remark', filterable:true,sortable : true, minWidth:200,hidden:records[0].get("remark"),
+			text:'备注', dataIndex:'remark', filterable:true,sortable : true, minWidth:290,hidden:records[0].get("remark"),
 			renderer: toolTipFn
 		}]
 	}];
@@ -490,7 +493,7 @@ listControl.load(function(records, operation, success) {
 			border:0,
 			columnLines: true,
 			title: '&nbsp;&nbsp;<b>&gt;&gt;&nbsp;固定收益产品&nbsp;&lt;&lt;</b> -- 点击折叠',
-			margin:10,
+			margin:'0 0 5 0',
 			columns: fullGridColumns,
 			viewConfig: {
 				stripeRows: true,
@@ -530,7 +533,7 @@ listControl.load(function(records, operation, success) {
 		fullGridC2=Ext.create('searchPanel', {
 			store: projAllStore,
 			border:0,
-			margin:10,
+			margin:'0 0 5 0',
 			columnLines: true,
 			title: '&nbsp;&nbsp;<b>&gt;&gt;&nbsp;浮动收益产品&nbsp;&lt;&lt;</b> -- 点击展开',
 			columns: fullGridColumns,
@@ -575,11 +578,11 @@ listControl.load(function(records, operation, success) {
 			text:'快速筛选：'
 		},{
 			xtype:'tbtext',
-		  scale:'medium',
+		  scale:'small',
 		  text:'【集合信托产品：'
 		},{
 			text:'上市公司股票质押',
-		  scale:'medium',
+		  scale:'small',
 			handler:function(){
 			  fullGridC1.filters.clearFilters();
 			  projAllStore.filterBy( function(record,id){
@@ -588,7 +591,7 @@ listControl.load(function(records, operation, success) {
 			}
 		},{
 			text:'政府基建',
-			scale:'medium',
+			scale:'small',
 			handler:function(){
 			  fullGridC1.filters.clearFilters();
 			  projAllStore.filterBy( function(record,id){
@@ -597,7 +600,7 @@ listControl.load(function(records, operation, success) {
 			}
 		},{
 			text:'房地产',
-			scale:'medium',
+			scale:'small',
 			handler:function(){
 			  fullGridC1.filters.clearFilters();
 			  projAllStore.filterBy( function(record,id){
@@ -606,7 +609,7 @@ listControl.load(function(records, operation, success) {
 			}
 		},{
 			text:'其他信托',
-			scale:'medium',
+			scale:'small',
 			handler:function(){
 			  fullGridC1.filters.clearFilters();
 			  projAllStore.filterBy( function(record,id){
@@ -615,7 +618,7 @@ listControl.load(function(records, operation, success) {
 			}
 		},{
 			text:'所有信托】',
-			scale:'medium',
+			scale:'small',
 			handler:function(){
 			  fullGridC1.filters.clearFilters();
 			  projAllStore.filterBy( function(record,id){
@@ -627,7 +630,7 @@ listControl.load(function(records, operation, success) {
 			}
 		},{
 			text:'【私募基金】',
-			scale:'medium',
+			scale:'small',
 			handler:function(){
 			  fullGridC1.filters.clearFilters();
 			  projAllStore.filterBy( function(record,id){
@@ -635,8 +638,17 @@ listControl.load(function(records, operation, success) {
 			  });
 			}
 		},{
+			text:'【资产管理计划】',
+			scale:'small',
+			handler:function(){
+			  fullGridC1.filters.clearFilters();
+			  projAllStore.filterBy( function(record,id){
+				return record.get("sub_category")=="资产管理计划";
+			  });
+			}
+		},{
 			text:'【P2P理财】',
-			scale:'medium',
+			scale:'small',
 			handler:function(){
 			  fullGridC1.filters.clearFilters();
 			  projAllStore.filterBy( function(record,id){
@@ -645,7 +657,7 @@ listControl.load(function(records, operation, success) {
 			}
 		},{
 			text:'【其他固定收益产品】',
-			scale:'medium',
+			scale:'small',
 			handler:function(){
 			  fullGridC1.filters.clearFilters();
 			  projAllStore.filterBy( function(record,id){
@@ -654,7 +666,7 @@ listControl.load(function(records, operation, success) {
 			}
 		},'-',{
 			text:'全部显示',
-			scale:'medium',
+			scale:'small',
 			icon:'/ts/misc/resources/icons/article_16.png',
 			handler:function(){
 				fullGridC1.filters.clearFilters();
@@ -671,7 +683,7 @@ listControl.load(function(records, operation, success) {
 			text:'快速筛选：'
 		},{
 			text:'【债券基金】',
-			scale:'medium',
+			scale:'small',
 			handler:function(){
 			  fullGridC2.filters.clearFilters();
 			  projAllStore.filterBy( function(record,id){
@@ -680,7 +692,7 @@ listControl.load(function(records, operation, success) {
 			}
 		},{
 			text:'【证券基金】',
-			scale:'medium',
+			scale:'small',
 			handler:function(){
 			  fullGridC2.filters.clearFilters();
 			  projAllStore.filterBy( function(record,id){
@@ -689,7 +701,7 @@ listControl.load(function(records, operation, success) {
 			}
 		},{
 			text:'【股权基金】',
-			scale:'medium',
+			scale:'small',
 			handler:function(){
 			  fullGridC2.filters.clearFilters();
 			  projAllStore.filterBy( function(record,id){
@@ -698,7 +710,7 @@ listControl.load(function(records, operation, success) {
 			}
 		},{
 			text:'【其他浮动收益产品】',
-			scale:'medium',
+			scale:'small',
 			handler:function(){
 			  fullGridC2.filters.clearFilters();
 			  projAllStore.filterBy( function(record,id){
@@ -707,7 +719,7 @@ listControl.load(function(records, operation, success) {
 			}
 		},'-',{
 			text:'全部显示',
-			scale:'medium',
+			scale:'small',
 			icon:'/ts/misc/resources/icons/article_16.png',
 			handler:function(){
 				fullGridC1.filters.clearFilters();
@@ -736,6 +748,7 @@ listControl.load(function(records, operation, success) {
 	});
 	
 	var viewport = Ext.create('Ext.Viewport', {
+        id:'viewport',
 		layout: {
 			type: 'border',
 			padding: 0
@@ -744,7 +757,7 @@ listControl.load(function(records, operation, success) {
 		items: [{
 			xtype:'toolbar',
 			region:'north',
-			height: 40,
+			height: 48,
 			id:'topMenu',
 			border:0,
 			margin:0,
@@ -759,7 +772,7 @@ listControl.load(function(records, operation, success) {
 				flex:1
 			},{
 				icon: '/ts/misc/resources/icons/document_add_24.png',
-				text: '新增项目',
+				text: '新增产品',
 				scale:'medium',
 				handler: function() {
                     ProjWin.down('hiddenfield[name="proj_id"]').setValue(-1);
@@ -796,7 +809,7 @@ listControl.load(function(records, operation, success) {
 					}
 				}
 			},{
-				text:'查看近期结束项目',
+				text:'查看近期结束产品',
 				icon:'/ts/misc/resources/icons/document_alt_fill_24.png',
 				scale:'medium',
 				itemId:"endProjListBtn",
@@ -852,13 +865,17 @@ listControl.load(function(records, operation, success) {
 				xtype:'box',flex:1
 			},{
 				xtype:'box',
-				html:'版权所有。上海玉尔投资发展有限公司 - 2012-2013年'
+				html:'版权所有。北京玉尔财富投资管理有限公司 - 2012-2013年'
 			},{
 				xtype:'box',flex:1
 			}]
 		}]
 	});
+    
+    viewport.add(controlTree);
 });
+
+
 
 });
 

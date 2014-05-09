@@ -10,7 +10,7 @@ Ext.onReady(function() {
         height:20,
         items:[{xtype:'box',flex:1},{
           xtype:'box',
-          html:'上海玉尔投资发展有限公司 - 版权所有 - 2012-2013年'
+          html:'北京玉尔财富投资管理有限公司 - 版权所有 - 2012-2013年'
         },{xtype:'box',flex:1}]
     },{
       xtype:'panel', 
@@ -33,7 +33,7 @@ Ext.onReady(function() {
           border:0,
           height:600,
           width:800,
-          html:'<a href="http://www.firstshin.com/?page_id=479"><img src="/ts/misc/resources/fp_20130809.jpg"></img></a>'
+          html:'<a href="http://www.firstshin.com/?page_id=492"><img src="/ts/misc/resources/fp_20130816.jpg"></img></a>'
         },{
           xtype:'form',
           border:2,
@@ -84,14 +84,14 @@ Ext.onReady(function() {
                       if(typeof(params.redurl)!="undefined"){
                         window.location.href=params.redurl;
                       } else {
-                        window.location.href='/ts/misc/redirect.html';
+                        window.location.href='/ts/index.php/promote_proj';
                       }
                     } else {
-                      window.location.href='/ts/misc/redirect.html';
+                      window.location.href='/ts/index.php/promote_proj';
                     }
                   },
                   failure: function(form, action) {
-                    Ext.Msg.alert('alert', '用户名或密码错误，请检查您的输入！');
+                    //Ext.Msg.alert('alert', '用户名或密码错误，请检查您的输入！');
                   }
                 });
               }
@@ -126,6 +126,7 @@ Ext.onReady(function() {
             labelAlign: 'top',
             padding:10,
             name: 'loginname',
+              msgTarget: 'under',
             width:180,
             allowBlank: false,
             labelClsExtra : "font-size:14px!important"
@@ -135,6 +136,7 @@ Ext.onReady(function() {
             labelAlign: 'top',
             padding:10,
             inputType: 'password',
+              msgTarget: 'under',
             name: 'password',
             width:180,
             allowBlank: false,

@@ -9,7 +9,7 @@ class Auth extends Auth_Controller {
 			if($redurl != '') {
 				redirect($redurl, 'refresh');
 			}
-			redirect(site_url('proj'), 'refresh');
+			redirect(site_url('tsmain'), 'refresh');
 		}
 	}
 
@@ -37,7 +37,7 @@ class Auth extends Auth_Controller {
 		}
 		
 		if(!$this->User_model->validate($loginname, $password)) {
-			$this->json->output(array('success' => false, 'errors' => array('password' => '登录密码错误')));
+			$this->json->output(array('success' => false, 'errors' => array('loginname' => '用户名或登录密码错误')));
 		}
 		
 		if($this->User_model->is_banned($loginname)) {

@@ -39,7 +39,7 @@ Ext.onReady(function() {
 		resizeable:false,
 		closeAction:"hide",
 		closable:false,
-		title:'编辑项目',
+		title:'编辑产品',
 		titleAlign : "center",
 		width:980,
 		items:[
@@ -110,7 +110,7 @@ Ext.onReady(function() {
 				items:[
 				{
 					xtype:'fieldset',
-					title: '====<b>项目基本信息</b>====',
+					title: '====<b>产品基本信息</b>====',
 					border:0,
 					//collapsible: true,
 					defaults: {
@@ -133,7 +133,7 @@ Ext.onReady(function() {
 						width:420,
 						region:'north',
 						labelAlign:'right',
-						fieldLabel: '项目类别*',
+						fieldLabel: '产品类别*',
 						items:[
 						{//主类别
 							 xtype:'combo',
@@ -170,7 +170,7 @@ Ext.onReady(function() {
 						width:320
 					},{
 						xtype:'textfield',
-						fieldLabel: '项目名称*',
+						fieldLabel: '产品名称*',
 						name:'name',
 						width:400
 					},{
@@ -188,7 +188,7 @@ Ext.onReady(function() {
 						forceSelection:true
 					},{
 						xtype:'combo',
-						fieldLabel: '项目收益属性*',
+						fieldLabel: '产品收益属性*',
 						name:'profit_property',
 						queryMode : 'local',
 						store : chProfitPropertyList,
@@ -202,7 +202,7 @@ Ext.onReady(function() {
 						name:'flow_of_fund'
 					},{
 						xtype:'textareafield',
-						fieldLabel: '项目亮点*',
+						fieldLabel: '产品亮点*',
 						width:520,
 						height:160,
 						name:'highlights'
@@ -214,6 +214,7 @@ Ext.onReady(function() {
 						store : chProjDirectorList,
 						valueField: 'id',
 						displayField: 'text',
+                        //disabled:true
 						forceSelection:true
 					}, {
 						xtype:'combo',
@@ -223,6 +224,7 @@ Ext.onReady(function() {
 						store : chManagerList,
 						valueField: 'id',
 						displayField: 'text',
+                        //disabled:true
 						forceSelection:true
 					}, {
 						xtype:'combo',
@@ -245,7 +247,7 @@ Ext.onReady(function() {
 					}]
 				},{
 					xtype:'fieldset',
-					title: '====<b>项目其他信息</b>====',
+					title: '====<b>产品其他信息</b>====',
 					border:0,
 					//collapsible: true,
 					defaults: {
@@ -338,14 +340,14 @@ Ext.onReady(function() {
                 text:'<span class="app-header2">&nbsp;</span>'
 			},{
 				xtype:'tbtext',
-				text:'<span class="app-header2">项目编辑</span>'
+				text:'<span class="app-header2">产品编辑</span>'
 			},{
 				xtype:'tbtext',
 				text:'您可以：'
 			},{
 				icon: '/ts/misc/resources/icons/message_add.png',
 				scale:'medium',
-				text:'新增项目消息' ,
+                text:'新增:最新进展' ,
 				handler:function(){
 					//todo
 					messageForm=messageWin.down('form');
@@ -358,7 +360,7 @@ Ext.onReady(function() {
 			},{
 				icon: '/ts/misc/resources/icons/article_add.png',
 				scale:'medium',
-				text:'新增额度信息' ,
+                text:'新增:额度信息' ,
 				handler:function(){
 					//todo
 					AmountEditForm=AmountEditWin.down('form');
@@ -371,7 +373,7 @@ Ext.onReady(function() {
 				}
 			},{
 				icon: '/ts/misc/resources/icons/arrow_up_24.png',
-				text:'上传项目文件',
+				text:'上传产品文件',
 				scale:'medium',
 				handler:function(){
 					AmountEditWin.down('form').getForm().reset();
@@ -383,7 +385,7 @@ Ext.onReady(function() {
 				xtype:'box',
 				flex:1
 			},{
-				text:'返回项目管理列表',
+				text:'返回产品管理列表',
 				icon:'/ts/misc/resources/icons/curved_arrow_24.png',
 				scale:'medium',
 				handler:function(){window.location.href='/ts/index.php/proj/manage';}
@@ -404,15 +406,15 @@ Ext.onReady(function() {
 				xtype:'panel',
 				region:'west',
 				width:586,
-				title:'项目信息',
-				html:'正在加载项目信息...',
+				title:'产品信息',
+				html:'正在加载产品信息...',
 				autoScroll :true,
 				dockedItems:[{
 					dock: 'top',
 					xtype: 'toolbar',
 					bodyPadding: 5,
 					items: [{
-						text:'编辑项目',
+						text:'编辑产品',
 						scale:'medium',
 						icon: '/ts/misc/resources/icons/cog_24.png',
 						handler:function(){
@@ -437,7 +439,7 @@ Ext.onReady(function() {
                                     window.location.reload();
 								} ,
 								failure: function(form, action) {
-									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+									Ext.Msg.alert('错误！', action.result.error.name);
 								}
 							})
 						}
@@ -458,7 +460,7 @@ Ext.onReady(function() {
                                     window.location.reload();
                                 },
 								failure: function(form, action) {
-									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+									Ext.Msg.alert('错误！', action.result.error.name);
 								}
 							})
 						}
@@ -480,7 +482,7 @@ Ext.onReady(function() {
                                     window.location.reload();
 								} ,
 								failure: function(form, action) {
-									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+									Ext.Msg.alert('错误！', action.result.error.name);
 								}
 							})
 						}
@@ -502,14 +504,14 @@ Ext.onReady(function() {
                                     window.location.reload();
 								} ,
 								failure: function(form, action) {
-									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+									Ext.Msg.alert('错误！', action.result.error.name);
 								}
 							})
 						}
 					},{
 						icon: '/ts/misc/resources/icons/check_24.png',
 						id:'BtnPdtEnterPromote',
-						text:'设为推荐项目',
+						text:'设为推荐产品',
 						scale:'medium',
 						hidden:true,
 						handler:function(){
@@ -524,14 +526,14 @@ Ext.onReady(function() {
                                     window.location.reload();
 								} ,
 								failure: function(form, action) {
-									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+									Ext.Msg.alert('错误！', action.result.error.name);
 								}
 							})
 						}
 					},{
 						icon: '/ts/misc/resources/icons/denied_24.png',
 						id:'BtnPdtClosePromote',
-						text:'取消推荐项目',
+						text:'取消推荐产品',
 						scale:'medium',
 						hidden:true,
 						handler:function(){
@@ -546,18 +548,18 @@ Ext.onReady(function() {
                                     window.location.reload();
 								} ,
 								failure: function(form, action) {
-									Ext.Msg.alert('错误！', '保存失败。如有问题请联系管理员。');
+									Ext.Msg.alert('错误！', action.result.error.name);
 								}
 							})
 						}
 					},{
 						icon: '/ts/misc/resources/icons/multi_end_24.png',
-						text:'一键结束该项目',
+						text:'一键结束该产品',
 						scale:'medium',
 						handler:function(){
 							Ext.Msg.show({
-								title:'结束项目',
-								msg: '您是否确认要结束该项目？',
+								title:'结束产品',
+								msg: '您是否确认要结束该产品？',
 								buttons: Ext.Msg.OKCANCEL,
 								icon: Ext.Msg.QUESTION,
 								fn:function(buttonId){
@@ -605,7 +607,7 @@ Ext.onReady(function() {
 	           		recommendStore.load(function(records, operation, success) {
 						Ext.Array.forEach(records,function(record){
 							if(record.get("proj_id")==params.proj_id){
-								Ext.getCmp('headerTitle').setText('<span class="app-header2">推荐项目： '+firstRec.data.issue+' '+firstRec.data.name+'</span>');
+								Ext.getCmp('headerTitle').setText('<span class="app-header2">推荐产品： '+firstRec.data.issue+' '+firstRec.data.name+'</span>');
 								Ext.getCmp('BtnPdtEnterPromote').hide();
 								Ext.getCmp('BtnPdtClosePromote').show();
 								t_i+=1;
@@ -654,30 +656,30 @@ Ext.onReady(function() {
 			proj_info_tpl=Ext.create('Ext.XTemplate',[
     	    '<table style="border-collapse:collapse;">{pdt_status:this.cusPdtStatus()}<tr><td style="padding:20px;border:1px;"><table style="border-collapse:collapse;">',
 			'<tr><td class="r_ex_td_pre"><b>分类</b></td><td class="r_ex_td_main"><pre>{category}: {sub_category}</pre></td></tr>',
-			'<tr><td class="r_ex_td_pre"><b>项目名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
-			'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>项目，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
-			'<tr><td class="r_ex_td_pre"><b>项目评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>产品名称</b></td><td class="r_ex_td_main"><pre>{name}</pre></td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>基本情况</b></td><td class="r_ex_td_main"><b>{profit_property}收益</b>产品，由<b>{issue}</b>发行，融资规模<b>{scale:this.cusNum()}</b>，按<b>{cycle}</b>分配</td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>产品评级</b></td><td class="r_ex_td_main">{grade:this.cusGrade()}</td></tr>',
 			'<tr><td class="r_ex_td_pre"><b>预期收益</b></td><td class="r_ex_td_main">',
 			detailString, '</td></tr>',
 			'<tr><td class="r_ex_td_pre"><b>资金投向</b></td><td class="r_ex_td_main"><pre>{flow_of_fund}</pre></td></tr>',
-			'<tr><td class="r_ex_td_pre"><b>项目亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>产品亮点</b></td><td class="r_ex_td_main"><pre>{highlights}</pre></td></tr>',
 			'<tr><td class="r_ex_td_pre"><b>合同情况</b></td><td class="r_ex_td_main"><pre>{contract}</pre></td></tr>',
-			//'<tr><td class="r_ex_td_pre"><b>项目进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
+			//'<tr><td class="r_ex_td_pre"><b>产品进度</b></td><td class="r_ex_td_main"><pre>{countdown}</pre></td></tr>',
 			'<tr><td class="r_ex_td_pre"><b>打款账号</b></td><td class="r_ex_td_main"><pre>{pay_account}</pre></td></tr>',
 			'<tr><td class="r_ex_td_pre"><b>备注</b></td><td class="r_ex_td_main"><pre>{remark}</pre></td></tr>',
-            '</table></td></tr><tr><td style="padding:15px;border:1px;"><b>项目补充信息：</b><br /><br /><table style="border-collapse:collapse;">',
+            '</table></td></tr><tr><td style="padding:15px;border:1px;"><b>产品补充信息：</b><br /><br /><table style="border-collapse:collapse;">',
 			'<tr><td class="r_ex_td_pre"><b>添加时间</b></td><td class="r_ex_td_main"><pre>{create_ts:this.cusDate}</pre></td></tr>',
-			'<tr><td class="r_ex_td_pre"><b>项目经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
+			'<tr><td class="r_ex_td_pre"><b>产品经理备注</b></td><td class="r_ex_td_main"><pre>{manager_remark}</pre></td></tr>',
             '<tr><td class="r_ex_td_pre"><b>销售类别</b></td><td class="r_ex_td_main"><pre>{exclusive}</pre></td></tr>',
-		    '<tr><td class="r_ex_td_pre"><b>项目董事</b></td><td class="r_ex_td_main"><pre>{proj_director}</pre></td></tr>',
-	        '<tr><td class="r_ex_td_pre"><b>项目经理</b></td><td class="r_ex_td_main"><pre>{manager}</pre></td></tr>',
+		    '<tr><td class="r_ex_td_pre"><b>产品董事</b></td><td class="r_ex_td_main"><pre>{proj_director}</pre></td></tr>',
+	        '<tr><td class="r_ex_td_pre"><b>产品经理</b></td><td class="r_ex_td_main"><pre>{manager}</pre></td></tr>',
 	        '</td></tr></table></td></tr></table>',
 			{
 				cusDate:function(d){return Ext.Date.format(d,'Y年m月d日');}
 			},{
 				cusPdtStatus:function(d){
 					if(d!="上线通过"){
-						return '<tr><td style="padding:20px;border:1px;"><span style="background-color:#003366;color:#FFFFFF;font-size:20px;font_weight:bold;">请注意该项目尚未上线！</span></td></tr>';
+						return '<tr><td style="padding:20px;border:1px;"><span style="background-color:#003366;color:#FFFFFF;font-size:20px;font_weight:bold;">请注意该产品尚未上线！</span></td></tr>';
 					} else {
 						return '';
 					}

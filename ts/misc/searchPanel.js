@@ -63,8 +63,9 @@ Ext.define('searchPanel', {
         me.dockedItems=[{
           xtype: 'toolbar',
           dock: 'top',
+            height:36,
           enableOverflow: true,
-          padding:1,
+          padding:3,
           items:['查找',{
                  xtype: 'textfield',
                  name: 'searchField',

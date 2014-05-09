@@ -41,14 +41,48 @@ class User_model extends CI_Model {
 		return $query->row();
 	}
 
-    function get_all() {
-		$this->db->select('loginname, title, realname, branch, tel, qq, email, mobile');
+    function get_all($status = '') {
+		$this->db->select('id,loginname, title, realname, branch, tel, qq, email, mobile, status');
+        if(!empty($status)){
+            $this->db->where('status',$status);
+        }
 		$this->db->from('user');
 		$this->db->order_by('id', 'asc');
 		$query = $this->db->get();
 		return $query->result();
 	}
 	
+    function get_by_users($append_users='',$mode=0){
+        $this->db->select('id as userid,loginname, title, realname, branch');
+        $this->db->where('status','normal');
+        $group_cfg=$this->utility->get_group_cfg();
+        $this->db->where_in('title',array_merge(
+			$group_cfg['administrator'],
+			$group_cfg['administrator_b'],
+			$group_cfg['proj_director'],
+			$group_cfg['proj_director_b'],
+			$group_cfg['proj_director_c'],
+			$group_cfg['proj_director_d'],
+			$group_cfg['product_manager'],
+			$group_cfg['staff'],
+			$group_cfg['part_time_job'],
+			$group_cfg['other']
+		));
+       	if(!empty($append_users)){
+       		$apuser_where = '(realname = \''.element('realname', $this->session->userdata('user')).'\' or  ';
+       		foreach ($append_users as $row) {
+       	    	$apuser_where .= 'realname =\''.$row.'\' or ';
+       		}
+           	$apuser_where = substr($apuser_where, 0 ,strlen($apuser_where)-3);
+       	    $apuser_where .= ') ';
+       	    //echo($apuser_where);
+   		    $this->db->where($apuser_where);
+       	}
+		$this->db->from('user');
+		$query = $this->db->get();
+		return $query->result();
+    }
+    
 	function update_pwd($loginname, $password) {
 		$this->db->set('password', $this->encrypt->sha1($password));
 		$this->db->where('loginname', $loginname);
@@ -209,7 +243,10 @@ class User_model extends CI_Model {
     }
     
     function update_access_history($action_access_id, $value, $loginname){
-        $data = array('value' => $value);
+        $data = array(
+            'value' => $value,
+            'update_ts' => date('Y-m-d H:i:s'),
+        );
         $this->db->where('loginname',$loginname);
         $this->db->where('action_access_id',$action_access_id);
         $this->db->update('user_action_access_history', $data);
@@ -280,5 +317,18 @@ class User_model extends CI_Model {
         $this->db->where('id', $proj_id);
         $this->db->update('proj', $data);
 
+    }
+    
+    function get_reporters() {
+        $this->db->select('realname');
+        $this->db->from('user');
+        $this->db->where('report_to',element('realname', $this->session->userdata('user')));
+        //$this->db->where('report_to','孟祥春');
+        $query=$this->db->get();
+        return $query->result();
+    }
+
+    function get_all_reporters() {
+        return explode(',',element('all_reportors', $this->session->userdata('user')));
     }
 }

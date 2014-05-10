@@ -246,5 +246,13 @@ class Api extends Auth_Controller {
         
         $this->json->output($data );
     }
-        
+
+    function get_user_tree() {
+        $roots = $this->User_model->get_root_reporter();
+        $data = array();
+        foreach($roots as $root) {
+            $data[] = $this->User_model->get_reporter($root->loginname);
+        }
+        $this->json->output(array('success' => true, 'data' => $data));
+    }
 }

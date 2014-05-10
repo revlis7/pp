@@ -331,4 +331,30 @@ class User_model extends CI_Model {
     function get_all_reporters() {
         return explode(',',element('all_reportors', $this->session->userdata('user')));
     }
+
+    function get_root_reporter() {
+        $sql = "SELECT * FROM user WHERE report_to = '' OR report_to IS NULL";
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    function get_reporter($loginname) {
+        $sql = "SELECT * FROM user WHERE report_to = ?";
+        $query = $this->db->query($sql, array($loginname));
+
+        $result = array(
+            'loginname' => $loginname,
+            'children'  => array(),
+        );
+
+        foreach($query->result() as $reporter) {
+            $result['children'][] = $this->get_reporter($reporter->loginname);
+        }
+        if(empty($result['children'])) {
+            $result['leaf'] = true;
+        } else {
+            $result['expanded'] = true;
+        }
+        return $result;
+    }
 }
